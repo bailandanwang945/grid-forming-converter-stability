@@ -5,16 +5,19 @@
 ## 项目执行入口
 
 - `docs/PROJECT_PLAN.md`：持续维护的研究与实施规划；
+- `docs/PROJECT_EXECUTION_GOVERNANCE.md`：中央判断、并行代理、测试门和版本演进规则；
 - `docs/EXTERNAL_RESOURCES.md`：外部资源获取、版本固定和许可证要求；
 - `docs/SUBMISSION_CHECKLIST.md`：中期检查与结项验收材料清单；
+- `docs/research/`：数值方法和独立模型候选的来源可追溯调研；
 - `docs/specs/algorithms/`：算法原理、接口和测试计划；
 - `notes/PROJECT_LOG.md`：可复核的执行与测试记录；
 - `experiments/run_unit_tests.m`：MATLAB 快速单元测试入口。
+- `experiments/baseline/run_inf_bus_baseline.m`：论文无限大母线稳定/不稳定基线入口。
 
 ## 当前结项主线
 
 1. 复现 Cifelli 与 Anta 的单机无穷大母线算例，建立可信基线。
-2. 对每个频率点的复矩阵判定扇形、半扇形或非扇形，并输出数值域和相位边界。
+2. 对每个频率点的复矩阵计算数值域分离裕度及条件性上下包络；证据不足时保留“暂不能判定”。
 3. 重点复查边界频率附近的误判，区分理论边界、离散采样和浮点容差问题。
 4. 选择一个新的构网型变流器小信号模型，判断其是否满足小相位定理的应用前提。
 5. 用时域仿真或闭环极点结果交叉验证判据，形成结项报告和可复现实验。
@@ -45,7 +48,7 @@
 ## MATLAB / Simulink AI 工具
 
 - MATLAB：R2024b，安装于 `G:\matlab`。
-- MATLAB MCP Server：v0.11.2，已在 Codex 中注册为 `matlab`。
+- MATLAB MCP Server：v0.11.2，已在 Codex 中注册并实际验证 12 个 MATLAB/Simulink 工具。
 - MATLAB Agentic Toolkit：2026.07.02。
 - Simulink Agentic Toolkit：2026.07.08。
 - Codex MCP 默认工作目录为本项目，工具超时为 600 秒，并已转发 Windows `WINDIR`。
@@ -57,7 +60,7 @@ addpath("C:\Users\18073\.matlab\agentic-toolkits\simulink")
 satk_initialize
 ```
 
-随后启动一个新的 Codex 会话，使新安装的 MCP 和技能被完整加载。
+`C:\Users\18073\Documents\MATLAB\startup.m` 已配置自动执行上述初始化。若 MCP 工具未出现，应保持 MATLAB 会话运行并建立新的 Codex 任务，使工具清单重新加载。
 
 ## 工作原则
 
