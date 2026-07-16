@@ -1,0 +1,34 @@
+# Local papers and project documents
+docs/project/*.pdf
+references/papers/*.pdf
+
+# Third-party repositories and toolboxes
+external/
+
+# MATLAB / Simulink generated files
+*.asv
+*.autosave
+*.slxc
+slprj/
+codegen/
+
+# Large or generated experiment data
+data/
+results/raw/
+*.mat
+
+# Rebuildable temporary and compiled artifacts
+tmp/
+output/pdf/
+output/**/*.aux
+output/**/*.bbl
+output/**/*.blg
+output/**/*.fdb_latexmk
+output/**/*.fls
+output/**/*.log
+output/**/*.synctex.gz
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/

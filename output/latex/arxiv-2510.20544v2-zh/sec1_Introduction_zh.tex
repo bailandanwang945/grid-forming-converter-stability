@@ -1,0 +1,47 @@
+\section{引言}
+现代电力系统中电力电子变流器的渗透率持续提高，电网动态正在发生日益明显的根本变化。基于变流器的资源与既有网络之间的相互作用会产生复杂且尚未得到充分理解的行为。实践中，这类变流器驱动的动态已经引发了意外且不利的现象~\cite{Cigre2024}，凸显出开展系统性稳定性评估的必要性。传统稳定性保障依赖大规模仿真研究；当系统扩展到数百台变流器时，其计算开销往往难以承受，也不再实用。此外，每接入一个新设备都需要重新评估整个系统，进一步加剧了这一挑战。
+
+为克服这些限制，近期研究提出了分散式稳定性判据~\cite{chenExtendedFrequencyDomainPassivity2025a,huangGainPhaseDecentralized2024,häberle2025decentralizedparametricstabilitycertificates}，使单台变流器的影响能够独立于系统中的其他变流器进行评估。这些条件经过设计，使得只要每台变流器分别满足条件，便可保证整个系统稳定，而无需显式分析变流器之间的相互作用。这一范式为变流器主导电网的稳定性认证提供了可扩展、模块化的路径，降低了对穷举式全系统仿真的依赖。同时，这些分散式条件也能为保障系统稳定的变流器控制设计提供有价值的见解。
+
+一种众所周知的分散式稳定性判据要求所有系统元件均具有无源性。该要求已开始出现在即将实施的构网型变流器并网规范中~\cite{fingridGridCode}。网络天然能够满足该条件，但变流器通常不能。在高频段，可通过适当的控制策略强制满足无源性；而在本文所采用的同步 $dq$ 坐标系中，低频非无源性与变流器的恒功率特性内在相关，无法消除。
+
+无源性判据较为保守，后续研究因而提出了更一般、限制更少的框架。文献~\cite{chenExtendedFrequencyDomainPassivity2025a} 及其扩展工作~\cite{chenUnifiedFlexibleFrequencyDomain2025a} 利用无源性指标，使无源设备与非无源设备能够逐频率相互补偿。带权重矩阵的扩展无源性指标提供了更大的灵活性并降低了保守性，但这些方法主要面向单台变流器，尚未扩展到多变流器系统。
+
+文献~\cite{huangGainPhaseDecentralized2024} 基于新的矩阵相位定义，构造了分散式混合增益--相位判据，从而提出另一类更精细的分散式条件。然而，该方法要求变流器导纳满足实际中往往不成立的扇形性条件，限制了其适用范围。文献~\cite{woolcockMixedGainPhase2023} 也针对鲁棒分析提出了类似思路。
+
+为绕开扇形性假设，文献~\cite{baron2025decentralized} 提出基于尺度相对图（scaled relative graph，SRG）的相位计算方法。该方法虽有前景，但构造 SRG 的计算代价较高，而且如何根据黑箱模型计算 SRG 仍是开放问题。
+
+另一项相关研究~\cite{deyPassivityBasedDecentralizedCriteria2023} 在极坐标系中描述系统；在该坐标系下，构网型（GFM）变流器在低频段具有无源性。作者在假设时间尺度分离的基础上提出混合判据：低频段在极坐标系中验证无源性，高频段则采用标准的直角坐标导纳表示。然而，时间尺度分离在实际中未必成立，也可能难以验证。文献~\cite{häberle2025decentralizedparametricstabilitycertificates} 还针对有功--频率（P--f）和无功--电压（Q--V）控制提出了分散式参数化条件，但其适用范围受限于预先规定的控制结构，并忽略了变流器的底层动态。
+
+本文聚焦于文献~\cite{huangGainPhaseDecentralized2024} 提出的分散式小增益/小相位条件。首先，我们指出该方法用于低频增益较高且缺乏扇形性的 GFM 变流器时所面临的局限。随后分析这种非扇形性的来源，说明它源于变流器的恒功率特性，因而无法避免。最后，受文献~\cite{deyPassivityBasedDecentralizedCriteria2023} 启发，我们通过引入环路整形变换扩展文献~\cite{huangGainPhaseDecentralized2024} 的框架，使条件更一般、保守性更低，并解决扇形性问题。
+
+本文其余部分安排如下：第~\ref{sec:gain_phase_crit} 节回顾分散式增益--相位稳定性判据；第~\ref{sec:lim} 节分析其应用于 GFM 变流器时的局限；第~\ref{sec:propo_approch} 节给出本文提出的扩展。第~\ref{sec:ex_1} 节和第~\ref{sec:ex_2} 节分别通过接入无限大母线的变流器和 IEEE 14 节点系统验证所提方法。最后，第~\ref{sec:conc} 节总结全文。
+
+复现本文结果所需的数据和代码见文献~\cite{RepoZenodo}。
+
+\section{混合增益--相位稳定性条件}
+\label{sec:gain_phase_crit}
+
+对于矩阵 $A\in\mathbb{C}^{n\times n}$，其 $n$ 个增益定义为各奇异值，其中 $\overline{\sigma}(A)$ 和 $\underline{\sigma}(A)$ 分别表示最大和最小增益。这些量既可以界定 $A$ 的特征值，也可以按照式~\eqref{eq:sv_bound} 界定两个矩阵 $A,B\in\mathbb{C}^{n\times n}$ 乘积的特征值模，而且无需显式计算乘积 $AB$。
+\begin{equation}
+\underline{\sigma}(A)\underline{\sigma}(B)
+\leq |\lambda(AB)|
+\leq \overline{\sigma}(A)\overline{\sigma}(B).
+\label{eq:sv_bound}
+\end{equation}
+我们希望为特征值的相位建立类似的界。这个问题更为复杂，直到近期才出现能够导出此类界的矩阵相位定义~\cite{wangPhasesComplexMatrix2020,chenPhaseAnalysisIEEE}。
+
+复矩阵 $A\in\mathbb{C}^{n\times n}$ 的数值域 $W(A)$ 定义为
+\begin{equation}
+W(A)=\{x^*Ax:\,x\in\mathbb{C}^n,\ \|x\|=1\}.
+\label{eq:num_range}
+\end{equation}
+它是复平面上包含 $A$ 的各特征值的凸子集。若 $W(A)$ 完全位于复平面的某个角扇区内，且 $0\notin W(A)$，则称矩阵 $A$ 为扇形矩阵。对于扇形矩阵 $A$，存在可逆矩阵 $T$，使 $A=T^*DT$，其中 $D$ 是在置换意义下唯一的对角矩阵。$A$ 的相位定义为 $D$ 的对角元的辐角，并按顺序排列，使 $\overline{\phi}(A)$ 和 $\underline{\phi}(A)$ 分别表示最大和最小相位，且 $\overline{\phi}(A)-\underline{\phi}(A)<\pi$。相位区间 $[\underline{\phi}(A),\overline{\phi}(A)]$ 简记为 $\Phi(A)$。该定义还可扩展至拟扇形矩阵（即 $0\in\partial W(A)$）和半扇形矩阵（即 $0\in\partial W(A)$ 且 $\overline{\phi}(A)-\underline{\phi}(A)\leq\pi$）~\cite{chenPhaseTheoryMIMO2022}。
+
+从几何上看，这些相位对应于数值域的角边界。与奇异值完全类似，最大和最小相位可以按照式~\eqref{eq:phase_bound} 界定矩阵乘积特征值的相位：
+\begin{equation}
+\underline{\phi}(A)+\underline{\phi}(B)
+\leq \angle\lambda(AB)
+\leq \overline{\phi}(A)+\overline{\phi}(B).
+\label{eq:phase_bound}
+\end{equation}

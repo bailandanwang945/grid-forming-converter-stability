@@ -1,0 +1,130 @@
+\documentclass{IEEEtran4PSCC}
+
+\usepackage{iftex}
+\ifXeTeX\else
+  \errmessage{This Chinese translation must be compiled with XeLaTeX}
+\fi
+\usepackage[UTF8,scheme=plain,heading=false]{ctex}
+\usepackage{graphicx}
+\usepackage[cmex10]{amsmath}
+\usepackage{amssymb}
+\usepackage{verbatim}
+\usepackage{xurl}
+\usepackage{url}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsthm}
+\usepackage{xcolor}
+
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\proofname}{证明}
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\IEEEkeywordsname}{关键词}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\appendixname}{附录}
+\providecommand{\appendicesname}{附录}
+\newtheorem{thm}{定理}[section]
+\newtheorem{prop}[thm]{命题}
+\newtheorem{rem}{注}
+
+\makeatletter
+\let\old@ps@headings\ps@headings
+\let\old@ps@IEEEtitlepagestyle\ps@IEEEtitlepagestyle
+\def\psccfooter#1{%
+  \def\ps@headings{%
+    \old@ps@headings%
+    \def\@oddfoot{\strut\hfill#1\hfill\strut}%
+    \def\@evenfoot{\strut\hfill#1\hfill\strut}%
+  }%
+  \def\ps@IEEEtitlepagestyle{%
+    \old@ps@IEEEtitlepagestyle%
+    \def\@oddfoot{\strut\hfill#1\hfill\strut}%
+    \def\@evenfoot{\strut\hfill#1\hfill\strut}%
+  }%
+  \ps@headings%
+}
+\makeatother
+
+\psccfooter{%
+  \parbox{\textwidth}{\hrulefill\\[-1pt]
+  \scriptsize 第24届电力系统计算会议（PSCC 2026）中文翻译版
+  \hfill 塞浦路斯利马索尔，2026年6月8--12日}%
+}
+
+\begin{document}
+
+\title{构网型变流器的分散式小增益与相位稳定性条件：局限与扩展}
+
+\author{
+\IEEEauthorblockN{Diego Cifelli，Adolfo Anta}
+\IEEEauthorblockA{奥地利理工学院（AIT Austrian Institute of Technology）\\
+奥地利维也纳}}
+
+\maketitle
+
+\begin{center}
+\footnotesize
+\textbf{非官方中文翻译。}译自 arXiv:2510.20544v2（2026-04-14），未经原作者审校。
+翻译属于改编；公式、编号、图及参考文献沿用原版，图内英文未改。
+原文：\url{https://arxiv.org/abs/2510.20544v2}；原作采用 CC BY 4.0：
+\url{https://creativecommons.org/licenses/by/4.0/}。
+\end{center}
+
+\begin{abstract}
+随着基于变流器的资源在电力系统中的占比不断提高，稳定性分析亟需无需穷举式全系统仿真的可扩展方法。近期已有研究为此提出分散式小增益与小相位判据，但扇形性假设严重限制了这些判据在构网型变流器中的适用性，因为该假设通常在低频段不成立。本文通过引入环路整形变换，在其他坐标系中重新表述变流器与网络模型，从而重新审视并扩展混合增益--相位条件。所提方法解决了低频固有非扇形性问题并降低了保守性，因而提高了分散式稳定性认证的适用性。本文首先用无限大母线系统说明分析结果，随后将其扩展至 IEEE 14 节点网络，以展示该方法的实用性和可扩展性。这些结果为电网中保守性更低、适用范围更广的分散式稳定性认证提供了路径。
+\end{abstract}
+
+\begin{IEEEkeywords}
+变流器主导电网；小相位判据；分散式稳定性条件；构网型变流器。
+\end{IEEEkeywords}
+
+\thanksto{本研究由 CETPartnership（清洁能源转型伙伴关系）2023 年联合研究提案征集资助，并由欧盟委员会（GA No. 101069750）以及以下机构共同出资：西班牙国家研究署（AEI）、德国 J\"ulich 研究中心项目管理机构（PtJ/MWIKE）、希腊研究与创新总秘书处（GSRI）、爱尔兰可持续能源署（SEAI）、奥地利研究促进署（FFG）和挪威研究理事会（RCN）。}
+
+\input{sec1_Introduction_zh}
+\input{sec2_Preliminary_zh}
+\input{sec3_Limitations_zh}
+\input{sec4b_ProposedApproach_zh}
+\input{sec5b_Examples_zh}
+\input{sec6_Conclusion_zh}
+
+\bibliographystyle{IEEEtran}
+\bibliography{DecCondition_bib}
+
+\appendices
+\section{GFM 控制结构}
+本文采用图~\ref{fig:gfm_diag} 所示的 GFM 控制结构。控制器在静止 $\alpha\beta$ 坐标系中实现，包括式~\eqref{eq:pr_tf} 给出的比例谐振电流控制器 $PR(s)$，以及式~\eqref{eq:yv_tf} 给出的虚拟导纳电压控制器 $Y_v(s)$，其中 $R_v$ 和 $L_v$ 分别为虚拟电阻和虚拟电感。
+\begin{equation}
+  PR(s)=K_p+\frac{K_i}{s^2+(2\pi50)^2}
+  \label{eq:pr_tf}
+\end{equation}
+\begin{equation}
+  Y_v(s)=\frac{1}{sL_v+R_v},\qquad L_v=\frac{X_v}{2\pi50}
+  \label{eq:yv_tf}
+\end{equation}
+同步控制采用虚拟同步机（VSM），其惯性和阻尼分别为 $H$ 与 $D$。比例积分（PI）控制器通过改变参考电压幅值调节无功功率。除非另有说明，本文禁用无功功率控制器并采用恒定电压幅值参考。参数及更多细节见文献~\cite{RepoZenodo}。
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\columnwidth]{drawing.pdf}
+  \caption{GFM 控制结构。}
+  \label{fig:gfm_diag}
+  \vspace{-1em}
+\end{figure}
+\label{apx:GFM_control}
+
+\section{命题~\ref{prop:Y_DQ_0} 的证明}
+\label{apx:Prop_Y_DQ_0}
+式~\eqref{eq:frame_embedding} 中的 $Y_{DQ}(s)$ 可改写为式~\eqref{eq:A1}，并进一步化简为式~\eqref{eq:A2}：
+\begin{align}
+Y_{DQ}(s)&=(Y_{dq}(s)+I_0^eK_v(s))\left(I-\frac{V_0^eK_v(s)}{1+K_v(s)V_0^e}\right)\label{eq:A1}\\
+&=Y_{dq}(s)-(Y_{dq}(s)V_0^e-I_0^e)\frac{K_v(s)}{1+K_v(s)V_0^e}.\label{eq:A2}
+\end{align}
+考虑 $K_v(s)=\frac{H_P(s)}{s}G_P(s)$，并令 $s$ 趋于零，可得
+\begin{equation}
+Y_{DQ}(0)=Y_{dq}(0)-(Y_{dq}(0)V_0^e-I_0^e)\frac{G_P(0)}{G_P(0)V_0^e}.
+\label{eq:A3}
+\end{equation}
+右乘 $V_0^e$ 后得到 $Y_{DQ}(0)V_0^e=-I_0^e$。也就是说，$Y_{DQ}(0)$ 的第二列乘以 $V_{d,0}$ 等于 $-I_0^e$，与式~\eqref{eq:Y_DQ_0} 一致。通过直接但较繁复的代数运算（为简洁起见略去），还可证明 $Y_{DQ}(0)$ 的 $(1,1)$ 元同样与式~\eqref{eq:Y_DQ_0} 中的相应表达式一致。
+
+\end{document}

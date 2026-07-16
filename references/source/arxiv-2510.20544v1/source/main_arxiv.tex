@@ -1,0 +1,91 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage{caption}  % for captions
+\usepackage{subcaption}
+\usepackage{url}
+
+\usepackage{amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{rem}{Remark}
+
+\begin{document}
+
+\title{Decentralized Small Gain and Phase Stability Conditions for Grid-Forming Converters: Limitations and Extensions}
+%{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
+%should not be used}
+%\thanks{Identify applicable funding agency here. If none, delete this.}
+%}
+
+\author{
+\IEEEauthorblockN{Diego Cifelli, Adolfo Anta}
+\IEEEauthorblockA{AIT Austrian Institute of Technology,
+Vienna, Austria
+%\\
+%\{diego.cifelli, adolfo.anta\}@ait.ac.at}
+}}
+
+\maketitle
+
+\begin{abstract}
+The increasing share of converter-based resources in power systems calls for scalable methods to analyse stability without relying on exhaustive system-wide simulations. Decentralized small-gain and small-phase criteria have recently been proposed for this purpose, but their applicability to grid-forming converters is severely limited by the sectoriality assumption, which is not typically satisfied at low frequencies. This work revisits and extends mixed gain–phase conditions by introducing loop-shaping transformations that reformulate converter and network models in alternative coordinate frames. The proposed approach resolves intrinsic non-sectoriality at low frequencies and reduces conservativeness, thereby improving the applicability of decentralized stability certification. Analytical results are illustrated using an infinite bus system first and then extended to the IEEE 14-bus network, demonstrating the practicality and scalability of the method. These findings provide a pathway toward less conservative and more widely applicable decentralized stability certificates in power grids.
+\end{abstract}
+
+\begin{IEEEkeywords}
+converter-dominated grids;small-phase criterion; decentralized stability conditions; grid-forming converters.
+\end{IEEEkeywords}
+
+\input{sec1_Introduction}
+\input{sec2_Preliminary}
+\input{sec3_Limitations}
+\input{sec4b_ProposedApproach}
+\input{sec5b_Examples}
+\input{sec6_Conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{DecCondition_bib}
+
+
+\appendices
+\section{GFM Control structure}
+In this paper, we consider the GFM control structure represented in Figure \ref{fig:gfm_diag}. The controller is made in the stationary reference frame $\alpha\beta$. It consists of a Proportional-Resonant (PR) current controller and a Virtual Admittance ($Y_v$) voltage controller. On top of these, the power control loop is implemented through a Virtual Synchronous Machine and a Proportional-Integral (PI) reactive power controller. Unless explicitly stated, the reactive power controller is disabled, and a constant voltage magnitude reference is used. Parameters and further details are available in \cite{Repo}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\columnwidth]{drawing.pdf}
+    \caption{GFM control Structure}
+    \label{fig:gfm_diag}
+    \vspace{-1em}
+\end{figure}
+
+\label{apx:GFM_control}
+
+\section{Proof of Proposition \ref{prop:Y_DQ_0}}
+\label{apx:Prop_Y_DQ_0}
+The expression of $Y_{DQ}(s)$ in~\eqref{eq:frame_embedding} can be rewritten as in \eqref{eq:A1}, and further simplify as in \eqref{eq:A2}.
+\begin{align}
+    Y_{DQ}(s)&=(Y_{dq}(s)+I_0^eK_v(s))\left(I-\frac{V_0^eK_v(s)}{1+K_v(s)V_0^e} \right)\label{eq:A1}\\
+    &=Y_{dq}(s)-(Y_{dq}(s)V_0^e-I_0^e)\frac{K_v(s)}{1+K_v(s)V_0^e}\label{eq:A2}
+\end{align}
+Considering $K_v(s)=\frac{H_P(s)}{s}G_P(s)$ and taking the limit for $s$ tends to zero we obtain~\eqref{eq:A3}.
+\begin{equation}
+    Y_{DQ}(0)= Y_{dq}(0)-(Y_{dq}(0)V_0^e-I_0^e)\frac{G_P(0)}{G_P(0)V_0^e}
+    \label{eq:A3}
+\end{equation}
+By post-multiplying by $V_0^e$, we obtain $Y_{DQ}(0)V_0^e=-I_0^e$, i.e. the second column of $Y_{DQ}(0)$ times $V_{d,0}$ is equal to $-I_0^e$, as given in~\eqref{eq:Y_DQ_0}.
+%it is not difficult to see that the second column of $Y_{DQ}(0)$ is as in \eqref{eq:Y_DQ_0}. 
+Through straightforward but lengthy algebraic manipulations (omitted here for brevity), it can be shown that the (1,1) entry of $Y_{DQ}(0)$ also matches the corresponding expression in \eqref{eq:Y_DQ_0}.
+
+\end{document}
+
+\typeout{get arXiv to do 4 passes: Label(s) may have changed. Rerun}
+

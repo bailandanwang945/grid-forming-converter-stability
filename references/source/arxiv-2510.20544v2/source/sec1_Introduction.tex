@@ -1,0 +1,63 @@
+\section{Introduction}
+As the penetration of power electronic converters in modern power systems continues to rise, fundamental changes in grid dynamics are becoming increasingly evident. Interactions between converter-based resources and the existing network introduce complex behaviors that remain poorly understood. In practice, such converter-driven dynamics have already led to unexpected and undesirable phenomena~\cite{Cigre2024}, underscoring the need for systematic stability assessment. Traditionally, ensuring stability has relied on extensive simulation studies, which become computationally prohibitive and impractical when scaling to systems with hundreds of converters. Moreover, each time a new device is connected, the entire assessment must be repeated, further amplifying the challenge.
+
+To overcome these limitations, recent research has proposed decentralized stability criteria~\cite{chenExtendedFrequencyDomainPassivity2025a,huangGainPhaseDecentralized2024,häberle2025decentralizedparametricstabilitycertificates} that enable the impact of a single converter to be assessed independently of others in the system. These conditions are designed such that, if each individual converter satisfies them, the overall system stability is guaranteed without requiring explicit analysis of converter-converter interactions. This paradigm shift offers a scalable and modular pathway to stability certification in converter-dominated grids, reducing reliance on exhaustive system-wide simulations. Moreover, these decentralized conditions yield valuable insights for converter control design to ensure system stability. 
+
+%- Generic Introduction (Adolfo)
+%- Problem presentation (Adolfo)
+%- State of Art - Limbin, Verena, Indians, KTH, Eder, ...\\
+
+A well-known decentralized criterion for ensuring stability requires that all system components exhibit passivity. This requirement is starting to appear in upcoming grid codes for grid-forming converters \cite{fingridGridCode}. Although this condition is naturally satisfied by the network, it does not hold for converters. At high frequencies, passivity can be enforced through suitably control strategies. 
+At low frequencies, understood here in the synchronous reference (dq) frame, non-passivity is intrinsically associated with the constant-power characteristics of converters, a property that cannot be removed. 
+
+While passivity provides a conservative stability criterion, subsequent research has introduced more general and less restrictive frameworks.  In \cite{chenExtendedFrequencyDomainPassivity2025a}, and extended in~\cite{chenUnifiedFlexibleFrequencyDomain2025a}, passivity indices allow frequency-wise compensation between passive and non-passive devices. Extended passivity indices with weighting matrices offer additional flexibility and reduced conservatism. However, these approaches focus on single converters and have not been extended to multi-converter systems.
+
+Alternative decentralized conditions were proposed in~\cite{huangGainPhaseDecentralized2024} using more sophisticated methods, based on the novel definition of phase for a matrix to elaborate a decentralized mixed gain and phase criteria. However, the converter admittance needs to satisfy a sectoriality condition that is not fulfilled in practice
+%~\cite{chenExtendedFrequencyDomainPassivity2025a}, 
+limiting its applicability. A similar approach appeared in \cite{woolcockMixedGainPhase2023} aimed at robust analysis.
+
+To overcome the sectoriality assumption, \cite{baron2025decentralized} proposed an alternative method for phase computation based on scaled relative graphs (SRGs). While promising, the construction of such SRGs is computationally demanding. Moreover, computing SRGs with black-box models is still an open point.
+
+Another relevant study \cite{deyPassivityBasedDecentralizedCriteria2023} formulates the system in a polar reference frame, in which grid-forming (GFM) converters are passive at low frequencies. Assuming time-scale separation, the authors propose a hybrid criterion: passivity is verified in the polar frame at low frequencies, while the standard rectangular admittance representation is used at high frequencies. However, the time-scale separation assumption may not hold in practice or may be difficult to verify. Decentralized parametric conditions on P-f and Q-V control were also proposed in \cite{häberle2025decentralizedparametricstabilitycertificates}. However, the scope is limited to predefined control structure and ignore lower level converter dynamics.
+
+In this paper, focusing on the decentralized small gain/phase condition proposed in \cite{huangGainPhaseDecentralized2024}, we first identify some limitations of the method when applied to grid-forming converters, which exhibit high gain and lack sectoriality at low frequencies. We then analyze the origin of this non-sectoriality, showing that it arises from the constant-power characteristic of converters and is therefore unavoidable. Finally, inspired by \cite{deyPassivityBasedDecentralizedCriteria2023}, we extend the framework of \cite{huangGainPhaseDecentralized2024} by introducing a loop-shaping transformation, which generalizes the approach, provides less conservative conditions, and resolves the sectoriality issue.
+%In this work, we extend the work in \cite{huangGainPhaseDecentralized2024}, taking inspiration from \cite{deyPassivityBasedDecentralizedCriteria2023}, by generalizing the approach introducing loop-shaping transformation allowing a more flexible conditions and overcoming the sectorial issue.   
+%If there is space, paper structure.
+
+%\color{red}
+The remainder of this paper is organized as follows: Section \ref{sec:gain_phase_crit} reviews decentralized gain-phase stability criteria, while Section \ref{sec:lim} addresses their limitations regarding GFM converters. Section \ref{sec:propo_approch} details our proposed extensions. The methodology is validated in Sections \ref{sec:ex_1} and \ref{sec:ex_2} for a converter connected to an infinite bus and the IEEE 14 Bus system, respectively. Finally, Section \ref{sec:conc} concludes the paper.
+%\color{black}
+
+Data and code to reproduce the results are available at \cite{RepoZenodo}.
+
+\section{Mixed Gain-Phase Stability Conditions}
+\label{sec:gain_phase_crit}
+
+For a matrix $A\in \mathbb{C}^{n\times n}$, the $n$ gains are defined as its singular values, with $\overline{\sigma}(A)$ and $\underline{\sigma}(A)$ being the largest and smallest gains, respectively. These quantities can be used to bound both the eigenvalues of $A$ and the magnitudes of the eigenvalues of the product of two matrices $A,B\in\mathbb{C}^{n\times n}$, as in~\eqref{eq:sv_bound}. Importantly, these bounds are independent of the explicit computation of the product $AB$.
+%\begin{equation}
+%    \overline{\sigma}(A) = \sigma_1(A) \geq \cdots \geq \sigma_n(A) = \underline{\sigma}(A)
+%    \label{eq:sv_def}
+%\end{equation}
+\begin{equation}
+    \underline{\sigma}(A)\underline{\sigma}(B) \leq |\lambda(AB)| \leq \overline{\sigma}(A)\overline{\sigma}(B) 
+    \label{eq:sv_bound}
+\end{equation}
+It is desirable to establish analogous bounds for the phases of the eigenvalues. This problem is less straightforward, and only recently has a definition of matrix phase been proposed that enables such bounds \cite{wangPhasesComplexMatrix2020, chenPhaseAnalysisIEEE}.
+
+The numerical range $W(A)$ of a complex matrix $A\in \mathbb{C}^{n\times n}$ is defined by \eqref{eq:num_range}. It is a convex subset of $\mathbb{C}$ that contains the eigenvalues of $A$.
+\begin{equation}
+    W(A)=\{ x^*Ax:\,x\in\mathbb{C}^n, ||x||=1\}
+    \label{eq:num_range}
+\end{equation}
+A matrix is said to be sectorial if $W(A)$ lies entirely within an angular sector of the complex plane and $0 \notin W(A)$. For a sectorial matrix $A$, there exists an invertible matrix $T$ such that $A=T^*DT$, where $D$ is a unique diagonal matrix (up to permutation). 
+%The diagonal elements of $D$ are distributed in an arc on the unit circle with length smaller than $\pi$.
+The phases of $A$ are defined as the arguments of the diagonal entries of $D$, ordered so that $\overline{\phi}(A)$ and $\underline{\phi}(A)$ denote the maximum and minimum phases, with $\overline{\phi}(A)-\underline{\phi}(A) < \pi$. The phase interval $[\underline{\phi}(A),\, \overline{\phi}(A)]$ is shortly denoted by $\Phi(A)$. This definition can be extended to quasi-sectorial (i.e. $0 \in \partial W(A)$) and to semi-sectorial (i.e. $0 \in \partial W(A)$ and $\overline{\phi}(A)-\underline{\phi}(A) \leq \pi$) matrices \cite{chenPhaseTheoryMIMO2022}.
+%\begin{equation}
+%    \overline{\phi}(A)=\phi_1(A)\geq\cdots\geq\phi_n(A)=\underline{\phi}(A)
+%    \label{eq:phase_def}
+%\end{equation}
+Geometrically, these phases correspond to the angular boundaries of the numerical range. In direct analogy with singular values, maximum and minimum phases can be used to bound the phases of the eigenvalues of a matrix product as in~\eqref{eq:phase_bound}.
+\begin{equation}
+    \underline{\phi}(A)+\underline{\phi}(B) \leq \angle{\lambda(AB)} \leq \overline{\phi}(A)+\overline{\phi}(B) 
+    \label{eq:phase_bound}
+\end{equation}
