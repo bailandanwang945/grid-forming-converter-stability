@@ -21,3 +21,14 @@
 - PDF 和第三方仓库默认被父目录 `.gitignore` 排除，避免课程资料和上游历史误推到团队仓库。
 - 阅读论文时优先使用同版本 TeX 获取章节、公式、引用和图题关系，以 PDF 作为视觉与最终排版权威；派生文本放在 `output/`，不得混入原始源码快照。
 - 第三方代码使用前应保留其 LICENSE，并在结项报告中明确引用来源。
+
+## 研究方法与创新边界补充（2026-07-19）
+
+- Linbin Huang, Dan Wang, Xiongfei Wang, et al., “Gain and Phase: Decentralized Stability Conditions for Power Electronics-Dominated Power Systems,” arXiv:2309.08037v2, 2024-01-10：组合小增益与小相位定理的分散式稳定充分条件来源。<https://arxiv.org/abs/2309.08037>
+- Verena Häberle, Xiuqiang He, Linbin Huang, et al., “Decentralized Parametric Stability Certificates for Grid-Forming Converter Control,” arXiv:2503.05403v8, 2026-06-09：已有依赖局部控制参数的分散式参数稳定充分条件和整定规则。中文材料不直译题名中的 `certificate` 为“证书”，按语境写作“可验证稳定条件”或“稳定性充分判据”。<https://arxiv.org/abs/2503.05403>
+- Ruohan Leng, Linbin Huang, Liangxiao Luo, et al., “Geometric Decentralized Stability Certificate of Power Electronics-Dominated Power Systems Covering Variable Operating Points,” arXiv:2607.10335v1, 2026-07-11：利用 Davis–Wielandt 壳投影处理可变运行点并构造由分散式充分判据确认的运行区域。<https://arxiv.org/abs/2607.10335>
+- 王印松，田晓民，郝亚峰：《构网型变流器并网系统小干扰稳定域快速构建》，《电力系统及其自动化学报》，网络出版 2025-11-14，DOI: 10.19635/j.cnki.csu-epsa.001733：已有基于序阻抗、广义奈奎斯特判据、盖尔圆盘和相似变换的 GFM 参数稳定域快速构建方法。<https://doi.org/10.19635/j.cnki.csu-epsa.001733>
+- Alan L. Andrew, K.-W. Eric Chu, Peter Lancaster, “Derivatives of Eigenvalues and Eigenvectors of Matrix Functions,” *SIAM Journal on Matrix Analysis and Applications*, 14(4), 1993, DOI: 10.1137/0614061：含参数矩阵函数非线性特征值及特征向量灵敏度的理论来源。<https://doi.org/10.1137/0614061>
+- 迟永宁，江炳蔚，范译文，等：《构网型变流器：控制与稳定特性》，《高电压技术》，2025, 51(4): 1527–1542，DOI: 10.13336/j.1003-6520.hve.20241154：构网型变流器扰动建模、惯量阻尼、故障电流和宽频振荡研究综述。<https://doi.org/10.13336/j.1003-6520.hve.20241154>
+
+上述来源表明，参数稳定域、特征根/阻抗灵敏度、参数化分散稳定条件和可变运行点确认区域均已有研究。本项目的可辩护增量应收缩为：对 Cifelli–Anta 小增益—小相位充分判据在 GFM 低频非扇形问题上的适用性、保守性来源和数值不确定性进行可复现评估，而不是声称上述一般方法本身为首创。
