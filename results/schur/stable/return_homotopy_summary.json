@@ -1,0 +1,12 @@
+{
+  "caseName": "stable",
+  "tauGridPoints": 1001,
+  "frequencyGridPoints": 2000,
+  "minimumNormalizedReturnMargin": 0.00050890971043325453,
+  "minimumMarginHz": 2361.4926233374376,
+  "minimumMarginTau": 0.261,
+  "determinantMagnitudeAtMinimum": 0.0011150221555177365,
+  "maximumRealNetworkZeroHz": 76.388475253933962,
+  "maximumRealConverterPoleHz": -1.4938723187003486,
+  "openLoopFactorsStable": false
+}

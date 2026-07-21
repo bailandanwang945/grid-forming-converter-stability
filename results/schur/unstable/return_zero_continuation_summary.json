@@ -1,0 +1,8 @@
+{
+  "caseName": "unstable",
+  "criticalTau": 0.13526458059837743,
+  "criticalZeroRealHz": -7.9915937409080612E-16,
+  "criticalOscillationHz": 1.2471741862219996,
+  "finalDominantZeroRealHz": 0.0211544371034798,
+  "finalDominantOscillationHz": 0.57811329684032875
+}

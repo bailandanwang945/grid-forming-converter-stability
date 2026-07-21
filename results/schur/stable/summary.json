@@ -1,0 +1,17 @@
+{
+  "caseName": "stable",
+  "minimumNormalizedVoltageMargin": 0.005513266416465862,
+  "minimumVoltageMarginHz": 10000,
+  "minimumNormalizedAngleMargin": 0.11710329076340889,
+  "minimumAngleMarginHz": 50.043730294081868,
+  "minimumNormalizedTotalMargin": 0.057485914458502131,
+  "minimumTotalMarginHz": 50.043730294081868,
+  "maximumFactorizationResidual": 1.3495955400452131E-15,
+  "maximumRealVoltageZeroHz": 746.87821302548593,
+  "maximumRealAnglePivotZeroHz": 746.87799861285373,
+  "maximumRealTotalZeroHz": -0.16270415609696351,
+  "maximumRealClosedLoopPoleHz": 0,
+  "hasUnstableVoltageZero": true,
+  "hasUnstableAnglePivotZero": true,
+  "hasUnstableTotalZero": false
+}
