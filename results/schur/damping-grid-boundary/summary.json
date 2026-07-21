@@ -1,0 +1,17 @@
+{
+  "inputWorkbook": "external/cifelli-small-gain-phase/UserData_inf_bus_Fig_8.xlsm",
+  "impedanceScaling": "R = kappa*0.5 pu, wL = kappa*1 pu",
+  "scrDefinition": "SCR = 1/abs(R+j*wL) on the selected pu base",
+  "kappaMinimum": 0.5,
+  "kappaMaximum": 1.5,
+  "scrMinimum": 0.59628479399994394,
+  "scrMaximum": 1.7888543819998317,
+  "criticalDampingMinimum": 0.057965225130319611,
+  "criticalDampingMaximum": 0.083275801146261125,
+  "criticalFrequencyMinimumHz": 0.485224252373032,
+  "criticalFrequencyMaximumHz": 0.75755664659200239,
+  "maximumPredictorErrorD": 0.00034271463751793518,
+  "maximumTangentRelativeError": 0.0058839861973716623,
+  "maximumPoleZeroMismatchHz": 2.34220233307233E-14,
+  "maximumCharacteristicSigmaMin": 3.3295459866861046E-14
+}
