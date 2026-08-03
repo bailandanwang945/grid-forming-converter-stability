@@ -1,0 +1,17 @@
+{
+  "frequencyMinimumHz": 0.1,
+  "frequencyMaximumHz": 5,
+  "frequencyPointCountPerCase": 81,
+  "caseNames": [
+    "stable",
+    "unstable"
+  ],
+  "stableMinimumNormalizedSeparationMargin": -0.43677920258718012,
+  "unstableMinimumNormalizedSeparationMargin": -0.44246005427615687,
+  "stableStrictSectorialCount": 35,
+  "unstableStrictSectorialCount": 0,
+  "classificationIndeterminateCount": 0,
+  "attributionPendingCount": 0,
+  "overallNumericalPendingCount": 0,
+  "interpretationBoundary": "H/G terms are algebraic contributions in one selected critical direction, not physical causes or closed-loop stability margins. Cases differ in damping, grid impedance, operating point, and reactive-power control."
+}
