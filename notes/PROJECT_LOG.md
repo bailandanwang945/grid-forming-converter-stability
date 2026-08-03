@@ -129,3 +129,73 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 将边界验收改为 `10^-3` 容差带和 512 次预算，同时保留独立预算耗尽测试；
 - 自适应测试：11 Passed；全部快速测试：28 Passed、0 Failed、0 Incomplete；
 - `check_matlab_code` 对自适应函数无报告项。
+
+## 2026-08-04：开发重启与可复现基线
+
+### 目标与执行边界
+
+- 以一名学生和 Codex 共同连续执行的方式推进项目，不再按申报书中的五人分工排产；
+- 技术主线按《电力系统分析》课程知识组织为“网络与潮流工作点 -> 统一 dq 模型 -> 小信号线性化 -> 稳定性充分判据与闭环参考稳定性比较”；
+- MATLAB 和作者代码作为研究参考与交叉核验环境，最终便携软件不得依赖 MATLAB；
+- 开发过程持续记录已验证结果、失败、设计决策、证据路径和下一验收门；
+- 本任务不调用图像生成工具。如需科研示意图，先生成网页端提示词，由用户取得图片后再核查和集成。
+
+### 代码状态
+
+- 正式仓库：`E:\git_Projects\grid-forming-converter-stability`；
+- 分支：`research/nontrivial-core`；
+- 本轮起始 `HEAD`：`2fc4d14 docs: add Chinese innovation brief`；
+- 已配置私有远程仓库：`origin = https://github.com/bailandanwang945/grid-forming-converter-stability.git`；
+- 未跟踪内容：`src/analyzeHermitianGeometry.m`、`tests/analyzeHermitianGeometryTest.m`、`experiments/geometry/`、`results/geometry/`；
+- 本轮未删除、覆盖或回滚上述既有内容。
+
+### MATLAB 基线验证
+
+- MATLAB：R2024b（24.2.0.2712019）；
+- 使用本机 MATLAB MCP 共享桌面会话，端口 `31515`；
+- 测试入口：`experiments/run_unit_tests.m`；
+- 初始测试结果：42 Passed、0 Failed、0 Incomplete，MATLAB 测试时间 2.705219 s；
+- 修正状态传播缺陷并增加反例测试后：43 Passed、0 Failed、0 Incomplete，MATLAB 测试时间 1.077 s；
+- `run_unit_tests` 在任一测试失败时抛出 `gfm:tests:Failed`，可作为自动化失败门。
+
+### Hermitian 几何原型预审
+
+- `analyzeHermitianGeometry` 将复矩阵分解为 Hermitian 部分和正交 Hermitian 部分，并在候选最优旋转角的临界方向上分解分离裕度贡献；
+- 结果明确声明该分离裕度不是闭环稳定裕度；方向重根或角度包络不足时输出 `numerical-pending`；
+- 8项新增类式单元测试已被统一测试入口发现并通过；
+- MATLAB Code Analyzer 对函数、测试和无限大母线几何实验脚本均无报告项；
+- `results/geometry/summary.json` 记录的是两个多参数均不同算例的描述性比较，不能据此作单参数因果解释；
+- 本轮已从保存的作者基线工作区重新计算：两算例各 81 个频点，共 162 行；CSV 数值均有限，摘要极值和 `numerical-pending` 计数与明细一致；
+- 稳定算例的最小归一化分离裕度为 `-0.436779202587`，失稳算例为 `-0.442460054276`，两者均为负；这一结果只验证诊断流程和数据产物，不能据此建立稳定/失稳因果解释；
+- 是否纳入电气主线仍需完成数学与实验解释审查，当前科研结论状态仍记为 `partial`，不得写成已形成新的稳定机理结论。
+
+### 审计纠错与可移植复现
+
+- 独立审计构造出 `A=[1,2.001;0,1]` 反例：原型会在数值域分类未确认时错误输出 `resolved`；
+- 已把 `classificationStatus`、`attributionStatus` 与 `overallNumericalStatus` 分离；总状态只有在分类和归因均确认时才为 `resolved`；
+- 将 `angleResolved` 更名为 `objectiveEnvelopeResolved`，避免把目标值包络误称为最优角唯一性；
+- 已将两算例、各 81 个频点的 2×2 复频响固化为受版本约束的 CSV 夹具，主实验不再依赖被 `.gitignore` 排除的 MAT 工作区；
+- 新增端到端集成测试：1 Passed、0 Failed、0 Incomplete；
+- 几何代码与实验提交：`058c587 feat(geometry): add reproducible Hermitian diagnostics`。
+
+### 当前判断
+
+- 现有 MATLAB 研究内核可以继续扩展；
+- 第一优先级仍是实现可测试的混合小增益—小相位评价器；
+- 独立平均值 VSM 模型、时域验证、Python 内核和便携软件尚未开始；
+- 数值域几何诊断属于分析支撑，不替代弱电网、VSM阻尼和同步稳定性的电气主线。
+
+### 论文—代码交叉核对
+
+- 论文 v2 TeX 的功率—极坐标变换式存在转录错误：`F^{-1}` 的归一化和一个元素有误，`C(1,2)` 误写成电压量；
+- 已依据一阶线性化、矩阵互逆关系和作者多机代码冻结修正版 `E,C,F`，并在 `docs/specs/model-and-port-conventions.md` 留存勘误；
+- 原评价器计划遗漏多机分散式相位条件中的总体相位展宽约束，现已补入裕度、原因码和测试；
+- 有限采样频带通过只记为 `sampledBandStatus=confirmed-on-grid`；只有开环前提、端点和全频覆盖均有证据时，才可更新 `theoremStatus`；
+- 作者材料没有完整说明 Park 变换缩放与 `3/2` 系数归属，当前只冻结显式 `frameConventionId`，不声称已确认通用 Park 约定。
+
+### 下一验收门
+
+1. 实现严格扇形保守模式下的矩阵相位区间函数，并正确处理跨 `±pi` 分支；
+2. 实现逐频率混合判据接口，包含小增益、上下相位和多机总体相位展宽；
+3. 把准扇形/半扇形支持保留为显式待定，直到定义和数值证据完整；
+4. 用作者稳定/失稳算例和闭环特征根参考结果交叉验证，禁止把判据未确认写成失稳。

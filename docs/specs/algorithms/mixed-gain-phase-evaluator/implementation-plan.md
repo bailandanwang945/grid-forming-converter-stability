@@ -1,7 +1,7 @@
 # 混合小增益—小相位充分判据：实现与测试计划
 
-日期：2026-07-19<br>
-状态：接口冻结，尚未实现。
+日期：2026-08-04<br>
+状态：接口经论文 v2 与作者代码交叉核对后修订，尚未实现。
 
 ## 1. 目标
 
@@ -18,18 +18,23 @@
 建议接口：
 
 ```matlab
-responses = buildLoopShapedResponses(Yc, Ynet, operatingPoint, Wbase, frequenciesHz, options)
+responses = buildLoopShapedResponses(Yc, Ynet, operatingPoint, conventions, frequenciesHz, options)
 ```
 
-职责：实现论文 v2 式 (19) 的频率相关整形变换，返回每个频率的
+职责：实现论文 v2 式 (17) 的频率相关整形变换，返回每个频率的
 `Jc(:,:,k)` 与 `Jnet(:,:,k)`。该层只负责模型和坐标变换，不作稳定判定。
+
+变换必须遵循 `docs/specs/model-and-port-conventions.md` 的端口方向、修正版
+`E,C,F` 及基值约定。原始论文 TeX 中已确认的转录错误不得进入实现。
 
 ### 2.2 纯数值判据层
 
 建议接口：
 
 ```matlab
-result = evaluateMixedGainPhaseSamples(Jc, Jnet, frequenciesHz, options)
+result = evaluateMixedGainPhaseSamples( ...
+    converterResponses, networkResponse, frequenciesHz, ...
+    conventions, preconditions, options)
 ```
 
 输入为两个 `n×n×N` 复矩阵数组。该层逐频率计算：
@@ -38,7 +43,8 @@ result = evaluateMixedGainPhaseSamples(Jc, Jnet, frequenciesHz, options)
 - 变流器矩阵扇形性状态；
 - 网络逆矩阵扇形性状态；
 - 最大、最小矩阵相位；
-- 上、下相位裕度；
+- 各变流器上、下相位裕度；
+- 跨变流器总体相位展宽裕度；
 - 当前频率由小增益、小相位、两者共同覆盖，或未被覆盖；
 - 数值待定原因。
 
@@ -55,11 +61,15 @@ result = refineMixedGainPhaseFrequencyGrid(modelEvaluator, initialGrid, options)
 
 ## 3. 输出状态
 
-总状态只允许：
+有限频带采样状态 `sampledBandStatus` 只允许：
 
 - `confirmed-on-grid`：所有频率样本至少由一种充分条件覆盖；
 - `not-confirmed-on-grid`：存在明确违反增益和相位两类条件的频率样本；
 - `indeterminate`：至少一个关键频率因误差界、病态或分辨率不足无法可靠分类。
+
+另设 `theoremStatus`。只有开环稳定、实有理且适当、变换良定、网络逆稳定、
+不存在破坏结论的右半平面极零相消，并且 `0` 与无穷远端点及全频覆盖均有证据时，
+才允许输出 `confirmed-by-sufficient-condition`。有限频率网格通过不得冒充定理已确认。
 
 逐频率原因码至少包括：
 
@@ -71,6 +81,7 @@ result = refineMixedGainPhaseFrequencyGrid(modelEvaluator, initialGrid, options)
 - `network-inverse-nonsectorial`；
 - `upper-phase-overlap`；
 - `lower-phase-overlap`；
+- `converter-phase-spread-overlap`；
 - `gain-boundary-indeterminate`；
 - `sectoriality-indeterminate`；
 - `phase-boundary-indeterminate`；
@@ -85,6 +96,15 @@ result = refineMixedGainPhaseFrequencyGrid(modelEvaluator, initialGrid, options)
 5. 相位区间必须正确处理跨 `±π` 的分支；
 6. 半扇形、准扇形和严格扇形必须按定理所需对象分别处理，证据不足时返回待定；
 7. 输出必须包含频率范围、频率点数、容差、最大条件数和停止原因。
+
+逐频率相位条件除各变流器与网络逆矩阵的上下相位约束外，还必须计算
+
+```text
+phaseSpreadMargin = pi - (
+    max_i upperPhase(Jc_i) - min_i lowerPhase(Jc_i))
+```
+
+多机条件要求该裕度严格为正。作者绘图脚本没有显式执行这一约束，评价器不得照搬遗漏。
 
 ## 5. 最小测试集
 
@@ -107,8 +127,20 @@ result = refineMixedGainPhaseFrequencyGrid(modelEvaluator, initialGrid, options)
 - 一个条件通过而另一条件数值待定时，总体仍可确认；
 - 两者均未通过且至少一个待定时，总体必须待定；
 - 任何频率未覆盖时，整体不得标记 `confirmed-on-grid`。
+- 两台装置相位分别为 `0.6*pi` 与 `-0.6*pi` 时，即使各自上下相位约束通过，
+  跨变流器总体相位展宽也必须使小相位条件失败；
+- 有限频率网格全部通过但开环前提或端点证据缺失时，`sampledBandStatus` 可通过，
+  `theoremStatus` 必须保持待定。
 
-### 5.3 回归测试
+### 5.3 变换一致性测试
+
+- 非单位工作点下以有限差分验证修正版 `E,C,F`；
+- 验证 `Jc+Jnet = E*(Yc+Ynet)*F`；
+- 把网络侧误写为 `+C` 时测试必须失败；
+- `E=F=I,C=0` 时严格退化为原始模型；
+- 检查动态 `F(jw)` 在全频带的条件数和奇异点。
+
+### 5.4 回归测试
 
 - 作者稳定 Fig. 8 工况 `D=0.5`；
 - 作者不稳定 Fig. 8 工况 `D=0.05`；
