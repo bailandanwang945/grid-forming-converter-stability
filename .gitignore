@@ -32,3 +32,7 @@ output/**/*.synctex.gz
 .DS_Store
 Thumbs.db
 .vscode/
+node_modules/
+dist/
+__pycache__/
+.pytest_cache/
