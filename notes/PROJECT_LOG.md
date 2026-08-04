@@ -407,3 +407,11 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
   `npm audit fix --force`，应在锁定版本与构建基线后单独处理；
 - 当前拓扑只是交互式工作台的视觉雏形，还不能拖拽增删元件；下一阶段接入真正的图模型、
   后端任务数据契约和 Python 数值内核。
+
+### 一键启动补充
+
+- 项目根目录新增 `启动平台.bat`，双击后调用受 ExecutionPolicy Bypass 限定的项目脚本；
+- 启动器自动检查 Python、npm 和前后端依赖，后台启动两个本地服务，等待健康检查通过后
+  打开 `http://127.0.0.1:5173`；
+- 启动窗口承担生命周期管理：按回车后同时关闭前后端进程；另提供 `-SmokeTest` 参数供
+  自动验证使用，不打开浏览器、不等待人工输入。

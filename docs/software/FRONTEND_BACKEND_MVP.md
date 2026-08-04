@@ -15,9 +15,11 @@
 
 ## 本地启动
 
+Windows 下直接双击项目根目录的 `启动平台.bat`。脚本会在首次运行时安装缺少的依赖，
+随后启动前后端并自动打开浏览器。保留启动窗口，按回车键即可关闭平台。
+
+也可以在 PowerShell 中运行：
+
 ```powershell
-python -m uvicorn backend.api.app:app --reload --port 8000
-cd apps/web
-npm install
-npm run dev
+.\启动平台.bat
 ```
