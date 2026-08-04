@@ -76,6 +76,26 @@ result = refineMixedGainPhaseFrequencyGrid(modelEvaluator, initialGrid, options)
 `resolved-under-nearest-neighbor-assumption`，并记录相位种子、种子频点和来源。真正的
 连续分支确认必须增加模型级自适应加密或可验证的相位变化上界。
 
+模型级验证不得接受孤立的 `certified=true` 声明。当前接口要求逐区间提供响应偏差
+二范数上界 `delta` 与共同旋转角 `theta`，并由程序重算
+`mu = lambda_min(He(exp(-j*theta)*A_left))`。只有端点差异不超过所报上界，且
+`mu-delta` 严格为正时，该区间才记为
+`branch-verified-under-supplied-deviation-bounds`。这一结论只排除
+相位分支混叠并确认区间内严格扇形性；它不自动证明区间内的增益—相位不等式，更不
+等同于论文定理的全部前提已经成立。
+
+当前实现使用普通双精度运算，固定返回 `floatingPointCertified=false`。上界证据必须与
+模型哈希、频率网格、响应标识和左端点参考约定一致；在尚未引入向外舍入或区间算术前，
+不得使用“计算机辅助认证”表述。
+
+显式相位种子必须与其所在频点的矩阵相位一致。若种子位于频带中部，则当前实现只向
+高频方向传播，种子以前的频点与区间保持 `indeterminate`；不得把后置种子伪装成频带
+起点的锚定证据。
+
+缺少上述模型级证据时，`refineMixedGainPhaseFrequencyGrid` 仍可自动插入频点，以暴露
+有限网格遗漏的变化，但最终只能写作 `refined-screening-only`。频点加密本身不是连续
+频带证明。
+
 逐频率原因码至少包括：
 
 - `gain-pass`；
