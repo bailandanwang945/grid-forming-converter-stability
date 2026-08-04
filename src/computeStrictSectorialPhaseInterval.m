@@ -19,32 +19,56 @@ function result = computeStrictSectorialPhaseInterval(A, options)
     validateMatrix(A);
     options = validateOptions(options);
     A = double(A);
+    inputScale = max([abs(real(A(:))); abs(imag(A(:)))]);
+    if inputScale == 0
+        scaledA = A;
+        classifierOptions = options.ClassifierOptions;
+    else
+        scaledA = A/inputScale;
+        classifierOptions = options.ClassifierOptions;
+        scaledAbsTol = classifierOptions.AbsTol/inputScale;
+        classifierOptions.AbsTol = min(scaledAbsTol, realmax('double'));
+    end
 
-    classification = classifyNumericalRange(A, options.ClassifierOptions);
+    classification = classifyNumericalRange(scaledA, classifierOptions);
+    normalizedDiagnostics = captureNormalizedDiagnostics(classification);
+    classification = restoreClassificationScale(classification, inputScale);
+    classification.normalizedDiagnostics = normalizedDiagnostics;
+    classification.dimensionalDiagnosticOverflow = any(~isfinite([ ...
+        classification.margin, classification.lowerBound, ...
+        classification.upperBound, classification.optimalityGap, ...
+        classification.tolerance, classification.scale]));
     if classification.classification == "indeterminate"
         result = makeUnavailableResult(classification, size(A, 1), ...
-            "numerical-pending", "classification-indeterminate");
+            "numerical-pending", "classification-indeterminate", inputScale);
         return;
     end
     if classification.classification ~= "strict-sectorial"
         result = makeUnavailableResult(classification, size(A, 1), ...
-            "not-applicable", classification.classification);
+            "not-applicable", classification.classification, inputScale);
         return;
     end
 
     theta = classification.theta;
-    rotatedMatrix = exp(-1i*theta)*A;
+    rotatedMatrix = exp(-1i*theta)*scaledA;
     hermitianPart = (rotatedMatrix+rotatedMatrix')/2;
     quadratureHermitianPart = (rotatedMatrix-rotatedMatrix')/(2i);
     hermitianPart = (hermitianPart+hermitianPart')/2;
     quadratureHermitianPart = ...
         (quadratureHermitianPart+quadratureHermitianPart')/2;
+    if any(~isfinite(rotatedMatrix(:))) || ...
+            any(~isfinite(hermitianPart(:))) || ...
+            any(~isfinite(quadratureHermitianPart(:)))
+        result = makeUnavailableResult(classification, size(A, 1), ...
+            "numerical-pending", "nonfinite-intermediate", inputScale);
+        return;
+    end
 
     [~, positiveDefiniteFlag] = chol(hermitianPart);
     if positiveDefiniteFlag ~= 0
         result = makeUnavailableResult(classification, size(A, 1), ...
             "numerical-pending", ...
-            "rotated-hermitian-not-positive-definite");
+            "rotated-hermitian-not-positive-definite", inputScale);
         return;
     end
 
@@ -52,19 +76,25 @@ function result = computeStrictSectorialPhaseInterval(A, options)
     if ~isfinite(hermitianConditionNumber) || ...
             hermitianConditionNumber > options.MaxHermitianConditionNumber
         result = makeUnavailableResult(classification, size(A, 1), ...
-            "numerical-pending", "ill-conditioned-hermitian-part");
+            "numerical-pending", "ill-conditioned-hermitian-part", inputScale);
         result.hermitianConditionNumber = hermitianConditionNumber;
         return;
     end
 
     tangentValues = eig( ...
         quadratureHermitianPart, hermitianPart, 'vector');
+    if any(~isfinite(tangentValues))
+        result = makeUnavailableResult(classification, size(A, 1), ...
+            "numerical-pending", "nonfinite-intermediate", inputScale);
+        result.hermitianConditionNumber = hermitianConditionNumber;
+        return;
+    end
     tangentScale = max(1, max(abs(tangentValues)));
     normalizedImaginaryResidual = ...
         max(abs(imag(tangentValues)))/tangentScale;
     if normalizedImaginaryResidual > options.MaxRelativeImaginaryResidual
         result = makeUnavailableResult(classification, size(A, 1), ...
-            "numerical-pending", "complex-generalized-eigenvalues");
+            "numerical-pending", "complex-generalized-eigenvalues", inputScale);
         result.hermitianConditionNumber = hermitianConditionNumber;
         result.normalizedImaginaryResidual = normalizedImaginaryResidual;
         return;
@@ -72,6 +102,12 @@ function result = computeStrictSectorialPhaseInterval(A, options)
 
     relativePhases = sort(atan(real(tangentValues)), 'ascend');
     unwrappedPhases = theta + relativePhases;
+    if any(~isfinite(unwrappedPhases))
+        result = makeUnavailableResult(classification, size(A, 1), ...
+            "numerical-pending", "nonfinite-intermediate", inputScale);
+        result.hermitianConditionNumber = hermitianConditionNumber;
+        return;
+    end
     intervalCenter = (unwrappedPhases(1)+unwrappedPhases(end))/2;
     branchShift = 2*pi*floor((intervalCenter+pi)/(2*pi));
     unwrappedPhases = unwrappedPhases-branchShift;
@@ -90,7 +126,29 @@ function result = computeStrictSectorialPhaseInterval(A, options)
         'rotationTheta', theta, ...
         'hermitianConditionNumber', hermitianConditionNumber, ...
         'normalizedImaginaryResidual', normalizedImaginaryResidual, ...
+        'inputScale', inputScale, ...
         'method', "strict-sectorial-generalized-HG-v1");
+end
+
+function diagnostics = captureNormalizedDiagnostics(classification)
+    diagnostics = struct( ...
+        'margin', classification.margin, ...
+        'lowerBound', classification.lowerBound, ...
+        'upperBound', classification.upperBound, ...
+        'optimalityGap', classification.optimalityGap, ...
+        'tolerance', classification.tolerance, ...
+        'scale', classification.scale);
+end
+
+function classification = restoreClassificationScale( ...
+        classification, inputScale)
+    dimensionalNames = {'margin', 'lowerBound', 'upperBound', ...
+        'optimalityGap', 'tolerance', 'scale'};
+    for index = 1:numel(dimensionalNames)
+        name = dimensionalNames{index};
+        classification.(name) = classification.(name)*inputScale;
+    end
+    classification.inputNormalizationScale = inputScale;
 end
 
 function validateMatrix(A)
@@ -152,7 +210,7 @@ function validateNonnegativeScalar(value, name)
 end
 
 function result = makeUnavailableResult(classification, matrixSize, ...
-        status, reason)
+        status, reason, inputScale)
     result = struct( ...
         'status', status, ...
         'reason', reason, ...
@@ -165,5 +223,6 @@ function result = makeUnavailableResult(classification, matrixSize, ...
         'rotationTheta', classification.theta, ...
         'hermitianConditionNumber', NaN, ...
         'normalizedImaginaryResidual', NaN, ...
+        'inputScale', inputScale, ...
         'method', "strict-sectorial-generalized-HG-v1");
 end

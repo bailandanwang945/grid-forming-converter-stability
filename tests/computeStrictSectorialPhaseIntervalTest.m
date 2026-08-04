@@ -96,5 +96,42 @@ classdef computeStrictSectorialPhaseIntervalTest < matlab.unittest.TestCase
             testCase.verifyEqual(congruent.phases, result.phases, ...
                 AbsTol=1e-8);
         end
+
+        function testNearMaximumScaleRemainsFinite(testCase)
+            matrix = 1e308*(1+1i);
+
+            result = computeStrictSectorialPhaseInterval(matrix);
+
+            testCase.verifyEqual(result.status, "resolved");
+            testCase.verifyTrue(all(isfinite(result.phases)));
+            testCase.verifyEqual(result.phases, pi/4, AbsTol=1e-10);
+        end
+
+        function testMaximumFiniteComplexComponentsRemainFinite(testCase)
+            matrix = complex(realmax('double'), realmax('double'));
+
+            result = computeStrictSectorialPhaseInterval(matrix);
+
+            testCase.verifyEqual(result.status, "resolved");
+            testCase.verifyTrue(all(isfinite(result.phases)));
+            testCase.verifyEqual(result.phases, pi/4, AbsTol=1e-10);
+            testCase.verifyTrue( ...
+                result.classification.dimensionalDiagnosticOverflow);
+            normalized = result.classification.normalizedDiagnostics;
+            testCase.verifyTrue(all(isfinite([normalized.margin, ...
+                normalized.lowerBound, normalized.upperBound, ...
+                normalized.optimalityGap, normalized.tolerance, ...
+                normalized.scale])));
+        end
+
+        function testVerySmallPositiveScaleRemainsFinite(testCase)
+            matrix = 1e-300*exp(0.2i)*diag([1, 2]);
+
+            result = computeStrictSectorialPhaseInterval(matrix);
+
+            testCase.verifyEqual(result.status, "resolved");
+            testCase.verifyTrue(all(isfinite(result.phases)));
+            testCase.verifyEqual(result.phases, [0.2; 0.2], AbsTol=1e-9);
+        end
     end
 end
