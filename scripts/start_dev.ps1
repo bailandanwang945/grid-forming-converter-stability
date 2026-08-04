@@ -5,11 +5,36 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $FrontendRoot = Join-Path $ProjectRoot "apps\web"
+$ViteScript = Join-Path $FrontendRoot "node_modules\vite\bin\vite.js"
 $Backend = $null
 $Frontend = $null
 
 function Write-Step([string]$Message) {
     Write-Host "[GFM] $Message" -ForegroundColor Cyan
+}
+
+function Invoke-NativeCommand(
+    [string]$FilePath,
+    [string[]]$Arguments,
+    [switch]$Quiet
+) {
+    # Windows PowerShell 5.1 can promote native stderr to an ErrorRecord when
+    # ErrorActionPreference is Stop. Dependency probes intentionally use a
+    # non-zero exit code, so inspect LASTEXITCODE instead of catching stderr.
+    $PreviousPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = "Continue"
+        if ($Quiet) {
+            & $FilePath @Arguments 2>$null | Out-Null
+        }
+        else {
+            & $FilePath @Arguments 2>&1 | Out-Host
+        }
+        return [int]$LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $PreviousPreference
+    }
 }
 
 function Wait-Http([string]$Url, [int]$Attempts = 40) {
@@ -27,6 +52,25 @@ function Wait-Http([string]$Url, [int]$Attempts = 40) {
     return $false
 }
 
+function Stop-ProjectListener([int]$Port, [string]$ExpectedCommandFragment) {
+    $Connections = Get-NetTCPConnection `
+        -LocalPort $Port `
+        -State Listen `
+        -ErrorAction SilentlyContinue
+    foreach ($Connection in @($Connections)) {
+        $ServiceProcess = Get-CimInstance `
+            -ClassName Win32_Process `
+            -Filter "ProcessId=$($Connection.OwningProcess)" `
+            -ErrorAction SilentlyContinue
+        if (
+            $null -ne $ServiceProcess -and
+            $ServiceProcess.CommandLine -like "*$ExpectedCommandFragment*"
+        ) {
+            Stop-Process -Id $Connection.OwningProcess -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
 try {
     Write-Step "Checking runtime dependencies..."
     if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
@@ -36,12 +80,17 @@ try {
         throw "Node.js/npm was not found. Install Node.js 20 or newer."
     }
 
-    python -c "import fastapi, uvicorn, pydantic" 2>$null
-    if ($LASTEXITCODE -ne 0) {
+    $BackendProbeExitCode = Invoke-NativeCommand python @(
+        "-c", "import fastapi, uvicorn, pydantic"
+    ) -Quiet
+    if ($BackendProbeExitCode -ne 0) {
         Write-Step "Installing backend dependencies..."
-        python -m pip install -r (Join-Path $ProjectRoot "backend\requirements.txt")
-        if ($LASTEXITCODE -ne 0) {
-            throw "Backend dependency installation failed."
+        $RequirementsPath = Join-Path $ProjectRoot "backend\requirements.txt"
+        $PipExitCode = Invoke-NativeCommand python @(
+            "-m", "pip", "install", "-r", $RequirementsPath
+        )
+        if ($PipExitCode -ne 0) {
+            throw "Backend dependency installation failed (exit code $PipExitCode)."
         }
     }
 
@@ -49,9 +98,9 @@ try {
         Write-Step "Installing frontend dependencies..."
         Push-Location $FrontendRoot
         try {
-            npm install
-            if ($LASTEXITCODE -ne 0) {
-                throw "Frontend dependency installation failed."
+            $NpmExitCode = Invoke-NativeCommand npm.cmd @("install")
+            if ($NpmExitCode -ne 0) {
+                throw "Frontend dependency installation failed (exit code $NpmExitCode)."
             }
         }
         finally {
@@ -66,7 +115,6 @@ try {
         -WindowStyle Hidden `
         -PassThru
 
-    $ViteScript = Join-Path $FrontendRoot "node_modules\vite\bin\vite.js"
     if (-not (Test-Path $ViteScript)) {
         throw "Vite executable was not found after dependency installation."
     }
@@ -106,6 +154,11 @@ catch {
 }
 finally {
     Write-Step "Stopping services..."
+    # Some Python/Node launchers detach from the Start-Process wrapper. Stop
+    # only listeners whose command lines match this project, never unrelated
+    # services that happen to use Python or Node.
+    Stop-ProjectListener 5173 $ViteScript
+    Stop-ProjectListener 8000 "backend.api.app:app"
     foreach ($Process in @($Frontend, $Backend)) {
         if ($null -ne $Process -and -not $Process.HasExited) {
             Stop-Process -Id $Process.Id -ErrorAction SilentlyContinue
