@@ -16,7 +16,7 @@ function summary = run_inf_bus_damping_continuation()
     oldFolder = pwd;
     oldFigureVisibility = get(groot, 'defaultFigureVisible');
     cleanup = onCleanup(@() restoreEnvironment( ...
-        oldPath, oldFolder, oldFigureVisibility, runtimeRoot)); %#ok<NASGU>
+        oldPath, oldFolder, oldFigureVisibility, runtimeRoot));
 
     prepareRuntimeTool(simplusRoot, authorRoot, runtimeRoot, inputName);
     path(oldPath);
@@ -34,12 +34,26 @@ function summary = run_inf_bus_damping_continuation()
         'DampingContinuation:WrongClass', ...
         'The isolated author class was not resolved.');
 
-    UserDataName = 'UserData'; %#ok<NASGU>
-    UserDataType = 1; %#ok<NASGU>
-    NumApparatus = NaN; %#ok<NASGU>
-    ApparatusType = {}; %#ok<NASGU>
-    Para = {}; %#ok<NASGU>
+    UserDataName = 'UserData';
+    UserDataType = 1;
+    NumApparatus = NaN;
+    ApparatusType = {};
+    Para = {};
+    ObjYbusDss = [];
+    ObjGmCell = {};
+    ApparatusBus = {};
+    ApparatusPowerFlow = {};
+    Ts = [];
+    ListBusNew = [];
+    Advance = [];
+    ObjZbusDss = [];
+    NumBus = [];
+    UserDataStruct = [];
+    Wbase = [];
     SimplusGT.Toolbox.Main();
+    assert(strcmp(UserDataName, 'UserData') && UserDataType == 1, ...
+        'DampingContinuation:UnexpectedInputMode', ...
+        'The author toolbox changed the requested input mode.');
 
     assert(NumApparatus == 2 && ApparatusType{2} == 20, ...
         'DampingContinuation:UnexpectedSystem', ...
@@ -100,6 +114,8 @@ function summary = run_inf_bus_damping_continuation()
     highPoint = evaluateDamping(0.5, Para, ObjGmCell, ...
         ApparatusBus, ApparatusType, ApparatusPowerFlow, Ts, ...
         ListBusNew, Advance, ObjZbusDss, NumBus, networkMatrix);
+    powerFlow = ApparatusPowerFlow{2};
+    baseAngularFrequency = Wbase;
 
     if ~isfolder(outputRoot)
         mkdir(outputRoot);
@@ -143,7 +159,8 @@ function summary = run_inf_bus_damping_continuation()
     save(fullfile(outputRoot, 'damping_continuation_workspace.mat'), ...
         'dampingGrid', 'maximumRealPoleHz', 'dominantPoleOscillationHz', ...
         'dominantReturnZeroRealHz', 'dominantReturnZeroOscillationHz', ...
-        'criticalDamping', 'criticalPoint', 'summary');
+        'criticalDamping', 'criticalPoint', 'lowPoint', 'highPoint', ...
+        'networkMatrix', 'powerFlow', 'baseAngularFrequency', 'summary');
 
     fprintf(['DAMPING_CRITICAL D=%.12g pole=%.12g+j%.12g Hz ', ...
         'return_zero=%.12g+j%.12g Hz mismatch=%.3g Hz\n'], ...
@@ -188,6 +205,9 @@ function point = evaluateDamping(damping, paraTemplate, objectTemplate, ...
     dominantReturnZeroHz = dynamicReturnZerosHz(dominantZeroIndex);
 
     point = struct('damping', damping, ...
+        'converterMatrix', converterMatrix, ...
+        'dynamicPolesHz', dynamicPolesHz, ...
+        'dynamicReturnZerosHz', dynamicReturnZerosHz, ...
         'dominantPoleHz', dominantPoleHz, ...
         'dominantReturnZeroHz', dominantReturnZeroHz);
 end

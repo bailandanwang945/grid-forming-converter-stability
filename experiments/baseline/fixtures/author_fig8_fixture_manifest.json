@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0.0",
+  "fixtureId": "cifelli-anta-fig8-damping-controlled-v1",
+  "authorRepository": "Cifelli-Anta released companion code",
+  "authorTag": "v1.0.0",
+  "authorCommit": "ef67c7a4ac84e4e1142e95b072d241db89eb64ba",
+  "sourceWorkbook": "external/cifelli-small-gain-phase/UserData_inf_bus_Fig_8.xlsm",
+  "sourceWorkbookSha256": "5DD0FACCA95A134090EF5CDF5F5ACB2EB20A681F9CCA36ACCF182E54D751BFB2",
+  "simplusProvenance": {
+    "versionMarker": "v2026-Mar-9",
+    "commit": "unavailable-local-snapshot",
+    "sourceBoundary": "local snapshot without nested Git metadata",
+    "authorClassOverlay": "GridFormingVSI.m from author release"
+  },
+  "sourceWorkspaceRelativePath": "results/schur/damping-continuation/damping_continuation_workspace.mat",
+  "matlabRelease": "2024b",
+  "frequencyGrid": {
+    "minimumHz": 0.001,
+    "maximumHz": 10000,
+    "pointCountPerCase": 1000,
+    "spacing": "logarithmic"
+  },
+  "numericFormat": "%.17g",
+  "poleExclusionThresholdHz": 1E-7,
+  "baseAngularFrequency": 314.15926535897933,
+  "powerFlow": {
+    "P": -0.5,
+    "Q": -0,
+    "V": 1,
+    "phi": 0,
+    "omega": 314.15926535897933,
+    "convention": "load-positive"
+  },
+  "derivedOperatingPoint": {
+    "vd": 1,
+    "vq": 0,
+    "id": -0.5,
+    "iq": 0,
+    "definition": "v=V*exp(j*phi); i=(P-jQ)/conj(v)",
+    "convention": "author-load-positive"
+  },
+  "portConventions": {
+    "frameConventionId": "cifelli-anta-author-global-synchronous-dq-v1",
+    "converterCurrentDirection": "network-to-converter",
+    "networkCurrentDirection": "converter-to-network",
+    "powerConvention": "load-positive",
+    "matrixType": "admittance"
+  },
+  "caseIds": [
+    "fig8_D_0p05",
+    "fig8_D_0p5"
+  ],
+  "dampingValues": [
+    0.05,
+    0.5
+  ],
+  "frequencyResponseRowCount": 2000,
+  "spectrumRowCount": 80
+}
