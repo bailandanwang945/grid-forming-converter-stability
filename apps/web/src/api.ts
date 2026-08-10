@@ -67,6 +67,86 @@ export async function runAnalysis(scenarioId: Fig8ScenarioId): Promise<AnalysisR
   return response.json()
 }
 
+export type Fig8DomainClassification =
+  | 'criterion-covered-stable'
+  | 'stable-not-covered'
+  | 'unstable-not-covered'
+  | 'numerical-pending'
+  | 'consistency-violation'
+
+export type Fig8DomainPoint = {
+  impedance_scale_kappa: number
+  scr: number
+  damping_d: number
+  maximum_real_pole_hz: number
+  dominant_oscillation_frequency_hz: number
+  closed_loop_reference: 'stable' | 'marginal' | 'unstable'
+  sampled_criterion_status: string
+  classification: Fig8DomainClassification
+  gain_pass_count: number
+  gain_fail_count: number
+  gain_indeterminate_count: number
+  phase_pass_count: number
+  phase_fail_count: number
+  phase_indeterminate_count: number
+  uncovered_frequency_count: number
+  indeterminate_frequency_count: number
+}
+
+export type Fig8DomainComparison = {
+  status: 'completed'
+  analysis_mode: string
+  axes: {
+    impedance_scale_kappa: number[]
+    scr_by_kappa: number[]
+    damping_d: number[]
+    row_axis: string
+    column_axis: string
+  }
+  summary: {
+    schemaVersion: string
+    method: string
+    parameterPointCount: number
+    frequencyPointCountPerParameterPoint: number
+    frequencyMinimumHz: number
+    frequencyMaximumHz: number
+    phaseClassifierAngles: number
+    scrMinimum: number
+    scrMaximum: number
+    criterionCoveredSubsetOfReferenceStable: boolean
+    classificationCounts: {
+      criterionCoveredStable: number
+      stableNotCovered: number
+      unstableNotCovered: number
+      numericalPending: number
+      consistencyViolation: number
+    }
+    anchorEvidence: Record<string, number>
+  }
+  rows: Fig8DomainPoint[]
+  provenance: {
+    source_kind: string
+    generator: string
+    source_workbook: string
+    portable_behavior: string
+    claim_boundary: string
+    interpretation: string
+    closed_loop_boundary: string
+    claim_boundary_zh: string
+    interpretation_zh: string
+    closed_loop_boundary_zh: string
+  }
+}
+
+export async function getFig8DomainComparison(): Promise<Fig8DomainComparison> {
+  const response = await fetch('/api/comparison/fig8-domain')
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    throw new Error(detail?.detail ?? `同域对照服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
 export type Bus = {
   kind?: 'bus'
   id: string

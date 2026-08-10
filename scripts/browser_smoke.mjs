@@ -27,6 +27,25 @@ try {
     if (!fig8Text.includes(evidence)) throw new Error(`Fig. 8 page is missing ${evidence}.`)
   }
 
+  await page.getByRole('button', { name: '同域对照' }).click()
+  await page.getByText('D–SCR 参数域分类图').waitFor({ timeout: 15000 })
+  const comparisonText = await page.locator('body').innerText()
+  for (const evidence of ['45 点', '96 点', '35 点', '不是系统失稳']) {
+    if (!comparisonText.includes(evidence)) throw new Error(`Comparison page is missing ${evidence}.`)
+  }
+  const comparisonDownloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: /导出参数域 CSV/ }).click()
+  const comparisonDownload = await comparisonDownloadPromise
+  if (!comparisonDownload.suggestedFilename().endsWith('.csv')) {
+    throw new Error('Same-domain CSV export failed.')
+  }
+  const comparisonReportPromise = page.waitForEvent('popup')
+  await page.getByRole('button', { name: /打开可打印报告/ }).click()
+  const comparisonReport = await comparisonReportPromise
+  await comparisonReport.waitForFunction(() => document.body?.innerText.includes('未覆盖不等于失稳'), null, { timeout: 30000 })
+  await comparisonReport.close()
+  await page.screenshot({ path: resolve('tmp/browser-smoke-comparison.png'), fullPage: true })
+
   await page.getByRole('button', { name: '独立模型' }).click()
   await page.getByText('可编辑网络与控制参数').waitFor({ timeout: 15000 })
   await page.getByLabel('阻尼 D / pu').first().fill('0.05')

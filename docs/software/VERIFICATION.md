@@ -10,7 +10,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 脚本依次执行：
 
-1. Python `unittest` 全套测试，当前测试集为 52 项；
+1. Python `unittest` 全套测试，当前测试集为 56 项；
 2. React/TypeScript 前端生产构建；
 3. 开发态一键启动器冒烟测试；
 4. 使用本机现有 Chrome 或 Edge 的浏览器端到端流程；
@@ -31,7 +31,7 @@ $env:MATLAB_ROOT = "D:\matlab"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 ```
 
-`D:\matlab` 仅为示例，应替换为本机实际安装目录。当前仓库中可追溯的最新 MATLAB 记录为 128 Passed、0 Failed、0 Incomplete；Python 当前测试集为 52 项。两者验证不同实现，不应相加或互相替代。
+`D:\matlab` 仅为示例，应替换为本机实际安装目录。当前仓库中可追溯的最新 MATLAB 记录为 128 Passed、0 Failed、0 Incomplete；Python 当前测试集为 56 项。两者验证不同实现，不应相加或互相替代。
 
 成功标记分为：
 

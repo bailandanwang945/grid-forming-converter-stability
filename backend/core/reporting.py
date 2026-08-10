@@ -179,6 +179,115 @@ dl {{ display:grid; grid-template-columns:150px 1fr; }} dt,dd {{ margin:0; paddi
 </body></html>"""
 
 
+def render_fig8_domain_comparison_report(result: dict) -> str:
+    """Render the pinned same-domain comparison as a printable report."""
+
+    summary = result["summary"]
+    counts = summary["classificationCounts"]
+    axes = result["axes"]
+    rows = result["rows"]
+    palette = {
+        "criterion-covered-stable": ("#176e64", "判据覆盖且参考稳定"),
+        "stable-not-covered": ("#e0a13a", "参考稳定但判据未覆盖"),
+        "unstable-not-covered": ("#c34a4a", "参考失稳且判据未覆盖"),
+        "numerical-pending": ("#83909a", "数值待定"),
+        "consistency-violation": ("#7b3fa1", "一致性违例"),
+    }
+    by_point = {
+        (
+            round(row["impedance_scale_kappa"], 12),
+            round(row["damping_d"], 12),
+        ): row
+        for row in rows
+    }
+    left, top, cell_width, cell_height = 80, 42, 54, 24
+    width = left + cell_width * len(axes["impedance_scale_kappa"]) + 18
+    height = top + cell_height * len(axes["damping_d"]) + 58
+    cells: list[str] = []
+    for row_index, damping in enumerate(reversed(axes["damping_d"])):
+        y = top + row_index * cell_height
+        cells.append(
+            f'<text x="{left-8}" y="{y+16}" text-anchor="end" '
+            f'font-size="9" fill="#52616d">{damping:.3g}</text>'
+        )
+        for column_index, kappa in enumerate(axes["impedance_scale_kappa"]):
+            point = by_point[(round(kappa, 12), round(damping, 12))]
+            color, label = palette[point["classification"]]
+            x = left + column_index * cell_width
+            title = (
+                f"κ={kappa:.2f}, SCR={point['scr']:.4f}, D={damping:.3g}; "
+                f"{label}; max Re(λ)={point['maximum_real_pole_hz']:+.6g} Hz"
+            )
+            cells.append(
+                f'<rect x="{x}" y="{y}" width="{cell_width-2}" '
+                f'height="{cell_height-2}" rx="2" fill="{color}">'
+                f"<title>{escape(title)}</title></rect>"
+            )
+    x_labels = "".join(
+        f'<text x="{left+index*cell_width+(cell_width-2)/2:.2f}" '
+        f'y="{top+cell_height*len(axes["damping_d"])+16}" text-anchor="middle" '
+        f'font-size="9" fill="#52616d">{value:.1f}</text>'
+        for index, value in enumerate(axes["impedance_scale_kappa"])
+    )
+    scr_labels = "".join(
+        f'<text x="{left+index*cell_width+(cell_width-2)/2:.2f}" '
+        f'y="{top+cell_height*len(axes["damping_d"])+29}" text-anchor="middle" '
+        f'font-size="7" fill="#82909a">{value:.3f}</text>'
+        for index, value in enumerate(axes["scr_by_kappa"])
+    )
+    heatmap = (
+        f'<svg viewBox="0 0 {width} {height}" role="img" '
+        'aria-label="Fig. 8 D-SCR 同域对照图">'
+        '<text x="10" y="18" font-size="12" font-weight="700" '
+        'fill="#263641">阻尼 D—电网强度同域稳定性对照</text>'
+        + "".join(cells)
+        + x_labels
+        + scr_labels
+        + f'<text x="{left+cell_width*len(axes["impedance_scale_kappa"])/2:.2f}" '
+        f'y="{height-5}" text-anchor="middle" font-size="9" fill="#52616d">'
+        "线路阻抗缩放 κ（下一行列出对应 SCR）</text>"
+        '<text x="14" y="150" transform="rotate(-90 14 150)" '
+        'font-size="9" fill="#52616d">VSM 阻尼 D</text></svg>'
+    )
+    legend = "".join(
+        f'<span><i style="background:{color}"></i>{escape(label)}</span>'
+        for color, label in palette.values()
+    )
+    anchor = summary["anchorEvidence"]
+    return f"""<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Fig. 8 同域稳定性对照报告</title>
+<style>
+@page {{ size:A4 landscape; margin:13mm; }}
+body {{ font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif; color:#202b33; margin:0; font-size:11px; line-height:1.65; }}
+h1 {{ font-size:21px; margin:0 0 4px; }} h2 {{ font-size:14px; margin:18px 0 8px; border-left:4px solid #176e64; padding-left:8px; }}
+.sub {{ color:#697884; }} .notice {{ padding:9px 12px; background:#fff5df; border:1px solid #edd7a8; border-radius:7px; }}
+.grid {{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0; }} .metric {{ padding:9px; background:#f3f7f7; border-radius:7px; }} .metric b {{ display:block; margin-top:3px; font-size:14px; }}
+svg {{ width:100%; max-height:520px; border:1px solid #e0e6e9; border-radius:7px; }} .legend {{ display:flex; flex-wrap:wrap; gap:13px; margin:8px 0; }} .legend span {{ display:flex; align-items:center; gap:5px; }} .legend i {{ width:11px; height:11px; border-radius:2px; }}
+table {{ width:100%; border-collapse:collapse; }} th,td {{ padding:5px 7px; border:1px solid #dce3e7; text-align:left; }} th {{ background:#f2f5f6; }} .footer {{ margin-top:18px; color:#75838d; font-size:9px; }}
+@media print {{ .print-tip {{ display:none; }} .notice,svg,table {{ break-inside:avoid; }} }}
+</style></head><body>
+<h1>Fig. 8 同一参数域稳定性对照报告</h1>
+<div class="sub">作者同一模型 · 阻尼 D—线路阻抗缩放 κ / SCR · {summary['parameterPointCount']} 个参数点</div>
+<p class="print-tip"><button onclick="window.print()">打印或另存为 PDF</button></p>
+<div class="grid">
+ <div class="metric">判据覆盖且参考稳定<b>{counts['criterionCoveredStable']}</b></div>
+ <div class="metric">参考稳定但判据未覆盖<b>{counts['stableNotCovered']}</b></div>
+ <div class="metric">参考失稳且判据未覆盖<b>{counts['unstableNotCovered']}</b></div>
+ <div class="metric">数值待定 / 一致性违例<b>{counts['numericalPending']} / {counts['consistencyViolation']}</b></div>
+</div>
+<div class="notice"><b>解释边界：</b>{escape(result['provenance']['claim_boundary_zh'])} {escape(result['provenance']['interpretation_zh'])} {escape(result['provenance']['closed_loop_boundary_zh'])}</div>
+<h2>核心参数域对照</h2><div class="legend">{legend}</div>{heatmap}
+<h2>计算与锚点核验</h2>
+<table><tbody>
+<tr><th>频率样本</th><td>{summary['frequencyPointCountPerParameterPoint']} 点，{summary['frequencyMinimumHz']:.3g}—{summary['frequencyMaximumHz']:.3g} Hz</td><th>相位分类角网格</th><td>{summary['phaseClassifierAngles']}</td></tr>
+<tr><th>D=0.05 变流器响应最大误差</th><td>{anchor['damping005ConverterMaxAbsError']:.3g}</td><th>D=0.05 主导极点实部误差</th><td>{anchor['damping005MaximumRealPoleErrorHz']:.3g} Hz</td></tr>
+<tr><th>D=0.5 变流器响应最大误差</th><td>{anchor['damping05ConverterMaxAbsError']:.3g}</td><th>D=0.5 主导极点实部误差</th><td>{anchor['damping05MaximumRealPoleErrorHz']:.3g} Hz</td></tr>
+</tbody></table>
+<h2>答辩口径</h2><p>在本模型和离散参数域内，有限网格充分判据覆盖的 45 个点全部位于闭环特征根参考稳定区内；另有 96 个点虽由特征根参考判为稳定，却未被该充分条件覆盖。这说明该判据在所考察范围内具有可观察的保守性。未覆盖不等于失稳，闭环特征根也只是冻结模型上的有限精度参考，并非物理系统的绝对真值。</p>
+<div class="footer">生成器：{escape(result['provenance']['generator'])}。便携软件只读加载已经核验的 MATLAB/作者模型研究证据，运行本报告不要求安装 MATLAB。</div>
+</body></html>"""
+
+
 def _linear_svg_chart(
     x_values: list[float],
     series: Iterable[tuple[str, list[float], str]],

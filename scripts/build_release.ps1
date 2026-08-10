@@ -140,7 +140,7 @@ if (-not (Test-Path (Join-Path $BuiltApp "GFM-Stability-Platform.exe"))) {
 }
 Copy-Item -LiteralPath $BuiltApp -Destination $PackagePath -Recurse
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\WINDOWS_RELEASE_README.txt") `
-    -Destination (Join-Path $PackagePath "使用说明.txt")
+    -Destination (Join-Path $PackagePath "README.txt")
 
 $Forbidden = Get-ChildItem -LiteralPath $PackagePath -Recurse -Force | Where-Object {
     $_.FullName -match '(^|\\)(node_modules|__pycache__|\.pytest_cache|external)(\\|$)'

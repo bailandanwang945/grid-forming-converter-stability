@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from math import ceil
 from typing import Literal
 
@@ -10,6 +11,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from backend.core.fig8_kernel import available_fig8_cases, evaluate_fig8_case
+from backend.core.fig8_domain_comparison import load_fig8_domain_comparison
 from backend.core.reduced_order_model import (
     ReducedOrderModelError,
     build_reduced_order_model,
@@ -23,7 +25,11 @@ from backend.core.reduced_order_scan import (
     ReducedOrderScanError,
     scan_damping_reactance,
 )
-from backend.core.reporting import render_fig8_report, render_reduced_order_report
+from backend.core.reporting import (
+    render_fig8_domain_comparison_report,
+    render_fig8_report,
+    render_reduced_order_report,
+)
 from backend.domain.network_models import NetworkTopology
 
 
@@ -381,6 +387,16 @@ def run_analysis(request: AnalysisRequest) -> dict:
         raise HTTPException(status_code=422, detail=str(error)) from error
 
 
+@app.get("/api/comparison/fig8-domain")
+def fig8_domain_comparison() -> dict:
+    """Return frozen same-model D--SCR comparison evidence."""
+
+    try:
+        return load_fig8_domain_comparison()
+    except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
 @app.post("/api/reduced-order/analyze")
 def run_reduced_order_analysis(request: ReducedOrderAnalysisRequest) -> dict:
     try:
@@ -402,6 +418,11 @@ def run_reduced_order_scan(request: ReducedOrderScanRequest) -> dict:
 @app.get("/api/reports/fig8", response_class=HTMLResponse)
 def fig8_report(scenario_id: Fig8CaseId = "fig8_D_0p5") -> str:
     return render_fig8_report(_analysis_payload(AnalysisRequest(scenario_id=scenario_id)))
+
+
+@app.get("/api/reports/fig8-domain", response_class=HTMLResponse)
+def fig8_domain_comparison_report() -> str:
+    return render_fig8_domain_comparison_report(load_fig8_domain_comparison())
 
 
 @app.post("/api/reports/reduced-order", response_class=HTMLResponse)

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { AnalysisResult, Fig8ScenarioId, runAnalysis } from './api'
 import ReducedOrderWorkbench from './ReducedOrderWorkbench'
+import ParameterDomainComparison from './ParameterDomainComparison'
 
 echarts.use([
   LineChart,
@@ -46,7 +47,7 @@ const markZero = {
 }
 
 function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'paper' | 'model'>('paper')
+  const [workspaceMode, setWorkspaceMode] = useState<'paper' | 'comparison' | 'model'>('paper')
   const [scenarioId, setScenarioId] = useState<Fig8ScenarioId>('fig8_D_0p5')
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [running, setRunning] = useState(false)
@@ -140,11 +141,12 @@ function App() {
       <div><h1>构网型变流器稳定性分析平台</h1><p>拓扑建模 · 分散式充分判据 · 闭环参考验证</p></div>
       <nav className="workspace-tabs" aria-label="工作台切换">
         <button className={workspaceMode === 'paper' ? 'active' : ''} onClick={() => setWorkspaceMode('paper')}>论文复现</button>
+        <button className={workspaceMode === 'comparison' ? 'active' : ''} onClick={() => setWorkspaceMode('comparison')}>同域对照</button>
         <button className={workspaceMode === 'model' ? 'active' : ''} onClick={() => setWorkspaceMode('model')}>独立模型</button>
       </nav>
       <span className="research-tag">双内核工作台 v0.3</span>
     </header>
-    {workspaceMode === 'model' ? <ReducedOrderWorkbench/> : <main>
+    {workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
       <aside className="panel controls">
         <div className="panel-title"><SlidersHorizontal size={18}/><span>论文基线算例</span></div>
         <label>分析场景

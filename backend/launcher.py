@@ -106,6 +106,25 @@ def _verify_pinned_analysis(url: str) -> None:
         raise RuntimeError("Packaged Fig. 8 baseline verification failed.")
 
 
+def _verify_domain_comparison(url: str) -> None:
+    with urllib.request.urlopen(
+        f"{url}/api/comparison/fig8-domain", timeout=10.0
+    ) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    counts = payload.get("summary", {}).get("classificationCounts", {})
+    if (
+        response.status != 200
+        or payload.get("status") != "completed"
+        or len(payload.get("rows", [])) != 176
+        or counts.get("criterionCoveredStable") != 45
+        or counts.get("stableNotCovered") != 96
+        or counts.get("unstableNotCovered") != 35
+        or counts.get("numericalPending") != 0
+        or counts.get("consistencyViolation") != 0
+    ):
+        raise RuntimeError("Packaged Fig. 8 same-domain evidence verification failed.")
+
+
 def _wait_for_port_release(port: int, timeout_s: float = 5.0) -> bool:
     deadline = time.monotonic() + timeout_s
     while time.monotonic() < deadline:
@@ -139,6 +158,7 @@ def run(port: int, *, open_browser: bool, smoke_test: bool) -> int:
         _wait_for_health(f"{url}/api/health")
         _verify_frontend(url)
         _verify_pinned_analysis(url)
+        _verify_domain_comparison(url)
         print(f"[GFM] Ready: {url}")
         if open_browser:
             webbrowser.open(url)

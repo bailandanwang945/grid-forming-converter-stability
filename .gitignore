@@ -15,6 +15,7 @@ codegen/
 # Large or generated experiment data
 data/
 results/raw/
+results/comparison/**/progress.json
 *.mat
 
 # Rebuildable temporary and compiled artifacts
