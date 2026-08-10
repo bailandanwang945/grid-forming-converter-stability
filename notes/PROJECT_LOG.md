@@ -572,3 +572,12 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 科研边界保持明确：这些结果证明当前方程、数值实现与两层模型之间的内部一致性，不证明参数已经拟合某台硬件，也不替代可信 EMT、硬件在环或实物试验。三频点端口正弦辨识与更完整的 R/X、控制带宽、Q–V 系数灵敏度仍可作为后续研究增量。
 - 按项目负责人的要求，本轮继续只处理模型、软件、测试、日志和交付文档，不制作或修改 PPT/PDF。
 - v0.4 统一验收随后完成：Python 78/78、前端生产构建、开发态启动器、真实浏览器流程、MATLAB 128/128 全部通过，汇总 `PASS=5, FAIL=0, SKIP=0`、`VERIFY_ALL_OK`，耗时约120.2 s。Vite 的单包体积提示仍属于性能优化建议，不影响本轮功能验收。
+- 提交前只读复核未发现量纲、端口方向、PCC 重构或研究边界方面的阻断项；同时发现并修复“修改仿真时长/初始扰动后旧结果未失效”的追溯一致性缺陷，浏览器反例现要求旧 JSON 与报告按钮立即禁用。正式发布脚本取消跳过前端构建的捷径，运行时证据契约由 `gfm-runtime-acceptance/1.0` 升至 `1.1`，避免旧网页或旧证据结构混入 v0.4 候选包。
+
+## 2026-08-10：v0.4.0-rc1 Windows 候选包
+
+- 从干净提交 `76c61ddc5d6e34ecdc71ec7f615c9ae72da60c39` 构建 Windows x64 自包含候选包；发布清单确认 `workingTreeDirty=false`，共记录1005个受约束文件。
+- 成品 ZIP 为 `output/release/GFM-Stability-Platform-0.4.0-rc1-windows-x64.zip`，大小 `70,647,784` 字节，SHA-256 为 `102a857c2d52998cb84368df2d63bb30a7c10079c127af49a262180f58578387`。包内包含62个第三方组件条目和108份许可或通知文件。
+- 构建时重新生成前端并实际启动成品；静态网页/API、Fig. 8、同域对照、低频模型、平均值 `dq`、四类报告及端口释放检查通过，得到 `GFM_RELEASE_SMOKE_OK`。
+- 在本开发机执行包内 `verify_this_pc.ps1 -NonInteractive`，逐文件哈希、原始 ZIP 哈希和运行时功能链通过，得到 `GFM_CROSS_MACHINE_FUNCTIONAL_OK`。由于本机并非断网且无开发环境的异机，工具按设计给出 `GFM_M5_QUALIFICATION_INCOMPLETE`；该结果不能替代队友电脑上的最终 M5 验收。
+- 本候选包和本节仍不包含任何新的 PPT/PDF 制作或修改。
