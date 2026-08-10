@@ -208,6 +208,17 @@ export default function ReducedOrderWorkbench() {
     changeTopology(draft => Object.assign(draft.grid_forming_converters[index], patch))
   }
 
+  function updateInfiniteBus(index: number, patch: Partial<NetworkTopology['infinite_buses'][number]>) {
+    changeTopology(draft => {
+      const oldBusId = draft.infinite_buses[index].bus_id
+      Object.assign(draft.infinite_buses[index], patch)
+      const newBusId = draft.infinite_buses[index].bus_id
+      if (oldBusId !== newBusId && draft.reference_bus_id === oldBusId) {
+        draft.reference_bus_id = newBusId
+      }
+    })
+  }
+
   function addBus() {
     if (!topology) return
     const id = nextEntityId('bus', allEntityIds(topology))
@@ -221,6 +232,10 @@ export default function ReducedOrderWorkbench() {
   function removeBus(index: number) {
     if (!topology || topology.buses.length <= 2) return
     const busId = topology.buses[index].id
+    if (topology.infinite_buses.length === 1 && topology.infinite_buses[0].bus_id === busId) {
+      setError('当前低频模型至少需要保留一个无限大母线；请先新增或迁移无限大母线。')
+      return
+    }
     changeTopology(draft => {
       draft.buses.splice(index, 1)
       draft.lines = draft.lines.filter(line => line.from_bus_id !== busId && line.to_bus_id !== busId)
@@ -283,17 +298,25 @@ export default function ReducedOrderWorkbench() {
       return
     }
     const id = nextEntityId('grid', allEntityIds(topology))
-    changeTopology(draft => draft.infinite_buses.push({
-      id,
-      name: `无限大母线 ${id.split('-').pop()}`,
-      bus_id: bus.id,
-      voltage_magnitude_pu: 1,
-      voltage_angle_deg: 0,
-    }))
+    changeTopology(draft => {
+      const wasEmpty = draft.infinite_buses.length === 0
+      draft.infinite_buses.push({
+        id,
+        name: `无限大母线 ${id.split('-').pop()}`,
+        bus_id: bus.id,
+        voltage_magnitude_pu: 1,
+        voltage_angle_deg: 0,
+      })
+      if (wasEmpty) draft.reference_bus_id = bus.id
+    })
   }
 
   function removeInfiniteBus(index: number) {
     if (!topology) return
+    if (topology.infinite_buses.length <= 1) {
+      setError('当前低频模型至少需要保留一个无限大母线。')
+      return
+    }
     const removedBusId = topology.infinite_buses[index].bus_id
     changeTopology(draft => {
       draft.infinite_buses.splice(index, 1)
@@ -591,14 +614,14 @@ export default function ReducedOrderWorkbench() {
             <label>容量基值 / VA<input type="number" min="1" value={topology.base_values.apparent_power_va} onChange={event => changeTopology(draft => { draft.base_values.apparent_power_va = numeric(event.target.value, draft.base_values.apparent_power_va) })}/></label>
             <label>电压基值 / V<input type="number" min="1" value={topology.base_values.voltage_v} onChange={event => changeTopology(draft => { draft.base_values.voltage_v = numeric(event.target.value, draft.base_values.voltage_v) })}/></label>
             <label>基频 / Hz<input type="number" min="1" value={topology.base_values.frequency_hz} onChange={event => changeTopology(draft => { draft.base_values.frequency_hz = numeric(event.target.value, draft.base_values.frequency_hz) })}/></label>
-            <label>参考母线<select value={topology.reference_bus_id} onChange={event => changeTopology(draft => { draft.reference_bus_id = event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
+            <label>参考母线<select value={topology.reference_bus_id} disabled={topology.infinite_buses.length === 0} onChange={event => changeTopology(draft => { draft.reference_bus_id = event.target.value })}>{topology.infinite_buses.map(grid => <option key={grid.id} value={grid.bus_id}>{grid.bus_id}</option>)}</select></label>
           </div>
           {topology.infinite_buses.map((grid, index) => <div className="edit-row grid-row" key={`${grid.id}-${index}`}>
-            <label>无限大母线 ID<input value={grid.id} onChange={event => changeTopology(draft => { draft.infinite_buses[index].id = event.target.value })}/></label>
-            <label>名称<input value={grid.name} onChange={event => changeTopology(draft => { draft.infinite_buses[index].name = event.target.value })}/></label>
-            <label>连接母线<select value={grid.bus_id} onChange={event => changeTopology(draft => { draft.infinite_buses[index].bus_id = event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
-            <label>电压 / pu<input type="number" min="0.5" max="1.5" step="0.01" value={grid.voltage_magnitude_pu ?? 1} onChange={event => changeTopology(draft => { draft.infinite_buses[index].voltage_magnitude_pu = numeric(event.target.value, 1) })}/></label>
-            <button className="icon-button" onClick={() => removeInfiniteBus(index)}><Trash2 size={15}/></button>
+            <label>无限大母线 ID<input value={grid.id} onChange={event => updateInfiniteBus(index, { id: event.target.value })}/></label>
+            <label>名称<input value={grid.name} onChange={event => updateInfiniteBus(index, { name: event.target.value })}/></label>
+            <label>连接母线<select value={grid.bus_id} onChange={event => updateInfiniteBus(index, { bus_id: event.target.value })}>{topology.buses.filter(bus => bus.id === grid.bus_id || (!topology.grid_forming_converters.some(gfm => gfm.bus_id === bus.id) && !topology.infinite_buses.some((other, otherIndex) => otherIndex !== index && other.bus_id === bus.id))).map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
+            <label>电压 / pu<input type="number" min="0.5" max="1.5" step="0.01" value={grid.voltage_magnitude_pu ?? 1} onChange={event => updateInfiniteBus(index, { voltage_magnitude_pu: numeric(event.target.value, 1) })}/></label>
+            <button className="icon-button" disabled={topology.infinite_buses.length <= 1} title={topology.infinite_buses.length <= 1 ? '至少保留一个无限大母线' : '删除无限大母线'} onClick={() => removeInfiniteBus(index)}><Trash2 size={15}/></button>
           </div>)}
         </div></details>
 
@@ -607,7 +630,7 @@ export default function ReducedOrderWorkbench() {
             <label>ID<input value={bus.id} onChange={event => updateBus(index, { id: event.target.value })}/></label>
             <label>名称<input value={bus.name} onChange={event => updateBus(index, { name: event.target.value })}/></label>
             <label>额定电压 / V<input type="number" value={bus.nominal_voltage_v} onChange={event => updateBus(index, { nominal_voltage_v: numeric(event.target.value, bus.nominal_voltage_v) })}/></label>
-            <button className="icon-button" disabled={topology.buses.length <= 2} onClick={() => removeBus(index)} title="删除母线"><Trash2 size={15}/></button>
+            <button className="icon-button" disabled={topology.buses.length <= 2 || (topology.infinite_buses.length === 1 && topology.infinite_buses[0].bus_id === bus.id)} onClick={() => removeBus(index)} title={topology.infinite_buses.length === 1 && topology.infinite_buses[0].bus_id === bus.id ? '至少保留一个无限大母线节点' : '删除母线'}><Trash2 size={15}/></button>
           </div>)}
         </div></details>
 

@@ -4,7 +4,7 @@
 
 - 分支：`research/nontrivial-core`
 - 核心研究提交：`5991e5a`（`feat(research): compare Fig8 stability regions`）
-- 软件版本：`v0.3.0-rc2`
+- 软件版本：`v0.3.0-rc3`
 - 操作系统：Windows
 - MATLAB：R2024b
 - 验收入口：`scripts/verify_all.ps1 -NoBootstrap`
@@ -16,7 +16,7 @@
 
 | 阶段 | 结果 | 可核查输出 |
 |---|---:|---|
-| Python 单元与接口测试 | 56 Passed / 0 Failed | Fig. 8 便携内核、同域证据加载与报告、网络契约、低频模型、D–X 扫描、生产静态入口 |
+| Python 单元与接口测试 | 57 Passed / 0 Failed | Fig. 8 便携内核、同域证据加载与报告、网络契约、低频模型、D–X 扫描、生产静态入口与运行时证据 |
 | React/TypeScript 生产构建 | PASS | 2198 modules transformed；构建产物成功生成 |
 | 开发态启动器冒烟 | PASS | `FULLSTACK_LAUNCHER_SMOKE_OK`；服务启动和退出清理正常 |
 | 浏览器端到端流程 | PASS | `BROWSER_E2E_SMOKE_OK`；覆盖三个工作区、下载、报告、案例往返和 441 点扫描 |
@@ -80,4 +80,4 @@
 
 ## 7. 结论
 
-`v0.3.0-rc2` 已通过本机统一软件与数学内核验收；其核心研究提交 `5991e5a` 完成作者同一模型上的首轮 D–SCR 参数域对照。该版本可以作为结项材料与 Windows 候选包的技术基线，但在异机断网验收、学院材料和导师范围确认完成前，不宣称整个大创结项流程已经完成。
+`v0.3.0-rc3` 在本机完成最终统一验收：Python 57/57、前端生产构建、开发态启动器、真实浏览器流程与 MATLAB 128/128 全部通过，汇总为 `PASS=5, FAIL=0, SKIP=0`、`VERIFY_ALL_OK`，阶段耗时合计约 135.7 s。其核心研究提交 `5991e5a` 完成作者同一模型上的首轮 D–SCR 参数域对照；本轮发布提交将在最终发布包内由 `build_info.json` 与 `manifest.json` 自动记录。该版本可以作为结项材料与 Windows 候选包的技术基线，但在异机断网验收、学院材料和导师范围确认完成前，不宣称整个大创结项流程已经完成。

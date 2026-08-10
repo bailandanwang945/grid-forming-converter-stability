@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "0.3.0-rc2",
+    [string]$Version = "0.3.0-rc3",
     [switch]$SkipFrontendBuild,
     [switch]$SkipSmokeTest,
     [switch]$AllowDirtyWorktree
@@ -14,6 +14,7 @@ $FrontendSnapshot = Join-Path $ReleaseRoot "_frontend_snapshot"
 $FrontendRoot = Join-Path $ProjectRoot "apps\web"
 $FrontendDist = Join-Path $FrontendRoot "dist"
 $MetadataPath = Join-Path $ReleaseRoot "build_info.json"
+$PackagedSmokeEvidence = Join-Path $ReleaseRoot "_packaged_smoke_evidence.json"
 $SpecPath = Join-Path $ProjectRoot "packaging\gfm_windows.spec"
 $PackageName = "GFM-Stability-Platform-$Version-windows-x64"
 $PackagePath = Join-Path $ReleaseRoot $PackageName
@@ -69,7 +70,7 @@ if ($Dirty -and -not $AllowDirtyWorktree) {
 }
 
 New-Item -ItemType Directory -Force -Path $ReleaseRoot | Out-Null
-foreach ($Path in @($BuildRoot, $DistRoot, $FrontendSnapshot, $PackagePath, $ZipPath)) {
+foreach ($Path in @($BuildRoot, $DistRoot, $FrontendSnapshot, $PackagedSmokeEvidence, $PackagePath, $ZipPath)) {
     Assert-InReleaseRoot $Path
     if (Test-Path $Path) {
         Remove-Item -LiteralPath $Path -Recurse -Force
@@ -141,6 +142,10 @@ if (-not (Test-Path (Join-Path $BuiltApp "GFM-Stability-Platform.exe"))) {
 Copy-Item -LiteralPath $BuiltApp -Destination $PackagePath -Recurse
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\WINDOWS_RELEASE_README.txt") `
     -Destination (Join-Path $PackagePath "README.txt")
+Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\VERIFY_THIS_PC.cmd") `
+    -Destination (Join-Path $PackagePath "VERIFY_THIS_PC.cmd")
+Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\verify_this_pc.ps1") `
+    -Destination (Join-Path $PackagePath "verify_this_pc.ps1")
 
 $Forbidden = Get-ChildItem -LiteralPath $PackagePath -Recurse -Force | Where-Object {
     $_.FullName -match '(^|\\)(node_modules|__pycache__|\.pytest_cache|external)(\\|$)'
@@ -186,7 +191,18 @@ foreach ($Entry in $ManifestFiles) {
 if (-not $SkipSmokeTest) {
     Write-Step "Running the packaged startup and shutdown smoke test..."
     $Executable = Join-Path $PackagePath "GFM-Stability-Platform.exe"
-    Invoke-Native $Executable @("--smoke-test", "--no-browser", "--port", "18080")
+    Invoke-Native $Executable @(
+        "--smoke-test", "--no-browser", "--port", "18080",
+        "--evidence-file", $PackagedSmokeEvidence
+    )
+    $SmokeEvidence = Get-Content -LiteralPath $PackagedSmokeEvidence -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (
+        $SmokeEvidence.status -ne "passed" -or
+        $SmokeEvidence.checks.reduced_order.stability -ne "stable" -or
+        $SmokeEvidence.checks.reduced_order.report -ne "passed"
+    ) {
+        throw "Packaged runtime evidence verification failed."
+    }
     Start-Sleep -Milliseconds 300
     $Listener = Get-NetTCPConnection -LocalPort 18080 -State Listen -ErrorAction SilentlyContinue
     if ($Listener) {
@@ -200,7 +216,7 @@ $ZipHash = (Get-FileHash -LiteralPath $ZipPath -Algorithm SHA256).Hash.ToLowerIn
 $PackageBytes = (Get-ChildItem -LiteralPath $PackagePath -Recurse -File | Measure-Object Length -Sum).Sum
 
 Write-Step "Removing reproducible build intermediates..."
-foreach ($Path in @($BuildRoot, $DistRoot, $FrontendSnapshot, $MetadataPath)) {
+foreach ($Path in @($BuildRoot, $DistRoot, $FrontendSnapshot, $MetadataPath, $PackagedSmokeEvidence)) {
     Assert-InReleaseRoot $Path
     if (Test-Path $Path) {
         Remove-Item -LiteralPath $Path -Recurse -Force

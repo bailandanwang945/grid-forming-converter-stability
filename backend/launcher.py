@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import json
+import platform
+from pathlib import Path
 import socket
 import sys
 import threading
@@ -65,7 +68,7 @@ class _AssetReferenceParser(HTMLParser):
             self.references.append(str(attributes["href"]))
 
 
-def _verify_frontend(url: str) -> None:
+def _verify_frontend(url: str) -> dict[str, object]:
     with urllib.request.urlopen(url, timeout=5.0) as response:
         html = response.read().decode("utf-8")
         if response.status != 200 or "<div id=\"root\"></div>" not in html:
@@ -85,9 +88,10 @@ def _verify_frontend(url: str) -> None:
         with urllib.request.urlopen(asset_url, timeout=5.0) as response:
             if response.status != 200 or not response.read(1):
                 raise RuntimeError(f"Frontend asset is unavailable: {reference}")
+    return {"index": "passed", "local_asset_count": len(local_assets)}
 
 
-def _verify_pinned_analysis(url: str) -> None:
+def _verify_pinned_analysis(url: str) -> dict[str, object]:
     request = urllib.request.Request(
         f"{url}/api/analysis/run",
         data=json.dumps({"scenario_id": "fig8_D_0p05"}).encode("utf-8"),
@@ -104,9 +108,15 @@ def _verify_pinned_analysis(url: str) -> None:
         or summary.get("frequency_points") != 1000
     ):
         raise RuntimeError("Packaged Fig. 8 baseline verification failed.")
+    return {
+        "scenario_id": payload.get("scenario_id"),
+        "closed_loop_reference": summary.get("closed_loop_reference"),
+        "uncovered_points": summary.get("uncovered_points"),
+        "frequency_points": summary.get("frequency_points"),
+    }
 
 
-def _verify_domain_comparison(url: str) -> None:
+def _verify_domain_comparison(url: str) -> dict[str, object]:
     with urllib.request.urlopen(
         f"{url}/api/comparison/fig8-domain", timeout=10.0
     ) as response:
@@ -123,6 +133,64 @@ def _verify_domain_comparison(url: str) -> None:
         or counts.get("consistencyViolation") != 0
     ):
         raise RuntimeError("Packaged Fig. 8 same-domain evidence verification failed.")
+    return {"point_count": len(payload["rows"]), "classification_counts": counts}
+
+
+def _verify_reduced_order_workflow(url: str) -> dict[str, object]:
+    request_payload = {
+        "preset_id": "reduced-smib-stable",
+        "simulation_time_s": 1.0,
+        "time_step_s": 0.1,
+        "initial_angle_perturbation_rad": 0.001,
+    }
+    request = urllib.request.Request(
+        f"{url}/api/reduced-order/analyze",
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=30.0) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    result = payload.get("result", {})
+    validation = payload.get("input_validation", {})
+    if (
+        response.status != 200
+        or payload.get("status") != "completed"
+        or validation.get("status") != "passed"
+        or result.get("stability") != "stable"
+        or len(result.get("poles", [])) != 3
+    ):
+        raise RuntimeError("Packaged reduced-order analysis verification failed.")
+
+    report_request = urllib.request.Request(
+        f"{url}/api/reports/reduced-order",
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(report_request, timeout=30.0) as response:
+        report = response.read().decode("utf-8")
+    if (
+        response.status != 200
+        or "不是完整 dq 模型结论" not in report
+        or "输入拓扑与参数" not in report
+    ):
+        raise RuntimeError("Packaged reduced-order report verification failed.")
+    return {
+        "preset_id": request_payload["preset_id"],
+        "stability": result["stability"],
+        "pole_count": len(result["poles"]),
+        "report": "passed",
+    }
+
+
+def _write_runtime_evidence(path: str, payload: dict[str, object]) -> None:
+    evidence_path = Path(path).expanduser().resolve()
+    evidence_path.parent.mkdir(parents=True, exist_ok=True)
+    evidence_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
 
 
 def _wait_for_port_release(port: int, timeout_s: float = 5.0) -> bool:
@@ -134,7 +202,13 @@ def _wait_for_port_release(port: int, timeout_s: float = 5.0) -> bool:
     return _port_is_available(port)
 
 
-def run(port: int, *, open_browser: bool, smoke_test: bool) -> int:
+def run(
+    port: int,
+    *,
+    open_browser: bool,
+    smoke_test: bool,
+    evidence_file: str | None = None,
+) -> int:
     if not _port_is_available(port):
         print(f"[GFM] Port {port} is already in use. Close the other service and retry.")
         return 2
@@ -151,14 +225,31 @@ def run(port: int, *, open_browser: bool, smoke_test: bool) -> int:
     server = uvicorn.Server(config)
     thread = threading.Thread(target=server.run, name="gfm-local-server", daemon=True)
 
-    print(f"[GFM] Grid-Forming Converter Stability Platform {_build_label()}")
+    build_label = _build_label()
+    evidence: dict[str, object] = {
+        "schema_version": "gfm-runtime-acceptance/1.0",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "build_label": build_label,
+        "platform": platform.platform(),
+        "port": port,
+        "status": "running",
+        "checks": {},
+    }
+    print(f"[GFM] Grid-Forming Converter Stability Platform {build_label}")
     print("[GFM] Starting the local analysis service...")
     thread.start()
     try:
         _wait_for_health(f"{url}/api/health")
-        _verify_frontend(url)
-        _verify_pinned_analysis(url)
-        _verify_domain_comparison(url)
+        evidence["checks"] = {
+            "health": "passed",
+            "frontend": _verify_frontend(url),
+            "fig8": _verify_pinned_analysis(url),
+            "same_domain": _verify_domain_comparison(url),
+            "reduced_order": _verify_reduced_order_workflow(url),
+        }
+        evidence["status"] = "passed"
+        if evidence_file:
+            _write_runtime_evidence(evidence_file, evidence)
         print(f"[GFM] Ready: {url}")
         if open_browser:
             webbrowser.open(url)
@@ -169,8 +260,15 @@ def run(port: int, *, open_browser: bool, smoke_test: bool) -> int:
         input()
         return 0
     except KeyboardInterrupt:
+        evidence["status"] = "interrupted"
+        if evidence_file:
+            _write_runtime_evidence(evidence_file, evidence)
         return 0
     except Exception as error:
+        evidence["status"] = "failed"
+        evidence["error"] = str(error)
+        if evidence_file:
+            _write_runtime_evidence(evidence_file, evidence)
         print(f"[GFM] Startup failed: {error}")
         return 1
     finally:
@@ -189,6 +287,10 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--smoke-test", action="store_true")
+    parser.add_argument(
+        "--evidence-file",
+        help="write machine-readable runtime acceptance evidence to this JSON file",
+    )
     arguments = parser.parse_args()
     if not 1024 <= arguments.port <= 65535:
         parser.error("--port must be between 1024 and 65535")
@@ -196,6 +298,7 @@ def main() -> int:
         arguments.port,
         open_browser=not arguments.no_browser and not arguments.smoke_test,
         smoke_test=arguments.smoke_test,
+        evidence_file=arguments.evidence_file,
     )
 
 

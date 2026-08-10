@@ -48,6 +48,13 @@ try {
 
   await page.getByRole('button', { name: '独立模型' }).click()
   await page.getByText('可编辑网络与控制参数').waitFor({ timeout: 15000 })
+  const referenceBus = page.getByLabel('参考母线')
+  if (await referenceBus.inputValue() !== 'bus-grid' || await referenceBus.locator('option').count() !== 1) {
+    throw new Error('Reference bus selector must contain only grounded infinite-bus nodes.')
+  }
+  if (!(await page.getByRole('button', { name: '至少保留一个无限大母线', exact: true }).isDisabled())) {
+    throw new Error('The last infinite bus must not be removable from the reduced-order editor.')
+  }
   await page.getByLabel('阻尼 D / pu').first().fill('0.05')
   await page.getByRole('button', { name: /验证拓扑并分析/ }).click()
   await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
