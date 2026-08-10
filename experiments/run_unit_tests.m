@@ -9,8 +9,8 @@ function results = run_unit_tests()
         'Tag', 'Unit');
     disp(results);
 
-    if any([results.Failed])
-        error('gfm:tests:Failed', 'One or more unit tests failed.');
+    if any([results.Failed]) || any([results.Incomplete])
+        error('gfm:tests:FailedOrIncomplete', ...
+            'One or more unit tests failed or remained incomplete.');
     end
 end
-
