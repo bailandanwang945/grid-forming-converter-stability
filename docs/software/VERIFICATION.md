@@ -47,7 +47,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 | 项目 | 数值 |
 |---|---|
-| 版本标识 | `0.3.0-rc1` |
+| 版本标识 | `0.3.0-rc2` |
 | 源代码提交 | `e00a825d7532fef7d5b1dc6b880d1dbf3e0931fa` |
 | 解压目录大小 | 151.51 MiB |
 | ZIP 大小 | 66.10 MiB |

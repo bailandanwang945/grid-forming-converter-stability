@@ -16,7 +16,7 @@ class AnalysisApiTest(unittest.TestCase):
         response = self.client.get("/api/health")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "ok")
-        self.assertEqual(response.json()["version"], "0.3.0-rc1")
+        self.assertEqual(response.json()["version"], "0.3.0-rc2")
 
     def test_scenarios_are_explicitly_pinned(self) -> None:
         response = self.client.get("/api/scenarios")
