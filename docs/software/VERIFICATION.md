@@ -48,14 +48,14 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 | 项目 | 数值 |
 |---|---|
 | 版本标识 | `0.4.0-rc2` |
-| 源代码提交 | `e00a825d7532fef7d5b1dc6b880d1dbf3e0931fa` |
-| 解压目录大小 | 151.51 MiB |
-| ZIP 大小 | 66.10 MiB |
-| ZIP SHA-256 | `b118c2ccd1d97a38da5f9bd7b56c6d54816eca775ffe0b004030cea861ad9ef0` |
-| 清单状态 | `workingTreeDirty=false`，885 个受清单约束文件 |
+| 源代码提交 | `11eebebea1f6768855859e9ddbcf75a5e89db13c` |
+| 包内受约束文件总大小 | 161,411,038 字节 |
+| ZIP 大小 | 70,660,054 字节 |
+| ZIP SHA-256 | `55c58253336f8e1a7b4132a097908e45ae2a26281f00ea2c5fb1e133468d2c3f` |
+| 清单状态 | `workingTreeDirty=false`，1005 个受约束文件 |
 | 发布结论 | 本机验收通过的结项候选；异机验收未完成 |
 
-上述哈希只标识提交 `e00a825` 对应的本次候选，不得沿用于后续重新构建的包。
+上述哈希只标识提交 `11eebeb` 对应的本次候选，不得沿用于后续重新构建的包。
 
 M5 发布完成至少需要保存以下证据：
 
