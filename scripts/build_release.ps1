@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "0.3.0-rc3",
+    [string]$Version = "0.3.0-rc4",
     [switch]$SkipFrontendBuild,
     [switch]$SkipSmokeTest,
     [switch]$AllowDirtyWorktree

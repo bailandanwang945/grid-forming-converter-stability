@@ -16,8 +16,9 @@
 
 四、在另一台电脑上验收
 双击 VERIFY_THIS_PC.cmd，按实际情况回答是否断网、是否未安装 Python、Node.js 和 MATLAB。
+请保留原始 ZIP 在解压目录旁边且不要重命名；正式 M5 证据需要记录该 ZIP 的 SHA-256。
 脚本会逐文件校验发布包，运行论文算例、同域对照、独立模型与报告检查，并在 acceptance-results 文件夹中保存结构化证据和控制台日志。
-出现 GFM_CROSS_MACHINE_FUNCTIONAL_OK 表示自动功能链通过；只有同时出现 GFM_M5_QUALIFIED，才满足本项目定义的“异机、断网、无开发环境”资格。
+出现 GFM_CROSS_MACHINE_FUNCTIONAL_OK 表示自动功能链通过；只有同时出现 GFM_M5_QUALIFIED，才满足本项目定义的“异机、断网、无开发环境、原始包可追溯”资格。
 断网状态属于操作者声明，脚本无法独立证明物理网络已经断开。
 
 五、常见问题

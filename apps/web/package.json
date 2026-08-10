@@ -1,7 +1,7 @@
 {
   "name": "gfm-stability-workbench",
   "private": true,
-  "version": "0.3.0-rc3",
+  "version": "0.3.0-rc4",
   "type": "module",
   "scripts": {
     "dev": "vite",

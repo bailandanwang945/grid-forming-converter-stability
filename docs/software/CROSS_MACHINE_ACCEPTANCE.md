@@ -13,7 +13,7 @@
 
 1. 把原始 ZIP 复制到另一台 Windows 10/11 64 位电脑；不要在开发机上代替异机验收。
 2. 断开 Wi-Fi、网线、手机热点、VPN 和其他互联网连接。
-3. 将 ZIP 解压到普通可写目录，不要放在需要管理员权限的系统目录。
+3. 将 ZIP 解压到普通可写目录，不要放在需要管理员权限的系统目录；原始 ZIP 必须保留在解压目录旁边，且不要重命名，否则只能得到功能结论，不能形成正式 M5 原始包哈希证据。
 4. 双击包内 `VERIFY_THIS_PC.cmd`。
 5. 根据实际情况回答两个问题：是否断网；是否未安装 Python、Node.js 和 MATLAB。
 6. 等待出现 `GFM_CROSS_MACHINE_FUNCTIONAL_OK`。若同时出现 `GFM_M5_QUALIFIED`，表示该次证据满足项目定义的 M5 环境资格；若显示 `GFM_M5_QUALIFICATION_INCOMPLETE`，功能可能已经通过，但不能据此宣称完成“断网且无开发环境”验收。
@@ -34,9 +34,21 @@
 ## 结论等级
 
 - `GFM_CROSS_MACHINE_FUNCTIONAL_OK`：该电脑上的包完整性和自动功能链通过。
-- `GFM_M5_QUALIFIED`：功能链通过，操作者声明已断网且未安装三类开发环境，PATH 检测也未发现对应命令，操作系统为 64 位。
+- `GFM_M5_QUALIFIED`：功能链通过，操作者声明已断网且未安装三类开发环境，PATH 检测也未发现对应命令，操作系统为 64 位，并已记录相邻原始 ZIP 的 SHA-256。
 - `GFM_M5_QUALIFICATION_INCOMPLETE`：功能链通过，但断网、无开发环境或 64 位条件至少一项没有得到足够证据。
 - `GFM_CROSS_MACHINE_FUNCTIONAL_FAILED`：包校验、启动、数值基线、报告或端口释放至少一项失败。
 
 异机自动验收仍不能替代人工打开网页、点击三个工作区、实际导出 CSV/HTML 并确认浏览器和安全软件行为。自动证据通过后，队友还应按照两分钟演示脚本完成一次人工操作并保存截图。
 
+## 项目侧回收与复核
+
+收到队友回传的结果目录后，不直接依据截图改写项目状态。项目负责人在仓库根目录执行：
+
+```powershell
+python scripts/import_cross_machine_acceptance.py <回传结果目录> `
+  --expected-version 0.3.0-rc4 `
+  --expected-commit <发布清单中的提交号> `
+  --expected-zip-sha256 <正式ZIP的SHA-256>
+```
+
+该命令重新核对证据版本、原始 ZIP 哈希、构建提交、干净工作树、逐文件清单结论、端口释放、Fig. 8 的 75/1000、同域 45/96/35 和独立模型报告。自动证据通过时返回 `GFM_CROSS_MACHINE_MANUAL_CHECK_PENDING`，仍不关闭 M5。队友完成网页、CSV/HTML 导出及安全软件检查后，再附加 `--manual-browser-check-passed --operator <检查人> --manual-evidence <截图或录屏文件>` 重新归档；人工通过标志若没有检查人和至少一个证据附件会被拒绝。只有出现 `GFM_CROSS_MACHINE_RELEASE_ACCEPTED` 才能把该次运行登记为发布验收通过。

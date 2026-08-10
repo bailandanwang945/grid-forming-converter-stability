@@ -157,9 +157,10 @@ $ZipEvidence = if (Test-Path -LiteralPath $SiblingZipPath -PathType Leaf) {
 }
 
 $FunctionalPassed = $null -eq $Failure -and $ManifestErrors.Count -eq 0 -and $RuntimeExitCode -eq 0 -and $PortReleased
-$M5Qualified = $FunctionalPassed -and [bool]$DeclareOffline -and [bool]$DeclareCleanEnvironment -and $RuntimeCommandsAbsent -and [Environment]::Is64BitOperatingSystem
+$SourceZipPresent = $null -ne $ZipEvidence
+$M5Qualified = $FunctionalPassed -and [bool]$DeclareOffline -and [bool]$DeclareCleanEnvironment -and $RuntimeCommandsAbsent -and [Environment]::Is64BitOperatingSystem -and $SourceZipPresent
 $Evidence = [ordered]@{
-    schema_version = "gfm-cross-machine-acceptance/1.0"
+    schema_version = "gfm-cross-machine-acceptance/1.1"
     generated_at_utc = [DateTime]::UtcNow.ToString("o")
     package = if ($null -eq $Manifest) { $null } else { [ordered]@{
         product = $Manifest.product
@@ -182,6 +183,7 @@ $Evidence = [ordered]@{
         runtime_command_detection_method = "PATH command lookup"
         detected_runtime_commands = $DetectedRuntimes
         runtime_commands_absent = $RuntimeCommandsAbsent
+        source_zip_present = $SourceZipPresent
         m5_offline_no_dev_environment_qualified = $M5Qualified
     }
     checks = [ordered]@{
@@ -207,6 +209,7 @@ $Summary = @(
     "源代码提交：$(if ($null -eq $Manifest) { '未知' } else { $Manifest.commit })"
     "包内文件校验：$(if ($ManifestErrors.Count -eq 0) { '通过' } else { '失败' })"
     "运行时功能验收：$(if ($FunctionalPassed) { '通过' } else { '失败' })"
+    "原始 ZIP 证据：$(if ($SourceZipPresent) { '已记录 SHA-256' } else { '缺失；请保留 ZIP 与解压目录相邻' })"
     "断网且无开发环境资格：$(if ($M5Qualified) { '满足' } else { '未满足或证据不足' })"
     "离线状态仅由操作者声明，脚本不能独立证明物理断网。"
     "详细证据：$EvidencePath"
