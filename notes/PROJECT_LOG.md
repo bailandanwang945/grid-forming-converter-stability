@@ -490,3 +490,5 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - Python 测试增至 52 项并全部通过；在暂时移出前端 `dist` 后再次执行仍为 52/52 通过，证明后端测试不再依赖预先存在的前端构建产物。
 - 开发启动器与浏览器验收脚本增加端口占用预检、子进程存活检查和监听者所有权核验。反例测试确认：8000 端口被既有进程占用时，启动器以非零状态拒绝启动，且不会终止该既有进程。
 - MATLAB 验收入口现将 `Failed` 或 `Incomplete` 任一非零都视为失败；正式发布脚本默认拒绝脏工作树，仅允许用显式开关生成非正式开发候选。
+- 在干净提交 `e00a825d7532fef7d5b1dc6b880d1dbf3e0931fa` 上构建 `v0.3.0-rc1` Windows `onedir` 候选包。成品目录约 151.51 MiB，ZIP 约 66.10 MiB，清单记录 `workingTreeDirty=false`、885 个文件；ZIP SHA-256 为 `b118c2ccd1d97a38da5f9bd7b56c6d54816eca775ffe0b004030cea861ad9ef0`。
+- 打包后的程序已在 18080 端口实际启动，完成健康接口、生产前端资源和 Fig. 8 失稳基线（1000 点、75 个未覆盖点）自检，并在退出后释放端口。该证据仍不能替代另一台无开发环境 Windows 电脑的断网验收。
