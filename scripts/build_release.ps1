@@ -150,7 +150,10 @@ if ($Forbidden) {
 }
 
 Write-Step "Computing the release file manifest..."
-$Files = Get-ChildItem -LiteralPath $PackagePath -Recurse -File | Sort-Object FullName
+$ManifestPath = Join-Path $PackagePath "release-manifest.json"
+$Files = Get-ChildItem -LiteralPath $PackagePath -Recurse -File |
+    Where-Object { $_.FullName -ne $ManifestPath } |
+    Sort-Object FullName
 $ManifestFiles = foreach ($File in $Files) {
     [ordered]@{
         path = $File.FullName.Substring($PackagePath.Length + 1).Replace('\', '/')
@@ -171,7 +174,6 @@ $Manifest = [ordered]@{
     excludedSourceTrees = @("node_modules", "cache directories", "external repositories")
     files = @($ManifestFiles)
 }
-$ManifestPath = Join-Path $PackagePath "release-manifest.json"
 $Manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $ManifestPath -Encoding UTF8
 foreach ($Entry in $ManifestFiles) {
     $VerifiedPath = Join-Path $PackagePath ($Entry.path.Replace('/', '\'))
