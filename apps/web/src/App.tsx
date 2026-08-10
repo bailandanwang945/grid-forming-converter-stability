@@ -23,6 +23,7 @@ import { AnalysisResult, Fig8ScenarioId, runAnalysis } from './api'
 import EChart from './EChart'
 import ReducedOrderWorkbench from './ReducedOrderWorkbench'
 import ParameterDomainComparison from './ParameterDomainComparison'
+import AverageDQWorkbench from './AverageDQWorkbench'
 
 echarts.use([
   LineChart,
@@ -47,7 +48,7 @@ const markZero = {
 }
 
 function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'paper' | 'comparison' | 'model'>('paper')
+  const [workspaceMode, setWorkspaceMode] = useState<'paper' | 'comparison' | 'model' | 'average-dq'>('paper')
   const [scenarioId, setScenarioId] = useState<Fig8ScenarioId>('fig8_D_0p5')
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [running, setRunning] = useState(false)
@@ -142,11 +143,12 @@ function App() {
       <nav className="workspace-tabs" aria-label="工作台切换">
         <button className={workspaceMode === 'paper' ? 'active' : ''} onClick={() => setWorkspaceMode('paper')}>论文复现</button>
         <button className={workspaceMode === 'comparison' ? 'active' : ''} onClick={() => setWorkspaceMode('comparison')}>同域对照</button>
-        <button className={workspaceMode === 'model' ? 'active' : ''} onClick={() => setWorkspaceMode('model')}>独立模型</button>
+        <button className={workspaceMode === 'model' ? 'active' : ''} onClick={() => setWorkspaceMode('model')}>低频模型</button>
+        <button className={workspaceMode === 'average-dq' ? 'active' : ''} onClick={() => setWorkspaceMode('average-dq')}>平均值 dq</button>
       </nav>
-      <span className="research-tag">双内核工作台 v0.3</span>
+      <span className="research-tag">分层模型工作台 v0.4</span>
     </header>
-    {workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
+    {workspaceMode === 'average-dq' ? <AverageDQWorkbench/> : workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
       <aside className="panel controls">
         <div className="panel-title"><SlidersHorizontal size={18}/><span>论文基线算例</span></div>
         <label>分析场景

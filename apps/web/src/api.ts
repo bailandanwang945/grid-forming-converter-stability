@@ -179,6 +179,7 @@ export type GridFormingConverter = {
   virtual_inertia_s: number
   damping_coefficient_pu: number
   active_power_measurement_time_constant_s: number
+  parameter_set_id?: string | null
 }
 
 export type InfiniteBus = {
@@ -392,4 +393,165 @@ export async function runReducedOrderScan(input: {
     throw new Error(message ?? `参数扫描服务返回 ${response.status}`)
   }
   return response.json()
+}
+
+export type AverageDQParameters = {
+  schema_version: '1.0'
+  id: string
+  converter_id: string
+  frame_convention_id: 'power-invariant-park-q-lag-v1'
+  converter_side_resistance_pu: number
+  converter_side_reactance_pu: number
+  filter_capacitor_susceptance_pu: number
+  grid_side_resistance_pu: number
+  grid_side_reactance_pu: number
+  modulation_time_constant_s: number
+  reactive_power_measurement_time_constant_s: number
+  reactive_power_voltage_droop_pu: number
+  voltage_proportional_gain_pu: number
+  voltage_integral_gain_per_s: number
+  current_proportional_gain_pu: number
+  current_integral_gain_per_s: number
+  virtual_resistance_pu: number
+  virtual_reactance_pu: number
+  diagnostic_current_limit_pu: number
+  diagnostic_internal_voltage_limit_pu: number
+}
+
+export type AverageDQPreset = {
+  id: 'average-dq-smib-verification'
+  name: string
+  description: string
+  expected_stability: 'stable'
+  topology: NetworkTopology
+  parameters: AverageDQParameters
+  provenance: Record<string, unknown>
+}
+
+export type AverageDQResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  input_topology: NetworkTopology
+  input_parameters: AverageDQParameters
+  operating_point: {
+    state_labels: string[]
+    state: number[]
+    grid_voltage_global_pu: number[]
+    pcc_voltage_local_pu: number[]
+    pcc_voltage_global_pu: number[]
+    algebraic_residual: number[]
+    closed_rhs_residual_inf: number
+    device_rhs_residual_inf: number
+    active_power_balance_residual_pu: number
+    converter_current_magnitude_pu: number
+    grid_current_magnitude_pu: number
+    internal_voltage_magnitude_pu: number
+  }
+  result: {
+    stability: 'stable' | 'marginal' | 'unstable'
+    stability_tolerance_per_s: number
+    closed_state_matrix: number[][]
+    poles: Array<{
+      real_per_s: number
+      imag_per_s: number
+      real_hz: number
+      imag_hz: number
+    }>
+    dominant_mode: {
+      real_per_s: number
+      imag_per_s: number
+      real_hz: number
+      imag_hz: number
+      oscillation_frequency_hz: number
+    }
+    port_interconnection_max_abs_error: number
+    quasisteady_reduction_comparison: {
+      synchronizing_stiffness_pu_per_rad: number
+      reduced_state_matrix: number[][]
+      reduced_poles: Array<{
+        real_per_s: number
+        imag_per_s: number
+        real_hz: number
+        imag_hz: number
+      }>
+      full_dominant_pole: {
+        real_per_s: number
+        imag_per_s: number
+        real_hz: number
+        imag_hz: number
+      }
+      reduced_dominant_pole: {
+        real_per_s: number
+        imag_per_s: number
+        real_hz: number
+        imag_hz: number
+      }
+      oscillation_frequency_relative_error: number
+      decay_rate_relative_error: number
+      interpretation: string
+    }
+    port_admittance: {
+      current_direction: string
+      voltage_frame: string
+      frequencies_hz: number[]
+      matrices: Array<Array<Array<{ real: number; imag: number }>>>
+    }
+    time_response: {
+      response_kind: string
+      time_s: number[]
+      state_labels: string[]
+      initial_state: number[]
+      nonlinear_states: number[][]
+      linear_states: number[][]
+    }
+  }
+  model_scope: {
+    claim_level: string
+    statement: string
+    retained_dynamics: string[]
+    excluded_dynamics: string[]
+  }
+  provenance: Record<string, unknown>
+}
+
+export async function getAverageDQPreset(): Promise<AverageDQPreset> {
+  const response = await fetch('/api/average-dq/presets')
+  if (!response.ok) throw new Error(`平均值 dq 预设服务返回 ${response.status}`)
+  const payload = await response.json()
+  return payload.presets[0]
+}
+
+export type AverageDQAnalysisInput = {
+  preset_id?: 'average-dq-smib-verification'
+  topology?: NetworkTopology
+  parameters?: AverageDQParameters
+  simulation_time_s: number
+  time_step_s: number
+  initial_angle_perturbation_rad: number
+  frequency_values_hz: number[]
+}
+
+async function averageDQRequest(path: string, input: AverageDQAnalysisInput) {
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    const message = Array.isArray(detail?.detail)
+      ? detail.detail.map((item: { msg?: string }) => item.msg ?? String(item)).join('；')
+      : detail?.detail
+    throw new Error(message ?? `平均值 dq 服务返回 ${response.status}`)
+  }
+  return response
+}
+
+export async function runAverageDQAnalysis(input: AverageDQAnalysisInput): Promise<AverageDQResult> {
+  return (await averageDQRequest('/api/average-dq/analyze', input)).json()
+}
+
+export async function getAverageDQReportHtml(input: AverageDQAnalysisInput): Promise<string> {
+  return (await averageDQRequest('/api/reports/average-dq', input)).text()
 }

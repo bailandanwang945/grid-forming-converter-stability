@@ -12,6 +12,18 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from backend.core.fig8_kernel import available_fig8_cases, evaluate_fig8_case
 from backend.core.fig8_domain_comparison import load_fig8_domain_comparison
+from backend.core.average_dq_model import (
+    AverageDQModelError,
+    STATE_LABELS,
+    build_average_dq_model,
+    close_port_model_with_external_line,
+    compare_with_quasisteady_reduction,
+)
+from backend.core.average_dq_presets import (
+    PRESET_ID as AVERAGE_DQ_PRESET_ID,
+    average_dq_preset_metadata,
+    build_average_dq_verification_case,
+)
 from backend.core.reduced_order_model import (
     ReducedOrderModelError,
     build_reduced_order_model,
@@ -26,14 +38,16 @@ from backend.core.reduced_order_scan import (
     scan_damping_reactance,
 )
 from backend.core.reporting import (
+    render_average_dq_report,
     render_fig8_domain_comparison_report,
     render_fig8_report,
     render_reduced_order_report,
 )
 from backend.domain.network_models import NetworkTopology
+from backend.domain.average_dq_models import AverageDQGFMParameters
 
 
-app = FastAPI(title="构网型变流器稳定性分析平台", version="0.3.0-rc5")
+app = FastAPI(title="构网型变流器稳定性分析平台", version="0.4.0-rc1")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -48,6 +62,7 @@ ReducedOrderPresetId = Literal[
     "reduced-smib-critical",
     "reduced-smib-unstable",
 ]
+AverageDQPresetId = Literal["average-dq-smib-verification"]
 
 
 class AnalysisRequest(BaseModel):
@@ -110,6 +125,53 @@ class ReducedOrderScanRequest(BaseModel):
             raise ValueError(
                 f"D–X 扫描网格共 {point_count} 个点，超过上限 {MAX_SCAN_POINTS}。"
             )
+        return self
+
+
+class AverageDQAnalysisRequest(BaseModel):
+    """Select the verification preset or a complete custom 16-state case."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    preset_id: AverageDQPresetId | None = None
+    topology: NetworkTopology | None = None
+    parameters: AverageDQGFMParameters | None = None
+    simulation_time_s: float = Field(default=2.0, gt=0.0, le=30.0)
+    time_step_s: float = Field(default=0.002, ge=0.0001, le=0.1)
+    initial_angle_perturbation_rad: float = Field(
+        default=1.0e-4, ge=-0.01, le=0.01
+    )
+    frequency_values_hz: list[float] = Field(
+        default_factory=lambda: [0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0],
+        min_length=1,
+        max_length=200,
+    )
+
+    @model_validator(mode="after")
+    def require_one_case_source(self) -> "AverageDQAnalysisRequest":
+        has_preset = self.preset_id is not None
+        has_custom = self.topology is not None or self.parameters is not None
+        if has_preset == has_custom:
+            raise ValueError(
+                "必须且只能选择 preset_id，或同时给出 topology 与 parameters。"
+            )
+        if has_custom and (self.topology is None or self.parameters is None):
+            raise ValueError("自定义平均值 dq 算例必须同时给出 topology 与 parameters。")
+        sample_count = ceil(self.simulation_time_s / self.time_step_s) + 1
+        if sample_count > 3001:
+            raise ValueError(
+                f"非线性时域采样点数 {sample_count} 超过上限 3001；"
+                "请缩短仿真时长或增大时间步长。"
+            )
+        if any(value < 0.0 for value in self.frequency_values_hz):
+            raise ValueError("端口导纳频率必须非负。")
+        if any(
+            right <= left
+            for left, right in zip(
+                self.frequency_values_hz, self.frequency_values_hz[1:]
+            )
+        ):
+            raise ValueError("端口导纳频率必须严格递增且不得重复。")
         return self
 
 
@@ -333,9 +395,218 @@ def _reduced_order_scan_payload(request: ReducedOrderScanRequest) -> dict:
     }
 
 
+def _complex_matrix_payload(matrix: np.ndarray) -> list[list[dict[str, float]]]:
+    return [
+        [
+            {"real": float(value.real), "imag": float(value.imag)}
+            for value in row
+        ]
+        for row in matrix
+    ]
+
+
+def _average_dq_payload(request: AverageDQAnalysisRequest) -> dict:
+    if request.preset_id is not None:
+        topology, parameters = build_average_dq_verification_case()
+        source = {
+            "source_kind": "team-defined-average-dq-verification-preset",
+            "preset_id": AVERAGE_DQ_PRESET_ID,
+            "expected_stability": "stable",
+            "paper_fixture": False,
+            "physical_hardware_fit": False,
+        }
+    else:
+        if request.topology is None or request.parameters is None:
+            raise RuntimeError("平均值 dq 自定义请求缺少拓扑或参数。")
+        topology, parameters = request.topology, request.parameters
+        source = {
+            "source_kind": "user-supplied-average-dq-case",
+            "preset_id": None,
+            "expected_stability": None,
+            "paper_fixture": False,
+            "physical_hardware_fit": None,
+        }
+    model = build_average_dq_model(topology, parameters)
+    if (
+        source["expected_stability"] is not None
+        and model.stability.value != source["expected_stability"]
+    ):
+        raise RuntimeError("平均值 dq 固定预设的稳定性分类与冻结预期不一致。")
+
+    sample_count = ceil(request.simulation_time_s / request.time_step_s) + 1
+    times = np.linspace(0.0, request.simulation_time_s, sample_count)
+    initial_state = model.operating_point.state.copy()
+    initial_state[0] += request.initial_angle_perturbation_rad
+    response = model.nonlinear_linear_response(times, initial_state=initial_state)
+    admittance = model.port_admittance(request.frequency_values_hz)
+    reconstructed = close_port_model_with_external_line(
+        model.linearization,
+        model.line,
+        model.topology.base_values.frequency_hz,
+    )
+    interconnection_error = float(
+        np.max(
+            np.abs(
+                reconstructed - model.linearization.closed_state_matrix
+            )
+        )
+    )
+    reduction = compare_with_quasisteady_reduction(model)
+    dominant_index = max(
+        range(model.poles_per_s.size),
+        key=lambda index: (
+            model.poles_per_s[index].real,
+            model.poles_per_s[index].imag,
+        ),
+    )
+    dominant_per_s = model.poles_per_s[dominant_index]
+    dominant_hz = model.poles_hz[dominant_index]
+    operating = model.operating_point
+    return {
+        "run_id": f"average-dq-{topology.id}",
+        "status": "completed",
+        "analysis_mode": "transparent-average-value-dq-smib-v1",
+        "input_topology": topology.model_dump(mode="json"),
+        "input_parameters": parameters.model_dump(mode="json"),
+        "input_validation": {
+            "status": "passed",
+            "network_contract": f"NetworkTopology/{topology.schema_version}",
+            "parameter_contract": (
+                f"AverageDQGFMParameters/{parameters.schema_version}"
+            ),
+            "frame_convention_id": topology.frame_convention_id,
+            "scope_validation": "single-vsm-single-rl-line-infinite-bus-passed",
+        },
+        "operating_point": {
+            "state_labels": list(STATE_LABELS),
+            "state": operating.state.tolist(),
+            "grid_voltage_global_pu": operating.grid_voltage_global.tolist(),
+            "pcc_voltage_local_pu": operating.pcc_voltage_local.tolist(),
+            "pcc_voltage_global_pu": operating.pcc_voltage_global.tolist(),
+            "algebraic_residual": operating.algebraic_residual.tolist(),
+            "closed_rhs_residual_inf": operating.closed_rhs_residual_inf,
+            "device_rhs_residual_inf": operating.device_rhs_residual_inf,
+            "active_power_balance_residual_pu": (
+                operating.active_power_balance_residual_pu
+            ),
+            "converter_current_magnitude_pu": (
+                operating.converter_current_magnitude_pu
+            ),
+            "grid_current_magnitude_pu": operating.grid_current_magnitude_pu,
+            "internal_voltage_magnitude_pu": (
+                operating.internal_voltage_magnitude_pu
+            ),
+        },
+        "result": {
+            "stability": model.stability.value,
+            "stability_tolerance_per_s": model.stability_tolerance_per_s,
+            "closed_state_matrix": (
+                model.linearization.closed_state_matrix.tolist()
+            ),
+            "poles": [
+                _complex_pole_payload(pole_per_s, pole_hz)
+                for pole_per_s, pole_hz in zip(
+                    model.poles_per_s, model.poles_hz, strict=True
+                )
+            ],
+            "dominant_mode": {
+                **_complex_pole_payload(dominant_per_s, dominant_hz),
+                "oscillation_frequency_hz": (
+                    abs(float(dominant_per_s.imag)) / (2.0 * np.pi)
+                ),
+            },
+            "port_interconnection_max_abs_error": interconnection_error,
+            "quasisteady_reduction_comparison": {
+                "synchronizing_stiffness_pu_per_rad": (
+                    reduction.synchronizing_stiffness_pu_per_rad
+                ),
+                "reduced_state_matrix": reduction.reduced_state_matrix.tolist(),
+                "reduced_poles": [
+                    _complex_pole_payload(pole, pole / (2.0 * np.pi))
+                    for pole in reduction.reduced_poles_per_s
+                ],
+                "full_dominant_pole": _complex_pole_payload(
+                    reduction.full_dominant_pole_per_s,
+                    reduction.full_dominant_pole_per_s / (2.0 * np.pi),
+                ),
+                "reduced_dominant_pole": _complex_pole_payload(
+                    reduction.reduced_dominant_pole_per_s,
+                    reduction.reduced_dominant_pole_per_s / (2.0 * np.pi),
+                ),
+                "oscillation_frequency_relative_error": (
+                    reduction.oscillation_frequency_relative_error
+                ),
+                "decay_rate_relative_error": reduction.decay_rate_relative_error,
+                "interpretation": (
+                    "三状态模型使用同一工作点的准稳态 Q–V 关系求得 Kδ；"
+                    "误差只评价当前参数下的主导同步模态，不证明一般等价。"
+                ),
+            },
+            "port_admittance": {
+                "current_direction": "network-to-device-positive",
+                "voltage_frame": "global-synchronous-dq",
+                "frequencies_hz": request.frequency_values_hz,
+                "matrices": [
+                    _complex_matrix_payload(matrix) for matrix in admittance
+                ],
+            },
+            "time_response": {
+                "response_kind": "nonlinear-vs-local-linear-initial-condition",
+                "time_s": response.time_s.tolist(),
+                "state_labels": list(response.state_labels),
+                "initial_state": initial_state.tolist(),
+                "nonlinear_states": response.nonlinear_states.tolist(),
+                "linear_states": response.linear_states.tolist(),
+            },
+        },
+        "model_scope": {
+            "claim_level": "average-value-positive-sequence-smib-model-only",
+            "statement": (
+                "该结果属于团队定义的16状态平均值 dq 单机模型；它比三状态低频模型"
+                "保留更多控制与电磁动态，但不是论文 Fig. 8 模型、PWM 开关模型、"
+                "电磁暂态真值或任意多机构网系统结论。"
+            ),
+            "retained_dynamics": [
+                "LCL-filter-electromagnetic-dynamics",
+                "cascaded-dq-voltage-current-PI-control",
+                "VSM-active-power-frequency-loop",
+                "reactive-power-voltage-droop",
+                "first-order-average-modulator",
+                "external-series-RL-line",
+            ],
+            "excluded_dynamics": [
+                "PWM-switching-ripple",
+                "dc-link-and-prime-mover-dynamics",
+                "current-limiting-and-anti-windup",
+                "fault-ride-through-and-mode-switching",
+                "unbalance-zero-sequence-and-harmonics",
+                "static-load-algebraic-constraints",
+                "multi-converter-nonlinear-DAE",
+            ],
+        },
+        "provenance": {
+            "implementation": "backend.core.average_dq_model",
+            "model_specification": (
+                "docs/specs/models/average-dq-gfm-v1-proposal.md"
+            ),
+            "verification_basis": [
+                "analytic-no-load-equilibrium",
+                "steady-state-active-power-balance",
+                "global-frame-rotation-invariance",
+                "finite-difference-jacobian-convergence",
+                "nonlinear-linear-small-signal-agreement",
+                "port-line-direct-closure-matrix-agreement",
+                "working-point-matched-three-state-dominant-mode-comparison",
+            ],
+            "separated_from_fig8_fixture": True,
+            **source,
+        },
+    }
+
+
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "service": "gfm-stability-api", "version": "0.3.0-rc5"}
+    return {"status": "ok", "service": "gfm-stability-api", "version": "0.4.0-rc1"}
 
 
 @app.get("/api/scenarios")
@@ -379,6 +650,18 @@ def reduced_order_presets() -> dict:
     }
 
 
+@app.get("/api/average-dq/presets")
+def average_dq_presets() -> dict:
+    return {
+        "analysis_mode": "transparent-average-value-dq-smib-v1",
+        "separation_notice": (
+            "该预设为团队定义的16状态模型校核算例，不属于论文 Fig. 8 作者模型。"
+        ),
+        "claim_level": "average-value-positive-sequence-smib-model-only",
+        "presets": [average_dq_preset_metadata()],
+    }
+
+
 @app.post("/api/analysis/run")
 def run_analysis(request: AnalysisRequest) -> dict:
     try:
@@ -415,6 +698,16 @@ def run_reduced_order_scan(request: ReducedOrderScanRequest) -> dict:
         raise HTTPException(status_code=422, detail=str(error)) from error
 
 
+@app.post("/api/average-dq/analyze")
+def run_average_dq_analysis(request: AverageDQAnalysisRequest) -> dict:
+    try:
+        return _average_dq_payload(request)
+    except AverageDQModelError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
 @app.get("/api/reports/fig8", response_class=HTMLResponse)
 def fig8_report(scenario_id: Fig8CaseId = "fig8_D_0p5") -> str:
     return render_fig8_report(_analysis_payload(AnalysisRequest(scenario_id=scenario_id)))
@@ -432,6 +725,18 @@ def reduced_order_report(request: ReducedOrderAnalysisRequest) -> str:
     try:
         return render_reduced_order_report(_reduced_order_payload(request))
     except ReducedOrderModelError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.post("/api/reports/average-dq", response_class=HTMLResponse)
+def average_dq_report(request: AverageDQAnalysisRequest) -> str:
+    """Return the same average-dq calculation as a self-contained HTML report."""
+
+    try:
+        return render_average_dq_report(_average_dq_payload(request))
+    except AverageDQModelError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except RuntimeError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error

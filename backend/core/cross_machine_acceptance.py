@@ -93,8 +93,8 @@ def review_cross_machine_evidence(
 
     if acceptance.get("schema_version") != "gfm-cross-machine-acceptance/1.1":
         errors.append("异机证据版本不是 gfm-cross-machine-acceptance/1.1")
-    if runtime.get("schema_version") != "gfm-runtime-acceptance/1.0":
-        errors.append("运行时证据版本不是 gfm-runtime-acceptance/1.0")
+    if runtime.get("schema_version") != "gfm-runtime-acceptance/1.1":
+        errors.append("运行时证据版本不是 gfm-runtime-acceptance/1.1")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -159,6 +159,11 @@ def review_cross_machine_evidence(
         if isinstance(runtime_checks.get("reduced_order"), dict)
         else {}
     )
+    average_dq = (
+        runtime_checks.get("average_dq")
+        if isinstance(runtime_checks.get("average_dq"), dict)
+        else {}
+    )
     if runtime.get("status") != "passed" or runtime_checks.get("health") != "passed":
         errors.append("运行时健康检查未通过")
     if frontend.get("index") != "passed" or frontend.get("local_asset_count", 0) < 2:
@@ -181,6 +186,19 @@ def review_cross_machine_evidence(
         or reduced.get("report") != "passed"
     ):
         errors.append("独立低频模型或打印报告证据未通过")
+    if (
+        average_dq.get("preset_id") != "average-dq-smib-verification"
+        or average_dq.get("stability") != "stable"
+        or average_dq.get("pole_count") != 16
+        or average_dq.get("closed_rhs_residual_inf", 1.0) >= 1.0e-9
+        or abs(average_dq.get("active_power_balance_residual_pu", 1.0))
+        >= 1.0e-8
+        or average_dq.get("port_interconnection_max_abs_error", 1.0) >= 1.0e-6
+        or average_dq.get("reduction_frequency_relative_error", 1.0) >= 0.05
+        or average_dq.get("reduction_decay_relative_error", 1.0) >= 0.05
+        or average_dq.get("report") != "passed"
+    ):
+        errors.append("16状态平均值 dq 模型或打印报告证据未通过")
 
     for required_file in ("acceptance-summary.txt", "runtime-console.log"):
         if not (directory / required_file).is_file():

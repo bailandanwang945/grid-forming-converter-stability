@@ -2,6 +2,11 @@
 
 本目录用于登记后续完整平均值 `dq`、Simulink 或其他独立物理模型资产及其接口说明。
 
-当前已实现的低频相角—标幺频率—有功功率测量降阶模型位于 `backend/core/reduced_order_model.py`，其输入契约位于 `backend/domain/network_models.py`。该实现不属于完整平均值 `dq` 模型，不应把低频降阶结果外推为任意构网型变流器的稳定性结论。
+当前包含两层团队自建模型：
+
+- 低频相角—标幺频率—有功功率测量降阶模型位于 `backend/core/reduced_order_model.py`；
+- 16 状态 LCL 型平均值 dq 单机模型位于 `backend/core/average_dq_model.py`，附加参数契约位于 `backend/domain/average_dq_models.py`。
+
+第二层模型保留 VSM、Q–V 下垂、电压电流双闭环、平均调制、LCL 与外部 RL 线路，并已完成工作点、功率平衡、坐标旋转、端口互联和非线性—线性小扰动内部验证。它仍不包含 PWM、限流、故障、不平衡、负荷 DAE 和多机非线性网络；尚无实物或可信 EMT 外部确认，不应外推为任意构网型变流器的稳定性结论。
 
 新增模型前应固定坐标约定、功率方向、基值、工作点、状态和端口，并登记来源、版本与验证证据。

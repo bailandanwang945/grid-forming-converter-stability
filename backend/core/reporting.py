@@ -521,3 +521,116 @@ code {{ font-family:Consolas,monospace; font-size:10px; }} .footer {{ margin-top
 <table><tbody><tr><th>输入来源</th><td>{escape(provenance['source_kind'])}</td></tr><tr><th>预设 ID</th><td>{escape(str(provenance.get('preset_id') or '自定义拓扑'))}</td></tr><tr><th>实现</th><td><code>{escape(provenance['implementation'])}</code></td></tr><tr><th>拓扑契约</th><td><code>{escape(provenance['topology_contract'])}</code></td></tr><tr><th>与 Fig. 8 夹具隔离</th><td>{'是' if provenance['separated_from_fig8_fixture'] else '否'}</td></tr></tbody></table>
 <div class="footer">本报告由本地分析平台根据请求中的完整拓扑与参数即时生成。报告保留模型假设、排除项和证据边界，不能替代完整平均值 dq 模型、非线性时域仿真或论文定理的独立验证。</div>
 </body></html>"""
+
+
+def render_average_dq_report(result: dict) -> str:
+    """Render a self-contained report for one 16-state average-value dq run."""
+
+    topology = result["input_topology"]
+    parameters = result["input_parameters"]
+    operating = result["operating_point"]
+    analysis = result["result"]
+    scope = result["model_scope"]
+    provenance = result["provenance"]
+    response = analysis["time_response"]
+    nonlinear_columns = list(zip(*response["nonlinear_states"], strict=True))
+    linear_columns = list(zip(*response["linear_states"], strict=True))
+    equilibrium_angle = float(operating["state"][0])
+    time_chart = _linear_svg_chart(
+        response["time_s"],
+        [
+            (
+                "相角偏差（非线性）",
+                [(float(value) - equilibrium_angle) * 1000.0 for value in nonlinear_columns[0]],
+                "#176e64",
+            ),
+            (
+                "相角偏差（线性）",
+                [(float(value) - equilibrium_angle) * 1000.0 for value in linear_columns[0]],
+                "#b77824",
+            ),
+        ],
+        "平均值模型与局部线性模型的小扰动响应",
+        "时间 / s",
+        "相角偏差 / mrad",
+    )
+    pole_rows = "".join(
+        f"<tr><td>{index + 1}</td><td>{pole['real_per_s']:+.7g}</td>"
+        f"<td>{pole['imag_per_s']:+.7g}</td><td>{pole['real_hz']:+.7g}</td>"
+        f"<td>{pole['imag_hz']:+.7g}</td></tr>"
+        for index, pole in enumerate(analysis["poles"])
+    )
+    parameter_rows = "".join(
+        f"<tr><th>{escape(str(name))}</th><td>{escape(str(value))}</td></tr>"
+        for name, value in parameters.items()
+        if name not in {"schema_version", "frame_convention_id"}
+    )
+    state_rows = "".join(
+        f"<tr><td>{escape(label)}</td><td>{_number(float(value), 8)}</td></tr>"
+        for label, value in zip(
+            operating["state_labels"], operating["state"], strict=True
+        )
+    )
+    retained = "".join(
+        f"<li><code>{escape(item)}</code></li>" for item in scope["retained_dynamics"]
+    )
+    excluded = "".join(
+        f"<li><code>{escape(item)}</code></li>" for item in scope["excluded_dynamics"]
+    )
+    dominant = analysis["dominant_mode"]
+    reduction = analysis["quasisteady_reduction_comparison"]
+    stability_names = {"stable": "稳定", "marginal": "临界", "unstable": "失稳"}
+    converter = topology["grid_forming_converters"][0]
+    line = topology["lines"][0]
+    return f"""<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>平均值 dq 构网型变流器分析报告</title>
+<style>
+@page {{ size:A4; margin:14mm; }}
+body {{ font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif; color:#202b33; margin:0; font-size:11px; line-height:1.6; }}
+h1 {{ font-size:21px; margin:0 0 4px; }} h2 {{ font-size:15px; margin:20px 0 8px; border-left:4px solid #176e64; padding-left:9px; }}
+h3 {{ font-size:12px; margin:14px 0 6px; }} .sub {{ color:#697884; }}
+.notice {{ padding:10px 13px; background:#fff5df; border:1px solid #edd7a8; border-radius:7px; }}
+.grid {{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:13px 0; }}
+.metric {{ padding:9px; background:#f3f7f7; border-radius:7px; }} .metric b {{ display:block; margin-top:3px; font-size:13px; }}
+table {{ width:100%; border-collapse:collapse; margin-bottom:8px; }} th,td {{ padding:5px 7px; border:1px solid #dce3e7; text-align:left; }} th {{ background:#f2f5f6; }}
+svg {{ width:100%; height:auto; border:1px solid #e0e6e9; border-radius:7px; margin:5px 0 10px; }}
+code {{ font-family:Consolas,monospace; font-size:10px; }} .columns {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }}
+.footer {{ margin-top:22px; padding-top:9px; border-top:1px solid #dfe5e8; color:#75838d; font-size:9px; }}
+@media print {{ .print-tip {{ display:none; }} h2 {{ break-after:avoid; }} table,svg,.notice {{ break-inside:avoid; }} }}
+</style></head><body>
+<h1>平均值 dq 构网型变流器分析报告</h1>
+<div class="sub">16 状态正序平均模型 · {escape(result['run_id'])} · {escape(topology['name'])}</div>
+<p class="print-tip"><button onclick="window.print()">打印或另存为 PDF</button></p>
+<div class="notice"><b>适用边界：</b>{escape(scope['statement'])}</div>
+<div class="grid">
+ <div class="metric">闭环特征根分类<b>{stability_names.get(analysis['stability'], escape(analysis['stability']))}</b></div>
+ <div class="metric">主导极点<b>{dominant['real_hz']:+.6f} + j{dominant['imag_hz']:+.6f} Hz</b></div>
+ <div class="metric">PCC 电流<b>{operating['grid_current_magnitude_pu']:.6f} p.u.</b></div>
+ <div class="metric">端口互联误差<b>{analysis['port_interconnection_max_abs_error']:.3e}</b></div>
+</div>
+<h2>输入模型</h2>
+<p>变流器 <code>{escape(converter['id'])}</code> 位于节点 <code>{escape(converter['bus_id'])}</code>，外部线路 <code>{escape(line['id'])}</code> 的 R/X 为 {_number(line['resistance_pu'])}/{_number(line['reactance_pu'])} p.u.；坐标约定 <code>{escape(topology['frame_convention_id'])}</code>。</p>
+<table><tbody>{parameter_rows}</tbody></table>
+<h2>工作点与物理诊断</h2>
+<div class="grid">
+ <div class="metric">代数残差∞范数<b>{max(abs(value) for value in operating['algebraic_residual']):.3e}</b></div>
+ <div class="metric">闭环动态残差∞范数<b>{operating['closed_rhs_residual_inf']:.3e}</b></div>
+ <div class="metric">滤波器有功平衡残差<b>{operating['active_power_balance_residual_pu']:.3e} p.u.</b></div>
+ <div class="metric">内部电压幅值<b>{operating['internal_voltage_magnitude_pu']:.6f} p.u.</b></div>
+</div>
+<table><thead><tr><th>状态</th><th>工作点值</th></tr></thead><tbody>{state_rows}</tbody></table>
+<h2>模型保留项与排除项</h2><div class="columns"><div><h3>本模型保留</h3><ul>{retained}</ul></div><div><h3>本模型不包含</h3><ul>{excluded}</ul></div></div>
+<h2>闭环极点</h2><table><thead><tr><th>序号</th><th>实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>实部 / Hz</th><th>虚部 / Hz</th></tr></thead><tbody>{pole_rows}</tbody></table>
+<p>直接闭合矩阵与“变流器端口模型 + 外部线路方程”独立重组矩阵的最大逐元素误差为 {analysis['port_interconnection_max_abs_error']:.6e}。这项检查同时约束 PCC 方向、线路 dq 动态和电流正负号。</p>
+<h2>与三状态低频近似的层级比较</h2>
+<p>在同一工作点保持 Q–V 准稳态关系，数值求得同步刚度 Kδ={reduction['synchronizing_stiffness_pu_per_rad']:.7g} p.u./rad。三状态近似相对于16状态模型主导模态的振荡频率误差为 {100*reduction['oscillation_frequency_relative_error']:.3f}%，衰减率误差为 {100*reduction['decay_rate_relative_error']:.3f}%。{escape(reduction['interpretation'])}</p>
+<h2>非线性—线性小扰动交叉核对</h2><p>下图比较同一工作点和初始状态下的平均值非线性 ODE 与局部线性矩阵响应。两者的一致性属于实现验证，不等同于与实物或 EMT 模型的外部确认。</p>{time_chart}
+<h2>来源与结论边界</h2><table><tbody>
+<tr><th>输入来源</th><td>{escape(provenance['source_kind'])}</td></tr>
+<tr><th>实现</th><td><code>{escape(provenance['implementation'])}</code></td></tr>
+<tr><th>模型规格</th><td><code>{escape(provenance['model_specification'])}</code></td></tr>
+<tr><th>论文 Fig. 8 夹具</th><td>明确隔离；本报告不是论文算例复现</td></tr>
+<tr><th>硬件参数拟合</th><td>{'否' if provenance.get('physical_hardware_fit') is False else '未声明'}</td></tr>
+</tbody></table>
+<div class="footer">本报告由本地分析平台从完整输入拓扑与参数即时计算。它证明当前方程和软件实现之间的内部一致性；在没有外部实物、可信 EMT 或独立实验数据前，不宣称完成工程模型确认。</div>
+</body></html>"""

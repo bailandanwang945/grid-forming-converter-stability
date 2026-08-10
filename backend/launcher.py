@@ -184,6 +184,72 @@ def _verify_reduced_order_workflow(url: str) -> dict[str, object]:
     }
 
 
+def _verify_average_dq_workflow(url: str) -> dict[str, object]:
+    request_payload = {
+        "preset_id": "average-dq-smib-verification",
+        "simulation_time_s": 0.02,
+        "time_step_s": 0.002,
+        "initial_angle_perturbation_rad": 0.0001,
+        "frequency_values_hz": [0.1, 1.0, 10.0],
+    }
+    request = urllib.request.Request(
+        f"{url}/api/average-dq/analyze",
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=30.0) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    result = payload.get("result", {})
+    operating = payload.get("operating_point", {})
+    reduction = result.get("quasisteady_reduction_comparison", {})
+    if (
+        response.status != 200
+        or payload.get("status") != "completed"
+        or result.get("stability") != "stable"
+        or len(result.get("poles", [])) != 16
+        or operating.get("closed_rhs_residual_inf", 1.0) >= 1.0e-9
+        or abs(operating.get("active_power_balance_residual_pu", 1.0)) >= 1.0e-8
+        or result.get("port_interconnection_max_abs_error", 1.0) >= 1.0e-6
+        or reduction.get("oscillation_frequency_relative_error", 1.0) >= 0.05
+        or reduction.get("decay_rate_relative_error", 1.0) >= 0.05
+    ):
+        raise RuntimeError("Packaged average-dq analysis verification failed.")
+
+    report_request = urllib.request.Request(
+        f"{url}/api/reports/average-dq",
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(report_request, timeout=30.0) as response:
+        report = response.read().decode("utf-8")
+    if (
+        response.status != 200
+        or "端口互联误差" not in report
+        or "不是论文算例复现" not in report
+        or "不宣称完成工程模型确认" not in report
+    ):
+        raise RuntimeError("Packaged average-dq report verification failed.")
+    return {
+        "preset_id": request_payload["preset_id"],
+        "stability": result["stability"],
+        "pole_count": len(result["poles"]),
+        "closed_rhs_residual_inf": operating["closed_rhs_residual_inf"],
+        "active_power_balance_residual_pu": operating[
+            "active_power_balance_residual_pu"
+        ],
+        "port_interconnection_max_abs_error": result[
+            "port_interconnection_max_abs_error"
+        ],
+        "reduction_frequency_relative_error": reduction[
+            "oscillation_frequency_relative_error"
+        ],
+        "reduction_decay_relative_error": reduction["decay_rate_relative_error"],
+        "report": "passed",
+    }
+
+
 def _write_runtime_evidence(path: str, payload: dict[str, object]) -> None:
     evidence_path = Path(path).expanduser().resolve()
     evidence_path.parent.mkdir(parents=True, exist_ok=True)
@@ -227,7 +293,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.0",
+        "schema_version": "gfm-runtime-acceptance/1.1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),
@@ -246,6 +312,7 @@ def run(
             "fig8": _verify_pinned_analysis(url),
             "same_domain": _verify_domain_comparison(url),
             "reduced_order": _verify_reduced_order_workflow(url),
+            "average_dq": _verify_average_dq_workflow(url),
         }
         evidence["status"] = "passed"
         if evidence_file:

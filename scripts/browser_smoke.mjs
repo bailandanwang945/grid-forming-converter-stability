@@ -46,7 +46,7 @@ try {
   await comparisonReport.close()
   await page.screenshot({ path: resolve('tmp/browser-smoke-comparison.png'), fullPage: true })
 
-  await page.getByRole('button', { name: '独立模型' }).click()
+  await page.getByRole('button', { name: '低频模型' }).click()
   await page.getByText('可编辑网络与控制参数').waitFor({ timeout: 15000 })
   const referenceBus = page.getByLabel('参考母线')
   if (await referenceBus.inputValue() !== 'bus-grid' || await referenceBus.locator('option').count() !== 1) {
@@ -106,6 +106,38 @@ try {
   const reportText = await reportPage.locator('body').innerText()
   if (!reportText.includes('0.05')) throw new Error('Report did not retain the custom damping parameter.')
   await reportPage.close()
+
+  await page.getByRole('button', { name: '平均值 dq' }).click()
+  await page.getByText('16 状态平均值 dq 模型').waitFor({ timeout: 15000 })
+  await page.getByLabel('P* / p.u.').fill('0.4')
+  await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
+  await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })
+  const averageText = await page.locator('body').innerText()
+  for (const evidence of ['参考稳定', '有功平衡残差', '硬件参数拟合', '未进行']) {
+    if (!averageText.includes(evidence)) throw new Error(`Average-dq page is missing ${evidence}.`)
+  }
+  const averageDownloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: /导出可追溯 JSON/ }).click()
+  const averageDownload = await averageDownloadPromise
+  if (!averageDownload.suggestedFilename().endsWith('.json')) {
+    throw new Error('Average-dq JSON export failed.')
+  }
+  await page.getByLabel('初始相角 / mrad').fill('0.2')
+  if (await page.getByRole('button', { name: /导出可追溯 JSON/ }).isEnabled()) {
+    throw new Error('Average-dq result was not invalidated after changing the time-domain input.')
+  }
+  if (await page.getByRole('button', { name: /生成打印式分析报告/ }).isEnabled()) {
+    throw new Error('Average-dq report remained enabled for stale on-screen results.')
+  }
+  await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
+  await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })
+  const averageReportPromise = page.waitForEvent('popup')
+  await page.getByRole('button', { name: /生成打印式分析报告/ }).click()
+  const averageReport = await averageReportPromise
+  await averageReport.waitForFunction(() => document.body?.innerText.includes('不宣称完成工程模型确认'), null, { timeout: 30000 })
+  const averageReportText = await averageReport.locator('body').innerText()
+  if (!averageReportText.includes('0.4')) throw new Error('Average-dq report did not retain the edited active-power setpoint.')
+  await averageReport.close()
 
   await page.screenshot({ path: screenshotPath, fullPage: true })
   console.log('BROWSER_E2E_SMOKE_OK')

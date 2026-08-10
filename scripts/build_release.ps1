@@ -1,6 +1,5 @@
 param(
-    [string]$Version = "0.3.0-rc5",
-    [switch]$SkipFrontendBuild,
+    [string]$Version = "0.4.0-rc1",
     [switch]$SkipSmokeTest,
     [switch]$AllowDirtyWorktree
 )
@@ -56,7 +55,7 @@ if ($Version -notmatch '^[0-9A-Za-z][0-9A-Za-z._-]{0,63}$') {
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
     throw "Python is required only on the build machine."
 }
-if (-not $SkipFrontendBuild -and -not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
+if (-not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
     throw "Node.js/npm is required only on the build machine."
 }
 
@@ -77,18 +76,16 @@ foreach ($Path in @($BuildRoot, $DistRoot, $FrontendSnapshot, $PackagedSmokeEvid
     }
 }
 
-if (-not $SkipFrontendBuild) {
-    Write-Step "Building the production web interface..."
-    Push-Location $FrontendRoot
-    try {
-        if (-not (Test-Path (Join-Path $FrontendRoot "node_modules"))) {
-            Invoke-Native npm.cmd @("ci")
-        }
-        Invoke-Native npm.cmd @("run", "build")
+Write-Step "Building the production web interface..."
+Push-Location $FrontendRoot
+try {
+    if (-not (Test-Path (Join-Path $FrontendRoot "node_modules"))) {
+        Invoke-Native npm.cmd @("ci")
     }
-    finally {
-        Pop-Location
-    }
+    Invoke-Native npm.cmd @("run", "build")
+}
+finally {
+    Pop-Location
 }
 if (-not (Test-Path (Join-Path $FrontendDist "index.html"))) {
     throw "Frontend build output is missing: $FrontendDist\index.html"
@@ -219,7 +216,12 @@ if (-not $SkipSmokeTest) {
     if (
         $SmokeEvidence.status -ne "passed" -or
         $SmokeEvidence.checks.reduced_order.stability -ne "stable" -or
-        $SmokeEvidence.checks.reduced_order.report -ne "passed"
+        $SmokeEvidence.checks.reduced_order.report -ne "passed" -or
+        $SmokeEvidence.checks.average_dq.stability -ne "stable" -or
+        $SmokeEvidence.checks.average_dq.pole_count -ne 16 -or
+        $SmokeEvidence.checks.average_dq.reduction_frequency_relative_error -ge 0.05 -or
+        $SmokeEvidence.checks.average_dq.reduction_decay_relative_error -ge 0.05 -or
+        $SmokeEvidence.checks.average_dq.report -ne "passed"
     ) {
         throw "Packaged runtime evidence verification failed."
     }

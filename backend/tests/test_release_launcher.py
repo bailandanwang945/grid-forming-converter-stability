@@ -73,6 +73,31 @@ def acceptance_app() -> FastAPI:
     def reduced_order_report() -> HTMLResponse:
         return HTMLResponse("输入拓扑与参数；不是完整 dq 模型结论")
 
+    @app.post("/api/average-dq/analyze")
+    def average_dq() -> dict:
+        return {
+            "status": "completed",
+            "operating_point": {
+                "closed_rhs_residual_inf": 1.0e-12,
+                "active_power_balance_residual_pu": 1.0e-15,
+            },
+            "result": {
+                "stability": "stable",
+                "poles": [{}] * 16,
+                "port_interconnection_max_abs_error": 1.0e-10,
+                "quasisteady_reduction_comparison": {
+                    "oscillation_frequency_relative_error": 0.01,
+                    "decay_rate_relative_error": 0.02,
+                },
+            },
+        }
+
+    @app.post("/api/reports/average-dq")
+    def average_dq_report() -> HTMLResponse:
+        return HTMLResponse(
+            "端口互联误差；不是论文算例复现；不宣称完成工程模型确认"
+        )
+
     return app
 
 
@@ -112,6 +137,14 @@ class ReleaseLauncherTest(unittest.TestCase):
             )
             self.assertEqual(
                 evidence["checks"]["reduced_order"]["report"],
+                "passed",
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq"]["pole_count"],
+                16,
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq"]["report"],
                 "passed",
             )
 

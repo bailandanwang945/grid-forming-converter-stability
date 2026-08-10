@@ -38,7 +38,7 @@
 - `GFM_M5_QUALIFICATION_INCOMPLETE`：功能链通过，但断网、无开发环境或 64 位条件至少一项没有得到足够证据。
 - `GFM_CROSS_MACHINE_FUNCTIONAL_FAILED`：包校验、启动、数值基线、报告或端口释放至少一项失败。
 
-异机自动验收仍不能替代人工打开网页、点击三个工作区、实际导出 CSV/HTML 并确认浏览器和安全软件行为。自动证据通过后，队友还应按照两分钟演示脚本完成一次人工操作并保存截图。
+异机自动验收仍不能替代人工打开网页、点击四个工作区、实际导出数据/HTML 并确认浏览器和安全软件行为。自动证据通过后，队友还应完成一次人工操作并保存截图。
 
 ## 项目侧回收与复核
 
@@ -46,7 +46,7 @@
 
 ```powershell
 python scripts/import_cross_machine_acceptance.py <回传结果目录> `
-  --expected-version 0.3.0-rc5 `
+  --expected-version 0.4.0-rc1 `
   --expected-commit <发布清单中的提交号> `
   --expected-zip-sha256 <正式ZIP的SHA-256>
 ```
