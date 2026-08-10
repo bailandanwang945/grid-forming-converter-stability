@@ -6,6 +6,8 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $FrontendRoot = Join-Path $ProjectRoot "apps\web"
 $ViteScript = Join-Path $FrontendRoot "node_modules\vite\bin\vite.js"
+$BackendPort = 8000
+$FrontendPort = 5173
 $Backend = $null
 $Frontend = $null
 
@@ -37,8 +39,24 @@ function Invoke-NativeCommand(
     }
 }
 
-function Wait-Http([string]$Url, [int]$Attempts = 40) {
+function Assert-PortAvailable([int]$Port) {
+    $Listener = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
+    if ($null -ne $Listener) {
+        $Owners = @($Listener | Select-Object -ExpandProperty OwningProcess -Unique) -join ", "
+        throw "Port $Port is already occupied by process $Owners. Stop that service and retry."
+    }
+}
+
+function Wait-Http(
+    [string]$Url,
+    [System.Diagnostics.Process]$Process,
+    [int]$Attempts = 40
+) {
     for ($Index = 0; $Index -lt $Attempts; $Index++) {
+        $Process.Refresh()
+        if ($Process.HasExited) {
+            throw "The process for $Url exited early with code $($Process.ExitCode)."
+        }
         try {
             $Response = Invoke-WebRequest $Url -UseBasicParsing -TimeoutSec 2
             if ($Response.StatusCode -eq 200) {
@@ -52,21 +70,24 @@ function Wait-Http([string]$Url, [int]$Attempts = 40) {
     return $false
 }
 
-function Stop-ProjectListener([int]$Port, [string]$ExpectedCommandFragment) {
-    $Connections = Get-NetTCPConnection `
-        -LocalPort $Port `
-        -State Listen `
-        -ErrorAction SilentlyContinue
-    foreach ($Connection in @($Connections)) {
-        $ServiceProcess = Get-CimInstance `
-            -ClassName Win32_Process `
-            -Filter "ProcessId=$($Connection.OwningProcess)" `
-            -ErrorAction SilentlyContinue
-        if (
-            $null -ne $ServiceProcess -and
-            $ServiceProcess.CommandLine -like "*$ExpectedCommandFragment*"
-        ) {
-            Stop-Process -Id $Connection.OwningProcess -Force -ErrorAction SilentlyContinue
+function Assert-OwnsListener([int]$Port, [System.Diagnostics.Process]$Process) {
+    $Owners = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
+        Select-Object -ExpandProperty OwningProcess -Unique)
+    if ($Owners.Count -ne 1 -or $Owners[0] -ne $Process.Id) {
+        throw "The service on port $Port is not owned by the process started in this run."
+    }
+}
+
+function Stop-OwnedProcess([System.Diagnostics.Process]$Process) {
+    if ($null -ne $Process) {
+        $Process.Refresh()
+        if (-not $Process.HasExited) {
+            Stop-Process -Id $Process.Id -ErrorAction SilentlyContinue
+            $Process.WaitForExit(3000) | Out-Null
+            $Process.Refresh()
+            if (-not $Process.HasExited) {
+                Stop-Process -Id $Process.Id -Force -ErrorAction SilentlyContinue
+            }
         }
     }
 }
@@ -79,9 +100,11 @@ try {
     if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
         throw "Node.js/npm was not found. Install Node.js 20 or newer."
     }
+    Assert-PortAvailable $BackendPort
+    Assert-PortAvailable $FrontendPort
 
     $BackendProbeExitCode = Invoke-NativeCommand python @(
-        "-c", "import fastapi, uvicorn, pydantic"
+        "-c", "import fastapi, uvicorn, pydantic, numpy, scipy"
     ) -Quiet
     if ($BackendProbeExitCode -ne 0) {
         Write-Step "Installing backend dependencies..."
@@ -110,7 +133,7 @@ try {
 
     Write-Step "Starting analysis API..."
     $Backend = Start-Process python `
-        -ArgumentList "-m", "uvicorn", "backend.api.app:app", "--host", "127.0.0.1", "--port", "8000" `
+        -ArgumentList "-m", "uvicorn", "backend.api.app:app", "--host", "127.0.0.1", "--port", "$BackendPort" `
         -WorkingDirectory $ProjectRoot `
         -WindowStyle Hidden `
         -PassThru
@@ -125,12 +148,14 @@ try {
         -WindowStyle Hidden `
         -PassThru
 
-    if (-not (Wait-Http "http://127.0.0.1:8000/api/health")) {
+    if (-not (Wait-Http "http://127.0.0.1:$BackendPort/api/health" $Backend)) {
         throw "The analysis API did not become ready in time."
     }
-    if (-not (Wait-Http "http://127.0.0.1:5173")) {
+    if (-not (Wait-Http "http://127.0.0.1:$FrontendPort" $Frontend)) {
         throw "The web interface did not become ready in time."
     }
+    Assert-OwnsListener $BackendPort $Backend
+    Assert-OwnsListener $FrontendPort $Frontend
 
     Write-Host ""
     Write-Host "Platform ready: http://127.0.0.1:5173" -ForegroundColor Green
@@ -154,18 +179,6 @@ catch {
 }
 finally {
     Write-Step "Stopping services..."
-    # Some Python/Node launchers detach from the Start-Process wrapper. Stop
-    # only listeners whose command lines match this project, never unrelated
-    # services that happen to use Python or Node.
-    Stop-ProjectListener 5173 $ViteScript
-    Stop-ProjectListener 8000 "backend.api.app:app"
-    foreach ($Process in @($Frontend, $Backend)) {
-        if ($null -ne $Process -and -not $Process.HasExited) {
-            Stop-Process -Id $Process.Id -ErrorAction SilentlyContinue
-            $Process.WaitForExit(3000) | Out-Null
-            if (-not $Process.HasExited) {
-                Stop-Process -Id $Process.Id -Force -ErrorAction SilentlyContinue
-            }
-        }
-    }
+    Stop-OwnedProcess $Frontend
+    Stop-OwnedProcess $Backend
 }
