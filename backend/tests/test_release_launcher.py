@@ -98,6 +98,21 @@ def acceptance_app() -> FastAPI:
             "端口互联误差；不是论文算例复现；不宣称完成工程模型确认"
         )
 
+    @app.post("/api/average-dq/scan")
+    def average_dq_scan() -> dict:
+        return {
+            "status": "completed",
+            "result": {
+                "point_count": 42,
+                "counts": {
+                    "valid": 42,
+                    "invalid": 0,
+                    "agreement": 39,
+                    "disagreement": 3,
+                },
+            },
+        }
+
     return app
 
 
@@ -146,6 +161,12 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertEqual(
                 evidence["checks"]["average_dq"]["report"],
                 "passed",
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq"][
+                    "hierarchy_scan_disagreement_count"
+                ],
+                3,
             )
 
 

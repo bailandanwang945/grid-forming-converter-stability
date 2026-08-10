@@ -487,8 +487,16 @@ export type AverageDQResult = {
         real_hz: number
         imag_hz: number
       }
-      oscillation_frequency_relative_error: number
-      decay_rate_relative_error: number
+      matched_full_pole: {
+        real_per_s: number
+        imag_per_s: number
+        real_hz: number
+        imag_hz: number
+      }
+      oscillation_frequency_relative_error: number | null
+      real_part_relative_error: number | null
+      decay_rate_relative_error: number | null
+      matching_method: string
       interpretation: string
     }
     port_admittance: {
@@ -532,7 +540,72 @@ export type AverageDQAnalysisInput = {
   frequency_values_hz: number[]
 }
 
-async function averageDQRequest(path: string, input: AverageDQAnalysisInput) {
+export type AverageDQScanInput = {
+  preset_id?: 'average-dq-smib-verification'
+  topology?: NetworkTopology
+  parameters?: AverageDQParameters
+  damping_values_pu: number[]
+  reactance_values_pu: number[]
+}
+
+export type AverageDQScanResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  input_topology: NetworkTopology
+  input_parameters: AverageDQParameters
+  result: {
+    topology_id: string
+    parameter_set_id: string
+    axes: {
+      damping_values_pu: number[]
+      reactance_values_pu: number[]
+      row_axis: string
+      column_axis: string
+    }
+    point_count: number
+    counts: {
+      valid: number
+      invalid: number
+      agreement: number
+      disagreement: number
+      full: { stable: number; marginal: number; unstable: number }
+      reduced: { stable: number; marginal: number; unstable: number }
+    }
+    rows: Array<Array<{
+      damping_coefficient_pu: number
+      line_reactance_pu: number
+      valid: boolean
+      full_stability: 'stable' | 'marginal' | 'unstable' | null
+      reduced_stability: 'stable' | 'marginal' | 'unstable' | null
+      stability_agreement: boolean | null
+      full_dominant_real_per_s: number | null
+      full_oscillation_frequency_hz: number | null
+      reduced_dominant_real_per_s: number | null
+      reduced_oscillation_frequency_hz: number | null
+      matched_full_mode_real_per_s: number | null
+      matched_full_mode_frequency_hz: number | null
+      synchronizing_stiffness_pu_per_rad: number | null
+      frequency_relative_error: number | null
+      real_part_relative_error: number | null
+      matching_method: string | null
+      full_dominant_participation: Array<{
+        state: string
+        normalized_participation: number
+      }> | null
+      error: string | null
+    }>>
+  }
+  model_scope: {
+    statement: string
+    interpretation: string
+    paper_theorem_evaluated: boolean
+    physical_validation: boolean
+  }
+  provenance: Record<string, unknown>
+}
+
+async function averageDQRequest(path: string, input: AverageDQAnalysisInput | AverageDQScanInput) {
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -554,4 +627,8 @@ export async function runAverageDQAnalysis(input: AverageDQAnalysisInput): Promi
 
 export async function getAverageDQReportHtml(input: AverageDQAnalysisInput): Promise<string> {
   return (await averageDQRequest('/api/reports/average-dq', input)).text()
+}
+
+export async function runAverageDQScan(input: AverageDQScanInput): Promise<AverageDQScanResult> {
+  return (await averageDQRequest('/api/average-dq/scan', input)).json()
 }

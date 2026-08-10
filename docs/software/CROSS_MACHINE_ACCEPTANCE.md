@@ -46,9 +46,9 @@
 
 ```powershell
 python scripts/import_cross_machine_acceptance.py <回传结果目录> `
-  --expected-version 0.4.0-rc1 `
+  --expected-version 0.4.0-rc2 `
   --expected-commit <发布清单中的提交号> `
   --expected-zip-sha256 <正式ZIP的SHA-256>
 ```
 
-该命令重新核对证据版本、原始 ZIP 哈希、构建提交、干净工作树、逐文件清单结论、端口释放、Fig. 8 的 75/1000、同域 45/96/35 和独立模型报告。自动证据通过时返回 `GFM_CROSS_MACHINE_MANUAL_CHECK_PENDING`，仍不关闭 M5。队友完成网页、CSV/HTML 导出及安全软件检查后，再附加 `--manual-browser-check-passed --operator <检查人> --manual-evidence <截图或录屏文件>` 重新归档；人工通过标志若没有检查人和至少一个证据附件会被拒绝。只有出现 `GFM_CROSS_MACHINE_RELEASE_ACCEPTED` 才能把该次运行登记为发布验收通过。
+该命令重新核对证据版本、原始 ZIP 哈希、构建提交、干净工作树、逐文件清单结论、端口释放、Fig. 8 的 75/1000、同域 45/96/35、低频模型报告以及平均值 dq 的16极点和42点层级扫描 39/3 分类计数。自动证据通过时返回 `GFM_CROSS_MACHINE_MANUAL_CHECK_PENDING`，仍不关闭 M5。队友完成网页、CSV/HTML 导出及安全软件检查后，再附加 `--manual-browser-check-passed --operator <检查人> --manual-evidence <截图或录屏文件>` 重新归档；人工通过标志若没有检查人和至少一个证据附件会被拒绝。只有出现 `GFM_CROSS_MACHINE_RELEASE_ACCEPTED` 才能把该次运行登记为发布验收通过。

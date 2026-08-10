@@ -579,6 +579,16 @@ def render_average_dq_report(result: dict) -> str:
     )
     dominant = analysis["dominant_mode"]
     reduction = analysis["quasisteady_reduction_comparison"]
+    frequency_error_text = (
+        "不适用"
+        if reduction["oscillation_frequency_relative_error"] is None
+        else f"{100 * reduction['oscillation_frequency_relative_error']:.3f}%"
+    )
+    decay_error_text = (
+        "不适用"
+        if reduction["decay_rate_relative_error"] is None
+        else f"{100 * reduction['decay_rate_relative_error']:.3f}%"
+    )
     stability_names = {"stable": "稳定", "marginal": "临界", "unstable": "失稳"}
     converter = topology["grid_forming_converters"][0]
     line = topology["lines"][0]
@@ -623,7 +633,7 @@ code {{ font-family:Consolas,monospace; font-size:10px; }} .columns {{ display:g
 <h2>闭环极点</h2><table><thead><tr><th>序号</th><th>实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>实部 / Hz</th><th>虚部 / Hz</th></tr></thead><tbody>{pole_rows}</tbody></table>
 <p>直接闭合矩阵与“变流器端口模型 + 外部线路方程”独立重组矩阵的最大逐元素误差为 {analysis['port_interconnection_max_abs_error']:.6e}。这项检查同时约束 PCC 方向、线路 dq 动态和电流正负号。</p>
 <h2>与三状态低频近似的层级比较</h2>
-<p>在同一工作点保持 Q–V 准稳态关系，数值求得同步刚度 Kδ={reduction['synchronizing_stiffness_pu_per_rad']:.7g} p.u./rad。三状态近似相对于16状态模型主导模态的振荡频率误差为 {100*reduction['oscillation_frequency_relative_error']:.3f}%，衰减率误差为 {100*reduction['decay_rate_relative_error']:.3f}%。{escape(reduction['interpretation'])}</p>
+<p>在同一工作点保持 Q–V 准稳态关系，数值求得同步刚度 Kδ={reduction['synchronizing_stiffness_pu_per_rad']:.7g} p.u./rad。三状态最右模态相对于16状态模型中匹配同步模态的振荡频率误差为 {frequency_error_text}，衰减率误差为 {decay_error_text}。{escape(reduction['interpretation'])}</p>
 <h2>非线性—线性小扰动交叉核对</h2><p>下图比较同一工作点和初始状态下的平均值非线性 ODE 与局部线性矩阵响应。两者的一致性属于实现验证，不等同于与实物或 EMT 模型的外部确认。</p>{time_chart}
 <h2>来源与结论边界</h2><table><tbody>
 <tr><th>输入来源</th><td>{escape(provenance['source_kind'])}</td></tr>

@@ -93,8 +93,8 @@ def review_cross_machine_evidence(
 
     if acceptance.get("schema_version") != "gfm-cross-machine-acceptance/1.1":
         errors.append("异机证据版本不是 gfm-cross-machine-acceptance/1.1")
-    if runtime.get("schema_version") != "gfm-runtime-acceptance/1.1":
-        errors.append("运行时证据版本不是 gfm-runtime-acceptance/1.1")
+    if runtime.get("schema_version") != "gfm-runtime-acceptance/1.2":
+        errors.append("运行时证据版本不是 gfm-runtime-acceptance/1.2")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -196,6 +196,9 @@ def review_cross_machine_evidence(
         or average_dq.get("port_interconnection_max_abs_error", 1.0) >= 1.0e-6
         or average_dq.get("reduction_frequency_relative_error", 1.0) >= 0.05
         or average_dq.get("reduction_decay_relative_error", 1.0) >= 0.05
+        or average_dq.get("hierarchy_scan_point_count") != 42
+        or average_dq.get("hierarchy_scan_agreement_count") != 39
+        or average_dq.get("hierarchy_scan_disagreement_count") != 3
         or average_dq.get("report") != "passed"
     ):
         errors.append("16状态平均值 dq 模型或打印报告证据未通过")

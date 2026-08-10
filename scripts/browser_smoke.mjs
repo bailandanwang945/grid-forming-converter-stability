@@ -139,6 +139,19 @@ try {
   if (!averageReportText.includes('0.4')) throw new Error('Average-dq report did not retain the edited active-power setpoint.')
   await averageReport.close()
 
+  await page.getByRole('button', { name: /扫描 D–X 模型层级/ }).click()
+  await page.getByText('16状态—三状态 D–X 层级对照').waitFor({ timeout: 30000 })
+  const hierarchyText = await page.locator('body').innerText()
+  for (const evidence of ['扫描点数\n42', '两层分类不一致\n3', '不是论文小增益—小相位定理的反例']) {
+    if (!hierarchyText.includes(evidence)) throw new Error(`Average-dq hierarchy scan is missing ${evidence}.`)
+  }
+  const hierarchyDownloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: /导出层级扫描 JSON/ }).click()
+  const hierarchyDownload = await hierarchyDownloadPromise
+  if (!hierarchyDownload.suggestedFilename().endsWith('.json')) {
+    throw new Error('Average-dq hierarchy JSON export failed.')
+  }
+
   await page.screenshot({ path: screenshotPath, fullPage: true })
   console.log('BROWSER_E2E_SMOKE_OK')
   console.log(`Screenshot: ${screenshotPath}`)

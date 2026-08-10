@@ -24,6 +24,11 @@ from backend.core.average_dq_presets import (
     average_dq_preset_metadata,
     build_average_dq_verification_case,
 )
+from backend.core.average_dq_scan import (
+    MAX_SCAN_POINTS as MAX_AVERAGE_DQ_SCAN_POINTS,
+    AverageDQScanError,
+    scan_average_dq_damping_reactance,
+)
 from backend.core.reduced_order_model import (
     ReducedOrderModelError,
     build_reduced_order_model,
@@ -47,7 +52,7 @@ from backend.domain.network_models import NetworkTopology
 from backend.domain.average_dq_models import AverageDQGFMParameters
 
 
-app = FastAPI(title="构网型变流器稳定性分析平台", version="0.4.0-rc1")
+app = FastAPI(title="构网型变流器稳定性分析平台", version="0.4.0-rc2")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -172,6 +177,44 @@ class AverageDQAnalysisRequest(BaseModel):
             )
         ):
             raise ValueError("端口导纳频率必须严格递增且不得重复。")
+        return self
+
+
+class AverageDQScanRequest(BaseModel):
+    """Define a bounded D--line-X scan for one complete average-dq case."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    preset_id: AverageDQPresetId | None = None
+    topology: NetworkTopology | None = None
+    parameters: AverageDQGFMParameters | None = None
+    damping_values_pu: list[float] = Field(
+        default_factory=lambda: [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0],
+        min_length=1,
+        max_length=MAX_AVERAGE_DQ_SCAN_POINTS,
+    )
+    reactance_values_pu: list[float] = Field(
+        default_factory=lambda: [0.1, 0.2, 0.3, 0.5, 0.8, 1.2],
+        min_length=1,
+        max_length=MAX_AVERAGE_DQ_SCAN_POINTS,
+    )
+
+    @model_validator(mode="after")
+    def require_one_case_source(self) -> "AverageDQScanRequest":
+        has_preset = self.preset_id is not None
+        has_custom = self.topology is not None or self.parameters is not None
+        if has_preset == has_custom:
+            raise ValueError(
+                "必须且只能选择 preset_id，或同时给出 topology 与 parameters。"
+            )
+        if has_custom and (self.topology is None or self.parameters is None):
+            raise ValueError("自定义平均值 dq 扫描必须同时给出 topology 与 parameters。")
+        point_count = len(self.damping_values_pu) * len(self.reactance_values_pu)
+        if point_count > MAX_AVERAGE_DQ_SCAN_POINTS:
+            raise ValueError(
+                f"平均值 dq D–X 扫描共 {point_count} 个点，"
+                f"超过上限 {MAX_AVERAGE_DQ_SCAN_POINTS}。"
+            )
         return self
 
 
@@ -405,7 +448,9 @@ def _complex_matrix_payload(matrix: np.ndarray) -> list[list[dict[str, float]]]:
     ]
 
 
-def _average_dq_payload(request: AverageDQAnalysisRequest) -> dict:
+def _resolve_average_dq_case(
+    request: AverageDQAnalysisRequest | AverageDQScanRequest,
+) -> tuple[NetworkTopology, AverageDQGFMParameters, dict]:
     if request.preset_id is not None:
         topology, parameters = build_average_dq_verification_case()
         source = {
@@ -426,6 +471,11 @@ def _average_dq_payload(request: AverageDQAnalysisRequest) -> dict:
             "paper_fixture": False,
             "physical_hardware_fit": None,
         }
+    return topology, parameters, source
+
+
+def _average_dq_payload(request: AverageDQAnalysisRequest) -> dict:
+    topology, parameters, source = _resolve_average_dq_case(request)
     model = build_average_dq_model(topology, parameters)
     if (
         source["expected_stability"] is not None
@@ -533,13 +583,20 @@ def _average_dq_payload(request: AverageDQAnalysisRequest) -> dict:
                     reduction.reduced_dominant_pole_per_s,
                     reduction.reduced_dominant_pole_per_s / (2.0 * np.pi),
                 ),
+                "matched_full_pole": _complex_pole_payload(
+                    reduction.matched_full_pole_per_s,
+                    reduction.matched_full_pole_per_s / (2.0 * np.pi),
+                ),
                 "oscillation_frequency_relative_error": (
                     reduction.oscillation_frequency_relative_error
                 ),
                 "decay_rate_relative_error": reduction.decay_rate_relative_error,
+                "real_part_relative_error": reduction.real_part_relative_error,
+                "matching_method": reduction.matching_method,
                 "interpretation": (
                     "三状态模型使用同一工作点的准稳态 Q–V 关系求得 Kδ；"
-                    "误差只评价当前参数下的主导同步模态，不证明一般等价。"
+                    "稳定性分类分别取两层模型的最右极点，误差则比较三状态最右模态与"
+                    "16状态模型中最邻近的正虚部同步模态；该匹配不证明一般等价。"
                 ),
             },
             "port_admittance": {
@@ -604,9 +661,47 @@ def _average_dq_payload(request: AverageDQAnalysisRequest) -> dict:
     }
 
 
+def _average_dq_scan_payload(request: AverageDQScanRequest) -> dict:
+    topology, parameters, source = _resolve_average_dq_case(request)
+    scan = scan_average_dq_damping_reactance(
+        topology,
+        parameters,
+        damping_values_pu=request.damping_values_pu,
+        reactance_values_pu=request.reactance_values_pu,
+    )
+    return {
+        "run_id": f"average-dq-scan-{topology.id}",
+        "status": "completed",
+        "analysis_mode": "average-dq-full-vs-matched-reduction-d-x-scan-v1",
+        "input_topology": topology.model_dump(mode="json"),
+        "input_parameters": parameters.model_dump(mode="json"),
+        "result": scan.as_dict(),
+        "model_scope": {
+            "statement": (
+                "逐点重算16状态正序平均值 dq 单机模型，并与同一工作点匹配的"
+                "三状态近似比较。线路 X 是所选外部支路标幺电抗，不等同于普遍 SCR。"
+            ),
+            "interpretation": (
+                "分类分别由两层模型各自最右极点确定；频率与实部误差只比较"
+                "三状态最右模态和16状态中最邻近的正虚部模态。分类不一致说明"
+                "低频近似遗漏了改变稳定性结论的额外模态，但参与因子只作模态诊断，"
+                "不单独构成因果证明，也不是论文小增益—小相位定理的反例。"
+            ),
+            "paper_theorem_evaluated": False,
+            "physical_validation": False,
+        },
+        "provenance": {
+            **source,
+            "implementation": "backend.core.average_dq_scan",
+            "point_calculation": "fresh-workpoint-and-central-difference-linearization",
+            "interpolation_used": False,
+        },
+    }
+
+
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "service": "gfm-stability-api", "version": "0.4.0-rc1"}
+    return {"status": "ok", "service": "gfm-stability-api", "version": "0.4.0-rc2"}
 
 
 @app.get("/api/scenarios")
@@ -703,6 +798,16 @@ def run_average_dq_analysis(request: AverageDQAnalysisRequest) -> dict:
     try:
         return _average_dq_payload(request)
     except AverageDQModelError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.post("/api/average-dq/scan")
+def run_average_dq_scan(request: AverageDQScanRequest) -> dict:
+    try:
+        return _average_dq_scan_payload(request)
+    except (AverageDQScanError, AverageDQModelError) as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except RuntimeError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error

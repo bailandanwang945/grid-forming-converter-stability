@@ -6,7 +6,7 @@ from pathlib import Path
 from backend.core.cross_machine_acceptance import review_cross_machine_evidence
 
 
-VERSION = "0.4.0-rc1"
+VERSION = "0.4.0-rc2"
 COMMIT = "a" * 40
 ZIP_HASH = "b" * 64
 
@@ -49,7 +49,7 @@ def _write_valid_evidence(directory: Path) -> None:
         "source_zip": {"sha256": ZIP_HASH, "size_bytes": 123},
     }
     runtime = {
-        "schema_version": "gfm-runtime-acceptance/1.1",
+        "schema_version": "gfm-runtime-acceptance/1.2",
         "status": "passed",
         "checks": {
             "health": "passed",
@@ -85,6 +85,9 @@ def _write_valid_evidence(directory: Path) -> None:
                 "port_interconnection_max_abs_error": 1.0e-10,
                 "reduction_frequency_relative_error": 0.01,
                 "reduction_decay_relative_error": 0.02,
+                "hierarchy_scan_point_count": 42,
+                "hierarchy_scan_agreement_count": 39,
+                "hierarchy_scan_disagreement_count": 3,
                 "report": "passed",
             },
         },

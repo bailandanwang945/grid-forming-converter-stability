@@ -123,8 +123,11 @@ class QuasiSteadyReductionComparison:
     reduced_poles_per_s: NDArray[np.complex128]
     full_dominant_pole_per_s: complex
     reduced_dominant_pole_per_s: complex
-    oscillation_frequency_relative_error: float
-    decay_rate_relative_error: float
+    matched_full_pole_per_s: complex
+    oscillation_frequency_relative_error: float | None
+    real_part_relative_error: float | None
+    decay_rate_relative_error: float | None
+    matching_method: str
 
 
 @dataclass(frozen=True)
@@ -303,7 +306,10 @@ def compare_with_quasisteady_reduction(
     as quasi-steady.  The resulting ``K_delta = dp/d(delta)`` is inserted into
     the same VSM--active-power-measurement structure used by the low-frequency
     model.  This checks a model hierarchy; it does not assume the two models
-    are exactly equivalent.
+    are exactly equivalent.  The reduced model's rightmost mode is matched to
+    the nearest full-model mode in the same oscillatory half-plane before modal
+    errors are calculated.  Full and reduced rightmost poles remain separate,
+    because an omitted electrical/control mode can change the stability class.
     """
 
     if not np.isfinite(angle_step_rad) or angle_step_rad <= 0.0:
@@ -396,13 +402,41 @@ def compare_with_quasisteady_reduction(
 
     full_dominant = dominant(model.poles_per_s)
     reduced_dominant = dominant(reduced_poles)
-    full_frequency = abs(full_dominant.imag)
+    oscillatory_candidates = model.poles_per_s[
+        model.poles_per_s.imag > 1.0e-10
+    ]
+    if reduced_dominant.imag > 1.0e-10 and oscillatory_candidates.size:
+        matched_full = complex(
+            min(
+                oscillatory_candidates,
+                key=lambda pole: abs(pole - reduced_dominant),
+            )
+        )
+        matching_method = "nearest-positive-imaginary-pole-to-reduced-rightmost-mode"
+    else:
+        real_candidates = model.poles_per_s[
+            np.abs(model.poles_per_s.imag) <= 1.0e-10
+        ]
+        pool = real_candidates if real_candidates.size else model.poles_per_s
+        matched_full = complex(min(pool, key=lambda pole: abs(pole - reduced_dominant)))
+        matching_method = "nearest-real-or-any-pole-to-reduced-rightmost-mode"
+
+    full_frequency = abs(matched_full.imag)
     reduced_frequency = abs(reduced_dominant.imag)
-    if full_frequency <= 1.0e-12 or -full_dominant.real <= 1.0e-12:
-        raise AverageDQModelError("当前主导模态不适合计算振荡频率或衰减率相对误差。")
-    frequency_error = abs(reduced_frequency - full_frequency) / full_frequency
-    decay_error = abs(reduced_dominant.real - full_dominant.real) / abs(
-        full_dominant.real
+    frequency_error = (
+        abs(reduced_frequency - full_frequency) / full_frequency
+        if full_frequency > 1.0e-12 and reduced_frequency > 1.0e-12
+        else None
+    )
+    real_part_error = (
+        abs(reduced_dominant.real - matched_full.real) / abs(matched_full.real)
+        if abs(matched_full.real) > 1.0e-12
+        else None
+    )
+    decay_error = (
+        real_part_error
+        if matched_full.real < -1.0e-12 and reduced_dominant.real < -1.0e-12
+        else None
     )
     return QuasiSteadyReductionComparison(
         synchronizing_stiffness_pu_per_rad=float(stiffness),
@@ -410,8 +444,17 @@ def compare_with_quasisteady_reduction(
         reduced_poles_per_s=reduced_poles,
         full_dominant_pole_per_s=full_dominant,
         reduced_dominant_pole_per_s=reduced_dominant,
-        oscillation_frequency_relative_error=float(frequency_error),
-        decay_rate_relative_error=float(decay_error),
+        matched_full_pole_per_s=matched_full,
+        oscillation_frequency_relative_error=(
+            float(frequency_error) if frequency_error is not None else None
+        ),
+        real_part_relative_error=(
+            float(real_part_error) if real_part_error is not None else None
+        ),
+        decay_rate_relative_error=(
+            float(decay_error) if decay_error is not None else None
+        ),
+        matching_method=matching_method,
     )
 
 

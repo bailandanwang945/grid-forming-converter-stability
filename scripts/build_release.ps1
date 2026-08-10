@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "0.4.0-rc1",
+    [string]$Version = "0.4.0-rc2",
     [switch]$SkipSmokeTest,
     [switch]$AllowDirtyWorktree
 )
@@ -221,6 +221,9 @@ if (-not $SkipSmokeTest) {
         $SmokeEvidence.checks.average_dq.pole_count -ne 16 -or
         $SmokeEvidence.checks.average_dq.reduction_frequency_relative_error -ge 0.05 -or
         $SmokeEvidence.checks.average_dq.reduction_decay_relative_error -ge 0.05 -or
+        $SmokeEvidence.checks.average_dq.hierarchy_scan_point_count -ne 42 -or
+        $SmokeEvidence.checks.average_dq.hierarchy_scan_agreement_count -ne 39 -or
+        $SmokeEvidence.checks.average_dq.hierarchy_scan_disagreement_count -ne 3 -or
         $SmokeEvidence.checks.average_dq.report -ne "passed"
     ) {
         throw "Packaged runtime evidence verification failed."

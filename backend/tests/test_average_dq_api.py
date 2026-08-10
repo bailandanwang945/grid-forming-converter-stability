@@ -59,6 +59,9 @@ class AverageDQApiTest(unittest.TestCase):
         reduction = payload["result"]["quasisteady_reduction_comparison"]
         self.assertLess(reduction["oscillation_frequency_relative_error"], 0.05)
         self.assertLess(reduction["decay_rate_relative_error"], 0.05)
+        self.assertIn("matched_full_pole", reduction)
+        self.assertIn("matching_method", reduction)
+        self.assertIn("稳定性分类分别取", reduction["interpretation"])
         self.assertIn("不证明一般等价", reduction["interpretation"])
         self.assertIn("不是论文 Fig. 8", payload["model_scope"]["statement"])
         self.assertTrue(payload["provenance"]["separated_from_fig8_fixture"])
@@ -132,6 +135,46 @@ class AverageDQApiTest(unittest.TestCase):
 
         self.assertEqual(mixed.status_code, 422)
         self.assertEqual(nonmonotonic.status_code, 422)
+
+    def test_scan_compares_full_and_reduced_models_without_scr_overclaim(self) -> None:
+        response = self.client.post(
+            "/api/average-dq/scan",
+            json={
+                "preset_id": "average-dq-smib-verification",
+                "damping_values_pu": [20.0, 40.0, 60.0],
+                "reactance_values_pu": [0.1, 0.3, 0.8],
+            },
+        )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        payload = response.json()
+        self.assertEqual(payload["result"]["point_count"], 9)
+        self.assertEqual(payload["result"]["counts"]["agreement"], 8)
+        self.assertEqual(payload["result"]["counts"]["disagreement"], 1)
+        disagreement = payload["result"]["rows"][2][0]
+        self.assertEqual(disagreement["full_stability"], "unstable")
+        self.assertEqual(disagreement["reduced_stability"], "stable")
+        self.assertFalse(disagreement["stability_agreement"])
+        self.assertEqual(
+            disagreement["full_dominant_participation"][0]["state"],
+            "converter_current_q_pu",
+        )
+        self.assertIn("不等同于普遍 SCR", payload["model_scope"]["statement"])
+        self.assertFalse(payload["model_scope"]["paper_theorem_evaluated"])
+        self.assertFalse(payload["provenance"]["interpolation_used"])
+
+    def test_scan_rejects_duplicate_axis_values(self) -> None:
+        response = self.client.post(
+            "/api/average-dq/scan",
+            json={
+                "preset_id": "average-dq-smib-verification",
+                "damping_values_pu": [20.0, 20.0],
+                "reactance_values_pu": [0.3],
+            },
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertIn("严格递增", response.text)
 
 
 if __name__ == "__main__":

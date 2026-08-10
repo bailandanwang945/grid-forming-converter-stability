@@ -231,6 +231,29 @@ def _verify_average_dq_workflow(url: str) -> dict[str, object]:
         or "不宣称完成工程模型确认" not in report
     ):
         raise RuntimeError("Packaged average-dq report verification failed.")
+
+    scan_request = urllib.request.Request(
+        f"{url}/api/average-dq/scan",
+        data=json.dumps(
+            {"preset_id": "average-dq-smib-verification"}
+        ).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(scan_request, timeout=30.0) as response:
+        scan_payload = json.loads(response.read().decode("utf-8"))
+    scan = scan_payload.get("result", {})
+    scan_counts = scan.get("counts", {})
+    if (
+        response.status != 200
+        or scan_payload.get("status") != "completed"
+        or scan.get("point_count") != 42
+        or scan_counts.get("valid") != 42
+        or scan_counts.get("invalid") != 0
+        or scan_counts.get("agreement") != 39
+        or scan_counts.get("disagreement") != 3
+    ):
+        raise RuntimeError("Packaged average-dq hierarchy scan verification failed.")
     return {
         "preset_id": request_payload["preset_id"],
         "stability": result["stability"],
@@ -246,6 +269,9 @@ def _verify_average_dq_workflow(url: str) -> dict[str, object]:
             "oscillation_frequency_relative_error"
         ],
         "reduction_decay_relative_error": reduction["decay_rate_relative_error"],
+        "hierarchy_scan_point_count": scan["point_count"],
+        "hierarchy_scan_agreement_count": scan_counts["agreement"],
+        "hierarchy_scan_disagreement_count": scan_counts["disagreement"],
         "report": "passed",
     }
 
@@ -293,7 +319,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.1",
+        "schema_version": "gfm-runtime-acceptance/1.2",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),

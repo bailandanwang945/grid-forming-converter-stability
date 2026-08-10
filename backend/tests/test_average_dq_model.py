@@ -308,6 +308,14 @@ class AverageDQModelTest(unittest.TestCase):
         self.assertGreater(comparison.synchronizing_stiffness_pu_per_rad, 0.0)
         self.assertLess(comparison.oscillation_frequency_relative_error, 0.05)
         self.assertLess(comparison.decay_rate_relative_error, 0.05)
+        self.assertAlmostEqual(
+            comparison.matched_full_pole_per_s,
+            comparison.full_dominant_pole_per_s,
+        )
+        self.assertEqual(
+            comparison.matching_method,
+            "nearest-positive-imaginary-pole-to-reduced-rightmost-mode",
+        )
         self.assertEqual(comparison.reduced_state_matrix.shape, (3, 3))
         self.assertEqual(comparison.reduced_poles_per_s.shape, (3,))
 

@@ -1,20 +1,22 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as echarts from 'echarts/core'
-import { LineChart, ScatterChart } from 'echarts/charts'
-import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from 'echarts/components'
+import { HeatmapChart, LineChart, ScatterChart } from 'echarts/charts'
+import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { Activity, BookOpenCheck, CircleCheck, Download, Gauge, Play, ShieldAlert, SlidersHorizontal } from 'lucide-react'
 import {
   AverageDQParameters,
   AverageDQResult,
+  AverageDQScanResult,
   NetworkTopology,
   getAverageDQPreset,
   getAverageDQReportHtml,
   runAverageDQAnalysis,
+  runAverageDQScan,
 } from './api'
 import EChart from './EChart'
 
-echarts.use([LineChart, ScatterChart, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, CanvasRenderer])
+echarts.use([HeatmapChart, LineChart, ScatterChart, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent, CanvasRenderer])
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value))
 
@@ -32,11 +34,28 @@ function logarithmicFrequencies() {
   return Array.from({ length: 31 }, (_, index) => 10 ** (-1 + index * 3 / 30))
 }
 
+const stateNames: Record<string, string> = {
+  delta_rad: '相角 δ',
+  frequency_deviation_pu: '频率偏差',
+  measured_active_power_pu: '有功测量',
+  measured_reactive_power_pu: '无功测量',
+  converter_current_d_pu: '变流器侧电流 d',
+  converter_current_q_pu: '变流器侧电流 q',
+  internal_voltage_d_pu: '内部电压 d',
+  internal_voltage_q_pu: '内部电压 q',
+  voltage_integrator_d_pu: '电压积分 d',
+  voltage_integrator_q_pu: '电压积分 q',
+  current_integrator_d_pu: '电流积分 d',
+  current_integrator_q_pu: '电流积分 q',
+}
+
 export default function AverageDQWorkbench() {
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
   const [parameters, setParameters] = useState<AverageDQParameters | null>(null)
   const [result, setResult] = useState<AverageDQResult | null>(null)
+  const [scanResult, setScanResult] = useState<AverageDQScanResult | null>(null)
   const [running, setRunning] = useState(false)
+  const [scanRunning, setScanRunning] = useState(false)
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
@@ -104,12 +123,49 @@ export default function AverageDQWorkbench() {
     }
   }, [result])
 
+  const scanChart = useMemo(() => {
+    if (!scanResult) return {}
+    const scan = scanResult.result
+    const data = scan.rows.flatMap((row, dampingIndex) => row.map((point, reactanceIndex) => {
+      const code = !point.valid ? 3 : point.stability_agreement === false ? 2 : point.full_stability === 'stable' ? 1 : point.full_stability === 'marginal' ? 4 : 0
+      return [reactanceIndex, dampingIndex, code]
+    }))
+    return {
+      animationDuration: 300,
+      grid: { left: 74, right: 28, top: 34, bottom: 72 },
+      tooltip: {
+        trigger: 'item',
+        formatter: (item: { data: [number, number, number] }) => {
+          const [reactanceIndex, dampingIndex] = item.data
+          const point = scan.rows[dampingIndex][reactanceIndex]
+          if (!point.valid) return `D=${point.damping_coefficient_pu}<br/>X=${point.line_reactance_pu}<br/>不可计算：${point.error}`
+          const frequencyError = point.frequency_relative_error === null ? '不适用' : `${(point.frequency_relative_error * 100).toFixed(2)}%`
+          return `D=${point.damping_coefficient_pu}<br/>线路 X=${point.line_reactance_pu} p.u.<br/>16状态：${point.full_stability}<br/>三状态：${point.reduced_stability}<br/>匹配同步模态频率误差：${frequencyError}`
+        },
+      },
+      xAxis: { type: 'category', name: '外部线路 X / p.u.', nameLocation: 'middle', nameGap: 42, data: scan.axes.reactance_values_pu.map(String) },
+      yAxis: { type: 'category', name: '阻尼 D', data: scan.axes.damping_values_pu.map(String) },
+      visualMap: {
+        type: 'piecewise', orient: 'horizontal', left: 'center', bottom: 2,
+        pieces: [
+          { value: 1, label: '稳定一致', color: '#4a9b81' },
+          { value: 0, label: '失稳一致', color: '#c65a58' },
+          { value: 2, label: '层级失配', color: '#e1a13b' },
+          { value: 4, label: '临界', color: '#7489a4' },
+          { value: 3, label: '不可计算', color: '#c7cdd1' },
+        ],
+      },
+      series: [{ type: 'heatmap', data, itemStyle: { borderColor: '#fff', borderWidth: 2 }, label: { show: true, formatter: (item: { data: [number, number, number] }) => item.data[2] === 2 ? '失配' : '' } }],
+    }
+  }, [scanResult])
+
   function updateConverter(field: string, value: number) {
     if (!topology) return
     const next = clone(topology)
     ;(next.grid_forming_converters[0] as unknown as Record<string, number>)[field] = value
     setTopology(next)
     setResult(null)
+    setScanResult(null)
   }
 
   function updateLine(field: 'resistance_pu' | 'reactance_pu', value: number) {
@@ -118,12 +174,14 @@ export default function AverageDQWorkbench() {
     next.lines[0][field] = value
     setTopology(next)
     setResult(null)
+    setScanResult(null)
   }
 
   function updateParameter(field: keyof AverageDQParameters, value: number) {
     if (!parameters) return
     setParameters({ ...parameters, [field]: value })
     setResult(null)
+    setScanResult(null)
   }
 
   async function analyze() {
@@ -136,6 +194,24 @@ export default function AverageDQWorkbench() {
       setError(reason instanceof Error ? reason.message : '平均值 dq 分析失败')
     } finally {
       setRunning(false)
+    }
+  }
+
+  async function scanModelHierarchy() {
+    if (!topology || !parameters) return
+    setScanRunning(true)
+    setError('')
+    try {
+      setScanResult(await runAverageDQScan({
+        topology,
+        parameters,
+        damping_values_pu: [10, 20, 30, 40, 50, 60, 80],
+        reactance_values_pu: [0.1, 0.2, 0.3, 0.5, 0.8, 1.2],
+      }))
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : '平均值 dq 模型层级扫描失败')
+    } finally {
+      setScanRunning(false)
     }
   }
 
@@ -163,6 +239,7 @@ export default function AverageDQWorkbench() {
     ...result.operating_point.algebraic_residual.map(Math.abs),
     result.operating_point.closed_rhs_residual_inf,
   ) : null
+  const firstDisagreement = scanResult?.result.rows.flat().find(point => point.stability_agreement === false)
 
   return <main>
     <aside className="panel controls">
@@ -183,6 +260,8 @@ export default function AverageDQWorkbench() {
         <label>初始相角 / mrad<input type="number" step="0.05" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(Number(event.target.value)); setResult(null) }}/></label>
       </div>
       <button onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在求工作点并积分…' : '运行平均值 dq 分析'}</button>
+      <button className="secondary-button" onClick={scanModelHierarchy} disabled={scanRunning}>{scanRunning ? '正在逐点重算…' : '扫描 D–X 模型层级'}</button>
+      <button className="secondary-button" disabled={!scanResult} onClick={() => scanResult && download(`${scanResult.run_id}.json`, JSON.stringify(scanResult, null, 2))}><Download size={16}/>导出层级扫描 JSON</button>
       <button className="secondary-button" disabled={!result} onClick={() => result && download(`${result.run_id}.json`, JSON.stringify(result, null, 2))}><Download size={16}/>导出可追溯 JSON</button>
       <button className="secondary-button" disabled={!result} onClick={openReport}><BookOpenCheck size={16}/>生成打印式分析报告</button>
       <button className="secondary-button" onClick={() => download('average-dq-case.json', JSON.stringify({ topology, parameters }, null, 2))}><Download size={16}/>保存模型参数</button>
@@ -212,15 +291,24 @@ export default function AverageDQWorkbench() {
           <div><small>PCC 电流</small><b>{result.operating_point.grid_current_magnitude_pu.toFixed(5)} p.u.</b></div>
           <div><small>内部电压</small><b>{result.operating_point.internal_voltage_magnitude_pu.toFixed(5)} p.u.</b></div>
           <div><small>有功平衡残差</small><b>{result.operating_point.active_power_balance_residual_pu.toExponential(2)}</b></div>
-          <div><small>三状态近似频率误差</small><b>{(result.result.quasisteady_reduction_comparison.oscillation_frequency_relative_error * 100).toFixed(2)}%</b></div>
+          <div><small>匹配同步模态频率误差</small><b>{result.result.quasisteady_reduction_comparison.oscillation_frequency_relative_error === null ? '不适用' : `${(result.result.quasisteady_reduction_comparison.oscillation_frequency_relative_error * 100).toFixed(2)}%`}</b></div>
         </div>
         <div className="chart-grid">
           <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>闭环极点分布</span><em>虚轴右侧为失稳</em></div><EChart option={poleChart} style={{ height: 320 }}/></div>
           <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>非线性—线性相角响应</span><em>小扰动实现核对</em></div><EChart option={responseChart} style={{ height: 320 }}/></div>
         </div>
         <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>变流器端口导纳范数</span><em>网络流入变流器为正 · 全局同步 dq 坐标</em></div><EChart option={admittanceChart} style={{ height: 330 }}/></div>
-        <div className="panel provenance-card"><div className="panel-title"><BookOpenCheck size={18}/><span>模型身份与结论边界</span></div><p>{result.model_scope.statement}</p><p>{result.result.quasisteady_reduction_comparison.interpretation}</p><dl><div><dt>模型层级</dt><dd>正序平均值 ODE，16 个状态</dd></div><div><dt>工作点同步刚度 Kδ</dt><dd>{result.result.quasisteady_reduction_comparison.synchronizing_stiffness_pu_per_rad.toFixed(5)} p.u./rad</dd></div><div><dt>三状态近似衰减率误差</dt><dd>{(result.result.quasisteady_reduction_comparison.decay_rate_relative_error * 100).toFixed(2)}%</dd></div><div><dt>硬件参数拟合</dt><dd>未进行</dd></div></dl></div>
+        <div className="panel provenance-card"><div className="panel-title"><BookOpenCheck size={18}/><span>模型身份与结论边界</span></div><p>{result.model_scope.statement}</p><p>{result.result.quasisteady_reduction_comparison.interpretation}</p><dl><div><dt>模型层级</dt><dd>正序平均值 ODE，16 个状态</dd></div><div><dt>工作点同步刚度 Kδ</dt><dd>{result.result.quasisteady_reduction_comparison.synchronizing_stiffness_pu_per_rad.toFixed(5)} p.u./rad</dd></div><div><dt>匹配同步模态衰减率误差</dt><dd>{result.result.quasisteady_reduction_comparison.decay_rate_relative_error === null ? '不适用' : `${(result.result.quasisteady_reduction_comparison.decay_rate_relative_error * 100).toFixed(2)}%`}</dd></div><div><dt>硬件参数拟合</dt><dd>未进行</dd></div></dl></div>
       </> : <div className="panel empty-state"><Activity size={34}/><h2>编辑参数后运行16状态模型</h2><p>平台会先求解工作点并检查功率平衡，再计算闭环极点、端口导纳以及非线性—线性小扰动响应。</p></div>}
+      {scanResult && <>
+        <div className="panel evidence-strip">
+          <div><small>扫描点数</small><b>{scanResult.result.point_count}</b></div>
+          <div><small>两层分类一致</small><b>{scanResult.result.counts.agreement}</b></div>
+          <div><small>两层分类不一致</small><b>{scanResult.result.counts.disagreement}</b></div>
+          <div><small>不可计算点</small><b>{scanResult.result.counts.invalid}</b></div>
+        </div>
+        <div className="panel chart-card"><div className="panel-title"><ShieldAlert size={18}/><span>16状态—三状态 D–X 层级对照</span><em>逐点重算，不做显示层插值</em></div><EChart option={scanChart} style={{ height: 390 }}/>{firstDisagreement && <div className="evidence-strip"><div><small>首个失配锚点</small><b>D={firstDisagreement.damping_coefficient_pu}，X={firstDisagreement.line_reactance_pu}</b></div><div><small>16状态最右极点实部</small><b>{firstDisagreement.full_dominant_real_per_s?.toFixed(4)} s⁻¹</b></div><div><small>匹配同步模态实部</small><b>{firstDisagreement.matched_full_mode_real_per_s?.toFixed(4)} s⁻¹</b></div><div><small>主要参与状态</small><b>{firstDisagreement.full_dominant_participation?.slice(0, 4).map(item => stateNames[item.state] ?? item.state).join('、')}</b></div></div>}<p className="scope-note">{scanResult.model_scope.interpretation} {scanResult.model_scope.statement}</p></div>
+      </>}
     </section>
   </main>
 }
