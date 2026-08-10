@@ -110,6 +110,16 @@ export type InfiniteBus = {
   voltage_angle_deg?: number
 }
 
+export type StaticLoad = {
+  kind?: 'load'
+  id: string
+  name: string
+  bus_id: string
+  load_model: string
+  active_power_pu: number
+  reactive_power_pu: number
+}
+
 export type NetworkTopology = {
   schema_version: '1.0'
   id: string
@@ -125,7 +135,7 @@ export type NetworkTopology = {
   lines: ACLine[]
   grid_forming_converters: GridFormingConverter[]
   infinite_buses: InfiniteBus[]
-  loads: Array<Record<string, unknown>>
+  loads: StaticLoad[]
 }
 
 export type ReducedOrderPresetId =

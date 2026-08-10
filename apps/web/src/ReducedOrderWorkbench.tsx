@@ -108,6 +108,16 @@ function nextEntityId(prefix: string, ids: string[]) {
   return `${prefix}-${index}`
 }
 
+function allEntityIds(topology: NetworkTopology) {
+  return [
+    ...topology.buses.map(item => item.id),
+    ...topology.lines.map(item => item.id),
+    ...topology.grid_forming_converters.map(item => item.id),
+    ...topology.infinite_buses.map(item => item.id),
+    ...topology.loads.map(item => item.id),
+  ]
+}
+
 export default function ReducedOrderWorkbench() {
   const [presets, setPresets] = useState<ReducedOrderPreset[]>([])
   const [selectedPreset, setSelectedPreset] = useState<ReducedOrderPresetId>('reduced-smib-stable')
@@ -200,7 +210,7 @@ export default function ReducedOrderWorkbench() {
 
   function addBus() {
     if (!topology) return
-    const id = nextEntityId('bus', topology.buses.map(item => item.id))
+    const id = nextEntityId('bus', allEntityIds(topology))
     changeTopology(draft => draft.buses.push({
       id,
       name: `母线 ${id.split('-').pop()}`,
@@ -217,13 +227,15 @@ export default function ReducedOrderWorkbench() {
       draft.grid_forming_converters = draft.grid_forming_converters.filter(gfm => gfm.bus_id !== busId)
       draft.infinite_buses = draft.infinite_buses.filter(grid => grid.bus_id !== busId)
       draft.loads = draft.loads.filter(load => load.bus_id !== busId)
-      if (draft.reference_bus_id === busId) draft.reference_bus_id = draft.buses[0].id
+      if (draft.reference_bus_id === busId) {
+        draft.reference_bus_id = draft.infinite_buses[0]?.bus_id ?? draft.buses[0].id
+      }
     })
   }
 
   function addLine() {
     if (!topology || topology.buses.length < 2) return
-    const id = nextEntityId('line', topology.lines.map(item => item.id))
+    const id = nextEntityId('line', allEntityIds(topology))
     changeTopology(draft => draft.lines.push({
       id,
       name: `线路 ${id.split('-').pop()}`,
@@ -237,7 +249,7 @@ export default function ReducedOrderWorkbench() {
 
   function addGfm() {
     if (!topology) return
-    const id = nextEntityId('gfm', topology.grid_forming_converters.map(item => item.id))
+    const id = nextEntityId('gfm', allEntityIds(topology))
     const occupied = new Set(topology.grid_forming_converters.map(item => item.bus_id))
     const bus = topology.buses.find(item => !occupied.has(item.id) && !topology.infinite_buses.some(grid => grid.bus_id === item.id))
     if (!bus) {
@@ -270,7 +282,7 @@ export default function ReducedOrderWorkbench() {
       setError('请先新增一个未被 VSM 或其他无限大母线占用的母线。')
       return
     }
-    const id = nextEntityId('grid', topology.infinite_buses.map(item => item.id))
+    const id = nextEntityId('grid', allEntityIds(topology))
     changeTopology(draft => draft.infinite_buses.push({
       id,
       name: `无限大母线 ${id.split('-').pop()}`,
@@ -278,6 +290,17 @@ export default function ReducedOrderWorkbench() {
       voltage_magnitude_pu: 1,
       voltage_angle_deg: 0,
     }))
+  }
+
+  function removeInfiniteBus(index: number) {
+    if (!topology) return
+    const removedBusId = topology.infinite_buses[index].bus_id
+    changeTopology(draft => {
+      draft.infinite_buses.splice(index, 1)
+      if (draft.reference_bus_id === removedBusId) {
+        draft.reference_bus_id = draft.infinite_buses[0]?.bus_id ?? draft.buses[0].id
+      }
+    })
   }
 
   async function analyze() {
@@ -575,7 +598,7 @@ export default function ReducedOrderWorkbench() {
             <label>名称<input value={grid.name} onChange={event => changeTopology(draft => { draft.infinite_buses[index].name = event.target.value })}/></label>
             <label>连接母线<select value={grid.bus_id} onChange={event => changeTopology(draft => { draft.infinite_buses[index].bus_id = event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
             <label>电压 / pu<input type="number" min="0.5" max="1.5" step="0.01" value={grid.voltage_magnitude_pu ?? 1} onChange={event => changeTopology(draft => { draft.infinite_buses[index].voltage_magnitude_pu = numeric(event.target.value, 1) })}/></label>
-            <button className="icon-button" onClick={() => changeTopology(draft => draft.infinite_buses.splice(index, 1))}><Trash2 size={15}/></button>
+            <button className="icon-button" onClick={() => removeInfiniteBus(index)}><Trash2 size={15}/></button>
           </div>)}
         </div></details>
 
