@@ -559,3 +559,4 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 新增两项许可清单测试，分别校验包内相对路径和网页开发依赖排除规则；Python 测试总数增至 62 项。前端生产构建与真实浏览器回归通过，软件版本推进为 `v0.3.0-rc5`。
 - 本项工作只收口软件、测试、发布包和开发记录。答辩 PPT 与 PDF 保持原冻结版本，未经项目负责人再次明确授权不作任何修改。
 - 项目自有代码的开源许可证仍须由项目负责人决定；Microsoft 运行时再分发条款仍须在正式公共发布前复核。因此 rc5 仍称结项候选包，不冒充已完成法律审查的公共发行版。
+- rc5 统一验收完成：Python 62/62、前端生产构建、开发态启动器、真实浏览器流程、MATLAB 128/128 全部通过，汇总 `PASS=5, FAIL=0, SKIP=0`、`VERIFY_ALL_OK`，耗时约 94.3 s。候选包内自验得到 `GFM_CROSS_MACHINE_FUNCTIONAL_OK`，并因本开发机不满足断网且无开发环境声明而正确保持 `GFM_M5_QUALIFICATION_INCOMPLETE`。
