@@ -106,6 +106,7 @@ grid-forming-converter-stability/
 ├─ references/        论文、TeX 源码及来源登记
 ├─ external/          固定版本的第三方/作者代码
 ├─ docs/              规划、算法规范、研究说明与软件文档
+│  └─ deliverables/   研究总结、答辩 PPT/PDF、问答与两分钟演示脚本
 ├─ notes/             开发日志和证据台账
 ├─ packaging/         Windows 发布配置与发布说明
 ├─ scripts/           启动、验收、浏览器冒烟和发布脚本
@@ -139,7 +140,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 - 对 Simplus 非线性模型的近奇异和异常初始化现象，仅保留为未建立完整因果解释的兼容性问题；受污染响应不作为研究证据；
 - 在指导教师确认其为结项硬指标后，按 [`docs/specs/models/average-dq-gfm-v1-proposal.md`](docs/specs/models/average-dq-gfm-v1-proposal.md) 实现平均值 `dq` 模型和可信非线性时域参照；不以现有低频降阶模型替代，也不让该扩展阻塞当前结项主线；
 - 完成另一台电脑的断网启动、案例重算、导出和退出清理验收；
-- 取得学院正式结项通知、模板与提交规则，完成研究报告、答辩材料和成果支撑材料。
+- 取得学院正式结项通知、模板与提交规则，将现有研究总结、答辩 PPT/PDF、问答与演示脚本校准为正式提交版本。
 
 ## 许可证
 
