@@ -19,9 +19,17 @@ from backend.core.average_dq_model import (
     close_port_model_with_external_line,
     compare_with_quasisteady_reduction,
 )
+from backend.core.average_dq_ablation import (
+    AverageDQAblationError,
+    ModeMatch,
+    run_average_dq_anchor_ablation,
+)
 from backend.core.average_dq_presets import (
+    ABLATION_PRESET_ID as AVERAGE_DQ_ABLATION_PRESET_ID,
     PRESET_ID as AVERAGE_DQ_PRESET_ID,
+    average_dq_ablation_anchor_metadata,
     average_dq_preset_metadata,
+    build_average_dq_ablation_anchor_case,
     build_average_dq_verification_case,
 )
 from backend.core.average_dq_scan import (
@@ -52,7 +60,7 @@ from backend.domain.network_models import NetworkTopology
 from backend.domain.average_dq_models import AverageDQGFMParameters
 
 
-app = FastAPI(title="构网型变流器稳定性分析平台", version="0.4.0-rc2")
+app = FastAPI(title="构网型变流器稳定性分析平台", version="0.5.0-dev")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -68,6 +76,9 @@ ReducedOrderPresetId = Literal[
     "reduced-smib-unstable",
 ]
 AverageDQPresetId = Literal["average-dq-smib-verification"]
+AverageDQAblationPresetId = Literal[
+    "average-dq-hierarchy-disagreement-ablation-v1"
+]
 
 
 class AnalysisRequest(BaseModel):
@@ -216,6 +227,14 @@ class AverageDQScanRequest(BaseModel):
                 f"超过上限 {MAX_AVERAGE_DQ_SCAN_POINTS}。"
             )
         return self
+
+
+class AverageDQAblationRequest(BaseModel):
+    """Run only the frozen 19-point model-hierarchy ablation experiment."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    preset_id: AverageDQAblationPresetId = AVERAGE_DQ_ABLATION_PRESET_ID
 
 
 def _analysis_payload(request: AnalysisRequest) -> dict:
@@ -699,9 +718,198 @@ def _average_dq_scan_payload(request: AverageDQScanRequest) -> dict:
     }
 
 
+def _mode_match_payload(match: ModeMatch) -> dict:
+    """Serialize a tracked mode without overstating local matching evidence."""
+
+    return {
+        "pole": _complex_pole_payload(
+            match.eigenvalue_per_s,
+            match.eigenvalue_per_s / (2.0 * np.pi),
+        ),
+        "reference_pole": _complex_pole_payload(
+            match.reference_eigenvalue_per_s,
+            match.reference_eigenvalue_per_s / (2.0 * np.pi),
+        ),
+        "status": match.status,
+        "reason": match.reason,
+        "path_label": match.path_label,
+        "cumulative_tracking_steps": match.path_steps,
+        "minimum_step_right_mac": match.right_mac,
+        "minimum_step_left_mac": match.left_mac,
+        "minimum_step_combined_mac": match.combined_mac,
+        "maximum_step_normalized_eigenvalue_distance": (
+            match.normalized_distance
+        ),
+        "minimum_step_confidence": match.confidence,
+        "maximum_step_second_candidate_confidence": (
+            match.second_best_confidence
+        ),
+        "minimum_step_local_candidate_margin": (
+            match.relative_confidence_margin
+        ),
+        "maximum_eigenvalue_condition_number": match.condition_number,
+        "maximum_right_eigenpair_residual": match.right_residual,
+        "maximum_left_eigenpair_residual": match.left_residual,
+        "thresholds": {
+            "minimum_individual_mac": (
+                match.minimum_individual_mac_threshold
+            ),
+            "maximum_normalized_eigenvalue_distance": (
+                match.maximum_normalized_distance_threshold
+            ),
+            "maximum_eigenvalue_condition_number": (
+                match.maximum_condition_number_threshold
+            ),
+            "maximum_eigenpair_residual": (
+                match.maximum_eigenpair_residual_threshold
+            ),
+            "minimum_local_candidate_margin": (
+                match.minimum_relative_margin_threshold
+            ),
+        },
+        "candidate_index_is_internal_only": True,
+    }
+
+
+def _average_dq_ablation_payload(request: AverageDQAblationRequest) -> dict:
+    topology, parameters = build_average_dq_ablation_anchor_case()
+    study = run_average_dq_anchor_ablation(topology, parameters)
+    points = list(study.points)
+    stability_counts = {
+        label: sum(point.stability == label for point in points)
+        for label in ("stable", "marginal", "unstable")
+    }
+    extra_tracking_counts = {
+        label: sum(point.extra_mode.status == label for point in points)
+        for label in ("matched", "pending")
+    }
+    synchronous_tracking_counts = {
+        label: sum(point.synchronous_mode.status == label for point in points)
+        for label in ("matched", "pending")
+    }
+    serialized_points = []
+    for point in points:
+        serialized_points.append(
+            {
+                "scenario_id": point.scenario_id,
+                "factors": dict(point.factors),
+                "damping_coefficient_pu": point.damping_coefficient_pu,
+                "line_reactance_pu": point.line_reactance_pu,
+                "stability": point.stability,
+                "rightmost_pole": _complex_pole_payload(
+                    point.rightmost_pole_per_s,
+                    point.rightmost_pole_per_s / (2.0 * np.pi),
+                ),
+                "poles": [
+                    _complex_pole_payload(pole, pole / (2.0 * np.pi))
+                    for pole in point.poles_per_s
+                ],
+                "extra_mode": _mode_match_payload(point.extra_mode),
+                "synchronous_mode": _mode_match_payload(
+                    point.synchronous_mode
+                ),
+                "extra_group_participation": dict(
+                    point.extra_group_participation
+                ),
+                "synchronous_group_participation": dict(
+                    point.synchronous_group_participation
+                ),
+                "reduced_poles": [
+                    _complex_pole_payload(pole, pole / (2.0 * np.pi))
+                    for pole in point.reduced_poles_per_s
+                ],
+                "reduced_dominant_pole": _complex_pole_payload(
+                    point.reduced_dominant_pole_per_s,
+                    point.reduced_dominant_pole_per_s / (2.0 * np.pi),
+                ),
+                "synchronizing_stiffness_pu_per_rad": (
+                    point.synchronizing_stiffness_pu_per_rad
+                ),
+                "synchronous_frequency_relative_error": (
+                    point.synchronous_frequency_relative_error
+                ),
+                "synchronous_decay_relative_error": (
+                    point.synchronous_decay_relative_error
+                ),
+                "residuals": {
+                    "algebraic_inf": point.residuals.algebraic_inf,
+                    "closed_rhs_inf": point.residuals.closed_rhs_inf,
+                    "device_rhs_inf": point.residuals.device_rhs_inf,
+                    "active_power_balance_abs_pu": (
+                        point.residuals.active_power_balance_abs_pu
+                    ),
+                },
+            }
+        )
+    return {
+        "run_id": f"average-dq-ablation-{request.preset_id}",
+        "status": "completed",
+        "analysis_mode": "fixed-average-dq-modal-continuation-ablation-v1",
+        "preset_id": request.preset_id,
+        "fixed_anchor": {
+            "damping_coefficient_pu": 60.0,
+            "external_line_reactance_pu": 0.1,
+            "state_definition": "fixed-16-state-per-unit-and-delta-rad-basis",
+        },
+        "result": {
+            "point_count": study.point_count,
+            "summary": {
+                "stability_counts": stability_counts,
+                "extra_mode_tracking_counts": extra_tracking_counts,
+                "synchronous_mode_tracking_counts": (
+                    synchronous_tracking_counts
+                ),
+            },
+            "baseline_extra_mode": _complex_pole_payload(
+                study.baseline_extra_mode_per_s,
+                study.baseline_extra_mode_per_s / (2.0 * np.pi),
+            ),
+            "baseline_synchronous_mode": _complex_pole_payload(
+                study.baseline_synchronous_mode_per_s,
+                study.baseline_synchronous_mode_per_s / (2.0 * np.pi),
+            ),
+            "state_scaling": dict(study.state_scaling),
+            "state_scaling_scope": study.state_scaling_scope,
+            "points": serialized_points,
+        },
+        "model_scope": {
+            "claim_level": "fixed-team-average-dq-ablation-only",
+            "statement": (
+                "该实验只属于团队定义的16状态平均值 dq 单机模型及其固定19个"
+                "端点工况；整体稳定性由各工况最右极点独立判定，命名模态另经"
+                "连续追踪核对。"
+            ),
+            "tracking_method": (
+                "完整谱一对一指派，结合左右特征向量 MAC、归一化特征值距离、"
+                "简单特征值条件数、左右特征对残差和局部候选间隔；门槛不满足时"
+                "沿参数路径二分加密。双 PI 角点按两种参数调整顺序复核。"
+            ),
+            "tracking_boundary": (
+                "局部候选间隔不是全局指派唯一性证明；参与度只作当前固定状态"
+                "坐标下的模态诊断。19点结果不证明唯一因果、全参数域单调性、"
+                "硬件或电磁暂态系统稳定性。"
+            ),
+            "paper_theorem_evaluated": False,
+            "physical_validation": False,
+            "causal_identification": False,
+            "accepts_arbitrary_state_definition": False,
+        },
+        "provenance": {
+            **average_dq_ablation_anchor_metadata(),
+            "implementation": "backend.core.average_dq_ablation",
+            "point_calculation": (
+                "fresh-workpoint-and-central-difference-linearization"
+            ),
+            "full_spectrum_assignment": "hungarian-linear-assignment",
+            "adaptive_continuation_refinement": True,
+            "interpolation_used_for_reported_points": False,
+        },
+    }
+
+
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "service": "gfm-stability-api", "version": "0.4.0-rc2"}
+    return {"status": "ok", "service": "gfm-stability-api", "version": "0.5.0-dev"}
 
 
 @app.get("/api/scenarios")
@@ -808,6 +1016,16 @@ def run_average_dq_scan(request: AverageDQScanRequest) -> dict:
     try:
         return _average_dq_scan_payload(request)
     except (AverageDQScanError, AverageDQModelError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.post("/api/average-dq/ablation")
+def run_average_dq_ablation(request: AverageDQAblationRequest) -> dict:
+    try:
+        return _average_dq_ablation_payload(request)
+    except (AverageDQAblationError, AverageDQModelError) as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except RuntimeError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error

@@ -1,3 +1,4 @@
+import json
 import unittest
 
 from fastapi.testclient import TestClient
@@ -175,6 +176,80 @@ class AverageDQApiTest(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
         self.assertIn("严格递增", response.text)
+
+    def test_fixed_ablation_returns_traceable_nineteen_point_evidence(self) -> None:
+        response = self.client.post(
+            "/api/average-dq/ablation",
+            json={
+                "preset_id": (
+                    "average-dq-hierarchy-disagreement-ablation-v1"
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        payload = response.json()
+        result = payload["result"]
+        self.assertEqual(result["point_count"], 19)
+        self.assertEqual(len({p["scenario_id"] for p in result["points"]}), 19)
+        self.assertEqual(
+            result["summary"]["stability_counts"],
+            {"stable": 5, "marginal": 0, "unstable": 14},
+        )
+        self.assertEqual(
+            result["summary"]["extra_mode_tracking_counts"],
+            {"matched": 19, "pending": 0},
+        )
+        self.assertTrue(
+            all(point["damping_coefficient_pu"] == 60.0 for point in result["points"])
+        )
+        self.assertTrue(
+            all(point["line_reactance_pu"] == 0.1 for point in result["points"])
+        )
+        baseline = next(
+            point for point in result["points"] if point["scenario_id"] == "baseline"
+        )
+        self.assertAlmostEqual(
+            baseline["extra_mode"]["pole"]["real_per_s"], 4.5864, places=3
+        )
+        two_path = next(
+            point
+            for point in result["points"]
+            if point["scenario_id"]
+            == "voltage_pi__2p0__current_pi__2p0"
+        )
+        self.assertIn("|", two_path["extra_mode"]["path_label"])
+        self.assertIn(
+            "局部候选间隔不是全局指派唯一性证明",
+            payload["model_scope"]["tracking_boundary"],
+        )
+        self.assertFalse(payload["model_scope"]["paper_theorem_evaluated"])
+        self.assertFalse(payload["model_scope"]["physical_validation"])
+        self.assertFalse(
+            payload["model_scope"]["accepts_arbitrary_state_definition"]
+        )
+        self.assertFalse(
+            payload["provenance"]["interpolation_used_for_reported_points"]
+        )
+        json.dumps(payload, allow_nan=False)
+
+    def test_fixed_ablation_rejects_custom_state_or_unknown_preset(self) -> None:
+        custom_state = self.client.post(
+            "/api/average-dq/ablation",
+            json={
+                "preset_id": (
+                    "average-dq-hierarchy-disagreement-ablation-v1"
+                ),
+                "state_matrix": [[0.0]],
+            },
+        )
+        unknown = self.client.post(
+            "/api/average-dq/ablation",
+            json={"preset_id": "some-other-experiment"},
+        )
+
+        self.assertEqual(custom_state.status_code, 422)
+        self.assertEqual(unknown.status_code, 422)
 
 
 if __name__ == "__main__":

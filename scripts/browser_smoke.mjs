@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { chromium } from '../apps/web/node_modules/playwright-core/index.mjs'
 
@@ -109,6 +109,64 @@ try {
 
   await page.getByRole('button', { name: '平均值 dq' }).click()
   await page.getByText('16 状态平均值 dq 模型').waitFor({ timeout: 15000 })
+
+  const ablationScope = page.getByTestId('average-dq-ablation-fixed-scope')
+  await ablationScope.waitFor({ timeout: 15000 })
+  const ablationScopeText = await ablationScope.innerText()
+  for (const evidence of ['D=60', 'X=0.1 p.u.', '19 点']) {
+    if (!ablationScopeText.includes(evidence)) {
+      throw new Error(`Average-dq fixed ablation scope is missing ${evidence}.`)
+    }
+  }
+
+  await page.getByTestId('average-dq-ablation-run').click()
+  await page.getByTestId('average-dq-ablation-results').waitFor({ timeout: 45000 })
+  const ablationSummaryText = await page.getByTestId('average-dq-ablation-summary').innerText()
+  if (!/固定消融点数\s+19/.test(ablationSummaryText)
+      || !/整体稳定 \/ 失稳\s+5 \/ 14/.test(ablationSummaryText)) {
+    throw new Error(`Average-dq ablation summary is incomplete: ${ablationSummaryText}`)
+  }
+  await page.getByTestId('average-dq-ablation-row-baseline').waitFor({ timeout: 15000 })
+  await page.getByTestId('average-dq-ablation-row-voltage_pi__2').waitFor({ timeout: 15000 })
+  const trackingBoundaryText = await page.getByTestId('average-dq-ablation-tracking-boundary').innerText()
+  for (const evidence of ['不是全局指派唯一性证明', '当前固定状态', '不证明唯一因果']) {
+    if (!trackingBoundaryText.includes(evidence)) {
+      throw new Error(`Average-dq ablation tracking boundary is missing ${evidence}.`)
+    }
+  }
+
+  const ablationDownloadPromise = page.waitForEvent('download')
+  await page.getByTestId('average-dq-ablation-export').click()
+  const ablationDownload = await ablationDownloadPromise
+  const ablationDownloadPath = await ablationDownload.path()
+  const expectedAblationFilename = 'average-dq-ablation-average-dq-hierarchy-disagreement-ablation-v1.json'
+  if (ablationDownload.suggestedFilename() !== expectedAblationFilename || !ablationDownloadPath) {
+    throw new Error('Average-dq ablation JSON export filename or download path is invalid.')
+  }
+  let ablationPayload
+  try {
+    ablationPayload = JSON.parse(readFileSync(ablationDownloadPath, 'utf8'))
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    throw new Error(`Average-dq ablation JSON export is invalid: ${message}`)
+  }
+  const ablationPoints = ablationPayload.result?.points
+  const stabilityCounts = ablationPayload.result?.summary?.stability_counts
+  if (ablationPayload.result?.point_count !== 19
+      || !Array.isArray(ablationPoints)
+      || ablationPoints.length !== 19
+      || stabilityCounts?.stable !== 5
+      || stabilityCounts?.unstable !== 14) {
+    throw new Error('Average-dq ablation JSON export does not retain the fixed 19-point, 5/14 result.')
+  }
+  const ablationScenarioIds = new Set(ablationPoints.map(point => point.scenario_id))
+  if (!ablationScenarioIds.has('baseline') || !ablationScenarioIds.has('voltage_pi__2')) {
+    throw new Error('Average-dq ablation JSON export is missing an acceptance anchor scenario.')
+  }
+  if (!ablationPayload.model_scope?.tracking_boundary?.includes('不证明唯一因果')) {
+    throw new Error('Average-dq ablation JSON export is missing the tracking boundary.')
+  }
+
   await page.getByLabel('P* / p.u.').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
   await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })

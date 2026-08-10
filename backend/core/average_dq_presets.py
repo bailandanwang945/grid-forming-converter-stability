@@ -10,6 +10,7 @@ from backend.domain.network_models import NetworkTopology
 
 
 PRESET_ID = "average-dq-smib-verification"
+ABLATION_PRESET_ID = "average-dq-hierarchy-disagreement-ablation-v1"
 
 
 def build_average_dq_verification_case() -> tuple[
@@ -85,6 +86,61 @@ def build_average_dq_verification_case() -> tuple[
         }
     )
     return topology, parameters
+
+
+def build_average_dq_ablation_anchor_case() -> tuple[
+    NetworkTopology, AverageDQGFMParameters
+]:
+    """Return a fresh copy of the fixed model-hierarchy ablation anchor.
+
+    The anchor is derived from the ordinary average-value verification case,
+    then fixes VSM damping to ``D=60`` and external-line reactance to
+    ``X=0.1 pu``.  It belongs to the team's fixed 19-point ablation study; it
+    is neither the paper's Fig. 8 case nor a physical-hardware fit, and its
+    state definition is fixed rather than supplied by callers.
+    """
+
+    verification_topology, verification_parameters = (
+        build_average_dq_verification_case()
+    )
+    topology = verification_topology.model_copy(deep=True)
+    parameters = verification_parameters.model_copy(deep=True)
+
+    matching_converters = [
+        converter
+        for converter in topology.grid_forming_converters
+        if converter.id == parameters.converter_id
+    ]
+    matching_lines = [line for line in topology.lines if line.id == "line-grid"]
+    if len(matching_converters) != 1 or len(matching_lines) != 1:
+        raise RuntimeError(
+            "普通平均值校核算例不再包含唯一的 gfm-1 与 line-grid，"
+            "无法构造固定消融锚点。"
+        )
+
+    topology.id = ABLATION_PRESET_ID
+    topology.name = "平均值 dq 模型层级分歧固定消融锚点"
+    matching_converters[0].damping_coefficient_pu = 60.0
+    matching_lines[0].reactance_pu = 0.1
+    return topology, parameters
+
+
+def average_dq_ablation_anchor_metadata() -> dict[str, object]:
+    """Describe the immutable research boundary of the ablation anchor."""
+
+    return {
+        "id": ABLATION_PRESET_ID,
+        "name": "平均值 dq 模型层级分歧固定消融锚点",
+        "study_point_count": 19,
+        "paper_fig8_fixture": False,
+        "physical_hardware_fit": False,
+        "accepts_arbitrary_state_definition": False,
+        "source_kind": "team-defined-fixed-average-dq-ablation-anchor",
+        "interpretation_boundary": (
+            "团队固定 19 点模型层级消融；非论文 Fig. 8，非硬件拟合，"
+            "不接受任意状态定义。"
+        ),
+    }
 
 
 def average_dq_preset_metadata() -> dict:

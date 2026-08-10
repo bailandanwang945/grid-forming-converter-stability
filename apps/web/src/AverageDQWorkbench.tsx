@@ -5,12 +5,14 @@ import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, Vi
 import { CanvasRenderer } from 'echarts/renderers'
 import { Activity, BookOpenCheck, CircleCheck, Download, Gauge, Play, ShieldAlert, SlidersHorizontal } from 'lucide-react'
 import {
+  AverageDQAblationResult,
   AverageDQParameters,
   AverageDQResult,
   AverageDQScanResult,
   NetworkTopology,
   getAverageDQPreset,
   getAverageDQReportHtml,
+  runAverageDQAblation,
   runAverageDQAnalysis,
   runAverageDQScan,
 } from './api'
@@ -26,8 +28,10 @@ function download(filename: string, content: string, type = 'application/json') 
   const anchor = document.createElement('a')
   anchor.href = url
   anchor.download = filename
+  document.body.appendChild(anchor)
   anchor.click()
-  URL.revokeObjectURL(url)
+  anchor.remove()
+  window.setTimeout(() => URL.revokeObjectURL(url), 0)
 }
 
 function logarithmicFrequencies() {
@@ -49,13 +53,36 @@ const stateNames: Record<string, string> = {
   current_integrator_q_pu: '电流积分 q',
 }
 
+const ablationFactorNames: Record<string, string> = {
+  voltage_pi: '电压 PI',
+  current_pi: '电流 PI',
+  modulator_time: '调制器时间常数',
+  converter_side_reactance: '变流器侧电抗',
+  filter_capacitor: '滤波电容',
+  grid_side_reactance: '电网侧电抗',
+  qv_droop: 'Q–V 下垂',
+}
+
+function formatAblationFactors(factors: Record<string, number>) {
+  const entries = Object.entries(factors)
+  if (entries.length === 0) return '基准'
+  return entries.map(([name, scale]) => `${ablationFactorNames[name] ?? name} × ${scale}`).join('；')
+}
+
+function leadingParticipationGroup(groups: Record<string, number>) {
+  const leading = Object.entries(groups).sort((left, right) => right[1] - left[1])[0]
+  return leading ? `${leading[0]}（${(leading[1] * 100).toFixed(1)}%）` : '—'
+}
+
 export default function AverageDQWorkbench() {
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
   const [parameters, setParameters] = useState<AverageDQParameters | null>(null)
   const [result, setResult] = useState<AverageDQResult | null>(null)
   const [scanResult, setScanResult] = useState<AverageDQScanResult | null>(null)
+  const [ablationResult, setAblationResult] = useState<AverageDQAblationResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
+  const [ablationRunning, setAblationRunning] = useState(false)
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
@@ -159,6 +186,51 @@ export default function AverageDQWorkbench() {
     }
   }, [scanResult])
 
+  const ablationChart = useMemo(() => {
+    if (!ablationResult) return {}
+    const points = ablationResult.result.points
+    return {
+      animationDuration: 350,
+      grid: { left: 72, right: 28, top: 48, bottom: 112 },
+      tooltip: { trigger: 'axis' },
+      legend: { top: 4 },
+      xAxis: {
+        type: 'category',
+        name: '消融工况',
+        nameLocation: 'middle',
+        nameGap: 88,
+        axisLabel: { interval: 0, rotate: 42, fontSize: 10 },
+        data: points.map(point => formatAblationFactors(point.factors)),
+      },
+      yAxis: { type: 'value', name: '极点实部 / s⁻¹' },
+      series: [
+        {
+          name: '最右极点实部',
+          type: 'line',
+          symbolSize: 7,
+          lineStyle: { width: 2.2, color: '#c65a58' },
+          itemStyle: { color: '#c65a58' },
+          data: points.map(point => point.rightmost_pole.real_per_s),
+          markLine: {
+            silent: true,
+            symbol: 'none',
+            lineStyle: { color: '#59656b', type: 'dashed' },
+            label: { formatter: '稳定边界' },
+            data: [{ yAxis: 0 }],
+          },
+        },
+        {
+          name: '被追踪额外模态实部',
+          type: 'line',
+          symbolSize: 7,
+          lineStyle: { width: 2.2, color: '#3c6fa3' },
+          itemStyle: { color: '#3c6fa3' },
+          data: points.map(point => point.extra_mode.pole.real_per_s),
+        },
+      ],
+    }
+  }, [ablationResult])
+
   function updateConverter(field: string, value: number) {
     if (!topology) return
     const next = clone(topology)
@@ -215,6 +287,18 @@ export default function AverageDQWorkbench() {
     }
   }
 
+  async function runFixedAblation() {
+    setAblationRunning(true)
+    setError('')
+    try {
+      setAblationResult(await runAverageDQAblation())
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : '固定 19 点模态消融失败')
+    } finally {
+      setAblationRunning(false)
+    }
+  }
+
   async function openReport() {
     if (!analysisInput) return
     const reportWindow = window.open('', '_blank')
@@ -265,6 +349,19 @@ export default function AverageDQWorkbench() {
       <button className="secondary-button" disabled={!result} onClick={() => result && download(`${result.run_id}.json`, JSON.stringify(result, null, 2))}><Download size={16}/>导出可追溯 JSON</button>
       <button className="secondary-button" disabled={!result} onClick={openReport}><BookOpenCheck size={16}/>生成打印式分析报告</button>
       <button className="secondary-button" onClick={() => download('average-dq-case.json', JSON.stringify({ topology, parameters }, null, 2))}><Download size={16}/>保存模型参数</button>
+      <p className="scope-note" data-testid="average-dq-ablation-fixed-scope">固定研究实验：D=60、外部线路 X=0.1 p.u.；上方参数区的编辑与清空不会改变这组 19 点实验。</p>
+      <button
+        className="secondary-button"
+        data-testid="average-dq-ablation-run"
+        onClick={runFixedAblation}
+        disabled={ablationRunning}
+      >{ablationRunning ? '正在重建工作点并追踪模态…' : '运行固定 19 点模态消融'}</button>
+      <button
+        className="secondary-button"
+        data-testid="average-dq-ablation-export"
+        disabled={!ablationResult}
+        onClick={() => ablationResult && download(`${ablationResult.run_id}.json`, JSON.stringify(ablationResult, null, 2))}
+      ><Download size={16}/>导出模态消融 JSON</button>
       {error && <p className="error">{error}</p>}
     </aside>
 
@@ -309,6 +406,34 @@ export default function AverageDQWorkbench() {
         </div>
         <div className="panel chart-card"><div className="panel-title"><ShieldAlert size={18}/><span>16状态—三状态 D–X 层级对照</span><em>逐点重算，不做显示层插值</em></div><EChart option={scanChart} style={{ height: 390 }}/>{firstDisagreement && <div className="evidence-strip"><div><small>首个失配锚点</small><b>D={firstDisagreement.damping_coefficient_pu}，X={firstDisagreement.line_reactance_pu}</b></div><div><small>16状态最右极点实部</small><b>{firstDisagreement.full_dominant_real_per_s?.toFixed(4)} s⁻¹</b></div><div><small>匹配同步模态实部</small><b>{firstDisagreement.matched_full_mode_real_per_s?.toFixed(4)} s⁻¹</b></div><div><small>主要参与状态</small><b>{firstDisagreement.full_dominant_participation?.slice(0, 4).map(item => stateNames[item.state] ?? item.state).join('、')}</b></div></div>}<p className="scope-note">{scanResult.model_scope.interpretation} {scanResult.model_scope.statement}</p></div>
       </>}
+      {ablationResult && <section data-testid="average-dq-ablation-results">
+        <div className="panel evidence-strip" data-testid="average-dq-ablation-summary">
+          <div><small>固定消融点数</small><b>{ablationResult.result.point_count}</b></div>
+          <div><small>整体稳定 / 失稳</small><b>{ablationResult.result.summary.stability_counts.stable} / {ablationResult.result.summary.stability_counts.unstable}</b></div>
+          <div><small>额外模态 matched / pending</small><b>{ablationResult.result.summary.extra_mode_tracking_counts.matched} / {ablationResult.result.summary.extra_mode_tracking_counts.pending}</b></div>
+        </div>
+        <div className="panel chart-card" data-testid="average-dq-ablation-chart">
+          <div className="panel-title"><ShieldAlert size={18}/><span>固定 19 点模态消融</span><em>D=60，外部线路 X=0.1 p.u.</em></div>
+          <EChart option={ablationChart} style={{ height: 430 }}/>
+        </div>
+        <div className="panel" data-testid="average-dq-ablation-table" style={{ overflowX: 'auto' }}>
+          <div className="panel-title"><BookOpenCheck size={18}/><span>消融工况与模态追踪证据</span></div>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+            <thead><tr>
+              {['工况', '因素', '整体稳定性', '额外模态实部 / s⁻¹', '主要参与组', '追踪状态'].map(label => <th key={label} style={{ padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid #dfe6ea' }}>{label}</th>)}
+            </tr></thead>
+            <tbody>{ablationResult.result.points.map(point => <tr key={point.scenario_id} data-testid={`average-dq-ablation-row-${point.scenario_id}`}>
+              <td style={{ padding: '8px', borderBottom: '1px solid #edf1f3' }}>{point.scenario_id}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #edf1f3' }}>{formatAblationFactors(point.factors)}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #edf1f3' }}>{point.stability === 'stable' ? '稳定' : point.stability === 'marginal' ? '临界' : '失稳'}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #edf1f3' }}>{point.extra_mode.pole.real_per_s.toFixed(6)}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #edf1f3' }}>{leadingParticipationGroup(point.extra_group_participation)}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #edf1f3' }}>{point.extra_mode.status}</td>
+            </tr>)}</tbody>
+          </table>
+          <p className="scope-note" data-testid="average-dq-ablation-tracking-boundary">{ablationResult.model_scope.tracking_boundary}</p>
+        </div>
+      </section>}
     </section>
   </main>
 }

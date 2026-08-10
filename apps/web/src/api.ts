@@ -605,7 +605,107 @@ export type AverageDQScanResult = {
   provenance: Record<string, unknown>
 }
 
-async function averageDQRequest(path: string, input: AverageDQAnalysisInput | AverageDQScanInput) {
+export type AverageDQAblationPresetId = 'average-dq-hierarchy-disagreement-ablation-v1'
+
+export type AverageDQPole = {
+  real_per_s: number
+  imag_per_s: number
+  real_hz: number
+  imag_hz: number
+}
+
+export type AverageDQModeTracking = {
+  pole: AverageDQPole
+  reference_pole: AverageDQPole
+  status: 'matched' | 'pending'
+  reason: string
+  path_label: string
+  cumulative_tracking_steps: number
+  minimum_step_right_mac: number
+  minimum_step_left_mac: number
+  minimum_step_combined_mac: number
+  maximum_step_normalized_eigenvalue_distance: number
+  minimum_step_confidence: number
+  maximum_step_second_candidate_confidence: number
+  minimum_step_local_candidate_margin: number
+  maximum_eigenvalue_condition_number: number
+  maximum_right_eigenpair_residual: number
+  maximum_left_eigenpair_residual: number
+  thresholds: {
+    minimum_individual_mac: number
+    maximum_normalized_eigenvalue_distance: number
+    maximum_eigenvalue_condition_number: number
+    maximum_eigenpair_residual: number
+    minimum_local_candidate_margin: number
+  }
+}
+
+export type AverageDQAblationPoint = {
+  scenario_id: string
+  factors: Record<string, number>
+  damping_coefficient_pu: number
+  line_reactance_pu: number
+  stability: 'stable' | 'marginal' | 'unstable'
+  rightmost_pole: AverageDQPole
+  poles: AverageDQPole[]
+  extra_mode: AverageDQModeTracking
+  synchronous_mode: AverageDQModeTracking
+  extra_group_participation: Record<string, number>
+  synchronous_group_participation: Record<string, number>
+  reduced_poles: AverageDQPole[]
+  reduced_dominant_pole: AverageDQPole
+  synchronizing_stiffness_pu_per_rad: number
+  synchronous_frequency_relative_error: number | null
+  synchronous_decay_relative_error: number | null
+  residuals: {
+    algebraic_inf: number
+    closed_rhs_inf: number
+    device_rhs_inf: number
+    active_power_balance_abs_pu: number
+  }
+}
+
+export type AverageDQAblationResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  preset_id: AverageDQAblationPresetId
+  fixed_anchor: {
+    damping_coefficient_pu: number
+    external_line_reactance_pu: number
+    state_definition: string
+  }
+  result: {
+    point_count: number
+    summary: {
+      stability_counts: Record<'stable' | 'marginal' | 'unstable', number>
+      extra_mode_tracking_counts: Record<'matched' | 'pending', number>
+      synchronous_mode_tracking_counts: Record<'matched' | 'pending', number>
+    }
+    baseline_extra_mode: AverageDQPole
+    baseline_synchronous_mode: AverageDQPole
+    state_scaling: Record<string, number>
+    state_scaling_scope: string
+    points: AverageDQAblationPoint[]
+  }
+  model_scope: {
+    claim_level: string
+    statement: string
+    tracking_method: string
+    tracking_boundary: string
+    paper_theorem_evaluated: boolean
+    physical_validation: boolean
+    causal_identification: boolean
+    accepts_arbitrary_state_definition: boolean
+  }
+  provenance: Record<string, unknown>
+}
+
+type AverageDQAblationInput = {
+  preset_id: AverageDQAblationPresetId
+}
+
+async function averageDQRequest(path: string, input: AverageDQAnalysisInput | AverageDQScanInput | AverageDQAblationInput) {
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -631,4 +731,10 @@ export async function getAverageDQReportHtml(input: AverageDQAnalysisInput): Pro
 
 export async function runAverageDQScan(input: AverageDQScanInput): Promise<AverageDQScanResult> {
   return (await averageDQRequest('/api/average-dq/scan', input)).json()
+}
+
+export async function runAverageDQAblation(): Promise<AverageDQAblationResult> {
+  return (await averageDQRequest('/api/average-dq/ablation', {
+    preset_id: 'average-dq-hierarchy-disagreement-ablation-v1',
+  })).json()
 }
