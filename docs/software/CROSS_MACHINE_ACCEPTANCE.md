@@ -46,7 +46,7 @@
 
 ```powershell
 python scripts/import_cross_machine_acceptance.py <回传结果目录> `
-  --expected-version 0.3.0-rc4 `
+  --expected-version 0.3.0-rc5 `
   --expected-commit <发布清单中的提交号> `
   --expected-zip-sha256 <正式ZIP的SHA-256>
 ```

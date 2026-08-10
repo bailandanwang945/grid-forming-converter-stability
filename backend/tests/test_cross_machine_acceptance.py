@@ -6,7 +6,7 @@ from pathlib import Path
 from backend.core.cross_machine_acceptance import review_cross_machine_evidence
 
 
-VERSION = "0.3.0-rc4"
+VERSION = "0.3.0-rc5"
 COMMIT = "a" * 40
 ZIP_HASH = "b" * 64
 

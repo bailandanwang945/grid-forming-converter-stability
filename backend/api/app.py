@@ -33,7 +33,7 @@ from backend.core.reporting import (
 from backend.domain.network_models import NetworkTopology
 
 
-app = FastAPI(title="构网型变流器稳定性分析平台", version="0.3.0-rc4")
+app = FastAPI(title="构网型变流器稳定性分析平台", version="0.3.0-rc5")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -335,7 +335,7 @@ def _reduced_order_scan_payload(request: ReducedOrderScanRequest) -> dict:
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "service": "gfm-stability-api", "version": "0.3.0-rc4"}
+    return {"status": "ok", "service": "gfm-stability-api", "version": "0.3.0-rc5"}
 
 
 @app.get("/api/scenarios")

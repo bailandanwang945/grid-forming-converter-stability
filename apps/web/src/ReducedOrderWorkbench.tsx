@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
-import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { HeatmapChart, LineChart, ScatterChart } from 'echarts/charts'
 import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
@@ -32,6 +31,7 @@ import {
   runReducedOrderAnalysis,
   runReducedOrderScan,
 } from './api'
+import EChart from './EChart'
 
 echarts.use([
   LineChart,
@@ -670,8 +670,8 @@ export default function ReducedOrderWorkbench() {
           <div><small>计算边界</small><b>降阶闭环极点，不评价论文定理</b></div>
         </div>
         <div className="chart-grid">
-          <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>闭环极点分布</span><em>虚轴右侧为失稳</em></div><ReactEChartsCore echarts={echarts} option={poleChart} style={{height: 320}}/></div>
-          <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>线性自由响应</span><em>初始相角扰动，不是大扰动仿真</em></div><ReactEChartsCore echarts={echarts} option={timeChart} style={{height: 320}}/></div>
+          <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>闭环极点分布</span><em>虚轴右侧为失稳</em></div><EChart option={poleChart} style={{height: 320}}/></div>
+          <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>线性自由响应</span><em>初始相角扰动，不是大扰动仿真</em></div><EChart option={timeChart} style={{height: 320}}/></div>
         </div>
         <div className="panel scan-panel">
           <div className="panel-title"><Network size={18}/><span>D–X 参数平面</span><em>逐点重建状态矩阵，不做显示层插值</em></div>
@@ -694,7 +694,7 @@ export default function ReducedOrderWorkbench() {
               <span className="unstable-count">失稳 <b>{scanResult.scan.stability_counts.unstable}</b></span>
               <span>目标 <b>{scanResult.scan.target_vsm_id} × {scanResult.scan.target_line_id}</b></span>
             </div>
-            <ReactEChartsCore echarts={echarts} option={scanChart} style={{height: 430}}/>
+            <EChart option={scanChart} style={{height: 430}}/>
             <p className="scan-boundary">{scanResult.model_scope.line_reactance_interpretation} {scanResult.model_scope.statement}</p>
           </> : <div className="scan-empty">设置阻尼和目标线路电抗范围后，可生成稳定、临界与失稳分区。这里的 X 是选定线路的标幺电抗，不自动改称短路比 SCR。</div>}
         </div>

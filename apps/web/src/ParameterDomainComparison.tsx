@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { HeatmapChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
@@ -11,6 +10,7 @@ import {
   Fig8DomainPoint,
   getFig8DomainComparison,
 } from './api'
+import EChart from './EChart'
 
 echarts.use([HeatmapChart, GridComponent, TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -163,11 +163,13 @@ export default function ParameterDomainComparison() {
         <div className="domain-legend">
           {Object.entries(classificationMeta).map(([key, meta]) => <span key={key}><i style={{background: meta.color}}/>{meta.label}</span>)}
         </div>
-        <ReactEChartsCore
-          echarts={echarts}
+        <EChart
           option={chart}
           style={{height: 500}}
-          onEvents={{click: (params: { dataIndex: number }) => setSelected(result.rows[params.dataIndex])}}
+          onEvents={{click: (parameters: unknown) => {
+            const { dataIndex } = parameters as { dataIndex: number }
+            setSelected(result.rows[dataIndex])
+          }}}
         />
       </div>
 

@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "0.3.0-rc4",
+    [string]$Version = "0.3.0-rc5",
     [switch]$SkipFrontendBuild,
     [switch]$SkipSmokeTest,
     [switch]$AllowDirtyWorktree
@@ -146,6 +146,26 @@ Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\VERIFY_THIS_PC.cmd") `
     -Destination (Join-Path $PackagePath "VERIFY_THIS_PC.cmd")
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\verify_this_pc.ps1") `
     -Destination (Join-Path $PackagePath "verify_this_pc.ps1")
+
+Write-Step "Generating third-party notices from the packaged executable..."
+$ThirdPartyGenerator = Join-Path $ProjectRoot "scripts\generate_third_party_notices.py"
+$AuthorLicense = Join-Path $ProjectRoot "external\cifelli-small-gain-phase\LICENSE"
+Invoke-Native python @(
+    $ThirdPartyGenerator,
+    "--executable", (Join-Path $PackagePath "GFM-Stability-Platform.exe"),
+    "--frontend-root", $FrontendRoot,
+    "--author-license", $AuthorLicense,
+    "--output-root", $PackagePath
+)
+$SbomPath = Join-Path $PackagePath "third-party-sbom.json"
+$NoticesPath = Join-Path $PackagePath "THIRD_PARTY_NOTICES.md"
+if (-not (Test-Path -LiteralPath $SbomPath -PathType Leaf) -or -not (Test-Path -LiteralPath $NoticesPath -PathType Leaf)) {
+    throw "Third-party notices or SBOM were not generated."
+}
+$Sbom = Get-Content -LiteralPath $SbomPath -Raw -Encoding UTF8 | ConvertFrom-Json
+if ($Sbom.schema_version -ne "gfm-third-party-sbom/1.0" -or $Sbom.component_count -lt 10 -or @($Sbom.components).Count -ne $Sbom.component_count) {
+    throw "Third-party SBOM validation failed."
+}
 
 $Forbidden = Get-ChildItem -LiteralPath $PackagePath -Recurse -Force | Where-Object {
     $_.FullName -match '(^|\\)(node_modules|__pycache__|\.pytest_cache|external)(\\|$)'

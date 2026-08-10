@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { LineChart, ScatterChart } from 'echarts/charts'
 import {
@@ -21,6 +20,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react'
 import { AnalysisResult, Fig8ScenarioId, runAnalysis } from './api'
+import EChart from './EChart'
 import ReducedOrderWorkbench from './ReducedOrderWorkbench'
 import ParameterDomainComparison from './ParameterDomainComparison'
 
@@ -213,8 +213,8 @@ function App() {
           </div>
 
           <div className="chart-grid">
-            <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>小增益条件裕度</span><em>正值表示该频点由小增益条件覆盖</em></div><ReactEChartsCore echarts={echarts} option={gainChart} style={{height: 320}}/></div>
-            <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>严格扇形相位裕度</span><em>空段表示相位不可用或数值待定</em></div><ReactEChartsCore echarts={echarts} option={phaseChart} style={{height: 320}}/></div>
+            <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>小增益条件裕度</span><em>正值表示该频点由小增益条件覆盖</em></div><EChart option={gainChart} style={{height: 320}}/></div>
+            <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>严格扇形相位裕度</span><em>空段表示相位不可用或数值待定</em></div><EChart option={phaseChart} style={{height: 320}}/></div>
           </div>
 
           <div className="panel provenance-card">
