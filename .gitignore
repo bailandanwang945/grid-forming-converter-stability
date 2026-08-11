@@ -33,6 +33,7 @@ output/**/*.synctex.gz
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/
 node_modules/
 dist/
 output/release/

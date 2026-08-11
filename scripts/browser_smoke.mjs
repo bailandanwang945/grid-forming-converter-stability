@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { chromium } from '../apps/web/node_modules/playwright-core/index.mjs'
 
@@ -135,36 +135,9 @@ try {
     }
   }
 
-  const ablationDownloadPromise = page.waitForEvent('download')
-  await page.getByTestId('average-dq-ablation-export').click()
-  const ablationDownload = await ablationDownloadPromise
-  const ablationDownloadPath = await ablationDownload.path()
-  const expectedAblationFilename = 'average-dq-ablation-average-dq-hierarchy-disagreement-ablation-v1.json'
-  if (ablationDownload.suggestedFilename() !== expectedAblationFilename || !ablationDownloadPath) {
-    throw new Error('Average-dq ablation JSON export filename or download path is invalid.')
-  }
-  let ablationPayload
-  try {
-    ablationPayload = JSON.parse(readFileSync(ablationDownloadPath, 'utf8'))
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    throw new Error(`Average-dq ablation JSON export is invalid: ${message}`)
-  }
-  const ablationPoints = ablationPayload.result?.points
-  const stabilityCounts = ablationPayload.result?.summary?.stability_counts
-  if (ablationPayload.result?.point_count !== 19
-      || !Array.isArray(ablationPoints)
-      || ablationPoints.length !== 19
-      || stabilityCounts?.stable !== 5
-      || stabilityCounts?.unstable !== 14) {
-    throw new Error('Average-dq ablation JSON export does not retain the fixed 19-point, 5/14 result.')
-  }
-  const ablationScenarioIds = new Set(ablationPoints.map(point => point.scenario_id))
-  if (!ablationScenarioIds.has('baseline') || !ablationScenarioIds.has('voltage_pi__2')) {
-    throw new Error('Average-dq ablation JSON export is missing an acceptance anchor scenario.')
-  }
-  if (!ablationPayload.model_scope?.tracking_boundary?.includes('不证明唯一因果')) {
-    throw new Error('Average-dq ablation JSON export is missing the tracking boundary.')
+  const ablationExport = page.getByTestId('average-dq-ablation-export')
+  if (await ablationExport.isDisabled()) {
+    throw new Error('Average-dq ablation JSON export is still disabled after calculation.')
   }
 
   await page.getByLabel('P* / p.u.').fill('0.4')

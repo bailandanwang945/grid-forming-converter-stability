@@ -30,8 +30,10 @@ function download(filename: string, content: string, type = 'application/json') 
   anchor.download = filename
   document.body.appendChild(anchor)
   anchor.click()
-  anchor.remove()
-  window.setTimeout(() => URL.revokeObjectURL(url), 0)
+  window.setTimeout(() => {
+    anchor.remove()
+    URL.revokeObjectURL(url)
+  }, 5000)
 }
 
 function logarithmicFrequencies() {
