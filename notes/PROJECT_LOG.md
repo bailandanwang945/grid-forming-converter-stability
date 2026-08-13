@@ -618,3 +618,10 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 同步统一 ECharts 的文字、坐标轴、网格线、提示框和图例主题，并将稳定、临界、失稳与模型对照配色收敛到青灰、暖褐和低饱和朱褐范围；状态仍通过文字和数值表达，不仅依赖颜色。
 - `npm run build` 通过，Vite 仅保留既有的大代码包性能提示；以 1600×1100 真实浏览器截图核对首页，排版、文字对比、拓扑关系和留白正常。完整四工作区浏览器流程因数值计算超过一分钟而按延迟规则终止，未据此声称完整回归通过；本轮变更范围仅为前端表现层。
 - 本轮未制作或修改 PPT/PDF。
+
+## 2026-08-13：开发启动器端口冲突自愈
+
+- 用户启动时发现 `8000` 被 PID 3352 占用。只读核查确认该进程为 `E:\git_Projects\AutoFigure-Edit-main\server.py`，页面标题为 `AutoFigure-Edit`，不是 GFM 残留服务；因此未终止或复用该进程。
+- `scripts/start_dev.ps1` 改为从首选后端端口 `8000` 和前端端口 `5173` 起顺序选择空闲端口，并在发生切换时明确打印实际端口；前端 Vite 代理通过 `GFM_BACKEND_URL` 与本次后端端口同步，不再要求用户手动关闭其他项目。
+- 在 AutoFigure 保持占用 `8000` 的真实条件下执行 `scripts/start_dev.ps1 -SmokeTest`，GFM 自动选择 `8001`，前端在 `5173` 启动，健康检查、监听进程归属与退出清理均通过，输出 `FULLSTACK_LAUNCHER_SMOKE_OK`。
+- 正确的开发态访问入口是启动窗口打印的 `Platform ready` 地址，通常为 `http://127.0.0.1:5173`；`http://127.0.0.1:8000` 是后端或其他项目端口，不作为 GFM 页面入口。

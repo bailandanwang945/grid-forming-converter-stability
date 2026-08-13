@@ -10,6 +10,7 @@ $BackendPort = 8000
 $FrontendPort = 5173
 $Backend = $null
 $Frontend = $null
+$PreviousBackendUrl = $env:GFM_BACKEND_URL
 
 function Write-Step([string]$Message) {
     Write-Host "[GFM] $Message" -ForegroundColor Cyan
@@ -39,12 +40,18 @@ function Invoke-NativeCommand(
     }
 }
 
-function Assert-PortAvailable([int]$Port) {
-    $Listener = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
-    if ($null -ne $Listener) {
-        $Owners = @($Listener | Select-Object -ExpandProperty OwningProcess -Unique) -join ", "
-        throw "Port $Port is already occupied by process $Owners. Stop that service and retry."
+function Find-AvailablePort(
+    [int]$PreferredPort,
+    [int]$MaximumAttempts = 100
+) {
+    for ($Offset = 0; $Offset -lt $MaximumAttempts; $Offset++) {
+        $Candidate = $PreferredPort + $Offset
+        $Listener = Get-NetTCPConnection -LocalPort $Candidate -State Listen -ErrorAction SilentlyContinue
+        if ($null -eq $Listener) {
+            return $Candidate
+        }
     }
+    throw "No available local port was found from $PreferredPort to $($PreferredPort + $MaximumAttempts - 1)."
 }
 
 function Wait-Http(
@@ -100,8 +107,14 @@ try {
     if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
         throw "Node.js/npm was not found. Install Node.js 20 or newer."
     }
-    Assert-PortAvailable $BackendPort
-    Assert-PortAvailable $FrontendPort
+    $BackendPort = Find-AvailablePort $BackendPort
+    $FrontendPort = Find-AvailablePort $FrontendPort
+    if ($BackendPort -ne 8000) {
+        Write-Step "Port 8000 is in use; using analysis API port $BackendPort instead."
+    }
+    if ($FrontendPort -ne 5173) {
+        Write-Step "Port 5173 is in use; using web interface port $FrontendPort instead."
+    }
 
     $BackendProbeExitCode = Invoke-NativeCommand python @(
         "-c", "import fastapi, uvicorn, pydantic, numpy, scipy"
@@ -141,9 +154,10 @@ try {
     if (-not (Test-Path $ViteScript)) {
         throw "Vite executable was not found after dependency installation."
     }
+    $env:GFM_BACKEND_URL = "http://127.0.0.1:$BackendPort"
     Write-Step "Starting web interface..."
     $Frontend = Start-Process node `
-        -ArgumentList $ViteScript, "--host", "127.0.0.1" `
+        -ArgumentList $ViteScript, "--host", "127.0.0.1", "--port", "$FrontendPort", "--strictPort" `
         -WorkingDirectory $FrontendRoot `
         -WindowStyle Hidden `
         -PassThru
@@ -158,12 +172,13 @@ try {
     Assert-OwnsListener $FrontendPort $Frontend
 
     Write-Host ""
-    Write-Host "Platform ready: http://127.0.0.1:5173" -ForegroundColor Green
+    $PlatformUrl = "http://127.0.0.1:$FrontendPort"
+    Write-Host "Platform ready: $PlatformUrl" -ForegroundColor Green
     if ($SmokeTest) {
         Write-Host "FULLSTACK_LAUNCHER_SMOKE_OK" -ForegroundColor Green
     }
     else {
-        Start-Process "http://127.0.0.1:5173"
+        Start-Process $PlatformUrl
         Write-Host "The browser is open. Keep this window open; press Enter to stop the platform."
         Read-Host | Out-Null
     }
@@ -181,4 +196,10 @@ finally {
     Write-Step "Stopping services..."
     Stop-OwnedProcess $Frontend
     Stop-OwnedProcess $Backend
+    if ($null -eq $PreviousBackendUrl) {
+        Remove-Item Env:GFM_BACKEND_URL -ErrorAction SilentlyContinue
+    }
+    else {
+        $env:GFM_BACKEND_URL = $PreviousBackendUrl
+    }
 }
