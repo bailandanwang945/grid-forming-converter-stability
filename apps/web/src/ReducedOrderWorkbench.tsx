@@ -486,9 +486,9 @@ export default function ReducedOrderWorkbench() {
       xAxis: { type: 'value', name: '实部 / Hz', nameLocation: 'middle', nameGap: 32 },
       yAxis: { type: 'value', name: '虚部 / Hz' },
       series: [{
-        type: 'scatter', symbolSize: 11, itemStyle: { color: '#276c9b' },
+        type: 'scatter', symbolSize: 11, itemStyle: { color: '#667d84' },
         data: result.result.poles.map(pole => [pole.real_hz, pole.imag_hz]),
-        markLine: { silent: true, symbol: 'none', lineStyle: { color: '#c54b4b', type: 'dashed' }, data: [{ xAxis: 0, name: '稳定边界' }] },
+        markLine: { silent: true, symbol: 'none', lineStyle: { color: '#9b6654', type: 'dashed' }, data: [{ xAxis: 0, name: '稳定边界' }] },
       }],
     }
   }, [result])
@@ -540,12 +540,12 @@ export default function ReducedOrderWorkbench() {
       visualMap: {
         type: 'piecewise', right: 8, top: 45, dimension: 2,
         pieces: [
-          { value: -1, label: '稳定', color: '#62a99b' },
-          { value: 0, label: '临界', color: '#e2a33f' },
-          { value: 1, label: '失稳', color: '#cc6262' },
+          { value: -1, label: '稳定', color: '#718b82' },
+          { value: 0, label: '临界', color: '#a88a68' },
+          { value: 1, label: '失稳', color: '#9b6654' },
         ],
       },
-      series: [{ type: 'heatmap', data, emphasis: { itemStyle: { borderColor: '#1d313b', borderWidth: 1 } } }],
+      series: [{ type: 'heatmap', data, emphasis: { itemStyle: { borderColor: '#29312f', borderWidth: 1 } } }],
     }
   }, [scanResult])
 

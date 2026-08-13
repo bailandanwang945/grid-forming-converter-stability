@@ -43,7 +43,7 @@ const scenarios: Array<{ id: Fig8ScenarioId; label: string; damping: number }> =
 const markZero = {
   silent: true,
   symbol: 'none',
-  lineStyle: { color: '#c54b4b', type: 'dashed' },
+  lineStyle: { color: '#9b6654', type: 'dashed' },
   data: [{ yAxis: 0, name: '判定边界' }],
 }
 
@@ -71,13 +71,13 @@ function App() {
       series: [
         {
           name: 'σmin(Ynet) − σmax(Yc)', type: 'line', symbol: 'none',
-          lineStyle: { width: 2.2, color: '#167d70' },
+          lineStyle: { width: 2.2, color: '#58736f' },
           data: scan.frequencies_hz.map((frequency, index) => [frequency, scan.gain_margin[index]]),
           markLine: markZero,
         },
         {
           name: '增益与相位均未覆盖', type: 'scatter', symbolSize: 5,
-          itemStyle: { color: '#c94747' }, data: uncovered,
+          itemStyle: { color: '#9b6654' }, data: uncovered,
         },
       ],
     }
@@ -96,13 +96,13 @@ function App() {
       series: [
         {
           name: '上相位裕度', type: 'line', symbol: 'none', connectNulls: false,
-          lineStyle: { width: 2, color: '#3c6fa3' },
+          lineStyle: { width: 2, color: '#667d84' },
           data: scan.frequencies_hz.map((frequency, index) => [frequency, scan.upper_phase_margin[index]]),
           markLine: markZero,
         },
         {
           name: '下相位裕度', type: 'line', symbol: 'none', connectNulls: false,
-          lineStyle: { width: 2, color: '#b77824' },
+          lineStyle: { width: 2, color: '#9b7a5e' },
           data: scan.frequencies_hz.map((frequency, index) => [frequency, scan.lower_phase_margin[index]]),
         },
       ],
@@ -139,14 +139,15 @@ function App() {
   return <div className="app-shell">
     <header>
       <div className="brand-mark"><Activity size={22}/></div>
-      <div><h1>构网型变流器稳定性分析平台</h1><p>拓扑建模 · 分散式充分判据 · 闭环参考验证</p></div>
+      <div className="brand-copy"><h1>构网型变流器稳定性分析平台</h1><p>拓扑建模 · 分散式充分判据 · 闭环参考验证</p></div>
+      <div className="header-landscape" aria-hidden="true"><i/><i/><i/></div>
       <nav className="workspace-tabs" aria-label="工作台切换">
-        <button className={workspaceMode === 'paper' ? 'active' : ''} onClick={() => setWorkspaceMode('paper')}>论文复现</button>
-        <button className={workspaceMode === 'comparison' ? 'active' : ''} onClick={() => setWorkspaceMode('comparison')}>同域对照</button>
-        <button className={workspaceMode === 'model' ? 'active' : ''} onClick={() => setWorkspaceMode('model')}>低频模型</button>
-        <button className={workspaceMode === 'average-dq' ? 'active' : ''} onClick={() => setWorkspaceMode('average-dq')}>平均值 dq</button>
+        <button data-index="01" className={workspaceMode === 'paper' ? 'active' : ''} onClick={() => setWorkspaceMode('paper')}>论文复现</button>
+        <button data-index="02" className={workspaceMode === 'comparison' ? 'active' : ''} onClick={() => setWorkspaceMode('comparison')}>同域对照</button>
+        <button data-index="03" className={workspaceMode === 'model' ? 'active' : ''} onClick={() => setWorkspaceMode('model')}>低频模型</button>
+        <button data-index="04" className={workspaceMode === 'average-dq' ? 'active' : ''} onClick={() => setWorkspaceMode('average-dq')}>平均值 dq</button>
       </nav>
-      <span className="research-tag">分层模型工作台 v0.4</span>
+      <span className="research-tag">研究原型 · v0.5</span>
     </header>
     {workspaceMode === 'average-dq' ? <AverageDQWorkbench/> : workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
       <aside className="panel controls">

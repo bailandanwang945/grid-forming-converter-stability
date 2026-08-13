@@ -10,6 +10,40 @@ interface EChartProps {
   onEvents?: Record<string, ChartEventHandler>
 }
 
+const inkPaperTheme = {
+  color: ['#667d7d', '#96745c', '#59635f', '#9b6654', '#a4aaa4'],
+  backgroundColor: 'transparent',
+  textStyle: {
+    color: '#59635f',
+    fontFamily: 'Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif',
+  },
+  title: { textStyle: { color: '#29312f', fontWeight: 500 } },
+  legend: { textStyle: { color: '#69716d' } },
+  categoryAxis: {
+    axisLine: { lineStyle: { color: '#aeb2ab' } },
+    axisTick: { lineStyle: { color: '#aeb2ab' } },
+    axisLabel: { color: '#707771' },
+    splitLine: { lineStyle: { color: ['rgba(55,67,63,.09)'] } },
+  },
+  valueAxis: {
+    axisLine: { lineStyle: { color: '#aeb2ab' } },
+    axisTick: { lineStyle: { color: '#aeb2ab' } },
+    axisLabel: { color: '#707771' },
+    splitLine: { lineStyle: { color: ['rgba(55,67,63,.09)'] } },
+  },
+  logAxis: {
+    axisLine: { lineStyle: { color: '#aeb2ab' } },
+    axisTick: { lineStyle: { color: '#aeb2ab' } },
+    axisLabel: { color: '#707771' },
+    splitLine: { lineStyle: { color: ['rgba(55,67,63,.09)'] } },
+  },
+  tooltip: {
+    backgroundColor: 'rgba(250,248,242,.96)',
+    borderColor: 'rgba(55,67,63,.22)',
+    textStyle: { color: '#29312f' },
+  },
+}
+
 export default function EChart({ option, style, onEvents }: EChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<EChartsType | null>(null)
@@ -17,7 +51,7 @@ export default function EChart({ option, style, onEvents }: EChartProps) {
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    const chart = echarts.init(container)
+    const chart = echarts.init(container, inkPaperTheme)
     chartRef.current = chart
     const resize = () => chart.resize()
     const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(resize)

@@ -19,11 +19,11 @@ const classificationMeta: Record<Fig8DomainClassification, {
   label: string
   color: string
 }> = {
-  'criterion-covered-stable': { index: 0, label: '判据覆盖且参考稳定', color: '#176e64' },
-  'stable-not-covered': { index: 1, label: '参考稳定但判据未覆盖', color: '#e0a13a' },
-  'unstable-not-covered': { index: 2, label: '参考失稳且判据未覆盖', color: '#c34a4a' },
-  'numerical-pending': { index: 3, label: '数值待定', color: '#83909a' },
-  'consistency-violation': { index: 4, label: '一致性违例', color: '#7b3fa1' },
+  'criterion-covered-stable': { index: 0, label: '判据覆盖且参考稳定', color: '#657f77' },
+  'stable-not-covered': { index: 1, label: '参考稳定但判据未覆盖', color: '#a88a68' },
+  'unstable-not-covered': { index: 2, label: '参考失稳且判据未覆盖', color: '#9b6654' },
+  'numerical-pending': { index: 3, label: '数值待定', color: '#8e9690' },
+  'consistency-violation': { index: 4, label: '一致性违例', color: '#756b67' },
 }
 
 function downloadText(filename: string, text: string, type: string) {

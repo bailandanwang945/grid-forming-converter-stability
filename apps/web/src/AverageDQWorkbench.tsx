@@ -115,9 +115,9 @@ export default function AverageDQWorkbench() {
     xAxis: { type: 'value', name: '实部 / Hz', nameLocation: 'middle', nameGap: 32 },
     yAxis: { type: 'value', name: '虚部 / Hz' },
     series: [{
-      type: 'scatter', symbolSize: 9, itemStyle: { color: '#176e64' },
+      type: 'scatter', symbolSize: 9, itemStyle: { color: '#667d7d' },
       data: result.result.poles.map(pole => [pole.real_hz, pole.imag_hz]),
-      markLine: { silent: true, symbol: 'none', lineStyle: { color: '#c54b4b', type: 'dashed' }, data: [{ xAxis: 0 }] },
+      markLine: { silent: true, symbol: 'none', lineStyle: { color: '#9b6654', type: 'dashed' }, data: [{ xAxis: 0 }] },
     }],
   } : {}, [result])
 
@@ -132,8 +132,8 @@ export default function AverageDQWorkbench() {
       xAxis: { type: 'value', name: '时间 / s', nameLocation: 'middle', nameGap: 32 },
       yAxis: { type: 'value', name: '相角偏差 / mrad' },
       series: [
-        { name: '非线性平均值模型', type: 'line', symbol: 'none', lineStyle: { width: 2.2, color: '#176e64' }, data: response.time_s.map((time, index) => [time, (response.nonlinear_states[index][0] - result.operating_point.state[0]) * 1000]) },
-        { name: '局部线性模型', type: 'line', symbol: 'none', lineStyle: { width: 1.6, color: '#b77824', type: 'dashed' }, data: response.time_s.map((time, index) => [time, (response.linear_states[index][0] - result.operating_point.state[0]) * 1000]) },
+        { name: '非线性平均值模型', type: 'line', symbol: 'none', lineStyle: { width: 2.2, color: '#58736f' }, data: response.time_s.map((time, index) => [time, (response.nonlinear_states[index][0] - result.operating_point.state[0]) * 1000]) },
+        { name: '局部线性模型', type: 'line', symbol: 'none', lineStyle: { width: 1.6, color: '#96745c', type: 'dashed' }, data: response.time_s.map((time, index) => [time, (response.linear_states[index][0] - result.operating_point.state[0]) * 1000]) },
       ],
     }
   }, [result])
@@ -148,7 +148,7 @@ export default function AverageDQWorkbench() {
       tooltip: { trigger: 'axis' },
       xAxis: { type: 'log', name: '频率 / Hz', nameLocation: 'middle', nameGap: 32 },
       yAxis: { type: 'log', name: '||Ydev||F' },
-      series: [{ type: 'line', symbol: 'none', lineStyle: { width: 2.2, color: '#3c6fa3' }, data: port.frequencies_hz.map((frequency, index) => [frequency, magnitude[index]]) }],
+      series: [{ type: 'line', symbol: 'none', lineStyle: { width: 2.2, color: '#667d84' }, data: port.frequencies_hz.map((frequency, index) => [frequency, magnitude[index]]) }],
     }
   }, [result])
 
@@ -177,11 +177,11 @@ export default function AverageDQWorkbench() {
       visualMap: {
         type: 'piecewise', orient: 'horizontal', left: 'center', bottom: 2,
         pieces: [
-          { value: 1, label: '稳定一致', color: '#4a9b81' },
-          { value: 0, label: '失稳一致', color: '#c65a58' },
-          { value: 2, label: '层级失配', color: '#e1a13b' },
-          { value: 4, label: '临界', color: '#7489a4' },
-          { value: 3, label: '不可计算', color: '#c7cdd1' },
+          { value: 1, label: '稳定一致', color: '#718b82' },
+          { value: 0, label: '失稳一致', color: '#9b6654' },
+          { value: 2, label: '层级失配', color: '#a88a68' },
+          { value: 4, label: '临界', color: '#748488' },
+          { value: 3, label: '不可计算', color: '#b9b9b1' },
         ],
       },
       series: [{ type: 'heatmap', data, itemStyle: { borderColor: '#fff', borderWidth: 2 }, label: { show: true, formatter: (item: { data: [number, number, number] }) => item.data[2] === 2 ? '失配' : '' } }],
@@ -210,13 +210,13 @@ export default function AverageDQWorkbench() {
           name: '最右极点实部',
           type: 'line',
           symbolSize: 7,
-          lineStyle: { width: 2.2, color: '#c65a58' },
-          itemStyle: { color: '#c65a58' },
+          lineStyle: { width: 2.2, color: '#9b6654' },
+          itemStyle: { color: '#9b6654' },
           data: points.map(point => point.rightmost_pole.real_per_s),
           markLine: {
             silent: true,
             symbol: 'none',
-            lineStyle: { color: '#59656b', type: 'dashed' },
+            lineStyle: { color: '#59635f', type: 'dashed' },
             label: { formatter: '稳定边界' },
             data: [{ yAxis: 0 }],
           },
@@ -225,8 +225,8 @@ export default function AverageDQWorkbench() {
           name: '被追踪额外模态实部',
           type: 'line',
           symbolSize: 7,
-          lineStyle: { width: 2.2, color: '#3c6fa3' },
-          itemStyle: { color: '#3c6fa3' },
+          lineStyle: { width: 2.2, color: '#667d84' },
+          itemStyle: { color: '#667d84' },
           data: points.map(point => point.extra_mode.pole.real_per_s),
         },
       ],
