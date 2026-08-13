@@ -84,7 +84,9 @@ select, input { padding: 10px; min-width: 0; color: #27343e; background: #f9fbfc
 .case-description strong { display: block; margin-top: 5px; color: #164f49; font-size: 14px; }
 .case-description p { margin: 8px 0 0; color: #687782; font-size: 10px; line-height: 1.55; }
 
-.parameter-grid { margin: 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.parameter-grid { width: 100%; min-width: 0; margin: 20px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.controls .parameter-grid label { min-width: 0; margin-top: 0; }
+.controls .parameter-grid input { width: 100%; max-width: 100%; }
 .parameter-grid div { padding: 11px; background: #f4f7f8; border-radius: 9px; }
 .parameter-grid small, .metric small { display: block; color: #7b8794; font-size: 11px; }
 .parameter-grid strong { display: block; margin-top: 5px; font-size: 13px; }
@@ -437,7 +439,8 @@ main {
   pointer-events: none;
 }
 .controls {
-  height: calc(100vh - 166px);
+  height: auto;
+  min-height: calc(100vh - 166px);
   top: 24px;
   padding: 24px 22px;
   background: rgba(241, 236, 225, .7);
@@ -595,6 +598,9 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 
 @media (max-width: 1250px) {
   .header-landscape { display: none; }
+  main { grid-template-columns: minmax(0, 1fr); padding: 22px; }
+  .controls, .model-controls { position: static; width: 100%; height: auto; min-height: 0; }
+  .controls .compact-fields.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .metrics.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .chart-grid { grid-template-columns: 1fr; }
   .provenance-card dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -606,7 +612,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
   .research-tag { display: none; }
   .workspace-tabs { width: 100%; margin-left: 0; justify-content: space-between; border-top: 1px solid var(--hairline); }
   .workspace-tabs button { min-width: 0; flex: 1; }
-  main { grid-template-columns: 1fr; padding: 12px; }
+  main { padding: 12px; }
   .controls { position: static; height: auto; min-height: 0; }
   .topology { justify-content: flex-start; overflow-x: auto; }
   .node { min-width: 135px; }
