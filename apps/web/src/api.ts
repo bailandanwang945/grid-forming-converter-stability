@@ -701,6 +701,70 @@ export type AverageDQAblationResult = {
   provenance: Record<string, unknown>
 }
 
+export type AverageDQBoundaryEstimate = {
+  metric: 'extra-mode-real-part' | 'spectral-abscissa'
+  status: 'converged' | 'unbracketed' | 'pending' | 'maximum-iterations'
+  reason: string
+  factor_value: number | null
+  initial_interval: number[]
+  final_interval: number[] | null
+  real_part_per_s: number | null
+  iterations: number
+}
+
+export type AverageDQBoundaryPath = {
+  path_id: string
+  factor_name: string
+  label_zh: string
+  baseline_factor: number
+  screening_endpoint_factor: number
+  extra_mode_boundary: AverageDQBoundaryEstimate
+  overall_stability_boundary: AverageDQBoundaryEstimate
+  boundaries_agree: boolean | null
+  relative_boundary_difference: number | null
+  mode_handoff_observed: boolean
+  trial_count: number
+}
+
+export type AverageDQBoundaryResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  preset_id: AverageDQAblationPresetId
+  result: {
+    topology_id: string
+    parameter_set_id: string
+    fixed_anchor: {
+      damping_coefficient_pu: number
+      external_line_reactance_pu: number
+      state_definition: string
+    }
+    numerical_contract: {
+      factor_midpoint: string
+      factor_relative_tolerance: number
+      real_part_tolerance_per_s: number
+      maximum_iterations: number
+      failed_tracking_policy: string
+    }
+    path_count: number
+    converged_extra_mode_boundaries: number
+    converged_overall_boundaries: number
+    agreeing_boundary_count: number
+    paths: AverageDQBoundaryPath[]
+    interpretation_boundary: string
+  }
+  model_scope: {
+    claim_level: string
+    statement: string
+    tracking_boundary: string
+    paper_theorem_evaluated: boolean
+    physical_validation: boolean
+    causal_identification: boolean
+    accepts_arbitrary_parameter_paths: boolean
+  }
+  provenance: Record<string, unknown>
+}
+
 type AverageDQAblationInput = {
   preset_id: AverageDQAblationPresetId
 }
@@ -735,6 +799,12 @@ export async function runAverageDQScan(input: AverageDQScanInput): Promise<Avera
 
 export async function runAverageDQAblation(): Promise<AverageDQAblationResult> {
   return (await averageDQRequest('/api/average-dq/ablation', {
+    preset_id: 'average-dq-hierarchy-disagreement-ablation-v1',
+  })).json()
+}
+
+export async function runAverageDQBoundary(): Promise<AverageDQBoundaryResult> {
+  return (await averageDQRequest('/api/average-dq/boundary', {
     preset_id: 'average-dq-hierarchy-disagreement-ablation-v1',
   })).json()
 }

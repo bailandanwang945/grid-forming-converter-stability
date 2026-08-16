@@ -110,6 +110,33 @@ try {
   await page.getByRole('button', { name: '平均值 dq' }).click()
   await page.getByText('16 状态平均值 dq 模型').waitFor({ timeout: 15000 })
 
+  await page.setViewportSize({ width: 1078, height: 997 })
+  await page.waitForTimeout(200)
+  const responsiveLayout = await page.evaluate(() => {
+    const controls = document.querySelector('.controls')?.getBoundingClientRect()
+    const workspace = document.querySelector('.workspace')?.getBoundingClientRect()
+    const parameterGrid = document.querySelector('.controls .parameter-grid')?.getBoundingClientRect()
+    return {
+      viewportWidth: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      controlsRight: controls?.right ?? Number.NaN,
+      controlsBottom: controls?.bottom ?? Number.NaN,
+      workspaceTop: workspace?.top ?? Number.NaN,
+      parameterGridRight: parameterGrid?.right ?? Number.NaN,
+    }
+  })
+  if (responsiveLayout.documentWidth > responsiveLayout.viewportWidth + 1) {
+    throw new Error(`Average-dq page has horizontal overflow at 1078 px: ${JSON.stringify(responsiveLayout)}`)
+  }
+  if (responsiveLayout.parameterGridRight > responsiveLayout.controlsRight + 1) {
+    throw new Error(`Average-dq parameter grid escapes its panel: ${JSON.stringify(responsiveLayout)}`)
+  }
+  if (responsiveLayout.workspaceTop < responsiveLayout.controlsBottom - 1) {
+    throw new Error(`Average-dq panels overlap instead of stacking at 1078 px: ${JSON.stringify(responsiveLayout)}`)
+  }
+  await page.screenshot({ path: resolve('tmp/browser-smoke-average-dq-responsive.png'), fullPage: true })
+  await page.setViewportSize({ width: 1600, height: 1100 })
+
   const ablationScope = page.getByTestId('average-dq-ablation-fixed-scope')
   await ablationScope.waitFor({ timeout: 15000 })
   const ablationScopeText = await ablationScope.innerText()
@@ -138,6 +165,27 @@ try {
   const ablationExport = page.getByTestId('average-dq-ablation-export')
   if (await ablationExport.isDisabled()) {
     throw new Error('Average-dq ablation JSON export is still disabled after calculation.')
+  }
+
+  await page.getByTestId('average-dq-boundary-run').click()
+  await page.getByTestId('average-dq-boundary-results').waitFor({ timeout: 45000 })
+  const boundarySummaryText = await page.getByTestId('average-dq-boundary-summary').innerText()
+  if (!/冻结单因素路径\s+4/.test(boundarySummaryText)
+      || !/附加模态 \/ 整体边界收敛\s+4 \/ 4/.test(boundarySummaryText)
+      || !/两类边界一致\s+4 \/ 4/.test(boundarySummaryText)) {
+    throw new Error(`Average-dq boundary summary is incomplete: ${boundarySummaryText}`)
+  }
+  for (const factor of ['voltage_pi', 'current_pi', 'converter_side_reactance', 'grid_side_reactance']) {
+    await page.getByTestId(`average-dq-boundary-row-${factor}`).waitFor({ timeout: 15000 })
+  }
+  const boundaryInterpretation = await page.getByTestId('average-dq-boundary-interpretation').innerText()
+  for (const evidence of ['不证明唯一因果', '论文定理边界', '硬件稳定性确认']) {
+    if (!boundaryInterpretation.includes(evidence)) {
+      throw new Error(`Average-dq boundary interpretation is missing ${evidence}.`)
+    }
+  }
+  if (await page.getByTestId('average-dq-boundary-export').isDisabled()) {
+    throw new Error('Average-dq boundary JSON export is still disabled after calculation.')
   }
 
   await page.getByLabel('P* / p.u.').fill('0.4')

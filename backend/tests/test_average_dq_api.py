@@ -251,6 +251,77 @@ class AverageDQApiTest(unittest.TestCase):
         self.assertEqual(custom_state.status_code, 422)
         self.assertEqual(unknown.status_code, 422)
 
+    def test_fixed_boundary_returns_four_independently_recomputed_paths(self) -> None:
+        response = self.client.post(
+            "/api/average-dq/boundary",
+            json={
+                "preset_id": (
+                    "average-dq-hierarchy-disagreement-ablation-v1"
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        payload = response.json()
+        result = payload["result"]
+        self.assertEqual(result["path_count"], 4)
+        self.assertEqual(result["converged_extra_mode_boundaries"], 4)
+        self.assertEqual(result["converged_overall_boundaries"], 4)
+        self.assertEqual(result["agreeing_boundary_count"], 4)
+        expected = {
+            "voltage_pi": 1.6297459207796248,
+            "current_pi": 1.6016445244183835,
+            "converter_side_reactance": 0.6931690497962353,
+            "grid_side_reactance": 1.9945604684575917,
+        }
+        self.assertEqual(
+            {path["factor_name"] for path in result["paths"]},
+            set(expected),
+        )
+        for path in result["paths"]:
+            self.assertAlmostEqual(
+                path["extra_mode_boundary"]["factor_value"],
+                expected[path["factor_name"]],
+                places=10,
+            )
+            self.assertTrue(path["boundaries_agree"])
+            self.assertGreater(path["trial_count"], 2)
+            self.assertTrue(
+                all(
+                    trial["calculation_status"] == "valid"
+                    and trial["extra_mode"]["status"] == "matched"
+                    for trial in path["trials"]
+                )
+            )
+        self.assertFalse(
+            payload["model_scope"]["accepts_arbitrary_parameter_paths"]
+        )
+        self.assertFalse(payload["model_scope"]["causal_identification"])
+        self.assertFalse(
+            payload["provenance"][
+                "interpolation_used_for_reported_boundaries"
+            ]
+        )
+        json.dumps(payload, allow_nan=False)
+
+    def test_fixed_boundary_rejects_custom_state_or_unknown_preset(self) -> None:
+        custom_state = self.client.post(
+            "/api/average-dq/boundary",
+            json={
+                "preset_id": (
+                    "average-dq-hierarchy-disagreement-ablation-v1"
+                ),
+                "parameter_path": {"voltage_pi": [1.0, 2.0]},
+            },
+        )
+        unknown = self.client.post(
+            "/api/average-dq/boundary",
+            json={"preset_id": "some-other-experiment"},
+        )
+
+        self.assertEqual(custom_state.status_code, 422)
+        self.assertEqual(unknown.status_code, 422)
+
 
 if __name__ == "__main__":
     unittest.main()

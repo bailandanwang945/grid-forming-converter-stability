@@ -6,6 +6,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import { Activity, BookOpenCheck, CircleCheck, Download, Gauge, Play, ShieldAlert, SlidersHorizontal } from 'lucide-react'
 import {
   AverageDQAblationResult,
+  AverageDQBoundaryResult,
   AverageDQParameters,
   AverageDQResult,
   AverageDQScanResult,
@@ -13,6 +14,7 @@ import {
   getAverageDQPreset,
   getAverageDQReportHtml,
   runAverageDQAblation,
+  runAverageDQBoundary,
   runAverageDQAnalysis,
   runAverageDQScan,
 } from './api'
@@ -82,9 +84,11 @@ export default function AverageDQWorkbench() {
   const [result, setResult] = useState<AverageDQResult | null>(null)
   const [scanResult, setScanResult] = useState<AverageDQScanResult | null>(null)
   const [ablationResult, setAblationResult] = useState<AverageDQAblationResult | null>(null)
+  const [boundaryResult, setBoundaryResult] = useState<AverageDQBoundaryResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
   const [ablationRunning, setAblationRunning] = useState(false)
+  const [boundaryRunning, setBoundaryRunning] = useState(false)
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
@@ -233,6 +237,31 @@ export default function AverageDQWorkbench() {
     }
   }, [ablationResult])
 
+  const boundaryChart = useMemo(() => {
+    if (!boundaryResult) return {}
+    const paths = boundaryResult.result.paths
+    return {
+      animationDuration: 350,
+      grid: { left: 68, right: 28, top: 48, bottom: 58 },
+      tooltip: { trigger: 'axis' },
+      legend: { top: 4 },
+      xAxis: { type: 'category', name: '单因素路径', nameLocation: 'middle', nameGap: 38, data: paths.map(path => path.label_zh) },
+      yAxis: { type: 'value', name: '临界倍率' },
+      series: [
+        {
+          name: '附加模态过零', type: 'line', symbolSize: 9,
+          lineStyle: { width: 2.2, color: '#667d84' }, itemStyle: { color: '#667d84' },
+          data: paths.map(path => path.extra_mode_boundary.factor_value),
+        },
+        {
+          name: '完整模型谱横坐标过零', type: 'line', symbolSize: 6,
+          lineStyle: { width: 1.6, color: '#9b6654', type: 'dashed' }, itemStyle: { color: '#9b6654' },
+          data: paths.map(path => path.overall_stability_boundary.factor_value),
+        },
+      ],
+    }
+  }, [boundaryResult])
+
   function updateConverter(field: string, value: number) {
     if (!topology) return
     const next = clone(topology)
@@ -301,6 +330,18 @@ export default function AverageDQWorkbench() {
     }
   }
 
+  async function runFixedBoundary() {
+    setBoundaryRunning(true)
+    setError('')
+    try {
+      setBoundaryResult(await runAverageDQBoundary())
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : '四条单因素临界边界追踪失败')
+    } finally {
+      setBoundaryRunning(false)
+    }
+  }
+
   async function openReport() {
     if (!analysisInput) return
     const reportWindow = window.open('', '_blank')
@@ -364,6 +405,19 @@ export default function AverageDQWorkbench() {
         disabled={!ablationResult}
         onClick={() => ablationResult && download(`${ablationResult.run_id}.json`, JSON.stringify(ablationResult, null, 2))}
       ><Download size={16}/>导出模态消融 JSON</button>
+      <p className="scope-note" data-testid="average-dq-boundary-fixed-scope">在同一固定锚点上，沿四条单因素路径分别求解附加模态过零点与完整 16 状态模型稳定边界。</p>
+      <button
+        className="secondary-button"
+        data-testid="average-dq-boundary-run"
+        onClick={runFixedBoundary}
+        disabled={boundaryRunning}
+      >{boundaryRunning ? '正在二分加密并追踪模态…' : '追踪四条一维临界边界'}</button>
+      <button
+        className="secondary-button"
+        data-testid="average-dq-boundary-export"
+        disabled={!boundaryResult}
+        onClick={() => boundaryResult && download(`${boundaryResult.run_id}.json`, JSON.stringify(boundaryResult, null, 2))}
+      ><Download size={16}/>导出临界边界 JSON</button>
       {error && <p className="error">{error}</p>}
     </aside>
 
@@ -434,6 +488,35 @@ export default function AverageDQWorkbench() {
             </tr>)}</tbody>
           </table>
           <p className="scope-note" data-testid="average-dq-ablation-tracking-boundary">{ablationResult.model_scope.tracking_boundary}</p>
+        </div>
+      </section>}
+      {boundaryResult && <section data-testid="average-dq-boundary-results">
+        <div className="panel evidence-strip" data-testid="average-dq-boundary-summary">
+          <div><small>冻结单因素路径</small><b>{boundaryResult.result.path_count}</b></div>
+          <div><small>附加模态 / 整体边界收敛</small><b>{boundaryResult.result.converged_extra_mode_boundaries} / {boundaryResult.result.converged_overall_boundaries}</b></div>
+          <div><small>两类边界一致</small><b>{boundaryResult.result.agreeing_boundary_count} / {boundaryResult.result.path_count}</b></div>
+        </div>
+        <div className="panel chart-card" data-testid="average-dq-boundary-chart">
+          <div className="panel-title"><Activity size={18}/><span>四条单因素临界边界</span><em>对数中点二分 · 逐点重建工作点</em></div>
+          <EChart option={boundaryChart} style={{ height: 360 }}/>
+        </div>
+        <div className="panel boundary-table" data-testid="average-dq-boundary-table">
+          <div className="panel-title"><BookOpenCheck size={18}/><span>临界倍率与模态交接</span></div>
+          <div className="table-scroll">
+            <table>
+              <thead><tr>{['路径', '筛查端点', '附加模态边界', '整体稳定边界', '一致', '边界后模态交接', '计算点数'].map(label => <th key={label}>{label}</th>)}</tr></thead>
+              <tbody>{boundaryResult.result.paths.map(path => <tr key={path.path_id} data-testid={`average-dq-boundary-row-${path.factor_name}`}>
+                <td>{path.label_zh}</td>
+                <td>{path.screening_endpoint_factor.toFixed(3)}</td>
+                <td>{path.extra_mode_boundary.factor_value?.toFixed(6) ?? path.extra_mode_boundary.status}</td>
+                <td>{path.overall_stability_boundary.factor_value?.toFixed(6) ?? path.overall_stability_boundary.status}</td>
+                <td>{path.boundaries_agree === null ? '待定' : path.boundaries_agree ? '是' : '否'}</td>
+                <td>{path.mode_handoff_observed ? '观察到' : '未观察到'}</td>
+                <td>{path.trial_count}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+          <p className="scope-note" data-testid="average-dq-boundary-interpretation">{boundaryResult.result.interpretation_boundary}</p>
         </div>
       </section>}
     </section>

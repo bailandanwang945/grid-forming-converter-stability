@@ -24,6 +24,11 @@ from backend.core.average_dq_ablation import (
     ModeMatch,
     run_average_dq_anchor_ablation,
 )
+from backend.core.average_dq_boundary import (
+    AverageDQBoundaryError,
+    boundary_study_as_dict,
+    run_average_dq_boundary_study,
+)
 from backend.core.average_dq_presets import (
     ABLATION_PRESET_ID as AVERAGE_DQ_ABLATION_PRESET_ID,
     PRESET_ID as AVERAGE_DQ_PRESET_ID,
@@ -77,6 +82,9 @@ ReducedOrderPresetId = Literal[
 ]
 AverageDQPresetId = Literal["average-dq-smib-verification"]
 AverageDQAblationPresetId = Literal[
+    "average-dq-hierarchy-disagreement-ablation-v1"
+]
+AverageDQBoundaryPresetId = Literal[
     "average-dq-hierarchy-disagreement-ablation-v1"
 ]
 
@@ -235,6 +243,14 @@ class AverageDQAblationRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     preset_id: AverageDQAblationPresetId = AVERAGE_DQ_ABLATION_PRESET_ID
+
+
+class AverageDQBoundaryRequest(BaseModel):
+    """Run only the four frozen one-factor boundary paths."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    preset_id: AverageDQBoundaryPresetId = AVERAGE_DQ_ABLATION_PRESET_ID
 
 
 def _analysis_payload(request: AnalysisRequest) -> dict:
@@ -779,6 +795,7 @@ def _average_dq_ablation_payload(request: AverageDQAblationRequest) -> dict:
         label: sum(point.stability == label for point in points)
         for label in ("stable", "marginal", "unstable")
     }
+
     extra_tracking_counts = {
         label: sum(point.extra_mode.status == label for point in points)
         for label in ("matched", "pending")
@@ -907,6 +924,40 @@ def _average_dq_ablation_payload(request: AverageDQAblationRequest) -> dict:
     }
 
 
+def _average_dq_boundary_payload(request: AverageDQBoundaryRequest) -> dict:
+    topology, parameters = build_average_dq_ablation_anchor_case()
+    study = run_average_dq_boundary_study(topology, parameters)
+    return {
+        "run_id": f"average-dq-boundary-{request.preset_id}",
+        "status": "completed",
+        "analysis_mode": "fixed-average-dq-one-factor-boundary-continuation-v1",
+        "preset_id": request.preset_id,
+        "result": boundary_study_as_dict(study),
+        "model_scope": {
+            "claim_level": "fixed-team-average-dq-one-factor-boundaries-only",
+            "statement": (
+                "从固定19点消融中四个稳定化端点出发，分别沿单因素路径求解"
+                "被追踪附加模态实部过零和完整16状态谱横坐标过零；二者独立"
+                "计算并报告模态交接。"
+            ),
+            "tracking_boundary": study.interpretation_boundary,
+            "paper_theorem_evaluated": False,
+            "physical_validation": False,
+            "causal_identification": False,
+            "accepts_arbitrary_parameter_paths": False,
+        },
+        "provenance": {
+            **average_dq_ablation_anchor_metadata(),
+            "implementation": "backend.core.average_dq_boundary",
+            "point_calculation": (
+                "fresh-workpoint-and-central-difference-linearization"
+            ),
+            "continuation": "adaptive-modal-tracking-plus-log-bisection",
+            "interpolation_used_for_reported_boundaries": False,
+        },
+    }
+
+
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok", "service": "gfm-stability-api", "version": "0.5.0-dev"}
@@ -1026,6 +1077,20 @@ def run_average_dq_ablation(request: AverageDQAblationRequest) -> dict:
     try:
         return _average_dq_ablation_payload(request)
     except (AverageDQAblationError, AverageDQModelError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.post("/api/average-dq/boundary")
+def run_average_dq_boundary(request: AverageDQBoundaryRequest) -> dict:
+    try:
+        return _average_dq_boundary_payload(request)
+    except (
+        AverageDQBoundaryError,
+        AverageDQAblationError,
+        AverageDQModelError,
+    ) as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except RuntimeError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error

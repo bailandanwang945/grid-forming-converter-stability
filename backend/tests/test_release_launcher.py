@@ -10,7 +10,7 @@ from unittest.mock import patch
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, Response
 
-from backend.launcher import run
+from backend.launcher import _find_available_port, run
 
 
 def acceptance_app() -> FastAPI:
@@ -117,6 +117,24 @@ def acceptance_app() -> FastAPI:
 
 
 class ReleaseLauncherTest(unittest.TestCase):
+    def test_default_port_search_skips_an_existing_listener(self) -> None:
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            listener.listen()
+            occupied_port = int(listener.getsockname()[1])
+            selected_port = _find_available_port(occupied_port, 20)
+
+        self.assertGreater(selected_port, occupied_port)
+        self.assertLess(selected_port, occupied_port + 20)
+
+    def test_default_port_search_reports_a_bounded_failure(self) -> None:
+        with patch("backend.launcher._port_is_available", return_value=False):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "No available local port was found",
+            ):
+                _find_available_port(8000, 3)
+
     def test_smoke_writes_cross_machine_runtime_evidence(self) -> None:
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))

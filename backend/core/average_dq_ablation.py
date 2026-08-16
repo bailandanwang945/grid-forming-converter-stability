@@ -19,6 +19,7 @@ from scipy.optimize import linear_sum_assignment
 
 from backend.core.average_dq_model import (
     STATE_LABELS,
+    AverageDQModel,
     AverageDQModelError,
     build_average_dq_model,
     compare_with_quasisteady_reduction,
@@ -148,6 +149,19 @@ class AverageDQAblationStudy:
     @property
     def point_count(self) -> int:
         return len(self.points)
+
+
+@dataclass(frozen=True)
+class AnchorModeTrackingContext:
+    """Frozen baseline and modal identities shared by bounded studies."""
+
+    topology: NetworkTopology
+    parameters: AverageDQGFMParameters
+    baseline_model: AverageDQModel
+    baseline_signatures: tuple[ModalSignature, ...]
+    extra_reference_index: int
+    synchronous_reference_index: int
+    matching_kwargs: dict[str, float]
 
 
 def _validate_matrix(state_matrix: NDArray[np.float64]) -> NDArray[np.float64]:
@@ -865,7 +879,7 @@ def _trace_scenario_modes(
     )
 
 
-def run_average_dq_anchor_ablation(
+def prepare_anchor_mode_tracking(
     topology: NetworkTopology,
     parameters: AverageDQGFMParameters,
     *,
@@ -876,8 +890,8 @@ def run_average_dq_anchor_ablation(
     maximum_condition_number: float = DEFAULT_MAXIMUM_CONDITION_NUMBER,
     maximum_eigenpair_residual: float = DEFAULT_MAXIMUM_EIGENPAIR_RESIDUAL,
     minimum_relative_margin: float = DEFAULT_MINIMUM_RELATIVE_MARGIN,
-) -> AverageDQAblationStudy:
-    """Run the fixed 19-point ablation without mutating either input model."""
+) -> AnchorModeTrackingContext:
+    """Freeze the hierarchy-disagreement anchor and its two named modes."""
 
     if not isinstance(topology, NetworkTopology):
         raise TypeError("topology 必须是经过校验的 NetworkTopology 实例。")
@@ -930,41 +944,107 @@ def run_average_dq_anchor_ablation(
             ]
         )
     )
+    return AnchorModeTrackingContext(
+        topology=baseline_topology,
+        parameters=baseline_parameters,
+        baseline_model=baseline,
+        baseline_signatures=baseline_signatures,
+        extra_reference_index=extra_reference_index,
+        synchronous_reference_index=sync_reference_index,
+        matching_kwargs=matching_kwargs,
+    )
+
+
+def evaluate_anchor_factors(
+    context: AnchorModeTrackingContext,
+    factors: tuple[tuple[str, float], ...],
+) -> tuple[AverageDQModel, ModeMatch, ModeMatch]:
+    """Rebuild one factored case and track both named modes from the anchor."""
+
+    if not isinstance(context, AnchorModeTrackingContext):
+        raise TypeError("context 必须由 prepare_anchor_mode_tracking 构造。")
+    factor_values: dict[str, float] = {}
+    for name, value in factors:
+        numeric = float(value)
+        if name not in FACTOR_ORDER:
+            raise AverageDQAblationError(f"未知消融因素：{name}。")
+        if name in factor_values:
+            raise AverageDQAblationError(f"消融因素 {name!r} 重复。")
+        if not isfinite(numeric) or numeric < 0.0:
+            raise AverageDQAblationError("消融倍率必须是有限非负数。")
+        factor_values[name] = numeric
+    canonical_factors = _factor_tuple(factor_values)
+    try:
+        model = _build_factored_model(
+            context.topology,
+            context.parameters,
+            factor_values,
+        )
+    except AverageDQModelError as error:
+        raise AverageDQAblationError(
+            f"消融工况无法重建工作点或线性化：{error}"
+        ) from error
+    extra_match, sync_match = _trace_scenario_modes(
+        context.topology,
+        context.parameters,
+        context.baseline_signatures,
+        canonical_factors,
+        extra_index=context.extra_reference_index,
+        synchronous_index=context.synchronous_reference_index,
+        matching_kwargs=context.matching_kwargs,
+    )
+    if extra_match.candidate_index == sync_match.candidate_index:
+        extra_match = replace(
+            extra_match,
+            status="pending",
+            reason="shared-candidate-with-synchronous-mode",
+        )
+        sync_match = replace(
+            sync_match,
+            status="pending",
+            reason="shared-candidate-with-extra-mode",
+        )
+    return model, extra_match, sync_match
+
+
+def run_average_dq_anchor_ablation(
+    topology: NetworkTopology,
+    parameters: AverageDQGFMParameters,
+    *,
+    minimum_confidence: float = DEFAULT_MINIMUM_CONFIDENCE,
+    minimum_combined_mac: float = DEFAULT_MINIMUM_COMBINED_MAC,
+    minimum_individual_mac: float = DEFAULT_MINIMUM_INDIVIDUAL_MAC,
+    maximum_normalized_distance: float = DEFAULT_MAXIMUM_NORMALIZED_DISTANCE,
+    maximum_condition_number: float = DEFAULT_MAXIMUM_CONDITION_NUMBER,
+    maximum_eigenpair_residual: float = DEFAULT_MAXIMUM_EIGENPAIR_RESIDUAL,
+    minimum_relative_margin: float = DEFAULT_MINIMUM_RELATIVE_MARGIN,
+) -> AverageDQAblationStudy:
+    """Run the fixed 19-point ablation without mutating either input model."""
+
+    context = prepare_anchor_mode_tracking(
+        topology,
+        parameters,
+        minimum_confidence=minimum_confidence,
+        minimum_combined_mac=minimum_combined_mac,
+        minimum_individual_mac=minimum_individual_mac,
+        maximum_normalized_distance=maximum_normalized_distance,
+        maximum_condition_number=maximum_condition_number,
+        maximum_eigenpair_residual=maximum_eigenpair_residual,
+        minimum_relative_margin=minimum_relative_margin,
+    )
+    baseline = context.baseline_model
+    baseline_reduction = compare_with_quasisteady_reduction(baseline)
+    baseline_extra = _dominant(baseline.poles_per_s)
+    baseline_sync = baseline_reduction.matched_full_pole_per_s
 
     points: list[AblationPoint] = []
     for scenario_id, factors in _scenario_definitions():
-        try:
-            model = _build_factored_model(
-                baseline_topology,
-                baseline_parameters,
-                dict(factors),
-            )
-        except AverageDQModelError as error:
-            raise AverageDQAblationError(
-                f"消融工况 {scenario_id!r} 无法重建工作点或线性化：{error}"
-            ) from error
+        model, extra_match, sync_match = evaluate_anchor_factors(
+            context,
+            factors,
+        )
         reduction = compare_with_quasisteady_reduction(model)
         matrix = model.linearization.closed_state_matrix
-        extra_match, sync_match = _trace_scenario_modes(
-            baseline_topology,
-            baseline_parameters,
-            baseline_signatures,
-            factors,
-            extra_index=extra_reference_index,
-            synchronous_index=sync_reference_index,
-            matching_kwargs=matching_kwargs,
-        )
-        if extra_match.candidate_index == sync_match.candidate_index:
-            extra_match = replace(
-                extra_match,
-                status="pending",
-                reason="shared-candidate-with-synchronous-mode",
-            )
-            sync_match = replace(
-                sync_match,
-                status="pending",
-                reason="shared-candidate-with-extra-mode",
-            )
         (
             extra_groups,
             extra_condition,

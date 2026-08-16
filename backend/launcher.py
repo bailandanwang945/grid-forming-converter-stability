@@ -40,6 +40,23 @@ def _port_is_available(port: int) -> bool:
         return probe.connect_ex((HOST, port)) != 0
 
 
+def _find_available_port(
+    preferred_port: int = DEFAULT_PORT,
+    maximum_attempts: int = 100,
+) -> int:
+    for offset in range(maximum_attempts):
+        candidate = preferred_port + offset
+        if candidate > 65535:
+            break
+        if _port_is_available(candidate):
+            return candidate
+    last_candidate = min(preferred_port + maximum_attempts - 1, 65535)
+    raise RuntimeError(
+        "No available local port was found from "
+        f"{preferred_port} to {last_candidate}."
+    )
+
+
 def _wait_for_health(url: str, timeout_s: float = 30.0) -> None:
     deadline = time.monotonic() + timeout_s
     last_error: Exception | None = None
@@ -377,7 +394,15 @@ def run(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--port", type=int, default=DEFAULT_PORT)
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=None,
+        help=(
+            "use a specific local port; when omitted, the launcher searches "
+            "from port 8000 for the first available port"
+        ),
+    )
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--smoke-test", action="store_true")
     parser.add_argument(
@@ -385,10 +410,20 @@ def main() -> int:
         help="write machine-readable runtime acceptance evidence to this JSON file",
     )
     arguments = parser.parse_args()
-    if not 1024 <= arguments.port <= 65535:
+    if arguments.port is not None and not 1024 <= arguments.port <= 65535:
         parser.error("--port must be between 1024 and 65535")
+    selected_port = (
+        arguments.port
+        if arguments.port is not None
+        else _find_available_port(DEFAULT_PORT)
+    )
+    if arguments.port is None and selected_port != DEFAULT_PORT:
+        print(
+            f"[GFM] Port {DEFAULT_PORT} is in use; "
+            f"using local port {selected_port} instead."
+        )
     return run(
-        arguments.port,
+        selected_port,
         open_browser=not arguments.no_browser and not arguments.smoke_test,
         smoke_test=arguments.smoke_test,
         evidence_file=arguments.evidence_file,
