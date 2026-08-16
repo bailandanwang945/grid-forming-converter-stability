@@ -820,7 +820,7 @@ select:focus, input:focus { background: #ffffff; border-color: rgba(15, 111, 111
 
 .controls .quiet-button { margin-top: 10px; color: #0f6f6f; background: rgba(255,255,255,.62); border-color: rgba(15,111,111,.28); box-shadow: none; }
 .controls .quiet-button:not(:disabled):hover { color: #fff; background: #0f6f6f; border-color: #0f6f6f; }
-.study-launcher { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.study-launcher { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .study-task {
   min-width: 0;
   min-height: 198px;
@@ -837,12 +837,14 @@ select:focus, input:focus { background: #ffffff; border-color: rgba(15, 111, 111
 .study-task::after { content: ""; position: absolute; right: -30px; top: -34px; width: 100px; height: 100px; border-radius: 50%; background: rgba(22, 155, 155, .08); }
 .study-task:nth-child(2)::after { background: rgba(240, 138, 60, .1); }
 .study-task:nth-child(3)::after { background: rgba(124, 111, 205, .09); }
+.study-task:nth-child(4)::after { background: rgba(79, 126, 163, .1); }
 .study-task-heading { display: flex; align-items: center; gap: 8px; position: relative; z-index: 1; }
 .study-task-heading span { width: 27px; height: 27px; display: grid; place-items: center; color: #fff; background: #151515; border-radius: 8px; font-size: 10px; font-weight: 800; }
 .study-task-heading small { color: var(--ink-faint); font-size: 9px; font-weight: 700; letter-spacing: .11em; }
 .study-task h3 { margin: 16px 0 8px; color: var(--ink); font-size: 14px; }
 .study-task p { margin: 0 0 16px; color: var(--ink-faint); font-size: 10px; line-height: 1.65; }
 .study-task-actions { margin-top: auto; display: grid; grid-template-columns: minmax(0, 1fr) 38px; gap: 7px; }
+.study-task-actions.has-two-icons { grid-template-columns: minmax(0, 1fr) 38px 38px; }
 .study-task-actions button { min-height: 38px; padding: 8px 10px; color: #fff; background: #151515; border: 1px solid #151515; border-radius: 10px; cursor: pointer; font-size: 10px; font-weight: 700; }
 .study-task-actions button:not(:disabled):hover { background: #0f6f6f; border-color: #0f6f6f; }
 .study-task-actions button:disabled { cursor: not-allowed; opacity: .35; }

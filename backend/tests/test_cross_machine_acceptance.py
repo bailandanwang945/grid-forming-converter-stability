@@ -95,13 +95,32 @@ def _write_valid_evidence(
             },
         },
     }
-    if runtime_schema == "gfm-runtime-acceptance/1.3":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.3",
+        "gfm-runtime-acceptance/1.4",
+    ):
         runtime["checks"]["fig8_sensitivity"] = {
             "baseline_reconstruction_exact": True,
             "common_scale_invariant_on_tested_range": True,
             "stable_case_remains_covered_in_all_tested_settings": True,
             "nine_point_detects_uncovered_region": False,
             "nine_point_unobserved_full_grid_uncovered_points": 75,
+            "report": "passed",
+        }
+    if runtime_schema == "gfm-runtime-acceptance/1.4":
+        runtime["checks"]["average_dq_port_identification"] = {
+            "preset_id": "average-dq-smib-verification",
+            "frequencies_hz": [0.2, 2.0, 20.0],
+            "source_amplitude_pu": 1.0e-4,
+            "point_count": 3,
+            "passed": True,
+            "maximum_magnitude_relative_error": 0.0002,
+            "maximum_phase_error_deg": 0.03,
+            "maximum_harmonic_residual_ratio": 0.001,
+            "maximum_voltage_matrix_condition_number": 3.1,
+            "amplitude_halving_maximum_element_relative_difference": 0.0003,
+            "physical_validation": False,
+            "emt_validation": False,
             "report": "passed",
         }
     (directory / "cross-machine-acceptance.json").write_text(json.dumps(acceptance))
@@ -178,6 +197,28 @@ class CrossMachineAcceptanceTest(unittest.TestCase):
             )
         self.assertFalse(review.automated_evidence_passed)
         self.assertIn("采样敏感性", " ".join(review.errors))
+
+    def test_runtime_1p4_requires_port_identification_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            _write_valid_evidence(
+                directory,
+                runtime_schema="gfm-runtime-acceptance/1.4",
+            )
+            runtime_path = directory / "runtime-evidence.json"
+            runtime = json.loads(runtime_path.read_text())
+            runtime["checks"]["average_dq_port_identification"][
+                "maximum_phase_error_deg"
+            ] = 1.1
+            runtime_path.write_text(json.dumps(runtime))
+            review = review_cross_machine_evidence(
+                directory,
+                expected_version=VERSION,
+                expected_commit=COMMIT,
+                expected_zip_sha256=ZIP_HASH,
+            )
+        self.assertFalse(review.automated_evidence_passed)
+        self.assertIn("三频点端口正弦辨识", " ".join(review.errors))
 
 
 if __name__ == "__main__":

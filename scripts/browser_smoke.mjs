@@ -231,6 +231,46 @@ try {
   }
   console.log('[browser] Average-dq ablation and boundary workflow passed.')
 
+  await page.getByTestId('average-dq-port-identification-run').click()
+  await page.getByTestId('average-dq-port-identification-results').waitFor({ timeout: 45000 })
+  const portIdentificationSummary = await page.getByTestId('average-dq-port-identification-summary').innerText()
+  for (const evidence of ['三频点判定\n全部通过', '最大幅值误差\n0.0171%', '最大相位误差\n0.0231°']) {
+    if (!portIdentificationSummary.includes(evidence)) {
+      throw new Error(`Average-dq port-identification summary is missing ${evidence}: ${portIdentificationSummary}`)
+    }
+  }
+  for (const frequency of ['0.2', '2', '20']) {
+    await page.getByTestId(`average-dq-port-identification-row-${frequency}`).waitFor({ timeout: 15000 })
+  }
+  const portBoundary = await page.getByTestId('average-dq-port-identification-boundary').innerText()
+  for (const evidence of ['不确认真实硬件', '开端口矩阵并非渐近稳定', '不评价论文稳定性充分条件']) {
+    if (!portBoundary.includes(evidence)) {
+      throw new Error(`Average-dq port-identification boundary is missing ${evidence}.`)
+    }
+  }
+  const portDownloadPromise = page.waitForEvent('download')
+  await page.getByTestId('average-dq-port-identification-export').click()
+  const portDownload = await portDownloadPromise
+  if (!portDownload.suggestedFilename().endsWith('.json')) {
+    throw new Error('Average-dq port-identification JSON export failed.')
+  }
+  const portReportPromise = page.waitForEvent('popup')
+  await page.getByTestId('average-dq-port-identification-report').click()
+  const portReport = await portReportPromise
+  await portReport.waitForFunction(
+    () => document.body?.innerText.includes('平均值 dq 三频点端口正弦辨识报告'),
+    null,
+    { timeout: 45000 },
+  )
+  const portReportText = await portReport.locator('body').innerText()
+  for (const evidence of ['Y=I·V⁻¹', '不评价论文稳定性充分条件', '未完成硬件、硬件在环或可信 EMT 确认']) {
+    if (!portReportText.includes(evidence)) {
+      throw new Error(`Average-dq port-identification report is missing ${evidence}.`)
+    }
+  }
+  await portReport.close()
+  console.log('[browser] Average-dq port-identification workflow passed.')
+
   await page.getByLabel('P* / p.u.').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
   await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })

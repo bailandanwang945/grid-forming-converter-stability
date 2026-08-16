@@ -10,13 +10,13 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 脚本依次执行：
 
-1. Python `unittest` 全套测试，当前测试集为 133 项；
+1. Python `unittest` 全套测试，当前测试集为 142 项；
 2. React/TypeScript 前端生产构建；
 3. 开发态一键启动器冒烟测试；
 4. 使用本机现有 Chrome 或 Edge 的浏览器端到端流程；
 5. 若能找到 MATLAB，则运行 `experiments/run_unit_tests.m`。
 
-浏览器端到端流程覆盖 Fig. 8 失稳工况的 75 个未覆盖点、独立模型参数修改、案例导出—导入—重算、打印式报告，以及 441 点 D–X 参数扫描。它验证软件链路实际可操作，不替代对模型物理有效性的确认。
+浏览器端到端流程覆盖 Fig. 8 失稳工况的 75 个未覆盖点、独立模型参数修改、案例导出—导入—重算、441 点 D–X 参数扫描、平均值 dq 模型研究任务，以及三频点端口辨识的 JSON/HTML 导出。它验证软件链路实际可操作，不替代对模型物理有效性的确认。
 
 首次运行如缺少项目依赖，脚本会根据 `backend/requirements-dev.txt` 和前端锁文件安装依赖。若只允许检查现有环境，使用：
 
@@ -31,7 +31,7 @@ $env:MATLAB_ROOT = "D:\matlab"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 ```
 
-`D:\matlab` 仅为示例，应替换为本机实际安装目录。当前仓库中可追溯的最新 MATLAB 记录为 128 Passed、0 Failed、0 Incomplete；Python 当前测试集为 133 项。两者验证不同实现，不应相加或互相替代。
+`D:\matlab` 仅为示例，应替换为本机实际安装目录。当前仓库中可追溯的最新 MATLAB 记录为 128 Passed、0 Failed、0 Incomplete；Python 当前测试集为 142 项。两者验证不同实现，不应相加或互相替代。
 
 成功标记分为：
 
@@ -41,7 +41,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 ## Windows 发布验收
 
-源码验收要求 Windows 10/11、Python 3.10+ 和 Node.js 20+。`scripts/build_release.ps1` 与 `packaging/` 已在本机生成 Windows `onedir` 候选包；打包后的同一进程能够提供静态前端和 API，并通过 Fig. 8 固定 1000 点复算（75 个未覆盖点）及退出后端口释放冒烟。
+源码验收要求 Windows 10/11、Python 3.10+ 和 Node.js 20+。`scripts/build_release.ps1` 与 `packaging/` 已在本机生成历史 Windows `onedir` 候选包；当前源码的同一进程能够提供静态前端和 API，并通过 Fig. 8 固定 1000 点复算（75 个未覆盖点）、平均值 dq 模型、42点层级扫描、三频点端口辨识、六类报告及退出后端口释放冒烟。这里的源码冒烟不等同于已经重新构建 v0.5 候选包。
 
 本机候选产物记录如下：
 

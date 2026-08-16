@@ -322,6 +322,65 @@ class AverageDQApiTest(unittest.TestCase):
         self.assertEqual(custom_state.status_code, 422)
         self.assertEqual(unknown.status_code, 422)
 
+    def test_fixed_port_identification_returns_traceable_three_frequency_evidence(
+        self,
+    ) -> None:
+        response = self.client.post(
+            "/api/average-dq/port-identification",
+            json={"preset_id": "average-dq-smib-verification"},
+        )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        payload = response.json()
+        result = payload["result"]
+        self.assertTrue(result["summary"]["passed"])
+        self.assertEqual(result["contract"]["frequencies_hz"], [0.2, 2.0, 20.0])
+        self.assertEqual(result["contract"]["source_amplitude_pu"], 1.0e-4)
+        self.assertEqual(len(result["points"]), 3)
+        self.assertTrue(all(point["passed"] for point in result["points"]))
+        self.assertLess(
+            result["summary"]["maximum_magnitude_relative_error"], 0.01
+        )
+        self.assertLess(result["summary"]["maximum_phase_error_deg"], 1.0)
+        self.assertLess(
+            result["amplitude_halving_check_at_2hz"][
+                "maximum_element_relative_difference"
+            ],
+            1.0e-3,
+        )
+        self.assertGreater(
+            payload["provenance"][
+                "device_open_port_spectral_abscissa_per_s"
+            ],
+            0.0,
+        )
+        self.assertFalse(payload["model_scope"]["physical_validation"])
+        self.assertFalse(payload["model_scope"]["emt_validation"])
+        json.dumps(payload, allow_nan=False)
+
+    def test_port_identification_report_and_fixed_contract_preserve_boundaries(
+        self,
+    ) -> None:
+        report = self.client.post(
+            "/api/reports/average-dq-port-identification",
+            json={"preset_id": "average-dq-smib-verification"},
+        )
+        custom = self.client.post(
+            "/api/average-dq/port-identification",
+            json={
+                "preset_id": "average-dq-smib-verification",
+                "frequencies_hz": [1.0],
+            },
+        )
+
+        self.assertEqual(report.status_code, 200, report.text)
+        self.assertIn("平均值 dq 三频点端口正弦辨识报告", report.text)
+        self.assertIn("Y=I·V⁻¹", report.text)
+        self.assertIn("设备开端口状态矩阵", report.text)
+        self.assertIn("不评价论文稳定性充分条件", report.text)
+        self.assertIn("未完成硬件、硬件在环或可信 EMT 确认", report.text)
+        self.assertEqual(custom.status_code, 422)
+
 
 if __name__ == "__main__":
     unittest.main()

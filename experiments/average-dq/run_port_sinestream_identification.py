@@ -13,8 +13,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import numpy as np
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
@@ -22,8 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from backend.core.average_dq_model import build_average_dq_model  # noqa: E402
 from backend.core.average_dq_port_identification import (  # noqa: E402
-    PortIdentificationPoint,
-    identify_port_admittance_with_sinestream,
+    evaluate_fixed_port_identification_verification,
 )
 from backend.core.average_dq_presets import (  # noqa: E402
     PRESET_ID,
@@ -36,78 +33,10 @@ CSV_FILENAME = "port_sinestream_identification_elements.csv"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "results" / "average-dq-port-identification"
 
 
-def _complex_value(value: complex) -> dict[str, float]:
-    return {
-        "real": float(value.real),
-        "imag": float(value.imag),
-        "magnitude": float(abs(value)),
-        "phase_deg": float(np.angle(value, deg=True)),
-    }
-
-
-def _complex_matrix(values: np.ndarray) -> list[list[dict[str, float]]]:
-    return [
-        [_complex_value(complex(value)) for value in row]
-        for row in np.asarray(values)
-    ]
-
-
-def _point_payload(point: PortIdentificationPoint) -> dict[str, Any]:
-    return {
-        "frequency_hz": point.frequency_hz,
-        "settling_periods": point.settling_periods,
-        "measurement_periods": point.measurement_periods,
-        "samples_per_period": point.samples_per_period,
-        "solver_method": point.solver_method,
-        "identified_admittance_pu": _complex_matrix(
-            point.identified_admittance_pu
-        ),
-        "linearized_admittance_pu": _complex_matrix(
-            point.linearized_admittance_pu
-        ),
-        "pcc_voltage_phasor_matrix_pu": _complex_matrix(
-            point.pcc_voltage_phasor_matrix_pu
-        ),
-        "device_current_phasor_matrix_pu": _complex_matrix(
-            point.device_current_phasor_matrix_pu
-        ),
-        "voltage_matrix_condition_number": (
-            point.voltage_matrix_condition_number
-        ),
-        "magnitude_relative_error": point.magnitude_relative_error.tolist(),
-        "phase_error_deg": point.phase_error_deg.tolist(),
-        "maximum_magnitude_relative_error": (
-            point.maximum_magnitude_relative_error
-        ),
-        "maximum_phase_error_deg": point.maximum_phase_error_deg,
-        "maximum_harmonic_residual_ratio": (
-            point.maximum_harmonic_residual_ratio
-        ),
-        "passed": point.passed,
-    }
-
-
 def build_payload() -> dict[str, Any]:
     topology, parameters = build_average_dq_verification_case()
     model = build_average_dq_model(topology, parameters)
-    study = identify_port_admittance_with_sinestream(model)
-    half_amplitude = identify_port_admittance_with_sinestream(
-        model,
-        [2.0],
-        source_amplitude_pu=0.5 * study.source_amplitude_pu,
-    ).points[0]
-    baseline_2hz = next(
-        point for point in study.points if point.frequency_hz == 2.0
-    )
-    amplitude_halving_difference = np.abs(
-        half_amplitude.identified_admittance_pu
-        - baseline_2hz.identified_admittance_pu
-    )
-    amplitude_halving_relative_difference = amplitude_halving_difference / np.maximum(
-        np.abs(baseline_2hz.identified_admittance_pu),
-        np.finfo(np.float64).eps,
-    )
-    points = [_point_payload(point) for point in study.points]
+    verification = evaluate_fixed_port_identification_verification(model)
     return {
         "run_id": "average-dq-three-frequency-port-sinestream-v1",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -115,74 +44,15 @@ def build_payload() -> dict[str, Any]:
             "experiments/average-dq/run_port_sinestream_identification.py"
         ),
         "preset_id": PRESET_ID,
-        "summary": {
-            "passed": study.passed,
-            "frequency_count": len(study.points),
-            "maximum_magnitude_relative_error": max(
-                point.maximum_magnitude_relative_error
-                for point in study.points
-            ),
-            "maximum_phase_error_deg": max(
-                point.maximum_phase_error_deg for point in study.points
-            ),
-            "maximum_harmonic_residual_ratio": max(
-                point.maximum_harmonic_residual_ratio
-                for point in study.points
-            ),
-            "maximum_voltage_matrix_condition_number": max(
-                point.voltage_matrix_condition_number
-                for point in study.points
-            ),
-        },
-        "contract": {
-            "frequencies_hz": [point.frequency_hz for point in study.points],
-            "source_amplitude_pu": study.source_amplitude_pu,
-            "minimum_settling_time_s": study.minimum_settling_time_s,
-            "measurement_periods": study.points[0].measurement_periods,
-            "samples_per_period": study.points[0].samples_per_period,
-            "magnitude_error_limit": study.magnitude_error_limit,
-            "phase_error_limit_deg": study.phase_error_limit_deg,
-            "harmonic_residual_limit": study.harmonic_residual_limit,
-            "voltage_matrix_condition_limit": (
-                study.voltage_matrix_condition_limit
-            ),
-            "frame": study.frame,
-            "current_direction": study.current_direction,
-        },
-        "points": points,
-        "amplitude_halving_check_at_2hz": {
-            "baseline_amplitude_pu": study.source_amplitude_pu,
-            "halved_amplitude_pu": 0.5 * study.source_amplitude_pu,
-            "maximum_element_relative_difference": float(
-                np.max(amplitude_halving_relative_difference)
-            ),
-            "halved_amplitude_point": _point_payload(half_amplitude),
-        },
-        "model_scope": {
-            "claim_level": "internal-nonlinear-versus-linear-software-verification",
-            "physical_validation": False,
-            "emt_validation": False,
-            "paper_fig8_fixture": False,
-            "statement": (
-                "在团队定义的单机平均值 dq 校核算例和所测三个频点内，"
-                "非线性闭环正弦辨识支持端口线性化实现的一致性；"
-                "该结果不确认真实硬件或电磁暂态模型。"
-            ),
-        },
+        "summary": verification["summary"],
+        "contract": verification["contract"],
+        "points": verification["points"],
+        "amplitude_halving_check_at_2hz": verification[
+            "amplitude_halving_check_at_2hz"
+        ],
+        "model_scope": verification["model_scope"],
         "provenance": {
-            "implementation": (
-                "backend.core.average_dq_port_identification"
-            ),
-            "identification_path": study.identification_path,
-            "device_open_port_spectral_abscissa_per_s": (
-                study.device_open_port_spectral_abscissa_per_s
-            ),
-            "mathworks_release_checked": "R2024b",
-            "mathworks_functions_checked": [
-                "frestimate",
-                "frest.Sinestream",
-                "tfestimate",
-            ],
+            **verification["provenance"],
             "mathworks_workflow_reference": (
                 "https://www.mathworks.com/help/releases/R2024b/slcontrol/ug/"
                 "estimate-frequency-response-matlab-code.html"
@@ -191,7 +61,6 @@ def build_payload() -> dict[str, Any]:
                 "https://www.mathworks.com/help/releases/R2024b/slcontrol/"
                 "generate-perturbation-signals.html"
             ),
-            "randomness": "none-deterministic-ode-and-least-squares",
         },
     }
 

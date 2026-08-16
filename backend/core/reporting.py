@@ -740,3 +740,97 @@ code {{ font-family:Consolas,monospace; font-size:10px; }} .columns {{ display:g
 </tbody></table>
 <div class="footer">本报告由本地分析平台从完整输入拓扑与参数即时计算。它证明当前方程和软件实现之间的内部一致性；在没有外部实物、可信 EMT 或独立实验数据前，不宣称完成工程模型确认。</div>
 </body></html>"""
+
+
+def render_average_dq_port_identification_report(result: dict) -> str:
+    """Render the frozen nonlinear port-identification evidence."""
+
+    analysis = result["result"]
+    summary = analysis["summary"]
+    contract = analysis["contract"]
+    points = analysis["points"]
+    scope = result["model_scope"]
+    provenance = result["provenance"]
+    topology = result["input_topology"]
+    amplitude_check = analysis["amplitude_halving_check_at_2hz"]
+    summary_rows = "".join(
+        "<tr>"
+        f"<td>{point['frequency_hz']:.6g}</td>"
+        f"<td>{point['settling_periods']}</td>"
+        f"<td>{escape(point['solver_method'])}</td>"
+        f"<td>{100 * point['maximum_magnitude_relative_error']:.6g}%</td>"
+        f"<td>{point['maximum_phase_error_deg']:.6g}</td>"
+        f"<td>{100 * point['maximum_harmonic_residual_ratio']:.6g}%</td>"
+        f"<td>{point['voltage_matrix_condition_number']:.6g}</td>"
+        f"<td>{'通过' if point['passed'] else '未通过'}</td>"
+        "</tr>"
+        for point in points
+    )
+    labels = ((0, 0, "Ydd"), (0, 1, "Ydq"), (1, 0, "Yqd"), (1, 1, "Yqq"))
+    detail_sections: list[str] = []
+    for point in points:
+        detail_rows = "".join(
+            "<tr>"
+            f"<td>{label}</td>"
+            f"<td>{point['identified_admittance_pu'][row][column]['magnitude']:.8g}</td>"
+            f"<td>{point['linearized_admittance_pu'][row][column]['magnitude']:.8g}</td>"
+            f"<td>{100 * point['magnitude_relative_error'][row][column]:.6g}%</td>"
+            f"<td>{point['identified_admittance_pu'][row][column]['phase_deg']:.7g}</td>"
+            f"<td>{point['linearized_admittance_pu'][row][column]['phase_deg']:.7g}</td>"
+            f"<td>{point['phase_error_deg'][row][column]:.6g}</td>"
+            "</tr>"
+            for row, column, label in labels
+        )
+        detail_sections.append(
+            f"<h3>{point['frequency_hz']:.6g} Hz 的 2×2 导纳元素</h3>"
+            "<table><thead><tr><th>元素</th><th>非线性辨识幅值</th>"
+            "<th>线性化幅值</th><th>幅值误差</th><th>非线性辨识相位 / °</th>"
+            "<th>线性化相位 / °</th><th>相位误差 / °</th></tr></thead>"
+            f"<tbody>{detail_rows}</tbody></table>"
+        )
+    return f"""<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>平均值 dq 三频点端口正弦辨识报告</title>
+<style>
+@page {{ size:A4; margin:14mm; }}
+body {{ font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif; color:#202b33; margin:0; font-size:11px; line-height:1.6; }}
+h1 {{ font-size:21px; margin:0 0 4px; }} h2 {{ font-size:15px; margin:20px 0 8px; border-left:4px solid #176e64; padding-left:9px; }}
+h3 {{ font-size:12px; margin:14px 0 6px; }} .sub {{ color:#697884; }}
+.notice {{ padding:10px 13px; background:#fff5df; border:1px solid #edd7a8; border-radius:7px; }}
+.grid {{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:13px 0; }}
+.metric {{ padding:9px; background:#f3f7f7; border-radius:7px; }} .metric b {{ display:block; margin-top:3px; font-size:13px; }}
+table {{ width:100%; border-collapse:collapse; margin-bottom:9px; }} th,td {{ padding:5px 7px; border:1px solid #dce3e7; text-align:left; }} th {{ background:#f2f5f6; }}
+code {{ font-family:Consolas,monospace; font-size:10px; }} .footer {{ margin-top:22px; padding-top:9px; border-top:1px solid #dfe5e8; color:#75838d; font-size:9px; }}
+@media print {{ .print-tip {{ display:none; }} h2,h3 {{ break-after:avoid; }} table,.notice {{ break-inside:avoid; }} }}
+</style></head><body>
+<h1>平均值 dq 三频点端口正弦辨识报告</h1>
+<div class="sub">固定预设 · {escape(result['run_id'])} · {escape(topology['name'])}</div>
+<p class="print-tip"><button onclick="window.print()">打印或另存为 PDF</button></p>
+<div class="notice"><b>证据边界：</b>{escape(scope['statement'])}</div>
+<div class="grid">
+ <div class="metric">三频点判定<b>{'全部通过' if summary['passed'] else '存在未通过点'}</b></div>
+ <div class="metric">最大幅值误差<b>{100 * summary['maximum_magnitude_relative_error']:.6g}%</b></div>
+ <div class="metric">最大相位误差<b>{summary['maximum_phase_error_deg']:.6g}°</b></div>
+ <div class="metric">幅值减半最大变化<b>{100 * amplitude_check['maximum_element_relative_difference']:.6g}%</b></div>
+</div>
+<h2>辨识方法与冻结契约</h2>
+<p>在稳定的“变流器—外部 RL 线路—无限大母线”闭环中，分别沿固定全局 d、q 轴向无限大母线电压源注入正弦扰动。由非线性状态重构 PCC 电压相量矩阵 V 与网络流向设备为正的电流相量矩阵 I，再按 <code>Y=I·V⁻¹</code> 反演设备端口导纳。</p>
+<p>频率为 {', '.join(_number(value) for value in contract['frequencies_hz'])} Hz；源电压扰动幅值 {_number(contract['source_amplitude_pu'])} p.u.；最短暂态舍弃时间 {_number(contract['minimum_settling_time_s'])} s；测量 {contract['measurement_periods']} 个周期；每周期 {contract['samples_per_period']} 点。</p>
+<table><tbody>
+<tr><th>幅值相对误差门槛</th><td>&lt; {100 * contract['magnitude_error_limit']:.6g}%</td><th>相位误差门槛</th><td>&lt; {contract['phase_error_limit_deg']:.6g}°</td></tr>
+<tr><th>归一化残差门槛</th><td>&lt; {100 * contract['harmonic_residual_limit']:.6g}%</td><th>相量矩阵条件数门槛</th><td>&lt; {contract['voltage_matrix_condition_limit']:.6g}</td></tr>
+<tr><th>坐标系</th><td>{escape(contract['frame'])}</td><th>电流正方向</th><td>{escape(contract['current_direction'])}</td></tr>
+</tbody></table>
+<h2>三频点汇总</h2>
+<table><thead><tr><th>频率 / Hz</th><th>舍弃周期</th><th>求解器</th><th>最大幅值误差</th><th>最大相位误差 / °</th><th>最大残差</th><th>cond(V)</th><th>状态</th></tr></thead><tbody>{summary_rows}</tbody></table>
+<h2>逐元素幅相对照</h2>{''.join(detail_sections)}
+<h2>方法限制与来源</h2>
+<p>设备开端口状态矩阵的谱横坐标为 {provenance['device_open_port_spectral_abscissa_per_s']:+.7g} s⁻¹，故不采用“直接钳位 PCC 后等待设备稳态”的不适定试验。闭环源电压注入只用于内部实现核对。</p>
+<table><tbody>
+<tr><th>输入来源</th><td>{escape(provenance['source_kind'])}</td></tr>
+<tr><th>实现</th><td><code>{escape(provenance['implementation'])}</code></td></tr>
+<tr><th>MathWorks 方法校准</th><td>R2024b：{escape(', '.join(provenance['mathworks_functions_checked']))}</td></tr>
+<tr><th>论文 Fig. 8</th><td>明确隔离；本报告不是论文算例复现，也不评价论文稳定性充分条件</td></tr>
+<tr><th>外部模型确认</th><td>未完成硬件、硬件在环或可信 EMT 确认</td></tr>
+</tbody></table>
+<div class="footer">本报告由本地平台按冻结实验契约即时重新计算。三个频点的一致性属于团队平均值模型的软件内部验证，不能外推为连续全频段或物理系统的充分证据。</div>
+</body></html>"""

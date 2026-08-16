@@ -835,11 +835,89 @@ export type AverageDQBoundaryResult = {
   provenance: Record<string, unknown>
 }
 
+export type AverageDQPortIdentificationPoint = {
+  frequency_hz: number
+  settling_periods: number
+  measurement_periods: number
+  samples_per_period: number
+  solver_method: string
+  identified_admittance_pu: Array<Array<{
+    real: number
+    imag: number
+    magnitude: number
+    phase_deg: number
+  }>>
+  linearized_admittance_pu: Array<Array<{
+    real: number
+    imag: number
+    magnitude: number
+    phase_deg: number
+  }>>
+  magnitude_relative_error: number[][]
+  phase_error_deg: number[][]
+  voltage_matrix_condition_number: number
+  maximum_magnitude_relative_error: number
+  maximum_phase_error_deg: number
+  maximum_harmonic_residual_ratio: number
+  passed: boolean
+}
+
+export type AverageDQPortIdentificationResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  preset_id: 'average-dq-smib-verification'
+  input_topology: NetworkTopology
+  input_parameters: AverageDQParameters
+  result: {
+    summary: {
+      passed: boolean
+      frequency_count: number
+      maximum_magnitude_relative_error: number
+      maximum_phase_error_deg: number
+      maximum_harmonic_residual_ratio: number
+      maximum_voltage_matrix_condition_number: number
+    }
+    contract: {
+      frequencies_hz: number[]
+      source_amplitude_pu: number
+      minimum_settling_time_s: number
+      measurement_periods: number
+      samples_per_period: number
+      magnitude_error_limit: number
+      phase_error_limit_deg: number
+      harmonic_residual_limit: number
+      voltage_matrix_condition_limit: number
+      frame: string
+      current_direction: string
+    }
+    points: AverageDQPortIdentificationPoint[]
+    amplitude_halving_check_at_2hz: {
+      baseline_amplitude_pu: number
+      halved_amplitude_pu: number
+      maximum_element_relative_difference: number
+      halved_amplitude_point: AverageDQPortIdentificationPoint
+    }
+  }
+  model_scope: {
+    claim_level: string
+    physical_validation: boolean
+    emt_validation: boolean
+    paper_fig8_fixture: boolean
+    statement: string
+  }
+  provenance: Record<string, unknown>
+}
+
 type AverageDQAblationInput = {
   preset_id: AverageDQAblationPresetId
 }
 
-async function averageDQRequest(path: string, input: AverageDQAnalysisInput | AverageDQScanInput | AverageDQAblationInput) {
+type AverageDQPortIdentificationInput = {
+  preset_id: 'average-dq-smib-verification'
+}
+
+async function averageDQRequest(path: string, input: AverageDQAnalysisInput | AverageDQScanInput | AverageDQAblationInput | AverageDQPortIdentificationInput) {
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -877,4 +955,16 @@ export async function runAverageDQBoundary(): Promise<AverageDQBoundaryResult> {
   return (await averageDQRequest('/api/average-dq/boundary', {
     preset_id: 'average-dq-hierarchy-disagreement-ablation-v1',
   })).json()
+}
+
+export async function runAverageDQPortIdentification(): Promise<AverageDQPortIdentificationResult> {
+  return (await averageDQRequest('/api/average-dq/port-identification', {
+    preset_id: 'average-dq-smib-verification',
+  })).json()
+}
+
+export async function getAverageDQPortIdentificationReportHtml(): Promise<string> {
+  return (await averageDQRequest('/api/reports/average-dq-port-identification', {
+    preset_id: 'average-dq-smib-verification',
+  })).text()
 }

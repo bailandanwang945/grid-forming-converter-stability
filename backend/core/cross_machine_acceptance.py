@@ -97,8 +97,9 @@ def review_cross_machine_evidence(
     if runtime_schema not in (
         "gfm-runtime-acceptance/1.2",
         "gfm-runtime-acceptance/1.3",
+        "gfm-runtime-acceptance/1.4",
     ):
-        errors.append("运行时证据版本不是受支持的 1.2 或 1.3")
+        errors.append("运行时证据版本不是受支持的 1.2、1.3 或 1.4")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -173,6 +174,13 @@ def review_cross_machine_evidence(
         if isinstance(runtime_checks.get("average_dq"), dict)
         else {}
     )
+    port_identification = (
+        runtime_checks.get("average_dq_port_identification")
+        if isinstance(
+            runtime_checks.get("average_dq_port_identification"), dict
+        )
+        else {}
+    )
     if runtime.get("status") != "passed" or runtime_checks.get("health") != "passed":
         errors.append("运行时健康检查未通过")
     if frontend.get("index") != "passed" or frontend.get("local_asset_count", 0) < 2:
@@ -184,7 +192,10 @@ def review_cross_machine_evidence(
         or fig8.get("frequency_points") != 1000
     ):
         errors.append("Fig. 8 固定失稳工况证据与冻结基线不一致")
-    if runtime_schema == "gfm-runtime-acceptance/1.3":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.3",
+        "gfm-runtime-acceptance/1.4",
+    ):
         if (
             fig8_sensitivity.get("baseline_reconstruction_exact") is not True
             or fig8_sensitivity.get(
@@ -235,6 +246,42 @@ def review_cross_machine_evidence(
         or average_dq.get("report") != "passed"
     ):
         errors.append("16状态平均值 dq 模型或打印报告证据未通过")
+    if runtime_schema == "gfm-runtime-acceptance/1.4":
+        if (
+            port_identification.get("preset_id")
+            != "average-dq-smib-verification"
+            or port_identification.get("frequencies_hz") != [0.2, 2.0, 20.0]
+            or port_identification.get("source_amplitude_pu") != 1.0e-4
+            or port_identification.get("point_count") != 3
+            or port_identification.get("passed") is not True
+            or port_identification.get(
+                "maximum_magnitude_relative_error", 1.0
+            )
+            >= 0.01
+            or port_identification.get("maximum_phase_error_deg", 1.0)
+            >= 1.0
+            or port_identification.get(
+                "maximum_harmonic_residual_ratio", 1.0
+            )
+            >= 0.02
+            or port_identification.get(
+                "maximum_voltage_matrix_condition_number", 1.0e9
+            )
+            >= 100.0
+            or port_identification.get(
+                "amplitude_halving_maximum_element_relative_difference", 1.0
+            )
+            >= 1.0e-3
+            or port_identification.get("physical_validation") is not False
+            or port_identification.get("emt_validation") is not False
+            or port_identification.get("report") != "passed"
+        ):
+            errors.append("三频点端口正弦辨识或打印报告证据未通过")
+    elif runtime_schema in (
+        "gfm-runtime-acceptance/1.2",
+        "gfm-runtime-acceptance/1.3",
+    ):
+        warnings.append("旧版运行时证据未包含三频点端口正弦辨识检查")
 
     for required_file in ("acceptance-summary.txt", "runtime-console.log"):
         if not (directory / required_file).is_file():

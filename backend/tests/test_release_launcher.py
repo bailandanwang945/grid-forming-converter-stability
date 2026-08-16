@@ -142,6 +142,40 @@ def acceptance_app() -> FastAPI:
             },
         }
 
+    @app.post("/api/average-dq/port-identification")
+    def average_dq_port_identification() -> dict:
+        return {
+            "status": "completed",
+            "result": {
+                "summary": {
+                    "passed": True,
+                    "maximum_magnitude_relative_error": 0.0002,
+                    "maximum_phase_error_deg": 0.03,
+                    "maximum_harmonic_residual_ratio": 0.001,
+                    "maximum_voltage_matrix_condition_number": 3.1,
+                },
+                "contract": {
+                    "frequencies_hz": [0.2, 2.0, 20.0],
+                    "source_amplitude_pu": 1.0e-4,
+                },
+                "points": [{"passed": True}] * 3,
+                "amplitude_halving_check_at_2hz": {
+                    "maximum_element_relative_difference": 0.0003,
+                },
+            },
+            "model_scope": {
+                "physical_validation": False,
+                "emt_validation": False,
+            },
+        }
+
+    @app.post("/api/reports/average-dq-port-identification")
+    def average_dq_port_identification_report() -> HTMLResponse:
+        return HTMLResponse(
+            "Y=I·V⁻¹；不评价论文稳定性充分条件；"
+            "未完成硬件、硬件在环或可信 EMT 确认"
+        )
+
     return app
 
 
@@ -187,7 +221,7 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertEqual(evidence["status"], "passed")
             self.assertEqual(
                 evidence["schema_version"],
-                "gfm-runtime-acceptance/1.3",
+                "gfm-runtime-acceptance/1.4",
             )
             self.assertEqual(
                 evidence["checks"]["fig8"]["uncovered_points"],
@@ -227,6 +261,23 @@ class ReleaseLauncherTest(unittest.TestCase):
                     "hierarchy_scan_disagreement_count"
                 ],
                 3,
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq_port_identification"][
+                    "frequencies_hz"
+                ],
+                [0.2, 2.0, 20.0],
+            )
+            self.assertTrue(
+                evidence["checks"]["average_dq_port_identification"][
+                    "passed"
+                ]
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq_port_identification"][
+                    "report"
+                ],
+                "passed",
             )
 
 

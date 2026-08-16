@@ -8,13 +8,16 @@ import {
   AverageDQAblationResult,
   AverageDQBoundaryResult,
   AverageDQParameters,
+  AverageDQPortIdentificationResult,
   AverageDQResult,
   AverageDQScanResult,
   NetworkTopology,
   getAverageDQPreset,
+  getAverageDQPortIdentificationReportHtml,
   getAverageDQReportHtml,
   runAverageDQAblation,
   runAverageDQBoundary,
+  runAverageDQPortIdentification,
   runAverageDQAnalysis,
   runAverageDQScan,
 } from './api'
@@ -85,10 +88,12 @@ export default function AverageDQWorkbench() {
   const [scanResult, setScanResult] = useState<AverageDQScanResult | null>(null)
   const [ablationResult, setAblationResult] = useState<AverageDQAblationResult | null>(null)
   const [boundaryResult, setBoundaryResult] = useState<AverageDQBoundaryResult | null>(null)
+  const [portIdentificationResult, setPortIdentificationResult] = useState<AverageDQPortIdentificationResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
   const [ablationRunning, setAblationRunning] = useState(false)
   const [boundaryRunning, setBoundaryRunning] = useState(false)
+  const [portIdentificationRunning, setPortIdentificationRunning] = useState(false)
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
@@ -342,6 +347,33 @@ export default function AverageDQWorkbench() {
     }
   }
 
+  async function runFixedPortIdentification() {
+    setPortIdentificationRunning(true)
+    setError('')
+    try {
+      setPortIdentificationResult(await runAverageDQPortIdentification())
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : '三频点端口正弦辨识失败')
+    } finally {
+      setPortIdentificationRunning(false)
+    }
+  }
+
+  async function openPortIdentificationReport() {
+    const reportWindow = window.open('', '_blank')
+    try {
+      const html = await getAverageDQPortIdentificationReportHtml()
+      if (reportWindow) {
+        reportWindow.document.open()
+        reportWindow.document.write(html)
+        reportWindow.document.close()
+      } else download('average-dq-port-identification-report.html', html, 'text/html')
+    } catch (reason) {
+      reportWindow?.close()
+      setError(reason instanceof Error ? reason.message : '端口辨识报告生成失败')
+    }
+  }
+
   async function openReport() {
     if (!analysisInput) return
     const reportWindow = window.open('', '_blank')
@@ -419,6 +451,16 @@ export default function AverageDQWorkbench() {
           <div className="study-task-actions">
             <button data-testid="average-dq-boundary-run" onClick={runFixedBoundary} disabled={boundaryRunning}>{boundaryRunning ? '正在二分加密…' : '追踪临界边界'}</button>
             <button className="icon-action" aria-label="导出临界边界 JSON" data-testid="average-dq-boundary-export" disabled={!boundaryResult} onClick={() => boundaryResult && download(`${boundaryResult.run_id}.json`, JSON.stringify(boundaryResult, null, 2))}><Download size={15}/></button>
+          </div>
+        </article>
+        <article className="study-task port-identification-task">
+          <div className="study-task-heading"><span>04</span><small>PORT IDENTIFICATION</small></div>
+          <h3>三频点端口正弦辨识</h3>
+          <p data-testid="average-dq-port-identification-fixed-scope">固定 0.2、2、20 Hz，由非线性 PCC 电压与端口电流相量反演导纳，并与局部线性化逐元素核对。</p>
+          <div className="study-task-actions has-two-icons">
+            <button data-testid="average-dq-port-identification-run" onClick={runFixedPortIdentification} disabled={portIdentificationRunning}>{portIdentificationRunning ? '正在逐频辨识…' : '运行三频点辨识'}</button>
+            <button className="icon-action" aria-label="导出端口辨识 JSON" data-testid="average-dq-port-identification-export" disabled={!portIdentificationResult} onClick={() => portIdentificationResult && download(`${portIdentificationResult.run_id}.json`, JSON.stringify(portIdentificationResult, null, 2))}><Download size={15}/></button>
+            <button className="icon-action" aria-label="生成端口辨识报告" data-testid="average-dq-port-identification-report" disabled={!portIdentificationResult || portIdentificationRunning} onClick={openPortIdentificationReport}><BookOpenCheck size={15}/></button>
           </div>
         </article>
       </div>
@@ -526,6 +568,33 @@ export default function AverageDQWorkbench() {
             </table>
           </div>
           <p className="scope-note" data-testid="average-dq-boundary-interpretation">{boundaryResult.result.interpretation_boundary}</p>
+        </div>
+      </section>}
+      {portIdentificationResult && <section data-testid="average-dq-port-identification-results">
+        <div className="panel evidence-strip" data-testid="average-dq-port-identification-summary">
+          <div><small>三频点判定</small><b>{portIdentificationResult.result.summary.passed ? '全部通过' : '存在未通过点'}</b></div>
+          <div><small>最大幅值误差</small><b>{(portIdentificationResult.result.summary.maximum_magnitude_relative_error * 100).toFixed(4)}%</b></div>
+          <div><small>最大相位误差</small><b>{portIdentificationResult.result.summary.maximum_phase_error_deg.toFixed(4)}°</b></div>
+          <div><small>幅值减半最大变化</small><b>{(portIdentificationResult.result.amplitude_halving_check_at_2hz.maximum_element_relative_difference * 100).toFixed(4)}%</b></div>
+        </div>
+        <div className="panel port-identification-table" data-testid="average-dq-port-identification-table">
+          <div className="panel-title"><Activity size={18}/><span>非线性辨识—端口线性化对照</span><em>固定全局同步 dq · 网络流向设备为正</em></div>
+          <div className="table-scroll">
+            <table>
+              <thead><tr>{['频率 / Hz', '舍弃周期', '求解器', '最大幅值误差', '最大相位误差', '最大残差', 'cond(V)', '判定'].map(label => <th key={label}>{label}</th>)}</tr></thead>
+              <tbody>{portIdentificationResult.result.points.map(point => <tr key={point.frequency_hz} data-testid={`average-dq-port-identification-row-${point.frequency_hz}`}>
+                <td>{point.frequency_hz}</td>
+                <td>{point.settling_periods}</td>
+                <td>{point.solver_method}</td>
+                <td>{(point.maximum_magnitude_relative_error * 100).toFixed(5)}%</td>
+                <td>{point.maximum_phase_error_deg.toFixed(5)}°</td>
+                <td>{(point.maximum_harmonic_residual_ratio * 100).toFixed(5)}%</td>
+                <td>{point.voltage_matrix_condition_number.toFixed(4)}</td>
+                <td>{point.passed ? '通过' : '未通过'}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+          <p className="scope-note" data-testid="average-dq-port-identification-boundary">{portIdentificationResult.model_scope.statement} 设备开端口矩阵并非渐近稳定，因此采用稳定闭环源电压注入；本结果不评价论文稳定性充分条件。</p>
         </div>
       </section>}
     </section>

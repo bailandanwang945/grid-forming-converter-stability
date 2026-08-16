@@ -20,6 +20,9 @@ from backend.core.average_dq_model import (
     close_port_model_with_external_line,
     compare_with_quasisteady_reduction,
 )
+from backend.core.average_dq_port_identification import (
+    evaluate_fixed_port_identification_verification,
+)
 from backend.core.average_dq_ablation import (
     AverageDQAblationError,
     ModeMatch,
@@ -57,6 +60,7 @@ from backend.core.reduced_order_scan import (
     scan_damping_reactance,
 )
 from backend.core.reporting import (
+    render_average_dq_port_identification_report,
     render_average_dq_report,
     render_fig8_domain_comparison_report,
     render_fig8_report,
@@ -253,6 +257,14 @@ class AverageDQBoundaryRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     preset_id: AverageDQBoundaryPresetId = AVERAGE_DQ_ABLATION_PRESET_ID
+
+
+class AverageDQPortIdentificationRequest(BaseModel):
+    """Run only the frozen three-frequency port-identification check."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    preset_id: AverageDQPresetId = AVERAGE_DQ_PRESET_ID
 
 
 def _analysis_payload(request: AnalysisRequest) -> dict:
@@ -960,6 +972,46 @@ def _average_dq_boundary_payload(request: AverageDQBoundaryRequest) -> dict:
     }
 
 
+def _average_dq_port_identification_payload(
+    request: AverageDQPortIdentificationRequest,
+) -> dict:
+    topology, parameters = build_average_dq_verification_case()
+    model = build_average_dq_model(topology, parameters)
+    verification = evaluate_fixed_port_identification_verification(model)
+    if not verification["summary"]["passed"]:
+        raise RuntimeError("冻结三频点端口辨识未通过预设幅相与残差门槛。")
+    return {
+        "run_id": "average-dq-three-frequency-port-sinestream-v1",
+        "status": "completed",
+        "analysis_mode": "fixed-average-dq-port-sinestream-identification-v1",
+        "preset_id": request.preset_id,
+        "input_topology": topology.model_dump(mode="json"),
+        "input_parameters": parameters.model_dump(mode="json"),
+        "result": {
+            "summary": verification["summary"],
+            "contract": verification["contract"],
+            "points": verification["points"],
+            "amplitude_halving_check_at_2hz": verification[
+                "amplitude_halving_check_at_2hz"
+            ],
+        },
+        "model_scope": verification["model_scope"],
+        "provenance": {
+            **verification["provenance"],
+            "source_kind": "team-defined-average-dq-verification-preset",
+            "preset_id": AVERAGE_DQ_PRESET_ID,
+            "paper_fixture": False,
+            "physical_hardware_fit": False,
+            "model_specification": (
+                "docs/specs/models/average-dq-gfm-v1-proposal.md"
+            ),
+            "research_method": (
+                "docs/research/average-dq-port-sinestream-identification.md"
+            ),
+        },
+    }
+
+
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok", "service": "gfm-stability-api", "version": "0.5.0-dev"}
@@ -1105,6 +1157,18 @@ def run_average_dq_boundary(request: AverageDQBoundaryRequest) -> dict:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
 
+@app.post("/api/average-dq/port-identification")
+def run_average_dq_port_identification(
+    request: AverageDQPortIdentificationRequest,
+) -> dict:
+    try:
+        return _average_dq_port_identification_payload(request)
+    except AverageDQModelError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
 @app.get("/api/reports/fig8", response_class=HTMLResponse)
 def fig8_report(scenario_id: Fig8CaseId = "fig8_D_0p5") -> str:
     return render_fig8_report(_analysis_payload(AnalysisRequest(scenario_id=scenario_id)))
@@ -1138,6 +1202,25 @@ def average_dq_report(request: AverageDQAnalysisRequest) -> str:
 
     try:
         return render_average_dq_report(_average_dq_payload(request))
+    except AverageDQModelError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.post(
+    "/api/reports/average-dq-port-identification",
+    response_class=HTMLResponse,
+)
+def average_dq_port_identification_report(
+    request: AverageDQPortIdentificationRequest,
+) -> str:
+    """Return the frozen nonlinear port-identification evidence as HTML."""
+
+    try:
+        return render_average_dq_port_identification_report(
+            _average_dq_port_identification_payload(request)
+        )
     except AverageDQModelError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except RuntimeError as error:

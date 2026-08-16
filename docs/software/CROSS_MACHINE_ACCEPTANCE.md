@@ -28,6 +28,8 @@
 - 核对同域对照 176 点和 45/96/35 分类；
 - 运行稳定低频 VSM 预设，检查拓扑校验、三阶极点和稳定分类；
 - 生成独立模型打印式 HTML 报告并核对模型边界；
+- 运行16状态平均值 dq 模型及42点层级扫描，核对16个极点和39/3分类计数；
+- 运行固定 `0.2、2、20 Hz` 端口正弦辨识，核对幅相误差、相量条件数、残差、幅值减半检验和打印式报告边界；
 - 退出后确认本地服务端口已经释放；
 - 记录 Windows、PowerShell、运行时命令检测结果、发布版本、提交号、控制台日志和结构化 JSON 证据。
 
@@ -51,4 +53,4 @@ python scripts/import_cross_machine_acceptance.py <回传结果目录> `
   --expected-zip-sha256 <正式ZIP的SHA-256>
 ```
 
-该命令重新核对证据版本、原始 ZIP 哈希、构建提交、干净工作树、逐文件清单结论、端口释放、Fig. 8 的 75/1000、同域 45/96/35、低频模型报告以及平均值 dq 的16极点和42点层级扫描 39/3 分类计数。自动证据通过时返回 `GFM_CROSS_MACHINE_MANUAL_CHECK_PENDING`，仍不关闭 M5。队友完成网页、CSV/HTML 导出及安全软件检查后，再附加 `--manual-browser-check-passed --operator <检查人> --manual-evidence <截图或录屏文件>` 重新归档；人工通过标志若没有检查人和至少一个证据附件会被拒绝。只有出现 `GFM_CROSS_MACHINE_RELEASE_ACCEPTED` 才能把该次运行登记为发布验收通过。
+该命令重新核对证据版本、原始 ZIP 哈希、构建提交、干净工作树、逐文件清单结论、端口释放、Fig. 8 的 75/1000、同域 45/96/35、低频模型报告、平均值 dq 的16极点和42点层级扫描 39/3 分类计数，以及运行时证据 `1.4` 中的三频点端口辨识。历史 `1.2/1.3` 证据仍可复核，但会明确提示缺少后加入的检查。自动证据通过时返回 `GFM_CROSS_MACHINE_MANUAL_CHECK_PENDING`，仍不关闭 M5。队友完成网页、CSV/HTML 导出及安全软件检查后，再附加 `--manual-browser-check-passed --operator <检查人> --manual-evidence <截图或录屏文件>` 重新归档；人工通过标志若没有检查人和至少一个证据附件会被拒绝。只有出现 `GFM_CROSS_MACHINE_RELEASE_ACCEPTED` 才能把该次运行登记为发布验收通过。

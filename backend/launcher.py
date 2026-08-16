@@ -342,6 +342,87 @@ def _verify_average_dq_workflow(url: str) -> dict[str, object]:
     }
 
 
+def _verify_average_dq_port_identification(url: str) -> dict[str, object]:
+    request_payload = {"preset_id": "average-dq-smib-verification"}
+    request = urllib.request.Request(
+        f"{url}/api/average-dq/port-identification",
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=45.0) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    result = payload.get("result", {})
+    summary = result.get("summary", {})
+    contract = result.get("contract", {})
+    amplitude_check = result.get("amplitude_halving_check_at_2hz", {})
+    scope = payload.get("model_scope", {})
+    points = result.get("points", [])
+    if (
+        response.status != 200
+        or payload.get("status") != "completed"
+        or contract.get("frequencies_hz") != [0.2, 2.0, 20.0]
+        or contract.get("source_amplitude_pu") != 1.0e-4
+        or len(points) != 3
+        or not all(point.get("passed") is True for point in points)
+        or summary.get("passed") is not True
+        or summary.get("maximum_magnitude_relative_error", 1.0) >= 0.01
+        or summary.get("maximum_phase_error_deg", 1.0) >= 1.0
+        or summary.get("maximum_harmonic_residual_ratio", 1.0) >= 0.02
+        or summary.get("maximum_voltage_matrix_condition_number", 1.0e9)
+        >= 100.0
+        or amplitude_check.get("maximum_element_relative_difference", 1.0)
+        >= 1.0e-3
+        or scope.get("physical_validation") is not False
+        or scope.get("emt_validation") is not False
+    ):
+        raise RuntimeError(
+            "Packaged average-dq port-identification verification failed."
+        )
+
+    report_request = urllib.request.Request(
+        f"{url}/api/reports/average-dq-port-identification",
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(report_request, timeout=45.0) as response:
+        report = response.read().decode("utf-8")
+    if (
+        response.status != 200
+        or "Y=I·V⁻¹" not in report
+        or "不评价论文稳定性充分条件" not in report
+        or "未完成硬件、硬件在环或可信 EMT 确认" not in report
+    ):
+        raise RuntimeError(
+            "Packaged average-dq port-identification report verification failed."
+        )
+
+    return {
+        "preset_id": request_payload["preset_id"],
+        "frequencies_hz": contract["frequencies_hz"],
+        "source_amplitude_pu": contract["source_amplitude_pu"],
+        "point_count": len(points),
+        "passed": summary["passed"],
+        "maximum_magnitude_relative_error": summary[
+            "maximum_magnitude_relative_error"
+        ],
+        "maximum_phase_error_deg": summary["maximum_phase_error_deg"],
+        "maximum_harmonic_residual_ratio": summary[
+            "maximum_harmonic_residual_ratio"
+        ],
+        "maximum_voltage_matrix_condition_number": summary[
+            "maximum_voltage_matrix_condition_number"
+        ],
+        "amplitude_halving_maximum_element_relative_difference": (
+            amplitude_check["maximum_element_relative_difference"]
+        ),
+        "physical_validation": scope["physical_validation"],
+        "emt_validation": scope["emt_validation"],
+        "report": "passed",
+    }
+
+
 def _write_runtime_evidence(path: str, payload: dict[str, object]) -> None:
     evidence_path = Path(path).expanduser().resolve()
     evidence_path.parent.mkdir(parents=True, exist_ok=True)
@@ -385,7 +466,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.3",
+        "schema_version": "gfm-runtime-acceptance/1.4",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),
@@ -406,6 +487,9 @@ def run(
             "same_domain": _verify_domain_comparison(url),
             "reduced_order": _verify_reduced_order_workflow(url),
             "average_dq": _verify_average_dq_workflow(url),
+            "average_dq_port_identification": (
+                _verify_average_dq_port_identification(url)
+            ),
         }
         evidence["status"] = "passed"
         if evidence_file:
