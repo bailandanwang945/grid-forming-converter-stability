@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "gfm-mathworks-external-scr-step/1.0",
+  "generatedAtUtc": "2026-08-16T11:56:25.282Z",
+  "source": {
+    "provider": "MathWorks",
+    "repository": "https://github.com/simscape/Power-Converter-Circuit-Control-Simscape",
+    "releaseTag": "23.2.1.4",
+    "commit": "a65692b004637acb38b2f8c64db7dcf47efe24c7",
+    "modelRelativePath": "Models/GridFormingConverter.slx",
+    "modelSha256": "9cd2abfd5699e92336ceb335414403cb29826da7a4f7ab3abafd581d96c6fac4",
+    "conditionRelativePath": "Script_Data/GridFormingConverterTestCondition.mlx",
+    "conditionSha256": "66632a96de03f438bf63ef51afa8d80fcf720cb520431d64f3f8e6756e632823",
+    "matlabRelease": "2024b"
+  },
+  "contract": {
+    "scrValues": [
+      1.5,
+      2.5,
+      5
+    ],
+    "xByR": 5,
+    "activePowerMethod": "Virtual Synchronous Machine",
+    "currentLimitMethod": "Virtual Impedance",
+    "testCondition": "Change in active power reference",
+    "powerErrorTolerancePu": 0.01,
+    "pointInitialization": "vendor input script rerun and frozen active-power condition reconstructed before every point",
+    "simulationInterface": "Simulink.SimulationInput"
+  },
+  "hypothesis": {
+    "statement": "Increasing SCR from 1.5 to 5 monotonically reduces frequency deviation and active-power settling time under the frozen step.",
+    "frequencyDeviationMonotonicImprovement": false,
+    "settlingTimeMonotonicImprovement": false,
+    "allPointsVendorStable": false,
+    "supported": false
+  },
+  "points": [
+    {
+      "scr": 1.5,
+      "xByR": 5,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceInitialPu": 0,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.80000000042112906,
+      "activePowerFinalAbsoluteErrorPu": 4.2112902054469714E-10,
+      "activePowerSettlingTimeS": 0.6467,
+      "activePowerMaximumPu": 0.86171578001837046,
+      "activePowerMinimumPu": 0.59997981056760374,
+      "frequencyMaximumDeviationHz": 0.0756121679851205,
+      "voltageMagnitudeMinimumPu": 0.99065598324437565,
+      "voltageMagnitudeMaximumPu": 1.001888268100956,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 96.1098557
+    },
+    {
+      "scr": 2.5,
+      "xByR": 5,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceInitialPu": 0,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.80000000014384787,
+      "activePowerFinalAbsoluteErrorPu": 1.4384782254239781E-10,
+      "activePowerSettlingTimeS": 0.46880000000000033,
+      "activePowerMaximumPu": 0.85416629581395276,
+      "activePowerMinimumPu": 0.59999999851938812,
+      "frequencyMaximumDeviationHz": 0.05400671234131238,
+      "voltageMagnitudeMinimumPu": 0.997849264697965,
+      "voltageMagnitudeMaximumPu": 1.0097162574700114,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 84.3819101
+    },
+    {
+      "scr": 5,
+      "xByR": 5,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceInitialPu": 0,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 1.3135808961683428,
+      "activePowerFinalAbsoluteErrorPu": 0.51358089616834279,
+      "activePowerSettlingTimeS": null,
+      "activePowerMaximumPu": 1.3283960203994252,
+      "activePowerMinimumPu": 0.23329007475230096,
+      "frequencyMaximumDeviationHz": 184.82147250067669,
+      "voltageMagnitudeMinimumPu": 0.96414116367826408,
+      "voltageMagnitudeMaximumPu": 1.0627870696745962,
+      "vendorOutcome": "Unstable",
+      "vendorStable": false,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 83.7799353
+    }
+  ],
+  "observation": "The frozen monotonic-improvement hypothesis is rejected if any trend flag is false or the vendor classifier reports an unstable point.",
+  "scope": {
+    "claimLevel": "external-fixed-model-three-point-time-domain-trend",
+    "independentFromTeamAverageDqImplementation": true,
+    "physicalHardwareValidation": false,
+    "paperSufficientConditionEvaluated": false,
+    "causalMechanismIdentified": false,
+    "continuousScrBoundaryEstablished": false
+  }
+}

@@ -64,6 +64,7 @@ which SimplusGT.Class.GridFormingVSI -all
 - 文档：<https://www.mathworks.com/help/sps/ug/design-analyze-gridforming-converter.html>
 - 仓库：<https://github.com/simscape/Power-Converter-Circuit-Control-Simscape>
 - 候选固定版本：`23.2.1.4`，面向 R2023b；项目使用 R2024b，必须先做兼容性 smoke test。
+- 2026-08-16 已只读取得该固定发布，提交为 `a65692b004637acb38b2f8c64db7dcf47efe24c7`；`GridFormingConverter.slx` SHA-256 为 `9cd2abfd5699e92336ceb335414403cb29826da7a4f7ab3abafd581d96c6fac4`。外部目录继续由 Git 忽略，项目只提交适配脚本、结果与来源证据。
 - 用途：独立时域验证、扰动和稳定/不稳定场景；不能替代团队的小信号导纳和判定实现。
 - 风险：工具箱依赖较重，许可证要求与 MathWorks 产品/服务结合使用。
 
@@ -88,4 +89,3 @@ which SimplusGT.Class.GridFormingVSI -all
 - 中期/结项报告、演示与全过程证据。
 
 外部模型只能作为输入与验证对象，不能把“模型能够运行”表述为团队算法贡献。
-
