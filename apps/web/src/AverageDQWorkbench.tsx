@@ -386,42 +386,51 @@ export default function AverageDQWorkbench() {
         <label>仿真时长 / s<input type="number" step="0.2" value={simulationTime} onChange={event => { setSimulationTime(Number(event.target.value)); setResult(null) }}/></label>
         <label>初始相角 / mrad<input type="number" step="0.05" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(Number(event.target.value)); setResult(null) }}/></label>
       </div>
-      <button onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在求工作点并积分…' : '运行平均值 dq 分析'}</button>
-      <button className="secondary-button" onClick={scanModelHierarchy} disabled={scanRunning}>{scanRunning ? '正在逐点重算…' : '扫描 D–X 模型层级'}</button>
-      <button className="secondary-button" disabled={!scanResult} onClick={() => scanResult && download(`${scanResult.run_id}.json`, JSON.stringify(scanResult, null, 2))}><Download size={16}/>导出层级扫描 JSON</button>
-      <button className="secondary-button" disabled={!result} onClick={() => result && download(`${result.run_id}.json`, JSON.stringify(result, null, 2))}><Download size={16}/>导出可追溯 JSON</button>
-      <button className="secondary-button" disabled={!result} onClick={openReport}><BookOpenCheck size={16}/>生成打印式分析报告</button>
-      <button className="secondary-button" onClick={() => download('average-dq-case.json', JSON.stringify({ topology, parameters }, null, 2))}><Download size={16}/>保存模型参数</button>
-      <p className="scope-note" data-testid="average-dq-ablation-fixed-scope">固定研究实验：D=60、外部线路 X=0.1 p.u.；上方参数区的编辑与清空不会改变这组 19 点实验。</p>
-      <button
-        className="secondary-button"
-        data-testid="average-dq-ablation-run"
-        onClick={runFixedAblation}
-        disabled={ablationRunning}
-      >{ablationRunning ? '正在重建工作点并追踪模态…' : '运行固定 19 点模态消融'}</button>
-      <button
-        className="secondary-button"
-        data-testid="average-dq-ablation-export"
-        disabled={!ablationResult}
-        onClick={() => ablationResult && download(`${ablationResult.run_id}.json`, JSON.stringify(ablationResult, null, 2))}
-      ><Download size={16}/>导出模态消融 JSON</button>
-      <p className="scope-note" data-testid="average-dq-boundary-fixed-scope">在同一固定锚点上，沿四条单因素路径分别求解附加模态过零点与完整 16 状态模型稳定边界。</p>
-      <button
-        className="secondary-button"
-        data-testid="average-dq-boundary-run"
-        onClick={runFixedBoundary}
-        disabled={boundaryRunning}
-      >{boundaryRunning ? '正在二分加密并追踪模态…' : '追踪四条一维临界边界'}</button>
-      <button
-        className="secondary-button"
-        data-testid="average-dq-boundary-export"
-        disabled={!boundaryResult}
-        onClick={() => boundaryResult && download(`${boundaryResult.run_id}.json`, JSON.stringify(boundaryResult, null, 2))}
-      ><Download size={16}/>导出临界边界 JSON</button>
+      <button className="primary-analysis-button" onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在求工作点并积分…' : '运行平均值 dq 分析'}</button>
+      <button className="quiet-button" onClick={() => download('average-dq-case.json', JSON.stringify({ topology, parameters }, null, 2))}><Download size={15}/>保存当前模型参数</button>
+      <p className="scope-note">参数变化会清空旧分析结果。固定研究任务使用各自冻结的锚点，不受这里的临时编辑影响。</p>
       {error && <p className="error">{error}</p>}
     </aside>
 
     <section className="workspace">
+      <div className="study-launcher" aria-label="固定研究任务">
+        <article className="study-task hierarchy-task">
+          <div className="study-task-heading"><span>01</span><small>MODEL HIERARCHY</small></div>
+          <h3>D–X 模型层级对照</h3>
+          <p>逐点重算42个参数点，比较16状态模型与三状态近似的稳定性分类。</p>
+          <div className="study-task-actions">
+            <button onClick={scanModelHierarchy} disabled={scanRunning}>{scanRunning ? '正在逐点重算…' : '运行42点扫描'}</button>
+            <button className="icon-action" aria-label="导出层级扫描 JSON" disabled={!scanResult} onClick={() => scanResult && download(`${scanResult.run_id}.json`, JSON.stringify(scanResult, null, 2))}><Download size={15}/></button>
+          </div>
+        </article>
+        <article className="study-task ablation-task">
+          <div className="study-task-heading"><span>02</span><small>MODAL ABLATION</small></div>
+          <h3>固定19点模态消融</h3>
+          <p data-testid="average-dq-ablation-fixed-scope">冻结 D=60、外部线路 X=0.1 p.u.，以固定 19 点追踪控制与LCL参数变化下的候选模态。</p>
+          <div className="study-task-actions">
+            <button data-testid="average-dq-ablation-run" onClick={runFixedAblation} disabled={ablationRunning}>{ablationRunning ? '正在追踪模态…' : '运行19点消融'}</button>
+            <button className="icon-action" aria-label="导出模态消融 JSON" data-testid="average-dq-ablation-export" disabled={!ablationResult} onClick={() => ablationResult && download(`${ablationResult.run_id}.json`, JSON.stringify(ablationResult, null, 2))}><Download size={15}/></button>
+          </div>
+        </article>
+        <article className="study-task boundary-task">
+          <div className="study-task-heading"><span>03</span><small>BOUNDARY TRACE</small></div>
+          <h3>四条一维临界边界</h3>
+          <p data-testid="average-dq-boundary-fixed-scope">在同一锚点沿四条单因素路径，分别求解附加模态过零与完整模型稳定边界。</p>
+          <div className="study-task-actions">
+            <button data-testid="average-dq-boundary-run" onClick={runFixedBoundary} disabled={boundaryRunning}>{boundaryRunning ? '正在二分加密…' : '追踪临界边界'}</button>
+            <button className="icon-action" aria-label="导出临界边界 JSON" data-testid="average-dq-boundary-export" disabled={!boundaryResult} onClick={() => boundaryResult && download(`${boundaryResult.run_id}.json`, JSON.stringify(boundaryResult, null, 2))}><Download size={15}/></button>
+          </div>
+        </article>
+      </div>
+
+      <div className="result-toolbar">
+        <div><small>LIVE ANALYSIS</small><b>{result ? '当前结果可追溯' : '等待运行模型'}</b></div>
+        <div className="inline-actions">
+          <button disabled={!result} onClick={() => result && download(`${result.run_id}.json`, JSON.stringify(result, null, 2))}><Download size={15}/>结果 JSON</button>
+          <button disabled={!result} onClick={openReport}><BookOpenCheck size={15}/>分析报告</button>
+        </div>
+      </div>
+
       <div className="panel topology-card">
         <div className="panel-title"><Activity size={18}/><span>16 状态平均值 dq 模型</span><em>团队自建校核模型，不是论文 Fig. 8</em></div>
         <div className="topology">

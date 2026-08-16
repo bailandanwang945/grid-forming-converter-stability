@@ -239,29 +239,29 @@ try {
     if (!averageText.includes(evidence)) throw new Error(`Average-dq page is missing ${evidence}.`)
   }
   const averageDownloadPromise = page.waitForEvent('download')
-  await page.getByRole('button', { name: /导出可追溯 JSON/ }).click()
+  await page.getByRole('button', { name: /结果 JSON/ }).click()
   const averageDownload = await averageDownloadPromise
   if (!averageDownload.suggestedFilename().endsWith('.json')) {
     throw new Error('Average-dq JSON export failed.')
   }
   await page.getByLabel('初始相角 / mrad').fill('0.2')
-  if (await page.getByRole('button', { name: /导出可追溯 JSON/ }).isEnabled()) {
+  if (await page.getByRole('button', { name: /结果 JSON/ }).isEnabled()) {
     throw new Error('Average-dq result was not invalidated after changing the time-domain input.')
   }
-  if (await page.getByRole('button', { name: /生成打印式分析报告/ }).isEnabled()) {
+  if (await page.getByRole('button', { name: /分析报告/ }).isEnabled()) {
     throw new Error('Average-dq report remained enabled for stale on-screen results.')
   }
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
   await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })
   const averageReportPromise = page.waitForEvent('popup')
-  await page.getByRole('button', { name: /生成打印式分析报告/ }).click()
+  await page.getByRole('button', { name: /分析报告/ }).click()
   const averageReport = await averageReportPromise
   await averageReport.waitForFunction(() => document.body?.innerText.includes('不宣称完成工程模型确认'), null, { timeout: 30000 })
   const averageReportText = await averageReport.locator('body').innerText()
   if (!averageReportText.includes('0.4')) throw new Error('Average-dq report did not retain the edited active-power setpoint.')
   await averageReport.close()
 
-  await page.getByRole('button', { name: /扫描 D–X 模型层级/ }).click()
+  await page.getByRole('button', { name: /运行42点扫描/ }).click()
   await page.getByText('16状态—三状态 D–X 层级对照').waitFor({ timeout: 30000 })
   const hierarchyText = await page.locator('body').innerText()
   for (const evidence of ['扫描点数\n42', '两层分类不一致\n3', '不是论文小增益—小相位定理的反例']) {

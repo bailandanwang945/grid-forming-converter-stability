@@ -25,9 +25,9 @@
 - Node.js 20 或更高版本；
 - 运行网页与 Python 分析不要求安装 MATLAB。
 
-首次启动可能需要联网安装依赖。Windows `v0.4.0-rc2` `onedir` 候选包已从干净提交 `11eebeb` 构建，ZIP SHA-256 为 `55c58253336f8e1a7b4132a097908e45ae2a26281f00ea2c5fb1e133468d2c3f`。该包是历史冻结证据，早于 `v0.5.0-dev` 的 Carbon 工程工作台界面、响应式布局、19 点模态消融和临界边界功能；日常协同开发与当前演示应使用 GitHub 最新源码，不应把旧包界面误认为当前版本。下一次功能冻结后再构建新的自包含 Windows 包。
+首次启动可能需要联网安装依赖。Windows `v0.4.0-rc2` `onedir` 候选包已从干净提交 `11eebeb` 构建，ZIP SHA-256 为 `55c58253336f8e1a7b4132a097908e45ae2a26281f00ea2c5fb1e133468d2c3f`。该包是历史冻结证据，早于 `v0.5.0-dev` 的现代科研画布界面、响应式布局、19 点模态消融和临界边界功能；日常协同开发与当前演示应使用 GitHub 最新源码，不应把旧包界面误认为当前版本。下一次功能冻结后再构建新的自包含 Windows 包。
 
-当前网页视觉直接采用 [IBM Carbon Design System White Theme](https://carbondesignsystem.com/elements/themes/overview/) 的公开颜色、间距与交互规范：浅灰页面、白色功能层、单一交互蓝和高对比状态色。项目不再使用水墨、纸张纹理或画册式装饰；模型结构、中文术语和科研结论仍由本项目维护。Carbon 官方样式仓库采用 Apache-2.0 许可证，本项目当前只使用公开设计令牌与规范，不复制其组件源码。
+当前网页主要参考 MIT 许可的 [AutoFigure-Edit](https://github.com/ResearAI/AutoFigure-Edit) 科研画布：细网格背景、米灰—薄荷渐变、圆角功能卡、紧凑任务工具条和清晰的主次操作。平均值 dq 工作区只在左栏保留参数与主分析入口，把42点层级扫描、19点模态消融和四条临界边界组织为独立研究任务卡；不再使用水墨、山景或长按钮瀑布。模型结构、中文术语、数值结果和科研边界仍由本项目独立维护，未复制 AutoFigure 的品牌标志或业务素材。设计调研与取舍见 [`docs/design/frontend-reference-study.md`](docs/design/frontend-reference-study.md)。
 
 ## 软件展示内容
 
