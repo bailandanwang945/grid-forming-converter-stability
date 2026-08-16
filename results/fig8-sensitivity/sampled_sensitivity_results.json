@@ -1,0 +1,792 @@
+{
+  "analysis_mode": "retrospective-sampled-fig8-sensitivity-v1",
+  "cases": [
+    {
+      "baseline": {
+        "frequency_maximum_hz": 10000.0,
+        "frequency_minimum_hz": 0.001,
+        "frequency_point_count": 1000,
+        "indeterminate_coverage_count": 0,
+        "reconstructed_coverage_mismatch_count": 0,
+        "uncovered_count": 75
+      },
+      "case_id": "fig8_D_0p05",
+      "closed_loop_reference": "unstable",
+      "common_matrix_scale": [
+        {
+          "common_post_transformation_matrix_scale": 1e-09,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "common_post_transformation_matrix_scale": 1e-06,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "common_post_transformation_matrix_scale": 1.0,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "common_post_transformation_matrix_scale": 1000000.0,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "common_post_transformation_matrix_scale": 1000000000.0,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "sample_count": 1000,
+          "uncovered_count": 75
+        }
+      ],
+      "damping": 0.05,
+      "decision_tolerance": [
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "gain_relative_tolerance": 1e-12,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "phase_tolerance_rad": 1e-12,
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "gain_relative_tolerance": 1e-10,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "phase_tolerance_rad": 1e-10,
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "gain_relative_tolerance": 1e-08,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "phase_tolerance_rad": 1e-08,
+          "sample_count": 1000,
+          "uncovered_count": 75
+        },
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "gain_relative_tolerance": 1e-06,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "phase_tolerance_rad": 1e-06,
+          "sample_count": 1000,
+          "uncovered_count": 75
+        }
+      ],
+      "frequency_density": [
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 5,
+            "indeterminate": 0,
+            "pass": 4
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.8758758758758765,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 3,
+            "indeterminate": 1,
+            "pass": 5
+          },
+          "requested_point_count": 9,
+          "sample_count": 9,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 75
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.9976977642363202,
+          "gain_counts": {
+            "fail": 9,
+            "indeterminate": 0,
+            "pass": 6
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 0.9976977642363202,
+          "maximum_log10_frequency_step": 0.5045045045045047,
+          "observed_full_grid_uncovered_points": 1,
+          "phase_counts": {
+            "fail": 6,
+            "indeterminate": 1,
+            "pass": 8
+          },
+          "requested_point_count": 15,
+          "sample_count": 15,
+          "uncovered_count": 1,
+          "unobserved_full_grid_uncovered_points": 74
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.6350425168595962,
+          "gain_counts": {
+            "fail": 19,
+            "indeterminate": 0,
+            "pass": 12
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.081518702552288,
+          "maximum_log10_frequency_step": 0.23823823823823886,
+          "observed_full_grid_uncovered_points": 2,
+          "phase_counts": {
+            "fail": 12,
+            "indeterminate": 2,
+            "pass": 17
+          },
+          "requested_point_count": 31,
+          "sample_count": 31,
+          "uncovered_count": 2,
+          "unobserved_full_grid_uncovered_points": 73
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.5148867450137492,
+          "gain_counts": {
+            "fail": 39,
+            "indeterminate": 0,
+            "pass": 24
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.4459729217920196,
+          "maximum_log10_frequency_step": 0.11911911911911943,
+          "observed_full_grid_uncovered_points": 5,
+          "phase_counts": {
+            "fail": 26,
+            "indeterminate": 3,
+            "pass": 34
+          },
+          "requested_point_count": 63,
+          "sample_count": 63,
+          "uncovered_count": 5,
+          "unobserved_full_grid_uncovered_points": 70
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.5148867450137492,
+          "gain_counts": {
+            "fail": 77,
+            "indeterminate": 0,
+            "pass": 48
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "maximum_log10_frequency_step": 0.06306306306306375,
+          "observed_full_grid_uncovered_points": 10,
+          "phase_counts": {
+            "fail": 53,
+            "indeterminate": 5,
+            "pass": 67
+          },
+          "requested_point_count": 125,
+          "sample_count": 125,
+          "uncovered_count": 10,
+          "unobserved_full_grid_uncovered_points": 65
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 154,
+            "indeterminate": 0,
+            "pass": 96
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.5929502125721229,
+          "maximum_log10_frequency_step": 0.03503503503503502,
+          "observed_full_grid_uncovered_points": 19,
+          "phase_counts": {
+            "fail": 105,
+            "indeterminate": 10,
+            "pass": 135
+          },
+          "requested_point_count": 250,
+          "sample_count": 250,
+          "uncovered_count": 19,
+          "unobserved_full_grid_uncovered_points": 56
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.5066461008921268,
+          "gain_counts": {
+            "fail": 307,
+            "indeterminate": 0,
+            "pass": 193
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6188596901781975,
+          "maximum_log10_frequency_step": 0.02102102102102066,
+          "observed_full_grid_uncovered_points": 37,
+          "phase_counts": {
+            "fail": 211,
+            "indeterminate": 19,
+            "pass": 270
+          },
+          "requested_point_count": 500,
+          "sample_count": 500,
+          "uncovered_count": 37,
+          "unobserved_full_grid_uncovered_points": 38
+        },
+        {
+          "detects_uncovered_region": true,
+          "first_uncovered_frequency_hz": 0.4985373463873894,
+          "gain_counts": {
+            "fail": 615,
+            "indeterminate": 0,
+            "pass": 385
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": 1.6451905877536626,
+          "maximum_log10_frequency_step": 0.007007007007007238,
+          "observed_full_grid_uncovered_points": 75,
+          "phase_counts": {
+            "fail": 422,
+            "indeterminate": 38,
+            "pass": 540
+          },
+          "requested_point_count": 1000,
+          "sample_count": 1000,
+          "uncovered_count": 75,
+          "unobserved_full_grid_uncovered_points": 0
+        }
+      ]
+    },
+    {
+      "baseline": {
+        "frequency_maximum_hz": 10000.0,
+        "frequency_minimum_hz": 0.001,
+        "frequency_point_count": 1000,
+        "indeterminate_coverage_count": 0,
+        "reconstructed_coverage_mismatch_count": 0,
+        "uncovered_count": 0
+      },
+      "case_id": "fig8_D_0p5",
+      "closed_loop_reference": "stable",
+      "common_matrix_scale": [
+        {
+          "common_post_transformation_matrix_scale": 1e-09,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "common_post_transformation_matrix_scale": 1e-06,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "common_post_transformation_matrix_scale": 1.0,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "common_post_transformation_matrix_scale": 1000000.0,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "common_post_transformation_matrix_scale": 1000000000.0,
+          "coverage_mismatch_from_unit_scale": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "sample_count": 1000,
+          "uncovered_count": 0
+        }
+      ],
+      "damping": 0.5,
+      "decision_tolerance": [
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "gain_relative_tolerance": 1e-12,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "phase_tolerance_rad": 1e-12,
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "gain_relative_tolerance": 1e-10,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "phase_tolerance_rad": 1e-10,
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "gain_relative_tolerance": 1e-08,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "phase_tolerance_rad": 1e-08,
+          "sample_count": 1000,
+          "uncovered_count": 0
+        },
+        {
+          "coverage_mismatch_from_default": 0,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "gain_relative_tolerance": 1e-06,
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "phase_tolerance_rad": 1e-06,
+          "sample_count": 1000,
+          "uncovered_count": 0
+        }
+      ],
+      "frequency_density": [
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 6,
+            "indeterminate": 0,
+            "pass": 3
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.8758758758758765,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 9
+          },
+          "requested_point_count": 9,
+          "sample_count": 9,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 10,
+            "indeterminate": 0,
+            "pass": 5
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.5045045045045047,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 15
+          },
+          "requested_point_count": 15,
+          "sample_count": 15,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 20,
+            "indeterminate": 0,
+            "pass": 11
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.23823823823823886,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 31
+          },
+          "requested_point_count": 31,
+          "sample_count": 31,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 42,
+            "indeterminate": 0,
+            "pass": 21
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.11911911911911943,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 63
+          },
+          "requested_point_count": 63,
+          "sample_count": 63,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 83,
+            "indeterminate": 0,
+            "pass": 42
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.06306306306306375,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 125
+          },
+          "requested_point_count": 125,
+          "sample_count": 125,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 166,
+            "indeterminate": 0,
+            "pass": 84
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.03503503503503502,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 250
+          },
+          "requested_point_count": 250,
+          "sample_count": 250,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 331,
+            "indeterminate": 0,
+            "pass": 169
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.02102102102102066,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 500
+          },
+          "requested_point_count": 500,
+          "sample_count": 500,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        },
+        {
+          "detects_uncovered_region": false,
+          "first_uncovered_frequency_hz": null,
+          "gain_counts": {
+            "fail": 663,
+            "indeterminate": 0,
+            "pass": 337
+          },
+          "indeterminate_coverage_count": 0,
+          "last_uncovered_frequency_hz": null,
+          "maximum_log10_frequency_step": 0.007007007007007238,
+          "observed_full_grid_uncovered_points": 0,
+          "phase_counts": {
+            "fail": 0,
+            "indeterminate": 0,
+            "pass": 1000
+          },
+          "requested_point_count": 1000,
+          "sample_count": 1000,
+          "uncovered_count": 0,
+          "unobserved_full_grid_uncovered_points": 0
+        }
+      ]
+    }
+  ],
+  "entrypoint": "experiments/baseline/run_fig8_sampled_sensitivity.py",
+  "experiment_contract": {
+    "common_matrix_scales": [
+      1e-09,
+      1e-06,
+      1.0,
+      1000000.0,
+      1000000000.0
+    ],
+    "decision_tolerances": [
+      1e-12,
+      1e-10,
+      1e-08,
+      1e-06
+    ],
+    "failure_conditions": [
+      "default full-grid reconstruction differs from pinned kernel",
+      "stable pinned case gains an uncovered sample",
+      "positive common scale changes a sampled classification"
+    ],
+    "frequency_point_counts": [
+      9,
+      15,
+      31,
+      63,
+      125,
+      250,
+      500,
+      1000
+    ],
+    "frequency_sampling_method": "rounded-equal-index-subgrid-including-both-endpoints",
+    "randomness": "none-deterministic"
+  },
+  "generated_at_utc": "2026-08-16T10:06:26.443583+00:00",
+  "model_scope": {
+    "claim_level": "retrospective-finite-grid-sensitivity-only",
+    "continuous_frequency_coverage_proved": false,
+    "paper_theorem_evaluated": false,
+    "physical_model_perturbed": false,
+    "statement": "频率密度实验只对子采样作者1000点夹具，不生成新的频率响应；容差实验只改变已解析裕度的最终判定门；共同尺度是整形后矩阵表示的正数缩放，不是物理参数扰动。"
+  },
+  "status": "completed",
+  "summary": {
+    "baseline_reconstruction_exact": true,
+    "common_scale_invariant_on_tested_range": true,
+    "stable_case_remains_covered_in_all_tested_settings": true
+  }
+}

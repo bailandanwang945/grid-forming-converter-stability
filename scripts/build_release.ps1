@@ -215,6 +215,11 @@ if (-not $SkipSmokeTest) {
     $SmokeEvidence = Get-Content -LiteralPath $PackagedSmokeEvidence -Raw -Encoding UTF8 | ConvertFrom-Json
     if (
         $SmokeEvidence.status -ne "passed" -or
+        $SmokeEvidence.checks.fig8_sensitivity.nine_point_uncovered_count -ne 0 -or
+        $SmokeEvidence.checks.fig8_sensitivity.nine_point_missed_full_uncovered_count -ne 75 -or
+        $SmokeEvidence.checks.fig8_sensitivity.maximum_tolerance_mismatch_count -ne 0 -or
+        $SmokeEvidence.checks.fig8_sensitivity.maximum_scale_mismatch_count -ne 0 -or
+        $SmokeEvidence.checks.fig8_sensitivity.report -ne "passed" -or
         $SmokeEvidence.checks.reduced_order.stability -ne "stable" -or
         $SmokeEvidence.checks.reduced_order.report -ne "passed" -or
         $SmokeEvidence.checks.average_dq.stability -ne "stable" -or

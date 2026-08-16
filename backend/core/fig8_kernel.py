@@ -375,6 +375,7 @@ def evaluate_fig8_case(
     coverage: list[str] = []
     active_constraint: list[str] = []
     gain_margin: list[float] = []
+    gain_tolerance_scale: list[float] = []
     upper_phase_margin: list[float | None] = []
     lower_phase_margin: list[float | None] = []
     converter_phase_spread_margin: list[float | None] = []
@@ -386,6 +387,7 @@ def evaluate_fig8_case(
         gain = _signed_status(margin, tolerance)
         gain_status.append(gain)
         gain_margin.append(margin)
+        gain_tolerance_scale.append(max(network_gain_floor, converter_gain))
 
         raw_converter = converter_intervals[index]
         raw_network = network_intervals[index]
@@ -477,6 +479,7 @@ def evaluate_fig8_case(
         "frequency_scan": {
             "frequencies_hz": frequencies.tolist(),
             "gain_margin": gain_margin,
+            "gain_tolerance_scale": gain_tolerance_scale,
             "upper_phase_margin": upper_phase_margin,
             "lower_phase_margin": lower_phase_margin,
             "converter_phase_spread_margin": converter_phase_spread_margin,

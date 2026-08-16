@@ -93,8 +93,12 @@ def review_cross_machine_evidence(
 
     if acceptance.get("schema_version") != "gfm-cross-machine-acceptance/1.1":
         errors.append("异机证据版本不是 gfm-cross-machine-acceptance/1.1")
-    if runtime.get("schema_version") != "gfm-runtime-acceptance/1.2":
-        errors.append("运行时证据版本不是 gfm-runtime-acceptance/1.2")
+    runtime_schema = runtime.get("schema_version")
+    if runtime_schema not in (
+        "gfm-runtime-acceptance/1.2",
+        "gfm-runtime-acceptance/1.3",
+    ):
+        errors.append("运行时证据版本不是受支持的 1.2 或 1.3")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -149,6 +153,11 @@ def review_cross_machine_evidence(
         runtime_checks.get("frontend") if isinstance(runtime_checks.get("frontend"), dict) else {}
     )
     fig8 = runtime_checks.get("fig8") if isinstance(runtime_checks.get("fig8"), dict) else {}
+    fig8_sensitivity = (
+        runtime_checks.get("fig8_sensitivity")
+        if isinstance(runtime_checks.get("fig8_sensitivity"), dict)
+        else {}
+    )
     same_domain = (
         runtime_checks.get("same_domain")
         if isinstance(runtime_checks.get("same_domain"), dict)
@@ -175,6 +184,30 @@ def review_cross_machine_evidence(
         or fig8.get("frequency_points") != 1000
     ):
         errors.append("Fig. 8 固定失稳工况证据与冻结基线不一致")
+    if runtime_schema == "gfm-runtime-acceptance/1.3":
+        if (
+            fig8_sensitivity.get("baseline_reconstruction_exact") is not True
+            or fig8_sensitivity.get(
+                "common_scale_invariant_on_tested_range"
+            )
+            is not True
+            or fig8_sensitivity.get(
+                "stable_case_remains_covered_in_all_tested_settings"
+            )
+            is not True
+            or fig8_sensitivity.get(
+                "nine_point_detects_uncovered_region"
+            )
+            is not False
+            or fig8_sensitivity.get(
+                "nine_point_unobserved_full_grid_uncovered_points"
+            )
+            != 75
+            or fig8_sensitivity.get("report") != "passed"
+        ):
+            errors.append("Fig. 8 采样敏感性证据与冻结基线不一致")
+    elif runtime_schema == "gfm-runtime-acceptance/1.2":
+        warnings.append("旧版运行时证据未包含 Fig. 8 采样敏感性检查")
     if same_domain.get("point_count") != 176 or same_domain.get(
         "classification_counts"
     ) != EXPECTED_CLASSIFICATION_COUNTS:

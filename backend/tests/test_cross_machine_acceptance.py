@@ -11,7 +11,10 @@ COMMIT = "a" * 40
 ZIP_HASH = "b" * 64
 
 
-def _write_valid_evidence(directory: Path) -> None:
+def _write_valid_evidence(
+    directory: Path,
+    runtime_schema: str = "gfm-runtime-acceptance/1.2",
+) -> None:
     acceptance = {
         "schema_version": "gfm-cross-machine-acceptance/1.1",
         "package": {
@@ -49,7 +52,7 @@ def _write_valid_evidence(directory: Path) -> None:
         "source_zip": {"sha256": ZIP_HASH, "size_bytes": 123},
     }
     runtime = {
-        "schema_version": "gfm-runtime-acceptance/1.2",
+        "schema_version": runtime_schema,
         "status": "passed",
         "checks": {
             "health": "passed",
@@ -92,6 +95,15 @@ def _write_valid_evidence(directory: Path) -> None:
             },
         },
     }
+    if runtime_schema == "gfm-runtime-acceptance/1.3":
+        runtime["checks"]["fig8_sensitivity"] = {
+            "baseline_reconstruction_exact": True,
+            "common_scale_invariant_on_tested_range": True,
+            "stable_case_remains_covered_in_all_tested_settings": True,
+            "nine_point_detects_uncovered_region": False,
+            "nine_point_unobserved_full_grid_uncovered_points": 75,
+            "report": "passed",
+        }
     (directory / "cross-machine-acceptance.json").write_text(json.dumps(acceptance))
     (directory / "runtime-evidence.json").write_text(json.dumps(runtime))
     (directory / "acceptance-summary.txt").write_text("passed")
@@ -144,6 +156,28 @@ class CrossMachineAcceptanceTest(unittest.TestCase):
         self.assertFalse(review.automated_evidence_passed)
         self.assertFalse(review.release_accepted)
         self.assertGreaterEqual(len(review.errors), 2)
+
+    def test_runtime_1p3_requires_sampled_sensitivity_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            _write_valid_evidence(
+                directory,
+                runtime_schema="gfm-runtime-acceptance/1.3",
+            )
+            runtime_path = directory / "runtime-evidence.json"
+            runtime = json.loads(runtime_path.read_text())
+            runtime["checks"]["fig8_sensitivity"][
+                "nine_point_detects_uncovered_region"
+            ] = True
+            runtime_path.write_text(json.dumps(runtime))
+            review = review_cross_machine_evidence(
+                directory,
+                expected_version=VERSION,
+                expected_commit=COMMIT,
+                expected_zip_sha256=ZIP_HASH,
+            )
+        self.assertFalse(review.automated_evidence_passed)
+        self.assertIn("采样敏感性", " ".join(review.errors))
 
 
 if __name__ == "__main__":

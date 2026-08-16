@@ -381,6 +381,102 @@ def _linear_svg_chart(
     )
 
 
+def render_fig8_sensitivity_report(result: dict) -> str:
+    """Render the fixed finite-grid sensitivity experiment."""
+
+    cases = {case["case_id"]: case for case in result["cases"]}
+    unstable = cases["fig8_D_0p05"]
+    stable = cases["fig8_D_0p5"]
+    density = unstable["frequency_density"]
+    chart = _linear_svg_chart(
+        [float(row["requested_point_count"]) for row in density],
+        [
+            (
+                "D=0.05 检出未覆盖点",
+                [float(row["uncovered_count"]) for row in density],
+                "#9b6654",
+            ),
+            (
+                "D=0.5 检出未覆盖点",
+                [
+                    float(row["uncovered_count"])
+                    for row in stable["frequency_density"]
+                ],
+                "#667d7d",
+            ),
+        ],
+        "频率子网格对未覆盖样点的检出能力",
+        "子网格点数",
+        "检出的未覆盖点数",
+    )
+    density_rows = "".join(
+        "<tr>"
+        f"<td>{row['requested_point_count']}</td>"
+        f"<td>{row['maximum_log10_frequency_step']:.6g}</td>"
+        f"<td>{row['uncovered_count']}</td>"
+        f"<td>{_number(row['first_uncovered_frequency_hz']) if row['first_uncovered_frequency_hz'] is not None else '未检出'}</td>"
+        f"<td>{_number(row['last_uncovered_frequency_hz']) if row['last_uncovered_frequency_hz'] is not None else '未检出'}</td>"
+        f"<td>{row['unobserved_full_grid_uncovered_points']}</td>"
+        "</tr>"
+        for row in density
+    )
+    tolerance_rows = "".join(
+        "<tr>"
+        f"<td>{row['gain_relative_tolerance']:.0e}</td>"
+        f"<td>{row['phase_tolerance_rad']:.0e}</td>"
+        f"<td>{row['coverage_mismatch_from_default']}</td>"
+        f"<td>{row['uncovered_count']}</td>"
+        "</tr>"
+        for row in unstable["decision_tolerance"]
+    )
+    scale_rows = "".join(
+        "<tr>"
+        f"<td>{row['common_post_transformation_matrix_scale']:.0e}</td>"
+        f"<td>{row['coverage_mismatch_from_unit_scale']}</td>"
+        f"<td>{row['uncovered_count']}</td>"
+        "</tr>"
+        for row in unstable["common_matrix_scale"]
+    )
+    scope = result["model_scope"]
+    return f"""<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Fig. 8 有限网格敏感性报告</title>
+<style>
+@page {{ size:A4; margin:14mm; }}
+body {{ font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif; color:#202b33; margin:0; font-size:11px; line-height:1.65; }}
+h1 {{ font-size:21px; margin:0 0 4px; }} h2 {{ font-size:15px; margin:20px 0 8px; border-left:4px solid #667d7d; padding-left:9px; }}
+.sub {{ color:#697884; }} .notice {{ padding:10px 13px; background:#f4f0e7; border-left:3px solid #96745c; }}
+.grid {{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:13px 0; }}
+.metric {{ padding:10px; background:#f3f1ea; }} .metric b {{ display:block; margin-top:4px; font-size:13px; }}
+table {{ width:100%; border-collapse:collapse; margin-bottom:8px; }} th,td {{ padding:6px 7px; border:1px solid #dcd9cf; text-align:left; }} th {{ background:#efede5; }}
+svg {{ width:100%; height:auto; border:1px solid #dedbd2; margin:6px 0 10px; }}
+.footer {{ margin-top:22px; padding-top:9px; border-top:1px solid #dfe0dc; color:#75807b; font-size:9px; }}
+@media print {{ .print-tip {{ display:none; }} table,svg,.notice {{ break-inside:avoid; }} }}
+</style></head><body>
+<h1>Fig. 8 有限频率网格敏感性报告</h1>
+<div class="sub">作者固定1000点夹具 · 回顾性子网格 · 判定容差与矩阵表示尺度核查</div>
+<p class="print-tip"><button onclick="window.print()">打印或另存为 PDF</button></p>
+<div class="notice"><b>适用边界：</b>{escape(scope['statement'])} 本报告不评价论文连续全频定理。</div>
+<div class="grid">
+ <div class="metric">默认1000点重构<b>{'完全一致' if result['summary']['baseline_reconstruction_exact'] else '存在差异'}</b></div>
+ <div class="metric">9点子网格<b>漏检75个完整网格未覆盖样点</b></div>
+ <div class="metric">稳定工况测试设置<b>{'均未出现未覆盖点' if result['summary']['stable_case_remains_covered_in_all_tested_settings'] else '出现变化'}</b></div>
+</div>
+{chart}
+<h2>频率采样密度</h2>
+<table><thead><tr><th>点数</th><th>最大 log10 步长</th><th>检出未覆盖点</th><th>首频 / Hz</th><th>末频 / Hz</th><th>未观察到的1000点未覆盖样点</th></tr></thead><tbody>{density_rows}</tbody></table>
+<p>9点子网格在0.001–10000 Hz范围内没有命中0.4985–1.6452 Hz未覆盖带；15点仅命中约0.9977 Hz的一个样点。故“所取样点均被覆盖”不能推出连续频带均被覆盖。</p>
+<h2>最终判定容差</h2>
+<table><thead><tr><th>增益相对容差</th><th>相位容差 / rad</th><th>相对默认分类变化</th><th>未覆盖点</th></tr></thead><tbody>{tolerance_rows}</tbody></table>
+<p>在10⁻¹²至10⁻⁶的测试范围内，两个固定工况的已采样点分类均未变化。这只说明这些样点没有落入所测容差带，不能外推到其他算例。</p>
+<h2>共同矩阵表示尺度</h2>
+<table><thead><tr><th>共同正尺度</th><th>相对单位尺度分类变化</th><th>未覆盖点</th></tr></thead><tbody>{scale_rows}</tbody></table>
+<p>在10⁻⁹至10⁹的共同正尺度范围内，逐点分类不变；该操作是整形后矩阵表示缩放，不是线路、控制器或运行点的物理扰动。</p>
+<h2>可复现性与结论</h2>
+<p>实验为确定性计算，无随机种子；子网格使用包含两端点的等索引取样。失败条件包括默认重构不一致、稳定工况产生未覆盖点，以及共同正尺度改变分类。当前三项失败条件均未触发，但9点频率网格构成明确的漏检反例。</p>
+<div class="footer">生成接口：<code>GET /api/analysis/fig8-sensitivity</code>。本报告区分有限样点数值稳健性与连续频带定理证明。</div>
+</body></html>"""
+
+
 def _matrix_table(matrix: list[list[float]], labels: list[str]) -> str:
     header = "".join(f"<th>{escape(label)}</th>" for label in labels)
     rows = "".join(

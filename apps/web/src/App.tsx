@@ -24,6 +24,7 @@ import EChart from './EChart'
 import ReducedOrderWorkbench from './ReducedOrderWorkbench'
 import ParameterDomainComparison from './ParameterDomainComparison'
 import AverageDQWorkbench from './AverageDQWorkbench'
+import Fig8SensitivityPanel from './Fig8SensitivityPanel'
 
 echarts.use([
   LineChart,
@@ -231,6 +232,7 @@ function App() {
             </dl>
           </div>
         </> : <div className="panel empty-state"><Activity size={34}/><h2>选择工况并运行分析</h2><p>平台将从固定复矩阵夹具重新计算 1000 个频率点，而不是读取预制结论或绘制人工曲线。</p></div>}
+        <Fig8SensitivityPanel/>
       </section>
     </main>}
   </div>

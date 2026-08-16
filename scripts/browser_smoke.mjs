@@ -27,6 +27,41 @@ try {
     if (!fig8Text.includes(evidence)) throw new Error(`Fig. 8 page is missing ${evidence}.`)
   }
 
+  await page.getByTestId('fig8-sensitivity-run').click()
+  await page.getByTestId('fig8-sensitivity-summary').waitFor({ timeout: 30000 })
+  const sensitivitySummary = await page.getByTestId('fig8-sensitivity-summary').innerText()
+  for (const evidence of ['漏检未覆盖带', '最大分类变化 0 点']) {
+    if (!sensitivitySummary.includes(evidence)) {
+      throw new Error(`Fig. 8 sensitivity summary is missing ${evidence}.`)
+    }
+  }
+  const sparseRow = await page.getByTestId('fig8-sensitivity-row-9').innerText()
+  if (!sparseRow.includes('未检出') || !sparseRow.includes('75')) {
+    throw new Error(`Nine-point counterexample is incomplete: ${sparseRow}`)
+  }
+  const sensitivityScope = await page.getByTestId('fig8-sensitivity-scope').innerText()
+  for (const evidence of ['不生成新的频率响应', '不评价论文连续全频定理']) {
+    if (!sensitivityScope.includes(evidence)) {
+      throw new Error(`Fig. 8 sensitivity scope is missing ${evidence}.`)
+    }
+  }
+  if (await page.getByTestId('fig8-sensitivity-export').isDisabled()) {
+    throw new Error('Fig. 8 sensitivity JSON export is disabled after calculation.')
+  }
+  const sensitivityReportPromise = page.waitForEvent('popup')
+  await page.getByTestId('fig8-sensitivity-report').click()
+  const sensitivityReport = await sensitivityReportPromise
+  await sensitivityReport.waitForFunction(
+    () => document.body?.innerText.includes('漏检75个完整网格未覆盖样点'),
+    null,
+    { timeout: 30000 },
+  )
+  if (!(await sensitivityReport.locator('body').innerText()).includes('不评价论文连续全频定理')) {
+    throw new Error('Fig. 8 sensitivity report is missing the continuous-frequency boundary.')
+  }
+  await sensitivityReport.close()
+  console.log('[browser] Fig. 8 baseline and sampled sensitivity passed.')
+
   await page.getByRole('button', { name: '同域对照' }).click()
   await page.getByText('D–SCR 参数域分类图').waitFor({ timeout: 15000 })
   const comparisonText = await page.locator('body').innerText()
@@ -45,6 +80,7 @@ try {
   await comparisonReport.waitForFunction(() => document.body?.innerText.includes('未覆盖不等于失稳'), null, { timeout: 30000 })
   await comparisonReport.close()
   await page.screenshot({ path: resolve('tmp/browser-smoke-comparison.png'), fullPage: true })
+  console.log('[browser] Same-domain comparison passed.')
 
   await page.getByRole('button', { name: '低频模型' }).click()
   await page.getByText('可编辑网络与控制参数').waitFor({ timeout: 15000 })
@@ -106,6 +142,7 @@ try {
   const reportText = await reportPage.locator('body').innerText()
   if (!reportText.includes('0.05')) throw new Error('Report did not retain the custom damping parameter.')
   await reportPage.close()
+  console.log('[browser] Reduced-order workflow passed.')
 
   await page.getByRole('button', { name: '平均值 dq' }).click()
   await page.getByText('16 状态平均值 dq 模型').waitFor({ timeout: 15000 })
@@ -119,9 +156,11 @@ try {
     return {
       viewportWidth: window.innerWidth,
       documentWidth: document.documentElement.scrollWidth,
+      controlsLeft: controls?.left ?? Number.NaN,
       controlsRight: controls?.right ?? Number.NaN,
-      controlsBottom: controls?.bottom ?? Number.NaN,
+      workspaceLeft: workspace?.left ?? Number.NaN,
       workspaceTop: workspace?.top ?? Number.NaN,
+      controlsTop: controls?.top ?? Number.NaN,
       parameterGridRight: parameterGrid?.right ?? Number.NaN,
     }
   })
@@ -131,8 +170,11 @@ try {
   if (responsiveLayout.parameterGridRight > responsiveLayout.controlsRight + 1) {
     throw new Error(`Average-dq parameter grid escapes its panel: ${JSON.stringify(responsiveLayout)}`)
   }
-  if (responsiveLayout.workspaceTop < responsiveLayout.controlsBottom - 1) {
-    throw new Error(`Average-dq panels overlap instead of stacking at 1078 px: ${JSON.stringify(responsiveLayout)}`)
+  if (responsiveLayout.workspaceLeft < responsiveLayout.controlsRight + 20) {
+    throw new Error(`Average-dq columns overlap or lose their intended gutter at 1078 px: ${JSON.stringify(responsiveLayout)}`)
+  }
+  if (Math.abs(responsiveLayout.workspaceTop - responsiveLayout.controlsTop) > 1) {
+    throw new Error(`Average-dq columns are not top-aligned at 1078 px: ${JSON.stringify(responsiveLayout)}`)
   }
   await page.screenshot({ path: resolve('tmp/browser-smoke-average-dq-responsive.png'), fullPage: true })
   await page.setViewportSize({ width: 1600, height: 1100 })
@@ -187,6 +229,7 @@ try {
   if (await page.getByTestId('average-dq-boundary-export').isDisabled()) {
     throw new Error('Average-dq boundary JSON export is still disabled after calculation.')
   }
+  console.log('[browser] Average-dq ablation and boundary workflow passed.')
 
   await page.getByLabel('P* / p.u.').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()

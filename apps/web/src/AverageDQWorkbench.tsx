@@ -368,7 +368,7 @@ export default function AverageDQWorkbench() {
   ) : null
   const firstDisagreement = scanResult?.result.rows.flat().find(point => point.stability_agreement === false)
 
-  return <main>
+  return <main className="average-dq-workbench">
     <aside className="panel controls">
       <div className="panel-title"><SlidersHorizontal size={18}/><span>平均值 dq 参数</span></div>
       <p className="scope-note">首版固定为单台 VSM、LCL 滤波器、单条外部 RL 线路和无限大母线。这里修改的是实际计算参数，不是显示层滑杆。</p>

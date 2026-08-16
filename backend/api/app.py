@@ -11,6 +11,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from backend.core.fig8_kernel import available_fig8_cases, evaluate_fig8_case
+from backend.core.fig8_sensitivity import evaluate_fig8_sensitivity
 from backend.core.fig8_domain_comparison import load_fig8_domain_comparison
 from backend.core.average_dq_model import (
     AverageDQModelError,
@@ -59,6 +60,7 @@ from backend.core.reporting import (
     render_average_dq_report,
     render_fig8_domain_comparison_report,
     render_fig8_report,
+    render_fig8_sensitivity_report,
     render_reduced_order_report,
 )
 from backend.domain.network_models import NetworkTopology
@@ -1034,6 +1036,13 @@ def fig8_domain_comparison() -> dict:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
 
+@app.get("/api/analysis/fig8-sensitivity")
+def fig8_sensitivity() -> dict:
+    """Return deterministic finite-grid sensitivity evidence."""
+
+    return evaluate_fig8_sensitivity()
+
+
 @app.post("/api/reduced-order/analyze")
 def run_reduced_order_analysis(request: ReducedOrderAnalysisRequest) -> dict:
     try:
@@ -1099,6 +1108,11 @@ def run_average_dq_boundary(request: AverageDQBoundaryRequest) -> dict:
 @app.get("/api/reports/fig8", response_class=HTMLResponse)
 def fig8_report(scenario_id: Fig8CaseId = "fig8_D_0p5") -> str:
     return render_fig8_report(_analysis_payload(AnalysisRequest(scenario_id=scenario_id)))
+
+
+@app.get("/api/reports/fig8-sensitivity", response_class=HTMLResponse)
+def fig8_sensitivity_report() -> str:
+    return render_fig8_sensitivity_report(evaluate_fig8_sensitivity())
 
 
 @app.get("/api/reports/fig8-domain", response_class=HTMLResponse)

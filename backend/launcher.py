@@ -133,6 +133,55 @@ def _verify_pinned_analysis(url: str) -> dict[str, object]:
     }
 
 
+def _verify_fig8_sensitivity(url: str) -> dict[str, object]:
+    with urllib.request.urlopen(
+        f"{url}/api/analysis/fig8-sensitivity", timeout=30.0
+    ) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    cases = {
+        case.get("case_id"): case for case in payload.get("cases", [])
+    }
+    unstable = cases.get("fig8_D_0p05", {})
+    nine_point = next(
+        (
+            row
+            for row in unstable.get("frequency_density", [])
+            if row.get("requested_point_count") == 9
+        ),
+        {},
+    )
+    summary = payload.get("summary", {})
+    if (
+        response.status != 200
+        or payload.get("status") != "completed"
+        or summary.get("baseline_reconstruction_exact") is not True
+        or summary.get("common_scale_invariant_on_tested_range") is not True
+        or summary.get("stable_case_remains_covered_in_all_tested_settings")
+        is not True
+        or nine_point.get("detects_uncovered_region") is not False
+        or nine_point.get("unobserved_full_grid_uncovered_points") != 75
+    ):
+        raise RuntimeError("Packaged Fig. 8 sensitivity verification failed.")
+    with urllib.request.urlopen(
+        f"{url}/api/reports/fig8-sensitivity", timeout=30.0
+    ) as response:
+        report = response.read().decode("utf-8")
+    if (
+        response.status != 200
+        or "漏检75个完整网格未覆盖样点" not in report
+        or "不评价论文连续全频定理" not in report
+    ):
+        raise RuntimeError("Packaged Fig. 8 sensitivity report failed.")
+    return {
+        "baseline_reconstruction_exact": True,
+        "common_scale_invariant_on_tested_range": True,
+        "stable_case_remains_covered_in_all_tested_settings": True,
+        "nine_point_detects_uncovered_region": False,
+        "nine_point_unobserved_full_grid_uncovered_points": 75,
+        "report": "passed",
+    }
+
+
 def _verify_domain_comparison(url: str) -> dict[str, object]:
     with urllib.request.urlopen(
         f"{url}/api/comparison/fig8-domain", timeout=10.0
@@ -336,7 +385,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.2",
+        "schema_version": "gfm-runtime-acceptance/1.3",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),
@@ -353,6 +402,7 @@ def run(
             "health": "passed",
             "frontend": _verify_frontend(url),
             "fig8": _verify_pinned_analysis(url),
+            "fig8_sensitivity": _verify_fig8_sensitivity(url),
             "same_domain": _verify_domain_comparison(url),
             "reduced_order": _verify_reduced_order_workflow(url),
             "average_dq": _verify_average_dq_workflow(url),

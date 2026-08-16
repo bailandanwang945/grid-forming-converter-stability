@@ -67,6 +67,76 @@ export async function runAnalysis(scenarioId: Fig8ScenarioId): Promise<AnalysisR
   return response.json()
 }
 
+export type Fig8SensitivityRow = {
+  sample_count: number
+  gain_counts: { pass: number; fail: number; indeterminate: number }
+  phase_counts: { pass: number; fail: number; indeterminate: number }
+  uncovered_count: number
+  indeterminate_coverage_count: number
+  first_uncovered_frequency_hz: number | null
+  last_uncovered_frequency_hz: number | null
+  requested_point_count?: number
+  maximum_log10_frequency_step?: number
+  detects_uncovered_region?: boolean
+  observed_full_grid_uncovered_points?: number
+  unobserved_full_grid_uncovered_points?: number
+  gain_relative_tolerance?: number
+  phase_tolerance_rad?: number
+  coverage_mismatch_from_default?: number
+  common_post_transformation_matrix_scale?: number
+  coverage_mismatch_from_unit_scale?: number
+}
+
+export type Fig8SensitivityResult = {
+  status: 'completed'
+  analysis_mode: string
+  cases: Array<{
+    case_id: Fig8ScenarioId
+    damping: number
+    closed_loop_reference: 'stable' | 'unstable'
+    baseline: {
+      frequency_point_count: number
+      frequency_minimum_hz: number
+      frequency_maximum_hz: number
+      uncovered_count: number
+      indeterminate_coverage_count: number
+      reconstructed_coverage_mismatch_count: number
+    }
+    frequency_density: Fig8SensitivityRow[]
+    decision_tolerance: Fig8SensitivityRow[]
+    common_matrix_scale: Fig8SensitivityRow[]
+  }>
+  summary: {
+    baseline_reconstruction_exact: boolean
+    common_scale_invariant_on_tested_range: boolean
+    stable_case_remains_covered_in_all_tested_settings: boolean
+  }
+  experiment_contract: {
+    frequency_point_counts: number[]
+    decision_tolerances: number[]
+    common_matrix_scales: number[]
+    frequency_sampling_method: string
+    randomness: string
+    failure_conditions: string[]
+  }
+  model_scope: {
+    claim_level: string
+    statement: string
+    continuous_frequency_coverage_proved: boolean
+    paper_theorem_evaluated: boolean
+    physical_model_perturbed: boolean
+  }
+}
+
+export async function getFig8Sensitivity(): Promise<Fig8SensitivityResult> {
+  const response = await fetch('/api/analysis/fig8-sensitivity')
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    throw new Error(detail?.detail ?? `敏感性分析服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
 export type Fig8DomainClassification =
   | 'criterion-covered-stable'
   | 'stable-not-covered'

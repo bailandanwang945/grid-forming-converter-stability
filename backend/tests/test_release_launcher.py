@@ -42,6 +42,35 @@ def acceptance_app() -> FastAPI:
             },
         }
 
+    @app.get("/api/analysis/fig8-sensitivity")
+    def fig8_sensitivity() -> dict:
+        return {
+            "status": "completed",
+            "summary": {
+                "baseline_reconstruction_exact": True,
+                "common_scale_invariant_on_tested_range": True,
+                "stable_case_remains_covered_in_all_tested_settings": True,
+            },
+            "cases": [
+                {
+                    "case_id": "fig8_D_0p05",
+                    "frequency_density": [
+                        {
+                            "requested_point_count": 9,
+                            "detects_uncovered_region": False,
+                            "unobserved_full_grid_uncovered_points": 75,
+                        }
+                    ],
+                }
+            ],
+        }
+
+    @app.get("/api/reports/fig8-sensitivity")
+    def fig8_sensitivity_report() -> HTMLResponse:
+        return HTMLResponse(
+            "漏检75个完整网格未覆盖样点；不评价论文连续全频定理"
+        )
+
     @app.get("/api/comparison/fig8-domain")
     def comparison() -> dict:
         return {
@@ -157,8 +186,21 @@ class ReleaseLauncherTest(unittest.TestCase):
             evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
             self.assertEqual(evidence["status"], "passed")
             self.assertEqual(
+                evidence["schema_version"],
+                "gfm-runtime-acceptance/1.3",
+            )
+            self.assertEqual(
                 evidence["checks"]["fig8"]["uncovered_points"],
                 75,
+            )
+            self.assertFalse(
+                evidence["checks"]["fig8_sensitivity"][
+                    "nine_point_detects_uncovered_region"
+                ]
+            )
+            self.assertEqual(
+                evidence["checks"]["fig8_sensitivity"]["report"],
+                "passed",
             )
             self.assertEqual(
                 evidence["checks"]["same_domain"]["point_count"],
