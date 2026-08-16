@@ -1,0 +1,667 @@
+{
+  "amplitude_halving_check_at_2hz": {
+    "baseline_amplitude_pu": 0.0001,
+    "halved_amplitude_point": {
+      "device_current_phasor_matrix_pu": [
+        [
+          {
+            "imag": -1.4977258092347132e-05,
+            "magnitude": 3.478760807724917e-05,
+            "phase_deg": -154.49852779062954,
+            "real": -3.13983982994597e-05
+          },
+          {
+            "imag": 0.00010209119596804613,
+            "magnitude": 0.00027633645653252686,
+            "phase_deg": 21.681409536797535,
+            "real": 0.00025678634098169454
+          }
+        ],
+        [
+          {
+            "imag": -8.048681416824078e-06,
+            "magnitude": 0.00012020349901368004,
+            "phase_deg": -176.16067108169685,
+            "real": -0.00011993373129600467
+          },
+          {
+            "imag": 2.6992069287017118e-05,
+            "magnitude": 4.050441241332909e-05,
+            "phase_deg": 41.78968443485627,
+            "real": 3.019992749252745e-05
+          }
+        ]
+      ],
+      "frequency_hz": 2.0,
+      "identified_admittance_pu": [
+        [
+          {
+            "imag": -0.5994038295144328,
+            "magnitude": 3.540736946661405,
+            "phase_deg": -9.746417128573043,
+            "real": 3.4896322405973614
+          },
+          {
+            "imag": 2.8065022935728443,
+            "magnitude": 6.119584345945068,
+            "phase_deg": 152.70255332834282,
+            "real": -5.438093180822326
+          }
+        ],
+        [
+          {
+            "imag": -0.8077518790573693,
+            "magnitude": 6.583940770846794,
+            "phase_deg": -172.95290328235322,
+            "real": -6.534203316082073
+          },
+          {
+            "imag": 0.3191285412984136,
+            "magnitude": 1.907786215848197,
+            "phase_deg": 170.37047084934392,
+            "real": -1.8809054254558175
+          }
+        ]
+      ],
+      "linearized_admittance_pu": [
+        [
+          {
+            "imag": -0.5975017109204528,
+            "magnitude": 3.5404011733279637,
+            "phase_deg": -9.716118299516994,
+            "real": 3.4896177689754437
+          },
+          {
+            "imag": 2.8035437820960993,
+            "magnitude": 6.118794175678521,
+            "phase_deg": 152.72990634807417,
+            "real": -5.438730037994871
+          }
+        ],
+        [
+          {
+            "imag": -0.8079155528711448,
+            "magnitude": 6.584032378329489,
+            "phase_deg": -172.9515666588901,
+            "real": -6.534275385864907
+          },
+          {
+            "imag": 0.3191939970426389,
+            "magnitude": 1.9076384981928038,
+            "phase_deg": 170.36772402154452,
+            "real": -1.880744488770136
+          }
+        ]
+      ],
+      "magnitude_relative_error": [
+        [
+          9.48404762632746e-05,
+          0.00012913823277268632
+        ],
+        [
+          1.3913583261992788e-05,
+          7.743482611235156e-05
+        ]
+      ],
+      "maximum_harmonic_residual_ratio": 0.0006885241172105384,
+      "maximum_magnitude_relative_error": 0.00012913823277268632,
+      "maximum_phase_error_deg": 0.030298829056050074,
+      "measurement_periods": 2,
+      "passed": true,
+      "pcc_voltage_phasor_matrix_pu": [
+        [
+          {
+            "imag": -1.7382723702959587e-06,
+            "magnitude": 1.4572162901867773e-05,
+            "phase_deg": -6.850966108389493,
+            "real": 1.4468114625107069e-05
+          },
+          {
+            "imag": 2.97444849086136e-06,
+            "magnitude": 5.94628615076577e-06,
+            "phase_deg": 30.01452535458208,
+            "real": 5.148880962112193e-06
+          }
+        ],
+        [
+          {
+            "imag": 6.093342090444106e-06,
+            "magnitude": 1.3210901164449146e-05,
+            "phase_deg": 27.466887651598356,
+            "real": 1.1721735867424504e-05
+          },
+          {
+            "imag": -3.152955642889162e-05,
+            "magnitude": 4.17167474238325e-05,
+            "phase_deg": -130.90459759047548,
+            "real": -2.7316187270942013e-05
+          }
+        ]
+      ],
+      "phase_error_deg": [
+        [
+          0.030298829056050074,
+          0.02735301973132449
+        ],
+        [
+          0.001336623463090727,
+          0.0027468277994085006
+        ]
+      ],
+      "samples_per_period": 128,
+      "settling_periods": 5,
+      "solver_method": "BDF",
+      "voltage_matrix_condition_number": 2.8050364810849495
+    },
+    "halved_amplitude_pu": 5e-05,
+    "maximum_element_relative_difference": 0.00029412629053288304
+  },
+  "contract": {
+    "current_direction": "network-to-device-positive",
+    "frame": "fixed-global-synchronous-dq",
+    "frequencies_hz": [
+      0.2,
+      2.0,
+      20.0
+    ],
+    "harmonic_residual_limit": 0.02,
+    "magnitude_error_limit": 0.01,
+    "measurement_periods": 2,
+    "minimum_settling_time_s": 2.5,
+    "phase_error_limit_deg": 1.0,
+    "samples_per_period": 128,
+    "source_amplitude_pu": 0.0001,
+    "voltage_matrix_condition_limit": 100.0
+  },
+  "entrypoint": "experiments/average-dq/run_port_sinestream_identification.py",
+  "generated_at_utc": "2026-08-16T10:55:19.297358+00:00",
+  "model_scope": {
+    "claim_level": "internal-nonlinear-versus-linear-software-verification",
+    "emt_validation": false,
+    "paper_fig8_fixture": false,
+    "physical_validation": false,
+    "statement": "在团队定义的单机平均值 dq 校核算例和所测三个频点内，非线性闭环正弦辨识支持端口线性化实现的一致性；该结果不确认真实硬件或电磁暂态模型。"
+  },
+  "points": [
+    {
+      "device_current_phasor_matrix_pu": [
+        [
+          {
+            "imag": -3.798202739333805e-06,
+            "magnitude": 4.94637493375194e-05,
+            "phase_deg": -4.403940666429636,
+            "real": 4.9317706297798035e-05
+          },
+          {
+            "imag": 2.3944880503240936e-05,
+            "magnitude": 2.465038175464029e-05,
+            "phase_deg": 76.2590746258563,
+            "real": 5.855255616539299e-06
+          }
+        ],
+        [
+          {
+            "imag": -1.7292516595477302e-06,
+            "magnitude": 0.00021097316412022388,
+            "phase_deg": -179.53036713620213,
+            "real": -0.000210966077054101
+          },
+          {
+            "imag": 6.823045472679325e-06,
+            "magnitude": 5.052018430811088e-05,
+            "phase_deg": 172.2381516654795,
+            "real": -5.0057317876642596e-05
+          }
+        ]
+      ],
+      "frequency_hz": 0.2,
+      "identified_admittance_pu": [
+        [
+          {
+            "imag": -0.027160458530161014,
+            "magnitude": 1.469155213474106,
+            "phase_deg": -1.0592946792596187,
+            "real": 1.4689041326004149
+          },
+          {
+            "imag": 0.23340310525403238,
+            "magnitude": 0.35316968589116776,
+            "phase_deg": 41.367091045409694,
+            "real": 0.2650505942084288
+          }
+        ],
+        [
+          {
+            "imag": -0.06352235932086339,
+            "magnitude": 6.340115043350998,
+            "phase_deg": -179.42593723249428,
+            "real": -6.339796816365012
+          },
+          {
+            "imag": 0.050972931042658126,
+            "magnitude": 1.4748224416398745,
+            "phase_deg": 178.0193442300225,
+            "real": -1.473941313168717
+          }
+        ]
+      ],
+      "linearized_admittance_pu": [
+        [
+          {
+            "imag": -0.027167191229794396,
+            "magnitude": 1.469155737084539,
+            "phase_deg": -1.0595569159284655,
+            "real": 1.4689045317954121
+          },
+          {
+            "imag": 0.2333810957474772,
+            "magnitude": 0.3531590280574611,
+            "phase_deg": 41.363855851013504,
+            "real": 0.2650557738405211
+          }
+        ],
+        [
+          {
+            "imag": -0.06352412202406525,
+            "magnitude": 6.340114365553929,
+            "phase_deg": -179.42592124072678,
+            "real": -6.339796120872057
+          },
+          {
+            "imag": 0.0509670979859739,
+            "magnitude": 1.4748205663611433,
+            "phase_deg": 178.01956845630795,
+            "real": -1.4739396384807255
+          }
+        ]
+      ],
+      "magnitude_relative_error": [
+        [
+          3.564022654610084e-07,
+          3.0178567897038665e-05
+        ],
+        [
+          1.0690612661814021e-07,
+          1.2715300926663044e-06
+        ]
+      ],
+      "maximum_harmonic_residual_ratio": 0.00011461554236093433,
+      "maximum_magnitude_relative_error": 3.0178567897038665e-05,
+      "maximum_phase_error_deg": 0.0032351943961947006,
+      "measurement_periods": 2,
+      "passed": true,
+      "pcc_voltage_phasor_matrix_pu": [
+        [
+          {
+            "imag": -5.019927621760628e-07,
+            "magnitude": 3.572279328728736e-05,
+            "phase_deg": -0.8051725710703532,
+            "real": 3.5719265999079345e-05
+          },
+          {
+            "imag": 1.560989184666358e-06,
+            "magnitude": 1.5186004923499737e-05,
+            "phase_deg": 174.10007125229495,
+            "real": -1.5105563819398232e-05
+          }
+        ],
+        [
+          {
+            "imag": 1.4272051952829827e-06,
+            "magnitude": 1.0673911830142366e-05,
+            "phase_deg": 172.31598719903582,
+            "real": -1.0578065942704764e-05
+          },
+          {
+            "imag": -7.259891998215694e-06,
+            "magnitude": 9.951791699287442e-05,
+            "phase_deg": -4.183477841803608,
+            "real": 9.925275699331926e-05
+          }
+        ]
+      ],
+      "phase_error_deg": [
+        [
+          0.0002622366688465773,
+          0.0032351943961947006
+        ],
+        [
+          1.5991767475885002e-05,
+          0.00022422628545095202
+        ]
+      ],
+      "samples_per_period": 128,
+      "settling_periods": 1,
+      "solver_method": "BDF",
+      "voltage_matrix_condition_number": 3.068815698659923
+    },
+    {
+      "device_current_phasor_matrix_pu": [
+        [
+          {
+            "imag": -2.995340624472991e-05,
+            "magnitude": 6.958099992451554e-05,
+            "phase_deg": -154.501812158463,
+            "real": -6.280373400390781e-05
+          },
+          {
+            "imag": 0.00020423014955326996,
+            "magnitude": 0.0005527784296291268,
+            "phase_deg": 21.68238832223292,
+            "real": 0.0005136672446990294
+          }
+        ],
+        [
+          {
+            "imag": -1.6097018343830705e-05,
+            "magnitude": 0.00024040830372148867,
+            "phase_deg": -176.1607742508177,
+            "real": -0.00023986879434116044
+          },
+          {
+            "imag": 5.3991009954926144e-05,
+            "magnitude": 8.103044768933084e-05,
+            "phase_deg": 41.782536081304904,
+            "real": 6.0422713417889866e-05
+          }
+        ]
+      ],
+      "frequency_hz": 2.0,
+      "identified_admittance_pu": [
+        [
+          {
+            "imag": -0.5988055442318403,
+            "magnitude": 3.5397959097128644,
+            "phase_deg": -9.739207753823903,
+            "real": 3.4887801596857795
+          },
+          {
+            "imag": 2.805114411414408,
+            "magnitude": 6.118585789729854,
+            "phase_deg": 152.7123522882378,
+            "real": -5.437685647879924
+          }
+        ],
+        [
+          {
+            "imag": -0.8078134328819055,
+            "magnitude": 6.58393550870388,
+            "phase_deg": -172.95235788017706,
+            "real": -6.534190404359776
+          },
+          {
+            "imag": 0.3191826854885029,
+            "magnitude": 1.9077511663383278,
+            "phase_deg": 170.36864288414787,
+            "real": -1.8808606875442948
+          }
+        ]
+      ],
+      "linearized_admittance_pu": [
+        [
+          {
+            "imag": -0.5975017109204528,
+            "magnitude": 3.5404011733279637,
+            "phase_deg": -9.716118299516994,
+            "real": 3.4896177689754437
+          },
+          {
+            "imag": 2.8035437820960993,
+            "magnitude": 6.118794175678521,
+            "phase_deg": 152.72990634807417,
+            "real": -5.438730037994871
+          }
+        ],
+        [
+          {
+            "imag": -0.8079155528711448,
+            "magnitude": 6.584032378329489,
+            "phase_deg": -172.9515666588901,
+            "real": -6.534275385864907
+          },
+          {
+            "imag": 0.3191939970426389,
+            "magnitude": 1.9076384981928038,
+            "phase_deg": 170.36772402154452,
+            "real": -1.880744488770136
+          }
+        ]
+      ],
+      "magnitude_relative_error": [
+        [
+          0.00017095904827370915,
+          3.405670180815637e-05
+        ],
+        [
+          1.4712811244335172e-05,
+          5.9061580918199384e-05
+        ]
+      ],
+      "maximum_harmonic_residual_ratio": 0.0007595352066524712,
+      "maximum_magnitude_relative_error": 0.00017095904827370915,
+      "maximum_phase_error_deg": 0.02308945430690992,
+      "measurement_periods": 2,
+      "passed": true,
+      "pcc_voltage_phasor_matrix_pu": [
+        [
+          {
+            "imag": -3.4763659037602417e-06,
+            "magnitude": 2.9144049293194137e-05,
+            "phase_deg": -6.850677307147253,
+            "real": 2.8935972237118677e-05
+          },
+          {
+            "imag": 5.949000897782591e-06,
+            "magnitude": 1.1897553302601595e-05,
+            "phase_deg": 30.001246989246322,
+            "real": 1.0303453930912101e-05
+          }
+        ],
+        [
+          {
+            "imag": 1.2186328468386887e-05,
+            "magnitude": 2.6423439263741484e-05,
+            "phase_deg": 27.464173242821833,
+            "real": 2.3445501508503044e-05
+          },
+          {
+            "imag": -6.307379575459656e-05,
+            "magnitude": 8.346332689628547e-05,
+            "phase_deg": -130.9128415417173,
+            "real": -5.4660984492630995e-05
+          }
+        ]
+      ],
+      "phase_error_deg": [
+        [
+          0.02308945430690992,
+          0.01755405983635126
+        ],
+        [
+          0.0007912212869535428,
+          0.0009188626033795007
+        ]
+      ],
+      "samples_per_period": 128,
+      "settling_periods": 5,
+      "solver_method": "BDF",
+      "voltage_matrix_condition_number": 2.8058719581344276
+    },
+    {
+      "device_current_phasor_matrix_pu": [
+        [
+          {
+            "imag": -4.269543782218721e-05,
+            "magnitude": 0.00014182725586881585,
+            "phase_deg": -17.51997726757831,
+            "real": 0.0001352481796419098
+          },
+          {
+            "imag": -0.00010904154511831736,
+            "magnitude": 0.0001199398192512881,
+            "phase_deg": -65.38615330843955,
+            "real": 4.995499654931045e-05
+          }
+        ],
+        [
+          {
+            "imag": 0.0001099444401327202,
+            "magnitude": 0.00012217847062152143,
+            "phase_deg": 115.85933822123778,
+            "real": -5.328976231244304e-05
+          },
+          {
+            "imag": -4.238146208474725e-05,
+            "magnitude": 0.0001409405539231261,
+            "phase_deg": -17.49992333195185,
+            "real": 0.00013441745203550298
+          }
+        ]
+      ],
+      "frequency_hz": 20.0,
+      "identified_admittance_pu": [
+        [
+          {
+            "imag": -1.205325749949236,
+            "magnitude": 1.8589869332101858,
+            "phase_deg": -40.41940193962924,
+            "real": 1.4152816872819076
+          },
+          {
+            "imag": -0.7565130232411246,
+            "magnitude": 0.7977412932637911,
+            "phase_deg": -71.4991136501162,
+            "real": 0.2531387300370286
+          }
+        ],
+        [
+          {
+            "imag": 0.7857401878498429,
+            "magnitude": 0.8410697130985102,
+            "phase_deg": 110.89826245596758,
+            "real": -0.30001769862677063
+          },
+          {
+            "imag": -1.1966810952170082,
+            "magnitude": 1.8448045361477263,
+            "phase_deg": -40.44187942857515,
+            "real": 1.4040150045286017
+          }
+        ]
+      ],
+      "linearized_admittance_pu": [
+        [
+          {
+            "imag": -1.2053257667548298,
+            "magnitude": 1.8589864515670822,
+            "phase_deg": -40.419415262492514,
+            "real": 1.4152810403262148
+          },
+          {
+            "imag": -0.7565160075147604,
+            "magnitude": 0.7977438172812917,
+            "phase_deg": -71.49924735015445,
+            "real": 0.2531377656227016
+          }
+        ],
+        [
+          {
+            "imag": 0.785740332695207,
+            "magnitude": 0.8410701473621784,
+            "phase_deg": 110.8983122717021,
+            "real": -0.3000185366937547
+          },
+          {
+            "imag": -1.1966832796462958,
+            "magnitude": 1.8448046750218559,
+            "phase_deg": -40.44196489574735,
+            "real": 1.4040133251495444
+          }
+        ]
+      ],
+      "magnitude_relative_error": [
+        [
+          2.5908908761358495e-07,
+          3.1639449230232188e-06
+        ],
+        [
+          5.163227701286186e-07,
+          7.52785005544273e-08
+        ]
+      ],
+      "maximum_harmonic_residual_ratio": 5.731983300848224e-06,
+      "maximum_magnitude_relative_error": 3.1639449230232188e-06,
+      "maximum_phase_error_deg": 0.00013370003825118168,
+      "measurement_periods": 2,
+      "passed": true,
+      "pcc_voltage_phasor_matrix_pu": [
+        [
+          {
+            "imag": 1.760745511265245e-05,
+            "magnitude": 7.819286940955757e-05,
+            "phase_deg": 13.013451585248093,
+            "real": 7.618465955135623e-05
+          },
+          {
+            "imag": -1.652820587329556e-05,
+            "magnitude": 3.101254463836405e-05,
+            "phase_deg": -32.20514528279857,
+            "real": 2.6241119174998637e-05
+          }
+        ],
+        [
+          {
+            "imag": 1.7004511773404608e-05,
+            "magnitude": 3.133128885400924e-05,
+            "phase_deg": 147.13014696525508,
+            "real": -2.6315323304141787e-05
+          },
+          {
+            "imag": 1.7429994292647015e-05,
+            "magnitude": 7.918159325052974e-05,
+            "phase_deg": 12.716483309364769,
+            "real": 7.723936825641849e-05
+          }
+        ]
+      ],
+      "phase_error_deg": [
+        [
+          1.3322863281047515e-05,
+          0.00013370003825118168
+        ],
+        [
+          4.981573450152779e-05,
+          8.546717219647832e-05
+        ]
+      ],
+      "samples_per_period": 128,
+      "settling_periods": 50,
+      "solver_method": "Radau",
+      "voltage_matrix_condition_number": 1.7042246147865074
+    }
+  ],
+  "preset_id": "average-dq-smib-verification",
+  "provenance": {
+    "device_open_port_spectral_abscissa_per_s": 11.942134963068025,
+    "identification_path": "nonlinear-closed-loop-grid-source-injection-and-pcc-Y=I*inv(V)",
+    "implementation": "backend.core.average_dq_port_identification",
+    "mathworks_functions_checked": [
+      "frestimate",
+      "frest.Sinestream",
+      "tfestimate"
+    ],
+    "mathworks_release_checked": "R2024b",
+    "mathworks_signal_reference": "https://www.mathworks.com/help/releases/R2024b/slcontrol/generate-perturbation-signals.html",
+    "mathworks_workflow_reference": "https://www.mathworks.com/help/releases/R2024b/slcontrol/ug/estimate-frequency-response-matlab-code.html",
+    "randomness": "none-deterministic-ode-and-least-squares"
+  },
+  "run_id": "average-dq-three-frequency-port-sinestream-v1",
+  "summary": {
+    "frequency_count": 3,
+    "maximum_harmonic_residual_ratio": 0.0007595352066524712,
+    "maximum_magnitude_relative_error": 0.00017095904827370915,
+    "maximum_phase_error_deg": 0.02308945430690992,
+    "maximum_voltage_matrix_condition_number": 3.068815698659923,
+    "passed": true
+  }
+}

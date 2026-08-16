@@ -639,6 +639,33 @@ def _closed_rhs(
     converter: GridFormingConverter,
     line: ACLine,
 ) -> NDArray[np.float64]:
+    grid_current_derivative, terminal_voltage_local = _closed_grid_quantities(
+        state,
+        grid_voltage_global,
+        topology,
+        parameters,
+        line,
+    )
+    return _controller_and_filter_rhs(
+        state,
+        terminal_voltage_local,
+        grid_current_derivative,
+        references,
+        topology,
+        parameters,
+        converter,
+    )
+
+
+def _closed_grid_quantities(
+    state: NDArray[np.float64],
+    grid_voltage_global: NDArray[np.float64],
+    topology: NetworkTopology,
+    parameters: AverageDQGFMParameters,
+    line: ACLine,
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Return line-current derivative and near-end PCC voltage in local dq."""
+
     delta, frequency_deviation, *_rest = _unpack_state(state)
     capacitor_voltage = state[6:8]
     grid_current = state[8:10]
@@ -663,15 +690,26 @@ def _closed_rhs(
             + omega_base * (1.0 + frequency_deviation) * J @ grid_current
         )
     )
-    return _controller_and_filter_rhs(
+    return grid_current_derivative, terminal_voltage_local
+
+
+def _closed_pcc_voltage_global(
+    state: NDArray[np.float64],
+    grid_voltage_global: NDArray[np.float64],
+    topology: NetworkTopology,
+    parameters: AverageDQGFMParameters,
+    line: ACLine,
+) -> NDArray[np.float64]:
+    """Reconstruct the near-end PCC voltage in the fixed global dq frame."""
+
+    _grid_current_derivative, terminal_voltage_local = _closed_grid_quantities(
         state,
-        terminal_voltage_local,
-        grid_current_derivative,
-        references,
+        grid_voltage_global,
         topology,
         parameters,
-        converter,
+        line,
     )
+    return _rotation(float(state[0])) @ terminal_voltage_local
 
 
 def _device_current_global(state: NDArray[np.float64]) -> NDArray[np.float64]:
