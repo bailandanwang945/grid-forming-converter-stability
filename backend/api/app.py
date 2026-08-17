@@ -17,6 +17,9 @@ from backend.core.mathworks_external_evidence import (
     MathWorksExternalEvidenceError,
     load_mathworks_external_evidence,
 )
+from backend.core.mathworks_team_comparison import (
+    evaluate_mathworks_team_comparison,
+)
 from backend.core.average_dq_model import (
     AverageDQModelError,
     STATE_LABELS,
@@ -1179,6 +1182,16 @@ def mathworks_gfm_external_evidence() -> dict:
 
     try:
         return load_mathworks_external_evidence()
+    except MathWorksExternalEvidenceError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.get("/api/evidence/mathworks-team-comparison")
+def mathworks_team_comparison() -> dict:
+    """Recompute the fixed aligned-coordinate cross-model comparison."""
+
+    try:
+        return evaluate_mathworks_team_comparison()
     except MathWorksExternalEvidenceError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 

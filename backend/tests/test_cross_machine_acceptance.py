@@ -98,6 +98,7 @@ def _write_valid_evidence(
     if runtime_schema in (
         "gfm-runtime-acceptance/1.3",
         "gfm-runtime-acceptance/1.4",
+        "gfm-runtime-acceptance/1.5",
     ):
         runtime["checks"]["fig8_sensitivity"] = {
             "baseline_reconstruction_exact": True,
@@ -107,7 +108,10 @@ def _write_valid_evidence(
             "nine_point_unobserved_full_grid_uncovered_points": 75,
             "report": "passed",
         }
-    if runtime_schema == "gfm-runtime-acceptance/1.4":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.4",
+        "gfm-runtime-acceptance/1.5",
+    ):
         runtime["checks"]["average_dq_port_identification"] = {
             "preset_id": "average-dq-smib-verification",
             "frequencies_hz": [0.2, 2.0, 20.0],
@@ -122,6 +126,36 @@ def _write_valid_evidence(
             "physical_validation": False,
             "emt_validation": False,
             "report": "passed",
+        }
+    if runtime_schema == "gfm-runtime-acceptance/1.5":
+        runtime["checks"]["mathworks_team_comparison"] = {
+            "run_id": "mathworks-team-aligned-eight-point-comparison-v1",
+            "point_count": 8,
+            "classification_agreement_count": 7,
+            "classification_disagreement_count": 1,
+            "disagreement_points": [
+                {
+                    "scr": 5.0,
+                    "damping_mathworks_pu_per_hz": 1.056,
+                    "external_vendor_outcome": "Unstable",
+                    "team_pre_step_stability": "stable",
+                    "team_post_step_stability": "stable",
+                }
+            ],
+            "external_vendor_classification_bracket_pu_per_hz": [
+                1.30675,
+                1.3215,
+            ],
+            "team_local_eigenvalue_boundaries_pu_per_hz": [
+                0.7586000105,
+                0.7560116930,
+            ],
+            "quantitative_transition_reproduced": False,
+            "same_full_physical_model": False,
+            "same_classifier": False,
+            "nonlinear_team_step_completed": False,
+            "paper_sufficient_condition_evaluated": False,
+            "physical_hardware_validation": False,
         }
     (directory / "cross-machine-acceptance.json").write_text(json.dumps(acceptance))
     (directory / "runtime-evidence.json").write_text(json.dumps(runtime))
@@ -219,6 +253,28 @@ class CrossMachineAcceptanceTest(unittest.TestCase):
             )
         self.assertFalse(review.automated_evidence_passed)
         self.assertIn("三频点端口正弦辨识", " ".join(review.errors))
+
+    def test_runtime_1p5_requires_mathworks_team_comparison(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            _write_valid_evidence(
+                directory,
+                runtime_schema="gfm-runtime-acceptance/1.5",
+            )
+            runtime_path = directory / "runtime-evidence.json"
+            runtime = json.loads(runtime_path.read_text())
+            runtime["checks"]["mathworks_team_comparison"][
+                "classification_agreement_count"
+            ] = 8
+            runtime_path.write_text(json.dumps(runtime))
+            review = review_cross_machine_evidence(
+                directory,
+                expected_version=VERSION,
+                expected_commit=COMMIT,
+                expected_zip_sha256=ZIP_HASH,
+            )
+        self.assertFalse(review.automated_evidence_passed)
+        self.assertIn("八点对照", " ".join(review.errors))
 
 
 if __name__ == "__main__":

@@ -423,6 +423,83 @@ def _verify_average_dq_port_identification(url: str) -> dict[str, object]:
     }
 
 
+def _verify_mathworks_team_comparison(url: str) -> dict[str, object]:
+    with urllib.request.urlopen(
+        f"{url}/api/evidence/mathworks-team-comparison",
+        timeout=45.0,
+    ) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    summary = payload.get("summary", {})
+    boundary = payload.get("boundary_comparison", {})
+    scope = payload.get("scope", {})
+    disagreement_points = summary.get("disagreement_points", [])
+    team_boundaries = boundary.get("team_local_eigenvalue_boundaries", [])
+    roots = [
+        item.get("damping_mw_equivalent_pu_per_hz")
+        for item in team_boundaries
+        if isinstance(item, dict)
+    ]
+    expected_disagreement = {
+        "scr": 5.0,
+        "damping_mathworks_pu_per_hz": 1.056,
+        "external_vendor_outcome": "Unstable",
+        "team_pre_step_stability": "stable",
+        "team_post_step_stability": "stable",
+    }
+    if (
+        response.status != 200
+        or payload.get("status") != "completed"
+        or summary.get("point_count") != 8
+        or summary.get("classification_agreement_count") != 7
+        or summary.get("classification_disagreement_count") != 1
+        or disagreement_points != [expected_disagreement]
+        or boundary.get("external_vendor_classification_bracket_pu_per_hz")
+        != [1.30675, 1.3215]
+        or len(roots) != 2
+        or not all(isinstance(value, (int, float)) for value in roots)
+        or abs(roots[0] - 0.7586000105) >= 1.0e-8
+        or abs(roots[1] - 0.7560116930) >= 1.0e-8
+        or boundary.get("quantitative_transition_reproduced") is not False
+        or boundary.get("external_and_team_boundaries_are_same_evidence_type")
+        is not False
+        or scope.get("same_full_physical_model") is not False
+        or scope.get("same_classifier") is not False
+        or scope.get("nonlinear_team_step_completed") is not False
+        or scope.get("paper_sufficient_condition_evaluated") is not False
+        or scope.get("physical_hardware_validation") is not False
+    ):
+        raise RuntimeError(
+            "Packaged MathWorks-team cross-model comparison verification failed."
+        )
+
+    return {
+        "run_id": payload["run_id"],
+        "point_count": summary["point_count"],
+        "classification_agreement_count": summary[
+            "classification_agreement_count"
+        ],
+        "classification_disagreement_count": summary[
+            "classification_disagreement_count"
+        ],
+        "disagreement_points": disagreement_points,
+        "external_vendor_classification_bracket_pu_per_hz": boundary[
+            "external_vendor_classification_bracket_pu_per_hz"
+        ],
+        "team_local_eigenvalue_boundaries_pu_per_hz": roots,
+        "quantitative_transition_reproduced": boundary[
+            "quantitative_transition_reproduced"
+        ],
+        "same_full_physical_model": scope["same_full_physical_model"],
+        "same_classifier": scope["same_classifier"],
+        "nonlinear_team_step_completed": scope["nonlinear_team_step_completed"],
+        "paper_sufficient_condition_evaluated": scope[
+            "paper_sufficient_condition_evaluated"
+        ],
+        "physical_hardware_validation": scope["physical_hardware_validation"],
+    }
+
+
 def _write_runtime_evidence(path: str, payload: dict[str, object]) -> None:
     evidence_path = Path(path).expanduser().resolve()
     evidence_path.parent.mkdir(parents=True, exist_ok=True)
@@ -466,7 +543,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.4",
+        "schema_version": "gfm-runtime-acceptance/1.5",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),
@@ -490,6 +567,7 @@ def run(
             "average_dq_port_identification": (
                 _verify_average_dq_port_identification(url)
             ),
+            "mathworks_team_comparison": _verify_mathworks_team_comparison(url),
         }
         evidence["status"] = "passed"
         if evidence_file:

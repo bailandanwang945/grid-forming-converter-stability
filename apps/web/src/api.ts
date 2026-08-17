@@ -941,6 +941,74 @@ export type MathWorksExternalEvidenceResult = {
   }
 }
 
+export type MathWorksTeamComparisonPoint = {
+  scr: number
+  x_by_r: number
+  source_resistance_pu: number
+  source_reactance_pu: number
+  damping_mathworks_pu_per_hz: number
+  damping_team_native_pu_per_pu_frequency: number
+  external_vendor_outcome: 'Stable' | 'Unstable'
+  team_pre_step_stability: 'stable' | 'marginal' | 'unstable'
+  team_post_step_stability: 'stable' | 'marginal' | 'unstable'
+  team_endpoints_same_class: boolean
+  classification_agreement: boolean
+  team_pre_step_dominant_mode: { real_per_s: number; oscillation_frequency_hz: number }
+  team_post_step_dominant_mode: { real_per_s: number; oscillation_frequency_hz: number }
+}
+
+export type MathWorksTeamComparisonResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  mapping_contract: {
+    base_frequency_hz: number
+    damping_mathworks_unit: string
+    damping_team_native_unit: string
+    damping_conversion: string
+    mathworks_model_gain_expression: string
+    team_model_equation: string
+    source_impedance_definition: string
+    x_by_r: number
+    pre_step_active_power_pu: number
+    post_step_active_power_pu: number
+  }
+  summary: {
+    point_count: number
+    classification_agreement_count: number
+    classification_disagreement_count: number
+    all_team_pre_post_endpoint_classes_equal: boolean
+    disagreement_points: Array<Record<string, string | number>>
+    interpretation: string
+  }
+  points: MathWorksTeamComparisonPoint[]
+  boundary_comparison: {
+    external_vendor_classification_bracket_pu_per_hz: number[]
+    team_local_eigenvalue_boundaries: Array<{
+      active_power_setpoint_pu: number
+      damping_mw_equivalent_pu_per_hz: number
+      damping_team_native_pu_per_pu_frequency: number
+      spectral_abscissa_per_s: number
+    }>
+    external_and_team_boundaries_are_same_evidence_type: boolean
+    external_lower_minus_team_boundary_pu_per_hz: number[]
+    quantitative_transition_reproduced: boolean
+  }
+  provenance: Record<string, unknown>
+  scope: {
+    claim_level: string
+    external_classifier: string
+    team_classifier: string
+    same_full_physical_model: boolean
+    same_classifier: boolean
+    same_controller_inner_loops: boolean
+    nonlinear_team_step_completed: boolean
+    paper_sufficient_condition_evaluated: boolean
+    physical_hardware_validation: boolean
+    statement: string
+  }
+}
+
 type AverageDQAblationInput = {
   preset_id: AverageDQAblationPresetId
 }
@@ -1006,6 +1074,15 @@ export async function getMathWorksExternalEvidence(): Promise<MathWorksExternalE
   if (!response.ok) {
     const detail = await response.json().catch(() => null)
     throw new Error(detail?.detail ?? `外部验证证据服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
+export async function getMathWorksTeamComparison(): Promise<MathWorksTeamComparisonResult> {
+  const response = await fetch('/api/evidence/mathworks-team-comparison')
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    throw new Error(detail?.detail ?? `跨模型对照服务返回 ${response.status}`)
   }
   return response.json()
 }

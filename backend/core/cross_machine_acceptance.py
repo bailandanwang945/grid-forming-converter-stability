@@ -98,8 +98,9 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.2",
         "gfm-runtime-acceptance/1.3",
         "gfm-runtime-acceptance/1.4",
+        "gfm-runtime-acceptance/1.5",
     ):
-        errors.append("运行时证据版本不是受支持的 1.2、1.3 或 1.4")
+        errors.append("运行时证据版本不是受支持的 1.2、1.3、1.4 或 1.5")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -181,6 +182,11 @@ def review_cross_machine_evidence(
         )
         else {}
     )
+    mathworks_team_comparison = (
+        runtime_checks.get("mathworks_team_comparison")
+        if isinstance(runtime_checks.get("mathworks_team_comparison"), dict)
+        else {}
+    )
     if runtime.get("status") != "passed" or runtime_checks.get("health") != "passed":
         errors.append("运行时健康检查未通过")
     if frontend.get("index") != "passed" or frontend.get("local_asset_count", 0) < 2:
@@ -195,6 +201,7 @@ def review_cross_machine_evidence(
     if runtime_schema in (
         "gfm-runtime-acceptance/1.3",
         "gfm-runtime-acceptance/1.4",
+        "gfm-runtime-acceptance/1.5",
     ):
         if (
             fig8_sensitivity.get("baseline_reconstruction_exact") is not True
@@ -246,7 +253,10 @@ def review_cross_machine_evidence(
         or average_dq.get("report") != "passed"
     ):
         errors.append("16状态平均值 dq 模型或打印报告证据未通过")
-    if runtime_schema == "gfm-runtime-acceptance/1.4":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.4",
+        "gfm-runtime-acceptance/1.5",
+    ):
         if (
             port_identification.get("preset_id")
             != "average-dq-smib-verification"
@@ -282,6 +292,59 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.3",
     ):
         warnings.append("旧版运行时证据未包含三频点端口正弦辨识检查")
+
+    if runtime_schema == "gfm-runtime-acceptance/1.5":
+        roots = mathworks_team_comparison.get(
+            "team_local_eigenvalue_boundaries_pu_per_hz", []
+        )
+        disagreement_points = mathworks_team_comparison.get(
+            "disagreement_points", []
+        )
+        expected_disagreement = {
+            "scr": 5.0,
+            "damping_mathworks_pu_per_hz": 1.056,
+            "external_vendor_outcome": "Unstable",
+            "team_pre_step_stability": "stable",
+            "team_post_step_stability": "stable",
+        }
+        if (
+            mathworks_team_comparison.get("point_count") != 8
+            or mathworks_team_comparison.get("classification_agreement_count") != 7
+            or mathworks_team_comparison.get("classification_disagreement_count")
+            != 1
+            or disagreement_points != [expected_disagreement]
+            or mathworks_team_comparison.get(
+                "external_vendor_classification_bracket_pu_per_hz"
+            )
+            != [1.30675, 1.3215]
+            or not isinstance(roots, list)
+            or len(roots) != 2
+            or not all(isinstance(value, (int, float)) for value in roots)
+            or abs(roots[0] - 0.7586000105) >= 1.0e-8
+            or abs(roots[1] - 0.7560116930) >= 1.0e-8
+            or mathworks_team_comparison.get(
+                "quantitative_transition_reproduced"
+            )
+            is not False
+            or mathworks_team_comparison.get("same_full_physical_model")
+            is not False
+            or mathworks_team_comparison.get("same_classifier") is not False
+            or mathworks_team_comparison.get("nonlinear_team_step_completed")
+            is not False
+            or mathworks_team_comparison.get(
+                "paper_sufficient_condition_evaluated"
+            )
+            is not False
+            or mathworks_team_comparison.get("physical_hardware_validation")
+            is not False
+        ):
+            errors.append("MathWorks 外部证据与团队模型八点对照证据不一致")
+    elif runtime_schema in (
+        "gfm-runtime-acceptance/1.2",
+        "gfm-runtime-acceptance/1.3",
+        "gfm-runtime-acceptance/1.4",
+    ):
+        warnings.append("旧版运行时证据未包含 MathWorks—团队模型八点对照")
 
     for required_file in ("acceptance-summary.txt", "runtime-console.log"):
         if not (directory / required_file).is_file():

@@ -176,6 +176,46 @@ def acceptance_app() -> FastAPI:
             "未完成硬件、硬件在环或可信 EMT 确认"
         )
 
+    @app.get("/api/evidence/mathworks-team-comparison")
+    def mathworks_team_comparison() -> dict:
+        return {
+            "run_id": "mathworks-team-aligned-eight-point-comparison-v1",
+            "status": "completed",
+            "summary": {
+                "point_count": 8,
+                "classification_agreement_count": 7,
+                "classification_disagreement_count": 1,
+                "disagreement_points": [
+                    {
+                        "scr": 5.0,
+                        "damping_mathworks_pu_per_hz": 1.056,
+                        "external_vendor_outcome": "Unstable",
+                        "team_pre_step_stability": "stable",
+                        "team_post_step_stability": "stable",
+                    }
+                ],
+            },
+            "boundary_comparison": {
+                "external_vendor_classification_bracket_pu_per_hz": [
+                    1.30675,
+                    1.3215,
+                ],
+                "team_local_eigenvalue_boundaries": [
+                    {"damping_mw_equivalent_pu_per_hz": 0.7586000105},
+                    {"damping_mw_equivalent_pu_per_hz": 0.7560116930},
+                ],
+                "external_and_team_boundaries_are_same_evidence_type": False,
+                "quantitative_transition_reproduced": False,
+            },
+            "scope": {
+                "same_full_physical_model": False,
+                "same_classifier": False,
+                "nonlinear_team_step_completed": False,
+                "paper_sufficient_condition_evaluated": False,
+                "physical_hardware_validation": False,
+            },
+        }
+
     return app
 
 
@@ -221,7 +261,7 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertEqual(evidence["status"], "passed")
             self.assertEqual(
                 evidence["schema_version"],
-                "gfm-runtime-acceptance/1.4",
+                "gfm-runtime-acceptance/1.5",
             )
             self.assertEqual(
                 evidence["checks"]["fig8"]["uncovered_points"],
@@ -235,6 +275,17 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertEqual(
                 evidence["checks"]["fig8_sensitivity"]["report"],
                 "passed",
+            )
+            self.assertEqual(
+                evidence["checks"]["mathworks_team_comparison"][
+                    "classification_agreement_count"
+                ],
+                7,
+            )
+            self.assertFalse(
+                evidence["checks"]["mathworks_team_comparison"][
+                    "quantitative_transition_reproduced"
+                ]
             )
             self.assertEqual(
                 evidence["checks"]["same_domain"]["point_count"],

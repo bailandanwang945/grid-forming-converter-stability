@@ -1,0 +1,253 @@
+{
+  "run_id": "mathworks-team-aligned-eight-point-comparison-v1",
+  "status": "completed",
+  "analysis_mode": "aligned-coordinate-cross-model-comparison",
+  "mapping_contract": {
+    "base_frequency_hz": 50.0,
+    "damping_mathworks_unit": "pu-power-per-Hz",
+    "damping_team_native_unit": "pu-power-per-pu-frequency",
+    "damping_conversion": "D_team = f_base * D_mathworks",
+    "mathworks_model_gain_expression": "vsmDampingConst*powerFreq",
+    "team_model_equation": "M*d(Delta_omega_pu)/dt = P_ref - P_meas - D_team*Delta_omega_pu",
+    "source_impedance_definition": "abs(Z_source_pu)=1/SCR",
+    "x_by_r": 5.0,
+    "pre_step_active_power_pu": 0.6,
+    "post_step_active_power_pu": 0.8
+  },
+  "summary": {
+    "point_count": 8,
+    "classification_agreement_count": 7,
+    "classification_disagreement_count": 1,
+    "all_team_pre_post_endpoint_classes_equal": true,
+    "disagreement_points": [
+      {
+        "scr": 5.0,
+        "damping_mathworks_pu_per_hz": 1.056,
+        "external_vendor_outcome": "Unstable",
+        "team_pre_step_stability": "stable",
+        "team_post_step_stability": "stable"
+      }
+    ],
+    "interpretation": "八个对齐坐标中七点分类一致，支持所测范围内控制—电网耦合的定性趋势；SCR=5、D=1.056 pu/Hz 处不一致，且定量过渡位置未复现。"
+  },
+  "points": [
+    {
+      "scr": 2.5,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.07844645405527362,
+      "source_reactance_pu": 0.3922322702763681,
+      "damping_mathworks_pu_per_hz": 0.6,
+      "damping_team_native_pu_per_pu_frequency": 30.0,
+      "external_vendor_outcome": "Stable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -0.3920424283003864,
+        "oscillation_frequency_hz": 1.8217195711859904
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -0.4532559455740164,
+        "oscillation_frequency_hz": 1.802210892843266
+      }
+    },
+    {
+      "scr": 2.5,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.07844645405527362,
+      "source_reactance_pu": 0.3922322702763681,
+      "damping_mathworks_pu_per_hz": 1.056,
+      "damping_team_native_pu_per_pu_frequency": 52.800000000000004,
+      "external_vendor_outcome": "Stable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -2.6807942586790894,
+        "oscillation_frequency_hz": 1.5446139200579847
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -2.7267306074446394,
+        "oscillation_frequency_hz": 1.5231496790086843
+      }
+    },
+    {
+      "scr": 2.5,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.07844645405527362,
+      "source_reactance_pu": 0.3922322702763681,
+      "damping_mathworks_pu_per_hz": 2.0,
+      "damping_team_native_pu_per_pu_frequency": 100.0,
+      "external_vendor_outcome": "Stable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -4.29395587654075,
+        "oscillation_frequency_hz": 1.0266200243375885
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -4.308506765064428,
+        "oscillation_frequency_hz": 1.0058685665285758
+      }
+    },
+    {
+      "scr": 2.5,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.07844645405527362,
+      "source_reactance_pu": 0.3922322702763681,
+      "damping_mathworks_pu_per_hz": 4.0,
+      "damping_team_native_pu_per_pu_frequency": 200.0,
+      "external_vendor_outcome": "Stable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -4.771877555659774,
+        "oscillation_frequency_hz": 0.44042160627033156
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -4.774412859061085,
+        "oscillation_frequency_hz": 0.41652216389082175
+      }
+    },
+    {
+      "scr": 5.0,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.03922322702763681,
+      "source_reactance_pu": 0.19611613513818404,
+      "damping_mathworks_pu_per_hz": 0.6,
+      "damping_team_native_pu_per_pu_frequency": 30.0,
+      "external_vendor_outcome": "Unstable",
+      "team_pre_step_stability": "unstable",
+      "team_post_step_stability": "unstable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": 1.0524856738995552,
+        "oscillation_frequency_hz": 2.2697503609912775
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": 1.035243669029064,
+        "oscillation_frequency_hz": 2.2639797003263955
+      }
+    },
+    {
+      "scr": 5.0,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.03922322702763681,
+      "source_reactance_pu": 0.19611613513818404,
+      "damping_mathworks_pu_per_hz": 1.056,
+      "damping_team_native_pu_per_pu_frequency": 52.800000000000004,
+      "external_vendor_outcome": "Unstable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": false,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -1.2902048435345526,
+        "oscillation_frequency_hz": 6.612129031774034
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -1.319512739300805,
+        "oscillation_frequency_hz": 6.609114548413201
+      }
+    },
+    {
+      "scr": 5.0,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.03922322702763681,
+      "source_reactance_pu": 0.19611613513818404,
+      "damping_mathworks_pu_per_hz": 2.0,
+      "damping_team_native_pu_per_pu_frequency": 100.0,
+      "external_vendor_outcome": "Stable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -1.0472852035186597,
+        "oscillation_frequency_hz": 6.640702550167546
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -1.0731266828116444,
+        "oscillation_frequency_hz": 6.638550847717877
+      }
+    },
+    {
+      "scr": 5.0,
+      "x_by_r": 5.0,
+      "source_resistance_pu": 0.03922322702763681,
+      "source_reactance_pu": 0.19611613513818404,
+      "damping_mathworks_pu_per_hz": 4.0,
+      "damping_team_native_pu_per_pu_frequency": 200.0,
+      "external_vendor_outcome": "Stable",
+      "team_pre_step_stability": "stable",
+      "team_post_step_stability": "stable",
+      "team_endpoints_same_class": true,
+      "classification_agreement": true,
+      "team_pre_step_dominant_mode": {
+        "real_per_s": -0.9700934028167421,
+        "oscillation_frequency_hz": 6.683949281171271
+      },
+      "team_post_step_dominant_mode": {
+        "real_per_s": -0.9964001978926573,
+        "oscillation_frequency_hz": 6.68271940156541
+      }
+    }
+  ],
+  "boundary_comparison": {
+    "external_vendor_classification_bracket_pu_per_hz": [
+      1.30675,
+      1.3215
+    ],
+    "team_local_eigenvalue_boundaries": [
+      {
+        "active_power_setpoint_pu": 0.6,
+        "damping_mw_equivalent_pu_per_hz": 0.7586000104691523,
+        "damping_team_native_pu_per_pu_frequency": 37.930000523457615,
+        "spectral_abscissa_per_s": -2.443045765687657e-13
+      },
+      {
+        "active_power_setpoint_pu": 0.8,
+        "damping_mw_equivalent_pu_per_hz": 0.7560116929636128,
+        "damping_team_native_pu_per_pu_frequency": 37.80058464818064,
+        "spectral_abscissa_per_s": -3.6504133049675147e-13
+      }
+    ],
+    "external_and_team_boundaries_are_same_evidence_type": false,
+    "external_lower_minus_team_boundary_pu_per_hz": [
+      0.5481499895308478,
+      0.5507383070363873
+    ],
+    "quantitative_transition_reproduced": false
+  },
+  "provenance": {
+    "external_evidence_run_id": "mathworks-gfm-external-evidence-v1",
+    "external_source": {
+      "provider": "MathWorks",
+      "release_tag": "23.2.1.4",
+      "commit": "a65692b004637acb38b2f8c64db7dcf47efe24c7",
+      "matlab_release": "2024b"
+    },
+    "team_preset_id": "average-dq-smib-verification",
+    "team_model": "project-defined-16-state-average-value-dq-v1",
+    "deterministic": true
+  },
+  "scope": {
+    "claim_level": "aligned-coordinate-eight-point-cross-model-screening",
+    "external_classifier": "vendor nonlinear time-domain threshold classifier",
+    "team_classifier": "local closed-loop eigenvalue spectral abscissa",
+    "same_full_physical_model": false,
+    "same_classifier": false,
+    "same_controller_inner_loops": false,
+    "nonlinear_team_step_completed": false,
+    "paper_sufficient_condition_evaluated": false,
+    "physical_hardware_validation": false,
+    "statement": "只对齐阻尼归一化、SCR、X/R、基频和有功工作点；七点一致不构成模型确认，一点不一致也不构成对任一模型的证伪。"
+  }
+}

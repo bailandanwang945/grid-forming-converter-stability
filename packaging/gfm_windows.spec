@@ -13,6 +13,7 @@ comparison_root = (
 external_validation_root = (
     project_root / "results" / "mathworks-gfm-external-validation"
 )
+cross_model_comparison_root = project_root / "results" / "mathworks-team-comparison"
 build_info = Path(os.environ["GFM_BUILD_INFO"])
 
 datas = [
@@ -25,6 +26,10 @@ datas = [
     (
         str(external_validation_root),
         "results/mathworks-gfm-external-validation",
+    ),
+    (
+        str(cross_model_comparison_root),
+        "results/mathworks-team-comparison",
     ),
     (str(build_info), "."),
 ]

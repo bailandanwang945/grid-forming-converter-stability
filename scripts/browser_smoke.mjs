@@ -285,13 +285,29 @@ try {
       throw new Error(`MathWorks external-evidence boundary is missing ${evidence}.`)
     }
   }
-  const externalDownloadPromise = page.waitForEvent('download')
-  await page.getByTestId('mathworks-external-evidence-export').click()
-  const externalDownload = await externalDownloadPromise
-  if (externalDownload.suggestedFilename() !== 'mathworks-gfm-external-evidence-v1.json') {
-    throw new Error('MathWorks external-evidence JSON export failed.')
+  await page.getByTestId('mathworks-team-comparison-results').waitFor({ timeout: 15000 })
+  const comparisonSummary = await page.getByTestId('mathworks-team-comparison-summary').innerText()
+  for (const evidence of ['固定对齐点\n8', '分类一致\n7 / 8', '分类不一致\n1', '定量过渡位置\n未复现']) {
+    if (!comparisonSummary.includes(evidence)) {
+      throw new Error(`MathWorks-team comparison summary is missing ${evidence}: ${comparisonSummary}`)
+    }
   }
-  console.log('[browser] MathWorks frozen external-evidence workflow passed.')
+  for (const point of ['2.5-0.6', '2.5-1.056', '2.5-2', '2.5-4', '5-0.6', '5-1.056', '5-2', '5-4']) {
+    await page.getByTestId(`mathworks-team-row-${point}`).waitFor({ timeout: 15000 })
+  }
+  const comparisonBoundary = await page.getByTestId('mathworks-team-comparison-boundary').innerText()
+  for (const evidence of ['七点分类一致', '定量过渡位置未复现', '并非同一种证据', '不命名为预测误差']) {
+    if (!comparisonBoundary.includes(evidence)) {
+      throw new Error(`MathWorks-team comparison boundary is missing ${evidence}.`)
+    }
+  }
+  const externalDownloadPromise = page.waitForEvent('download')
+  await page.getByTestId('mathworks-team-comparison-export').click()
+  const externalDownload = await externalDownloadPromise
+  if (externalDownload.suggestedFilename() !== 'mathworks-team-aligned-eight-point-comparison-v1.json') {
+    throw new Error('MathWorks-team comparison JSON export failed.')
+  }
+  console.log('[browser] MathWorks frozen evidence and team-model comparison passed.')
 
   await page.getByLabel('P* / p.u.').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()

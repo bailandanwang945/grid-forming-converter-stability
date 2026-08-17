@@ -12,9 +12,11 @@ import {
   AverageDQResult,
   AverageDQScanResult,
   MathWorksExternalEvidenceResult,
+  MathWorksTeamComparisonResult,
   NetworkTopology,
   getAverageDQPreset,
   getMathWorksExternalEvidence,
+  getMathWorksTeamComparison,
   getAverageDQPortIdentificationReportHtml,
   getAverageDQReportHtml,
   runAverageDQAblation,
@@ -92,6 +94,7 @@ export default function AverageDQWorkbench() {
   const [boundaryResult, setBoundaryResult] = useState<AverageDQBoundaryResult | null>(null)
   const [portIdentificationResult, setPortIdentificationResult] = useState<AverageDQPortIdentificationResult | null>(null)
   const [externalEvidence, setExternalEvidence] = useState<MathWorksExternalEvidenceResult | null>(null)
+  const [crossModelComparison, setCrossModelComparison] = useState<MathWorksTeamComparisonResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
   const [ablationRunning, setAblationRunning] = useState(false)
@@ -367,7 +370,12 @@ export default function AverageDQWorkbench() {
     setExternalEvidenceRunning(true)
     setError('')
     try {
-      setExternalEvidence(await getMathWorksExternalEvidence())
+      const [evidence, comparison] = await Promise.all([
+        getMathWorksExternalEvidence(),
+        getMathWorksTeamComparison(),
+      ])
+      setExternalEvidence(evidence)
+      setCrossModelComparison(comparison)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'MathWorks 外部验证证据读取失败')
     } finally {
@@ -482,10 +490,10 @@ export default function AverageDQWorkbench() {
         <article className="study-task external-evidence-task">
           <div className="study-task-heading"><span>05</span><small>EXTERNAL REFERENCE</small></div>
           <h3>MathWorks 固定模型参照</h3>
-          <p data-testid="mathworks-external-evidence-fixed-scope">只读加载三点 SCR、2×4 阻尼因子和 SCR=5 阻尼过渡区；不在网页端启动 MATLAB。</p>
+          <p data-testid="mathworks-external-evidence-fixed-scope">对齐50 Hz阻尼归一化、SCR、X/R与有功工作点，比较外部时域分类和团队16状态模型局部极点。</p>
           <div className="study-task-actions">
-            <button data-testid="mathworks-external-evidence-load" onClick={loadExternalEvidence} disabled={externalEvidenceRunning}>{externalEvidenceRunning ? '正在核对产物哈希…' : '载入外部验证证据'}</button>
-            <button className="icon-action" aria-label="导出外部验证证据 JSON" data-testid="mathworks-external-evidence-export" disabled={!externalEvidence} onClick={() => externalEvidence && download(`${externalEvidence.run_id}.json`, JSON.stringify(externalEvidence, null, 2))}><Download size={15}/></button>
+            <button data-testid="mathworks-external-evidence-load" onClick={loadExternalEvidence} disabled={externalEvidenceRunning}>{externalEvidenceRunning ? '正在重算八点对照…' : '运行外部—团队对照'}</button>
+            <button className="icon-action" aria-label="导出跨模型对照 JSON" data-testid="mathworks-team-comparison-export" disabled={!crossModelComparison} onClick={() => crossModelComparison && download(`${crossModelComparison.run_id}.json`, JSON.stringify(crossModelComparison, null, 2))}><Download size={15}/></button>
           </div>
         </article>
       </div>
@@ -633,6 +641,34 @@ export default function AverageDQWorkbench() {
           <div className="panel-title"><BookOpenCheck size={18}/><span>固定版本外部时域参照</span><em>MathWorks {externalEvidence.source.release_tag} · MATLAB R{externalEvidence.source.matlab_release}</em></div>
           <p data-testid="mathworks-external-evidence-boundary">{externalEvidence.scope.statement} 本证据不评价论文稳定性充分条件，也不构成实物或硬件在环确认。</p>
         </div>
+        {crossModelComparison && <div className="panel cross-model-comparison" data-testid="mathworks-team-comparison-results">
+          <div className="panel-title"><Activity size={18}/><span>外部时域分类—团队局部极点对照</span><em>D_team = 50·D_MW · |Z源| = 1/SCR</em></div>
+          <div className="panel evidence-strip" data-testid="mathworks-team-comparison-summary">
+            <div><small>固定对齐点</small><b>{crossModelComparison.summary.point_count}</b></div>
+            <div><small>分类一致</small><b>{crossModelComparison.summary.classification_agreement_count} / {crossModelComparison.summary.point_count}</b></div>
+            <div><small>分类不一致</small><b>{crossModelComparison.summary.classification_disagreement_count}</b></div>
+            <div><small>定量过渡位置</small><b>{crossModelComparison.boundary_comparison.quantitative_transition_reproduced ? '已复现' : '未复现'}</b></div>
+          </div>
+          <div className="table-scroll">
+            <table>
+              <thead><tr>{['SCR', 'D_MW / p.u./Hz', 'D_team', '外部时域', '团队 P*=0.6', '团队 P*=0.8', '对照'].map(label => <th key={label}>{label}</th>)}</tr></thead>
+              <tbody>{crossModelComparison.points.map(point => <tr key={`${point.scr}-${point.damping_mathworks_pu_per_hz}`} data-testid={`mathworks-team-row-${point.scr}-${point.damping_mathworks_pu_per_hz}`}>
+                <td>{point.scr}</td>
+                <td>{point.damping_mathworks_pu_per_hz}</td>
+                <td>{point.damping_team_native_pu_per_pu_frequency.toFixed(3)}</td>
+                <td>{point.external_vendor_outcome === 'Stable' ? '稳定' : '失稳'}</td>
+                <td>{point.team_pre_step_stability === 'stable' ? '稳定' : point.team_pre_step_stability === 'unstable' ? '失稳' : '临界'}</td>
+                <td>{point.team_post_step_stability === 'stable' ? '稳定' : point.team_post_step_stability === 'unstable' ? '失稳' : '临界'}</td>
+                <td className={point.classification_agreement ? 'comparison-agree' : 'comparison-disagree'}>{point.classification_agreement ? '一致' : '不一致'}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+          <div className="boundary-comparison-grid" data-testid="mathworks-team-boundary-comparison">
+            <div><small>MathWorks 供应商时域分类区间</small><b>[{crossModelComparison.boundary_comparison.external_vendor_classification_bracket_pu_per_hz.map(value => value.toFixed(5)).join(', ')}] p.u./Hz</b></div>
+            {crossModelComparison.boundary_comparison.team_local_eigenvalue_boundaries.map(boundary => <div key={boundary.active_power_setpoint_pu}><small>团队局部极点边界 · P*={boundary.active_power_setpoint_pu}</small><b>{boundary.damping_mw_equivalent_pu_per_hz.toFixed(6)} p.u./Hz 等效值</b></div>)}
+          </div>
+          <p className="scope-note" data-testid="mathworks-team-comparison-boundary">{crossModelComparison.summary.interpretation} {crossModelComparison.scope.statement} 外部供应商时域阈值与团队局部特征根并非同一种证据，差值不命名为预测误差。</p>
+        </div>}
       </section>}
     </section>
   </main>
