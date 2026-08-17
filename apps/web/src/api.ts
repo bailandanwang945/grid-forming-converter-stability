@@ -909,6 +909,38 @@ export type AverageDQPortIdentificationResult = {
   provenance: Record<string, unknown>
 }
 
+export type MathWorksExternalEvidenceResult = {
+  run_id: string
+  status: 'completed'
+  mode: 'frozen-read-only-external-validation-evidence'
+  source: {
+    provider: string
+    release_tag: string
+    commit: string
+    matlab_release: string
+  }
+  summary: {
+    three_point_vendor_outcomes: string[]
+    factorial_stable_point_count: number
+    factorial_point_count: number
+    vendor_classification_bracket_pu: number[]
+    vendor_classification_bracket_width_pu: number
+    project_tracking_observed_bracket_pu: number[]
+    project_tracking_target_achieved: boolean
+  }
+  studies: Record<string, unknown>
+  artifact_sha256: Record<string, string>
+  scope: {
+    claim_level: string
+    reruns_matlab_or_simulink: boolean
+    closed_loop_eigenvalue_boundary: boolean
+    continuous_stability_proof: boolean
+    physical_hardware_validation: boolean
+    paper_sufficient_condition_evaluated: boolean
+    statement: string
+  }
+}
+
 type AverageDQAblationInput = {
   preset_id: AverageDQAblationPresetId
 }
@@ -967,4 +999,13 @@ export async function getAverageDQPortIdentificationReportHtml(): Promise<string
   return (await averageDQRequest('/api/reports/average-dq-port-identification', {
     preset_id: 'average-dq-smib-verification',
   })).text()
+}
+
+export async function getMathWorksExternalEvidence(): Promise<MathWorksExternalEvidenceResult> {
+  const response = await fetch('/api/evidence/mathworks-gfm')
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    throw new Error(detail?.detail ?? `外部验证证据服务返回 ${response.status}`)
+  }
+  return response.json()
 }

@@ -10,6 +10,9 @@ fixture_root = project_root / "experiments" / "baseline" / "fixtures"
 comparison_root = (
     project_root / "results" / "comparison" / "fig8-damping-grid-strength"
 )
+external_validation_root = (
+    project_root / "results" / "mathworks-gfm-external-validation"
+)
 build_info = Path(os.environ["GFM_BUILD_INFO"])
 
 datas = [
@@ -18,6 +21,10 @@ datas = [
     (
         str(comparison_root),
         "results/comparison/fig8-damping-grid-strength",
+    ),
+    (
+        str(external_validation_root),
+        "results/mathworks-gfm-external-validation",
     ),
     (str(build_info), "."),
 ]

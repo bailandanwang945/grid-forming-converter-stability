@@ -11,8 +11,10 @@ import {
   AverageDQPortIdentificationResult,
   AverageDQResult,
   AverageDQScanResult,
+  MathWorksExternalEvidenceResult,
   NetworkTopology,
   getAverageDQPreset,
+  getMathWorksExternalEvidence,
   getAverageDQPortIdentificationReportHtml,
   getAverageDQReportHtml,
   runAverageDQAblation,
@@ -89,11 +91,13 @@ export default function AverageDQWorkbench() {
   const [ablationResult, setAblationResult] = useState<AverageDQAblationResult | null>(null)
   const [boundaryResult, setBoundaryResult] = useState<AverageDQBoundaryResult | null>(null)
   const [portIdentificationResult, setPortIdentificationResult] = useState<AverageDQPortIdentificationResult | null>(null)
+  const [externalEvidence, setExternalEvidence] = useState<MathWorksExternalEvidenceResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
   const [ablationRunning, setAblationRunning] = useState(false)
   const [boundaryRunning, setBoundaryRunning] = useState(false)
   const [portIdentificationRunning, setPortIdentificationRunning] = useState(false)
+  const [externalEvidenceRunning, setExternalEvidenceRunning] = useState(false)
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
@@ -359,6 +363,18 @@ export default function AverageDQWorkbench() {
     }
   }
 
+  async function loadExternalEvidence() {
+    setExternalEvidenceRunning(true)
+    setError('')
+    try {
+      setExternalEvidence(await getMathWorksExternalEvidence())
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'MathWorks 外部验证证据读取失败')
+    } finally {
+      setExternalEvidenceRunning(false)
+    }
+  }
+
   async function openPortIdentificationReport() {
     const reportWindow = window.open('', '_blank')
     try {
@@ -461,6 +477,15 @@ export default function AverageDQWorkbench() {
             <button data-testid="average-dq-port-identification-run" onClick={runFixedPortIdentification} disabled={portIdentificationRunning}>{portIdentificationRunning ? '正在逐频辨识…' : '运行三频点辨识'}</button>
             <button className="icon-action" aria-label="导出端口辨识 JSON" data-testid="average-dq-port-identification-export" disabled={!portIdentificationResult} onClick={() => portIdentificationResult && download(`${portIdentificationResult.run_id}.json`, JSON.stringify(portIdentificationResult, null, 2))}><Download size={15}/></button>
             <button className="icon-action" aria-label="生成端口辨识报告" data-testid="average-dq-port-identification-report" disabled={!portIdentificationResult || portIdentificationRunning} onClick={openPortIdentificationReport}><BookOpenCheck size={15}/></button>
+          </div>
+        </article>
+        <article className="study-task external-evidence-task">
+          <div className="study-task-heading"><span>05</span><small>EXTERNAL REFERENCE</small></div>
+          <h3>MathWorks 固定模型参照</h3>
+          <p data-testid="mathworks-external-evidence-fixed-scope">只读加载三点 SCR、2×4 阻尼因子和 SCR=5 阻尼过渡区；不在网页端启动 MATLAB。</p>
+          <div className="study-task-actions">
+            <button data-testid="mathworks-external-evidence-load" onClick={loadExternalEvidence} disabled={externalEvidenceRunning}>{externalEvidenceRunning ? '正在核对产物哈希…' : '载入外部验证证据'}</button>
+            <button className="icon-action" aria-label="导出外部验证证据 JSON" data-testid="mathworks-external-evidence-export" disabled={!externalEvidence} onClick={() => externalEvidence && download(`${externalEvidence.run_id}.json`, JSON.stringify(externalEvidence, null, 2))}><Download size={15}/></button>
           </div>
         </article>
       </div>
@@ -595,6 +620,18 @@ export default function AverageDQWorkbench() {
             </table>
           </div>
           <p className="scope-note" data-testid="average-dq-port-identification-boundary">{portIdentificationResult.model_scope.statement} 设备开端口矩阵并非渐近稳定，因此采用稳定闭环源电压注入；本结果不评价论文稳定性充分条件。</p>
+        </div>
+      </section>}
+      {externalEvidence && <section data-testid="mathworks-external-evidence-results">
+        <div className="panel evidence-strip" data-testid="mathworks-external-evidence-summary">
+          <div><small>三点 SCR 供应商分类</small><b>{externalEvidence.summary.three_point_vendor_outcomes.join(' / ')}</b></div>
+          <div><small>2×4 因子稳定点</small><b>{externalEvidence.summary.factorial_stable_point_count} / {externalEvidence.summary.factorial_point_count}</b></div>
+          <div><small>供应商分类过渡区 / p.u.</small><b>[{externalEvidence.summary.vendor_classification_bracket_pu.map(value => value.toFixed(5)).join(', ')}]</b></div>
+          <div><small>项目跟踪门已测区间 / p.u.</small><b>[{externalEvidence.summary.project_tracking_observed_bracket_pu.map(value => value.toFixed(4)).join(', ')}] · {externalEvidence.summary.project_tracking_target_achieved ? '目标已达成' : '目标未达成'}</b></div>
+        </div>
+        <div className="panel external-evidence-panel">
+          <div className="panel-title"><BookOpenCheck size={18}/><span>固定版本外部时域参照</span><em>MathWorks {externalEvidence.source.release_tag} · MATLAB R{externalEvidence.source.matlab_release}</em></div>
+          <p data-testid="mathworks-external-evidence-boundary">{externalEvidence.scope.statement} 本证据不评价论文稳定性充分条件，也不构成实物或硬件在环确认。</p>
         </div>
       </section>}
     </section>

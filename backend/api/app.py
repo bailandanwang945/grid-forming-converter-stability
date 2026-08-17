@@ -13,6 +13,10 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from backend.core.fig8_kernel import available_fig8_cases, evaluate_fig8_case
 from backend.core.fig8_sensitivity import evaluate_fig8_sensitivity
 from backend.core.fig8_domain_comparison import load_fig8_domain_comparison
+from backend.core.mathworks_external_evidence import (
+    MathWorksExternalEvidenceError,
+    load_mathworks_external_evidence,
+)
 from backend.core.average_dq_model import (
     AverageDQModelError,
     STATE_LABELS,
@@ -1166,6 +1170,16 @@ def run_average_dq_port_identification(
     except AverageDQModelError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except RuntimeError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.get("/api/evidence/mathworks-gfm")
+def mathworks_gfm_external_evidence() -> dict:
+    """Return hash-verified frozen evidence without launching MATLAB."""
+
+    try:
+        return load_mathworks_external_evidence()
+    except MathWorksExternalEvidenceError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
 

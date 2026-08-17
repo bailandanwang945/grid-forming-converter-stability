@@ -271,6 +271,28 @@ try {
   await portReport.close()
   console.log('[browser] Average-dq port-identification workflow passed.')
 
+  await page.getByTestId('mathworks-external-evidence-load').click()
+  await page.getByTestId('mathworks-external-evidence-results').waitFor({ timeout: 15000 })
+  const externalSummary = await page.getByTestId('mathworks-external-evidence-summary').innerText()
+  for (const evidence of ['Stable / Stable / Unstable', '6 / 8', '[1.30675, 1.32150]', '[1.3215, 1.3510] · 目标未达成']) {
+    if (!externalSummary.includes(evidence)) {
+      throw new Error(`MathWorks external-evidence summary is missing ${evidence}: ${externalSummary}`)
+    }
+  }
+  const externalBoundary = await page.getByTestId('mathworks-external-evidence-boundary').innerText()
+  for (const evidence of ['供应商分类与项目跟踪门分列', '不把区间称为临界阻尼', '不评价论文稳定性充分条件']) {
+    if (!externalBoundary.includes(evidence)) {
+      throw new Error(`MathWorks external-evidence boundary is missing ${evidence}.`)
+    }
+  }
+  const externalDownloadPromise = page.waitForEvent('download')
+  await page.getByTestId('mathworks-external-evidence-export').click()
+  const externalDownload = await externalDownloadPromise
+  if (externalDownload.suggestedFilename() !== 'mathworks-gfm-external-evidence-v1.json') {
+    throw new Error('MathWorks external-evidence JSON export failed.')
+  }
+  console.log('[browser] MathWorks frozen external-evidence workflow passed.')
+
   await page.getByLabel('P* / p.u.').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
   await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })
