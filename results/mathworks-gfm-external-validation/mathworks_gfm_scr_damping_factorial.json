@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "gfm-mathworks-scr-damping-factorial/1.0",
+  "generatedAtUtc": "2026-08-17T07:18:11.237Z",
+  "source": {
+    "provider": "MathWorks",
+    "repository": "https://github.com/simscape/Power-Converter-Circuit-Control-Simscape",
+    "releaseTag": "23.2.1.4",
+    "commit": "a65692b004637acb38b2f8c64db7dcf47efe24c7",
+    "modelRelativePath": "Models/GridFormingConverter.slx",
+    "modelSha256": "9cd2abfd5699e92336ceb335414403cb29826da7a4f7ab3abafd581d96c6fac4",
+    "conditionRelativePath": "Script_Data/GridFormingConverterTestCondition.mlx",
+    "conditionSha256": "66632a96de03f438bf63ef51afa8d80fcf720cb520431d64f3f8e6756e632823",
+    "matlabRelease": "2024b"
+  },
+  "contract": {
+    "scrValues": [
+      2.5,
+      5
+    ],
+    "dampingCoefficientValuesPu": [
+      0.6,
+      1.056,
+      2,
+      4
+    ],
+    "vendorDefaultDampingCoefficientPu": 1.056,
+    "xByR": 5,
+    "activePowerMethod": "Virtual Synchronous Machine",
+    "currentLimitMethod": "Virtual Impedance",
+    "testCondition": "Change in active power reference",
+    "powerErrorTolerancePu": 0.01,
+    "simulationInterface": "Simulink.SimulationInput",
+    "batchMode": "sequential points because SCR changes nontunable Simscape parameters"
+  },
+  "preRegisteredHypothesis": {
+    "statement": "Increasing VSM damping to 2 or 4 pu stabilizes the SCR=5 point while SCR=2.5 remains stable across the tested damping values.",
+    "falsifier": "Reject if either high-damping SCR=5 point is vendor-unstable or any tested SCR=2.5 point is vendor-unstable."
+  },
+  "results": {
+    "scr5StableAtHighDamping": true,
+    "scr2p5StableAcrossTestedDamping": true,
+    "hypothesisSupported": true,
+    "frequencyDeviationNonincreasingByScr": [
+      true,
+      false
+    ],
+    "classificationDependsOnBothTestedFactors": true,
+    "stableMatrixRowsScrColumnsDamping": [
+      [
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        false,
+        false,
+        true,
+        true
+      ]
+    ],
+    "frequencyDeviationMatrixHzRowsScrColumnsDamping": [
+      [
+        0.067409349753212666,
+        0.05400671234131238,
+        0.04512779473560613,
+        0.036071230005966015
+      ],
+      [
+        0.31349856920296304,
+        184.82147250067669,
+        0.033515823024259817,
+        0.023024932156026523
+      ]
+    ]
+  },
+  "points": [
+    {
+      "scr": 2.5,
+      "dampingCoefficientPu": 0.6,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.80000000009057948,
+      "activePowerFinalAbsoluteErrorPu": 9.0579432843185259E-11,
+      "activePowerSettlingTimeS": 0.2986,
+      "activePowerMaximumPu": 0.86741740585410088,
+      "activePowerMinimumPu": 0.59999999975365415,
+      "frequencyMaximumDeviationHz": 0.067409349753212666,
+      "voltageMagnitudeMinimumPu": 0.996418220589332,
+      "voltageMagnitudeMaximumPu": 1.0112096646928312,
+      "currentMagnitudeMaximumPu": 0.90030391359066886,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 111.6801543
+    },
+    {
+      "scr": 2.5,
+      "dampingCoefficientPu": 1.056,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.80000000014384787,
+      "activePowerFinalAbsoluteErrorPu": 1.4384782254239781E-10,
+      "activePowerSettlingTimeS": 0.46880000000000033,
+      "activePowerMaximumPu": 0.85416629581395276,
+      "activePowerMinimumPu": 0.59999999851938812,
+      "frequencyMaximumDeviationHz": 0.05400671234131238,
+      "voltageMagnitudeMinimumPu": 0.997849264697965,
+      "voltageMagnitudeMaximumPu": 1.0097162574700114,
+      "currentMagnitudeMaximumPu": 0.8879076023207787,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 73.7684712
+    },
+    {
+      "scr": 2.5,
+      "dampingCoefficientPu": 2,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.79999999932841581,
+      "activePowerFinalAbsoluteErrorPu": 6.7158423266988621E-10,
+      "activePowerSettlingTimeS": 0.9335,
+      "activePowerMaximumPu": 0.86490104540523072,
+      "activePowerMinimumPu": 0.5999440304078667,
+      "frequencyMaximumDeviationHz": 0.04512779473560613,
+      "voltageMagnitudeMinimumPu": 0.9992213858379313,
+      "voltageMagnitudeMaximumPu": 1.0097640448442298,
+      "currentMagnitudeMaximumPu": 0.89749902090565936,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 81.2247656
+    },
+    {
+      "scr": 2.5,
+      "dampingCoefficientPu": 4,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.79998519021963044,
+      "activePowerFinalAbsoluteErrorPu": 1.4809780369606784E-5,
+      "activePowerSettlingTimeS": 1.4868000000000006,
+      "activePowerMaximumPu": 0.88060180259703935,
+      "activePowerMinimumPu": 0.60420913477304483,
+      "frequencyMaximumDeviationHz": 0.036071230005966015,
+      "voltageMagnitudeMinimumPu": 1.0004016072359578,
+      "voltageMagnitudeMaximumPu": 1.0099746350645651,
+      "currentMagnitudeMaximumPu": 0.91167782854418822,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 80.8603542
+    },
+    {
+      "scr": 5,
+      "dampingCoefficientPu": 0.6,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.68488286365394324,
+      "activePowerFinalAbsoluteErrorPu": 0.1151171363460568,
+      "activePowerSettlingTimeS": null,
+      "activePowerMaximumPu": 1.40186265226317,
+      "activePowerMinimumPu": -1.0626285050310664,
+      "frequencyMaximumDeviationHz": 0.31349856920296304,
+      "voltageMagnitudeMinimumPu": 0.77969415097800454,
+      "voltageMagnitudeMaximumPu": 1.0843414178255637,
+      "currentMagnitudeMaximumPu": 1.5436041393780506,
+      "vendorOutcome": "Unstable",
+      "vendorStable": false,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 83.5611493
+    },
+    {
+      "scr": 5,
+      "dampingCoefficientPu": 1.056,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 1.3135808961683428,
+      "activePowerFinalAbsoluteErrorPu": 0.51358089616834279,
+      "activePowerSettlingTimeS": null,
+      "activePowerMaximumPu": 1.3283960203994252,
+      "activePowerMinimumPu": 0.23329007475230096,
+      "frequencyMaximumDeviationHz": 184.82147250067669,
+      "voltageMagnitudeMinimumPu": 0.96414116367826408,
+      "voltageMagnitudeMaximumPu": 1.0627870696745962,
+      "currentMagnitudeMaximumPu": 1.3573939126175982,
+      "vendorOutcome": "Unstable",
+      "vendorStable": false,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 69.6002816
+    },
+    {
+      "scr": 5,
+      "dampingCoefficientPu": 2,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.80000000024975138,
+      "activePowerFinalAbsoluteErrorPu": 2.4975133072757671E-10,
+      "activePowerSettlingTimeS": 0.40990000000000038,
+      "activePowerMaximumPu": 0.86310222019303551,
+      "activePowerMinimumPu": 0.599889322811812,
+      "frequencyMaximumDeviationHz": 0.033515823024259817,
+      "voltageMagnitudeMinimumPu": 1.0113351702344078,
+      "voltageMagnitudeMaximumPu": 1.0224217501640254,
+      "currentMagnitudeMaximumPu": 0.87660315878802253,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 70.5527124
+    },
+    {
+      "scr": 5,
+      "dampingCoefficientPu": 4,
+      "disturbanceTimeS": 3,
+      "simulationTimeS": 8,
+      "activePowerReferenceFinalPu": 0.8,
+      "activePowerFinalPu": 0.80000000116291625,
+      "activePowerFinalAbsoluteErrorPu": 1.1629162077753108E-9,
+      "activePowerSettlingTimeS": 0.88200000000000012,
+      "activePowerMaximumPu": 0.866645348533748,
+      "activePowerMinimumPu": 0.59991929523593113,
+      "frequencyMaximumDeviationHz": 0.023024932156026523,
+      "voltageMagnitudeMinimumPu": 1.0128275229959809,
+      "voltageMagnitudeMaximumPu": 1.021164938520829,
+      "currentMagnitudeMaximumPu": 0.878614965277685,
+      "vendorOutcome": "Stable",
+      "vendorStable": true,
+      "allReportedSignalsFinite": true,
+      "elapsedSeconds": 56.3862788
+    }
+  ],
+  "performance": {
+    "pointCount": 8,
+    "batchElapsedSeconds": 644.2634918,
+    "fastRestartRequested": false,
+    "failedFastRestartAttemptExcluded": true
+  },
+  "scope": {
+    "claimLevel": "external-fixed-model-two-factor-eight-point-time-domain-screening",
+    "independentFromTeamAverageDqImplementation": true,
+    "physicalHardwareValidation": false,
+    "paperSufficientConditionEvaluated": false,
+    "uniqueCausalMechanismIdentified": false,
+    "continuousBoundaryEstablished": false,
+    "interactionIsStatisticalEstimate": false
+  }
+}
