@@ -1304,3 +1304,23 @@ body {
   .workbench-viewbar { align-items: stretch; flex-direction: column; }
   .view-switch button { flex: 1; }
 }
+/* Lazy workspace boundary: keeps first load small without showing an empty canvas. */
+.workspace-loading {
+  min-height: 15rem;
+  display: grid;
+  place-content: center;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.workspace-loading svg {
+  animation: workspace-loading-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes workspace-loading-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}

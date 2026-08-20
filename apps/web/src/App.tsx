@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import * as echarts from 'echarts/core'
 import { LineChart, ScatterChart } from 'echarts/charts'
 import {
@@ -22,10 +22,11 @@ import {
 } from 'lucide-react'
 import { AnalysisResult, Fig8ScenarioId, runAnalysis } from './api'
 import EChart from './EChart'
-import ReducedOrderWorkbench from './ReducedOrderWorkbench'
-import ParameterDomainComparison from './ParameterDomainComparison'
-import AverageDQWorkbench from './AverageDQWorkbench'
 import Fig8SensitivityPanel from './Fig8SensitivityPanel'
+
+const ReducedOrderWorkbench = lazy(() => import('./ReducedOrderWorkbench'))
+const ParameterDomainComparison = lazy(() => import('./ParameterDomainComparison'))
+const AverageDQWorkbench = lazy(() => import('./AverageDQWorkbench'))
 
 echarts.use([
   LineChart,
@@ -168,7 +169,13 @@ function App() {
         <p>{activeWorkspace.description}</p>
         <span className="research-tag">结果均附模型边界</span>
       </header>
-      {workspaceMode === 'average-dq' ? <AverageDQWorkbench/> : workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
+      {workspaceMode === 'average-dq' || workspaceMode === 'model' || workspaceMode === 'comparison' ? <Suspense fallback={
+        <div className="workspace-loading" role="status" aria-live="polite">
+          <Activity size={20}/><span>正在载入{activeWorkspace.label}工作区…</span>
+        </div>
+      }>
+        {workspaceMode === 'average-dq' ? <AverageDQWorkbench/> : workspaceMode === 'model' ? <ReducedOrderWorkbench/> : <ParameterDomainComparison/>}
+      </Suspense> : <main>
       <aside className="panel controls">
         <div className="panel-title"><SlidersHorizontal size={18}/><span>论文基线算例</span></div>
         <label>分析场景

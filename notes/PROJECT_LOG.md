@@ -745,3 +745,4 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 按 `PowerSimulationsDynamics.jl v0.16.2` Test 08 固定方程、初值和期望谱建立独立19状态 Python 转写。初值残差为 `5.397×10^-11`，19个特征值匹配最大误差为 `1.546×10^-4 s^-1`、二范数误差为 `2.566×10^-4 s^-1`，复现上游小信号稳定分类。旧 RAW 文件头的50 Hz不能复现固定谱，软件将60/50 Hz差异保留为显式反例。
 - 该复核没有运行 Julia 或 PSCAD，也不验证结构不同的团队16状态模型。Sienna BSD-3-Clause 原文已从固定上游版本逐字核对后加入发布许可证目录；第三方清单生成器将自动登记固定版本、提交、许可证和“仅含独立转写、不含 Julia 仓库及 PSCAD 文件”的边界。
 - 前端生产构建与真实 Chromium 全流程已通过，输出 `BROWSER_E2E_SMOKE_OK`；Sienna与第三方清单定向9项测试在修正一处许可证目标文件名预期后重新执行。仍不制作 PPT/PDF，也不重建 Windows 冻结包。
+- 四个工作区进一步采用按需加载：默认论文页的主脚本由约 `831.41 kB` 降至 `710.14 kB`，gzip 由约 `272.86 kB` 降至 `239.05 kB`；同域对照、低频模型和平均值 dq 分别拆为约 `7.99、28.55、44.24 kB` 的独立模块。真实 Chromium 随后完整重跑四个工作区及全部研究任务，再次得到 `BROWSER_E2E_SMOKE_OK`。
