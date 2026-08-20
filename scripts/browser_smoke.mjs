@@ -91,9 +91,13 @@ try {
   if (!(await page.getByRole('button', { name: '至少保留一个无限大母线', exact: true }).isDisabled())) {
     throw new Error('The last infinite bus must not be removable from the reduced-order editor.')
   }
+  await page.locator('.model-editor details').filter({ hasText: 'VSM 控制参数' }).locator('summary').click()
   await page.getByLabel('阻尼 D / pu').first().fill('0.05')
   await page.getByRole('button', { name: /验证拓扑并分析/ }).click()
   await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
+  if (await page.getByTestId('reduced-view-results').getAttribute('aria-selected') !== 'true') {
+    throw new Error('Reduced-order analysis did not focus the result view after a successful run.')
+  }
   const firstStatus = await page.locator('.metrics .metric').first().locator('strong').innerText()
   if (firstStatus !== '失稳') throw new Error(`Expected low-damping case to be unstable, got ${firstStatus}.`)
 
@@ -104,6 +108,8 @@ try {
   if (!download.suggestedFilename().endsWith('.gfm-case.json') || !savedCasePath) {
     throw new Error('Versioned case export failed.')
   }
+  await page.getByTestId('reduced-view-editor').click()
+  await page.locator('.model-editor details').filter({ hasText: '线路参数' }).locator('summary').click()
   await page.getByLabel('末端').first().selectOption('bus-gfm')
   await page.getByRole('button', { name: /验证拓扑并分析/ }).click()
   await page.locator('.error').waitFor({ timeout: 15000 })
@@ -142,6 +148,14 @@ try {
   const reportText = await reportPage.locator('body').innerText()
   if (!reportText.includes('0.05')) throw new Error('Report did not retain the custom damping parameter.')
   await reportPage.close()
+
+  await page.getByTestId('reduced-view-editor').click()
+  await page.getByLabel('低频模型初始相角扰动').fill('2')
+  if (await page.getByTestId('reduced-view-results').isEnabled()) {
+    throw new Error('Reduced-order result remained available after changing a simulation input.')
+  }
+  await page.getByRole('button', { name: /验证拓扑并分析/ }).click()
+  await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
   console.log('[browser] Reduced-order workflow passed.')
 
   await page.getByRole('button', { name: '平均值 dq' }).click()
@@ -179,6 +193,23 @@ try {
   await page.screenshot({ path: resolve('tmp/browser-smoke-average-dq-responsive.png'), fullPage: true })
   await page.setViewportSize({ width: 1600, height: 1100 })
 
+  const analysisTab = page.getByRole('tab', { name: '模型分析' })
+  const studiesTab = page.getByRole('tab', { name: '研究验证' })
+  if (await analysisTab.getAttribute('aria-selected') !== 'true') {
+    throw new Error('Average-dq workbench does not open in the model-analysis view.')
+  }
+  if (await page.getByTestId('average-dq-ablation-fixed-scope').isVisible()) {
+    throw new Error('Average-dq fixed studies compete with the default model-analysis view.')
+  }
+  await studiesTab.click()
+  if (await studiesTab.getAttribute('aria-selected') !== 'true') {
+    throw new Error('Average-dq research-validation view did not become active.')
+  }
+  if ((await page.getByTestId('study-status-hierarchy').innerText()) !== '未运行') {
+    throw new Error('Average-dq hierarchy task did not start in the not-run state.')
+  }
+  await page.getByTestId('study-result-empty').waitFor({ timeout: 15000 })
+
   const ablationScope = page.getByTestId('average-dq-ablation-fixed-scope')
   await ablationScope.waitFor({ timeout: 15000 })
   const ablationScopeText = await ablationScope.innerText()
@@ -190,6 +221,9 @@ try {
 
   await page.getByTestId('average-dq-ablation-run').click()
   await page.getByTestId('average-dq-ablation-results').waitFor({ timeout: 45000 })
+  if ((await page.getByTestId('study-status-ablation').innerText()) !== '已完成') {
+    throw new Error('Average-dq ablation task did not expose its completed state.')
+  }
   const ablationSummaryText = await page.getByTestId('average-dq-ablation-summary').innerText()
   if (!/固定消融点数\s+19/.test(ablationSummaryText)
       || !/整体稳定 \/ 失稳\s+5 \/ 14/.test(ablationSummaryText)) {
@@ -271,6 +305,31 @@ try {
   await portReport.close()
   console.log('[browser] Average-dq port-identification workflow passed.')
 
+  if (await page.getByTestId('mathworks-external-evidence-results').count() !== 0) {
+    throw new Error('MathWorks evidence was unexpectedly loaded before its task was run.')
+  }
+  await page.getByTestId('sienna-test08-audit-run').click()
+  await page.getByTestId('sienna-test08-audit-results').waitFor({ timeout: 30000 })
+  const siennaSummary = await page.getByTestId('sienna-test08-audit-summary').innerText()
+  for (const evidence of ['状态数\n19', '平衡点残差\n5.40e-11', '特征值最大误差 / s⁻¹\n1.55e-4', '冻结谱基频\n60 Hz']) {
+    if (!siennaSummary.includes(evidence)) {
+      throw new Error(`Sienna Test 08 audit summary is missing ${evidence}: ${siennaSummary}`)
+    }
+  }
+  const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
+  for (const evidence of ['没有运行 Julia 或 PSCAD', '团队16状态模型', '论文稳定性充分条件']) {
+    if (!siennaBoundary.includes(evidence)) {
+      throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
+    }
+  }
+  const siennaDownloadPromise = page.waitForEvent('download')
+  await page.getByTestId('sienna-test08-audit-export').click()
+  const siennaDownload = await siennaDownloadPromise
+  if (siennaDownload.suggestedFilename() !== 'sienna-psid-test08-v0.16.2-python-transcription-v1.json') {
+    throw new Error('Sienna Test 08 audit JSON export failed.')
+  }
+  console.log('[browser] Independent Sienna source audit passed.')
+
   await page.getByTestId('mathworks-external-evidence-load').click()
   await page.getByTestId('mathworks-external-evidence-results').waitFor({ timeout: 15000 })
   const externalSummary = await page.getByTestId('mathworks-external-evidence-summary').innerText()
@@ -329,9 +388,10 @@ try {
   if (nonlinearStepDownload.suggestedFilename() !== 'average-dq-aligned-three-point-nonlinear-step-v1.json') {
     throw new Error('Aligned nonlinear-step JSON export failed.')
   }
-  console.log('[browser] MathWorks evidence, cross-model comparison, and aligned nonlinear-step study passed.')
+  console.log('[browser] MathWorks evidence and aligned nonlinear step passed.')
 
-  await page.getByLabel('P* / p.u.').fill('0.4')
+  await analysisTab.click()
+  await page.getByLabel('有功功率给定').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()
   await page.getByText('端口—线路重组误差').waitFor({ timeout: 30000 })
   const averageText = await page.locator('body').innerText()
@@ -344,7 +404,8 @@ try {
   if (!averageDownload.suggestedFilename().endsWith('.json')) {
     throw new Error('Average-dq JSON export failed.')
   }
-  await page.getByLabel('初始相角 / mrad').fill('0.2')
+  await page.locator('.parameter-sections details').filter({ hasText: '仿真设置' }).locator('summary').click()
+  await page.getByLabel('初始相角扰动').fill('0.2')
   if (await page.getByRole('button', { name: /结果 JSON/ }).isEnabled()) {
     throw new Error('Average-dq result was not invalidated after changing the time-domain input.')
   }
@@ -361,6 +422,7 @@ try {
   if (!averageReportText.includes('0.4')) throw new Error('Average-dq report did not retain the edited active-power setpoint.')
   await averageReport.close()
 
+  await studiesTab.click()
   await page.getByRole('button', { name: /运行42点扫描/ }).click()
   await page.getByText('16状态—三状态 D–X 层级对照').waitFor({ timeout: 30000 })
   const hierarchyText = await page.locator('body').innerText()
@@ -372,6 +434,21 @@ try {
   const hierarchyDownload = await hierarchyDownloadPromise
   if (!hierarchyDownload.suggestedFilename().endsWith('.json')) {
     throw new Error('Average-dq hierarchy JSON export failed.')
+  }
+
+  const resultFocus = page.getByRole('navigation', { name: '研究结果切换' })
+  if (!(await resultFocus.innerText()).includes('6 / 6 项已有结果')) {
+    throw new Error(`Average-dq study completion summary is incomplete: ${await resultFocus.innerText()}`)
+  }
+  await page.getByTestId('study-select-sienna').click()
+  if (!(await page.getByTestId('sienna-test08-audit-results').isVisible())
+      || await page.getByTestId('study-result-hierarchy').isVisible()) {
+    throw new Error('Average-dq study focus did not isolate the Sienna result without recomputation.')
+  }
+  await page.getByTestId('study-select-hierarchy').click()
+  if (!(await page.getByTestId('study-result-hierarchy').isVisible())
+      || await page.getByTestId('sienna-test08-audit-results').isVisible()) {
+    throw new Error('Average-dq study focus did not restore the hierarchy result without recomputation.')
   }
 
   await page.screenshot({ path: screenshotPath, fullPage: true })

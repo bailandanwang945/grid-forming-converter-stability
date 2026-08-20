@@ -217,7 +217,9 @@ def _runtime_components(output_root: Path) -> list[dict[str, Any]]:
     ]
 
 
-def _research_source_component(author_license: Path, output_root: Path) -> dict[str, Any]:
+def _cifelli_research_source_component(
+    author_license: Path, output_root: Path
+) -> dict[str, Any]:
     if not author_license.is_file():
         raise RuntimeError(f"author repository license is missing: {author_license}")
     destination = output_root / "licenses" / "research-source" / "cifelli-anta-author-code"
@@ -229,6 +231,33 @@ def _research_source_component(author_license: Path, output_root: Path) -> dict[
         "declared_license": "MIT",
         "license_files": copied,
         "note": "The package contains derived numerical fixtures, not the author MATLAB repository.",
+    }
+
+
+def _sienna_research_source_component(
+    sienna_license: Path, output_root: Path
+) -> dict[str, Any]:
+    if not sienna_license.is_file():
+        raise RuntimeError(f"Sienna source license is missing: {sienna_license}")
+    destination = (
+        output_root
+        / "licenses"
+        / "research-source"
+        / "powersimulationsdynamics-test08"
+    )
+    copied = _copy_license_files(
+        [("LICENSE", sienna_license)], destination, output_root
+    )
+    return {
+        "ecosystem": "research-source",
+        "name": "PowerSimulationsDynamics.jl Test 08 equations and regression values",
+        "version": "v0.16.2 / dfb56d80b7a019b2d287f1da4d65157d6de134fa",
+        "declared_license": "BSD-3-Clause",
+        "license_files": copied,
+        "note": (
+            "The package contains an independent Python transcription and frozen "
+            "regression values, not the Julia repository, Julia runtime, or PSCAD files."
+        ),
     }
 
 
@@ -278,6 +307,7 @@ def main() -> int:
     parser.add_argument("--executable", type=Path, required=True)
     parser.add_argument("--frontend-root", type=Path, required=True)
     parser.add_argument("--author-license", type=Path, required=True)
+    parser.add_argument("--sienna-license", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     args = parser.parse_args()
     output_root = args.output_root.resolve()
@@ -285,7 +315,8 @@ def main() -> int:
         *_python_components(args.executable.resolve(), output_root),
         *_node_components(args.frontend_root.resolve(), output_root),
         *_runtime_components(output_root),
-        _research_source_component(args.author_license.resolve(), output_root),
+        _cifelli_research_source_component(args.author_license.resolve(), output_root),
+        _sienna_research_source_component(args.sienna_license.resolve(), output_root),
     ]
     _write_notices(components, output_root)
     payload = {
@@ -293,7 +324,10 @@ def main() -> int:
         "inventory_basis": {
             "python": "modules present in the recursive PyInstaller archive listing",
             "web": "non-development package-lock entries installed for the production bundle",
-            "research_source": "fixed author repository license recorded in docs/EXTERNAL_RESOURCES.md",
+            "research_source": (
+                "fixed upstream licenses for the Cifelli-Anta Fig. 8 fixtures and "
+                "the PowerSimulationsDynamics.jl Test 08 transcription"
+            ),
         },
         "component_count": len(components),
         "components": sorted(

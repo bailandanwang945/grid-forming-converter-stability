@@ -147,11 +147,13 @@ Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\verify_this_pc.ps1") `
 Write-Step "Generating third-party notices from the packaged executable..."
 $ThirdPartyGenerator = Join-Path $ProjectRoot "scripts\generate_third_party_notices.py"
 $AuthorLicense = Join-Path $ProjectRoot "external\cifelli-small-gain-phase\LICENSE"
+$SiennaLicense = Join-Path $ProjectRoot "packaging\research-licenses\PowerSimulationsDynamics-v0.16.2-LICENSE.txt"
 Invoke-Native python @(
     $ThirdPartyGenerator,
     "--executable", (Join-Path $PackagePath "GFM-Stability-Platform.exe"),
     "--frontend-root", $FrontendRoot,
     "--author-license", $AuthorLicense,
+    "--sienna-license", $SiennaLicense,
     "--output-root", $PackagePath
 )
 $SbomPath = Join-Path $PackagePath "third-party-sbom.json"

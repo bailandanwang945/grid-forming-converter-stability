@@ -24,6 +24,7 @@ from backend.core.average_dq_nonlinear_step_study import (
     AverageDQNonlinearStepEvidenceError,
     load_frozen_aligned_nonlinear_step_evidence,
 )
+from backend.core.sienna_test08_reference import sienna_test08_audit_payload
 from backend.core.average_dq_model import (
     AverageDQModelError,
     STATE_LABELS,
@@ -1208,6 +1209,13 @@ def average_dq_aligned_nonlinear_step_evidence() -> dict:
         return load_frozen_aligned_nonlinear_step_evidence()
     except AverageDQNonlinearStepEvidenceError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.get("/api/reference/sienna-test08/audit")
+def sienna_test08_reference_audit() -> dict:
+    """Recompute the source-transcribed Sienna Test 08 initial/spectral audit."""
+
+    return sienna_test08_audit_payload()
 
 
 @app.get("/api/reports/fig8", response_class=HTMLResponse)

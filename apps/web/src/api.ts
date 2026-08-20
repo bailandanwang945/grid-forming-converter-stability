@@ -1071,6 +1071,56 @@ export type AverageDQAlignedStepResult = {
   }
 }
 
+export type SiennaTest08AuditResult = {
+  schema_version: string
+  benchmark_id: string
+  status: 'passed' | 'failed'
+  source_contract: {
+    power_simulations_dynamics_version: string
+    power_simulations_dynamics_commit: string
+    power_system_case_builder_version: string
+    power_system_case_builder_commit: string
+    power_systems_test_data_version: string
+    test_case: string
+    license: string
+  }
+  model_contract: {
+    state_count: number
+    state_labels: string[]
+    system_frequency_hz_used_by_frozen_result: number
+    legacy_raw_header_frequency_hz: number
+    system_base_power_mva: number
+    device_base_power_mva: number
+    network_reactance_pu_system_base: number
+    static_terminal_active_power_pu_device_base: number
+    initialized_internal_active_power_reference_pu: number
+  }
+  results: {
+    initial_residual_inf: number
+    terminal_voltage_error: number
+    matched_eigenvalue_max_error_per_s: number
+    matched_eigenvalue_l2_error_per_s: number
+    computed_stable: boolean
+    computed_eigenvalues: Array<{ real_per_s: number; imag_per_s: number; oscillation_frequency_hz: number }>
+    upstream_expected_eigenvalues: Array<{ real_per_s: number; imag_per_s: number; oscillation_frequency_hz: number }>
+    frequency_base_counterfactual: {
+      frequency_hz: number
+      matched_eigenvalue_max_error_per_s: number
+      interpretation: string
+    }
+  }
+  scope: {
+    source_equation_transcription_verified: boolean
+    julia_runtime_executed_on_this_machine: boolean
+    pscad_rerun: boolean
+    upstream_pscad_trace_present_in_fixed_source: boolean
+    team_16_state_model_validated_by_this_audit: boolean
+    mathworks_model_evaluated: boolean
+    paper_sufficient_condition_evaluated: boolean
+    statement: string
+  }
+}
+
 type AverageDQAblationInput = {
   preset_id: AverageDQAblationPresetId
 }
@@ -1154,6 +1204,15 @@ export async function getAverageDQAlignedStepEvidence(): Promise<AverageDQAligne
   if (!response.ok) {
     const detail = await response.json().catch(() => null)
     throw new Error(detail?.detail ?? `团队非线性阶跃证据服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
+export async function getSiennaTest08Audit(): Promise<SiennaTest08AuditResult> {
+  const response = await fetch('/api/reference/sienna-test08/audit')
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    throw new Error(detail?.detail ?? `Sienna Test 08 方程复核服务返回 ${response.status}`)
   }
   return response.json()
 }

@@ -14,6 +14,7 @@ import {
   CircleCheck,
   Download,
   Gauge,
+  Grid3X3,
   Network,
   Play,
   ShieldAlert,
@@ -56,6 +57,13 @@ function App() {
   const [error, setError] = useState('')
   const selectedScenario = scenarios.find(value => value.id === scenarioId) ?? scenarios[1]
   const stable = result?.summary.closed_loop_reference === 'stable'
+  const workspaces = [
+    { id: 'paper' as const, icon: BookOpenCheck, label: '论文复现', description: 'Fig. 8 固定算例' },
+    { id: 'comparison' as const, icon: Grid3X3, label: '同域对照', description: '充分判据与闭环参考' },
+    { id: 'model' as const, icon: Network, label: '低频模型', description: '可编辑网络与降阶分析' },
+    { id: 'average-dq' as const, icon: Activity, label: '平均值 dq', description: '16 状态模型与研究验证' },
+  ]
+  const activeWorkspace = workspaces.find(workspace => workspace.id === workspaceMode) ?? workspaces[0]
 
   const gainChart = useMemo(() => {
     if (!result) return {}
@@ -138,19 +146,29 @@ function App() {
   }
 
   return <div className="app-shell">
-    <header>
-      <div className="brand-mark"><Activity size={22}/></div>
-      <div className="brand-copy"><h1>构网型变流器稳定性分析平台</h1><p>拓扑建模 · 分散式充分判据 · 闭环参考验证</p></div>
-      <div className="header-landscape" aria-hidden="true"><i/><i/><i/></div>
+    <aside className="product-sidebar">
+      <div className="product-brand">
+        <div className="brand-mark"><Activity size={21}/></div>
+        <div className="brand-copy"><h1>GFM Stability</h1><p>稳定性分析工作台</p></div>
+      </div>
       <nav className="workspace-tabs" aria-label="工作台切换">
-        <button data-index="01" className={workspaceMode === 'paper' ? 'active' : ''} onClick={() => setWorkspaceMode('paper')}>论文复现</button>
-        <button data-index="02" className={workspaceMode === 'comparison' ? 'active' : ''} onClick={() => setWorkspaceMode('comparison')}>同域对照</button>
-        <button data-index="03" className={workspaceMode === 'model' ? 'active' : ''} onClick={() => setWorkspaceMode('model')}>低频模型</button>
-        <button data-index="04" className={workspaceMode === 'average-dq' ? 'active' : ''} onClick={() => setWorkspaceMode('average-dq')}>平均值 dq</button>
+        <span className="nav-section-label">分析工作区</span>
+        {workspaces.map(workspace => {
+          const Icon = workspace.icon
+          return <button key={workspace.id} className={workspaceMode === workspace.id ? 'active' : ''} onClick={() => setWorkspaceMode(workspace.id)}>
+            <Icon size={18}/><span><b>{workspace.label}</b><small>{workspace.description}</small></span>
+          </button>
+        })}
       </nav>
-      <span className="research-tag">研究原型 · v0.5</span>
-    </header>
-    {workspaceMode === 'average-dq' ? <AverageDQWorkbench/> : workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
+      <div className="sidebar-status"><span/><div><b>本地计算内核</b><small>研究原型 · v0.5</small></div></div>
+    </aside>
+    <div className="app-content">
+      <header className="workspace-header">
+        <div><small>GFM STABILITY / WORKSPACE</small><h2>{activeWorkspace.label}</h2></div>
+        <p>{activeWorkspace.description}</p>
+        <span className="research-tag">结果均附模型边界</span>
+      </header>
+      {workspaceMode === 'average-dq' ? <AverageDQWorkbench/> : workspaceMode === 'model' ? <ReducedOrderWorkbench/> : workspaceMode === 'comparison' ? <ParameterDomainComparison/> : <main>
       <aside className="panel controls">
         <div className="panel-title"><SlidersHorizontal size={18}/><span>论文基线算例</span></div>
         <label>分析场景
@@ -234,7 +252,8 @@ function App() {
         </> : <div className="panel empty-state"><Activity size={34}/><h2>选择工况并运行分析</h2><p>平台将从固定复矩阵夹具重新计算 1000 个频率点，而不是读取预制结论或绘制人工曲线。</p></div>}
         <Fig8SensitivityPanel/>
       </section>
-    </main>}
+      </main>}
+    </div>
   </div>
 }
 

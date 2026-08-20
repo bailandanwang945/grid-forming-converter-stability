@@ -3,7 +3,11 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.generate_third_party_notices import _copy_license_files, _node_components
+from scripts.generate_third_party_notices import (
+    _copy_license_files,
+    _node_components,
+    _sienna_research_source_component,
+)
 
 
 class ThirdPartyNoticeTests(unittest.TestCase):
@@ -64,6 +68,22 @@ class ThirdPartyNoticeTests(unittest.TestCase):
             self.assertEqual(
                 components[0]["license_files"][0]["packaged_path"],
                 "licenses/web/production-package-1.0.0/01-LICENSE",
+            )
+
+    def test_sienna_transcription_has_fixed_source_and_packaged_license(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "PowerSimulationsDynamics-LICENSE"
+            source.write_text("BSD 3-Clause License", encoding="utf-8")
+
+            component = _sienna_research_source_component(source, root / "package")
+
+            self.assertEqual(component["declared_license"], "BSD-3-Clause")
+            self.assertIn("dfb56d80b7a019b2d287f1da4d65157d6de134fa", component["version"])
+            self.assertEqual(
+                component["license_files"][0]["packaged_path"],
+                "licenses/research-source/powersimulationsdynamics-test08/"
+                "01-PowerSimulationsDynamics-LICENSE",
             )
 
 

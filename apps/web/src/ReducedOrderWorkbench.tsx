@@ -122,6 +122,7 @@ export default function ReducedOrderWorkbench() {
   const [presets, setPresets] = useState<ReducedOrderPreset[]>([])
   const [selectedPreset, setSelectedPreset] = useState<ReducedOrderPresetId>('reduced-smib-stable')
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
+  const [modelView, setModelView] = useState<'editor' | 'results'>('editor')
   const [customized, setCustomized] = useState(false)
   const [result, setResult] = useState<ReducedOrderAnalysisResult | null>(null)
   const [simulationTime, setSimulationTime] = useState(20)
@@ -167,6 +168,7 @@ export default function ReducedOrderWorkbench() {
     setCustomized(false)
     setResult(null)
     setScanResult(null)
+    setModelView('editor')
     setError('')
   }
 
@@ -180,6 +182,7 @@ export default function ReducedOrderWorkbench() {
     setCustomized(true)
     setResult(null)
     setScanResult(null)
+    setModelView('editor')
   }
 
   function updateBus(index: number, patch: Partial<Bus>) {
@@ -336,9 +339,11 @@ export default function ReducedOrderWorkbench() {
         time_step_s: timeStep,
         initial_angle_perturbation_rad: initialAngleMrad / 1000,
       }
-      setResult(await runReducedOrderAnalysis(customized
+      const nextResult = await runReducedOrderAnalysis(customized
         ? { ...common, topology }
-        : { ...common, preset_id: selectedPreset }))
+        : { ...common, preset_id: selectedPreset })
+      setResult(nextResult)
+      setModelView('results')
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : '分析失败')
     } finally {
@@ -397,6 +402,8 @@ export default function ReducedOrderWorkbench() {
       setTopology(importedTopology)
       setCustomized(true)
       setResult(null)
+      setScanResult(null)
+      setModelView('editor')
       setError('')
     } catch (reason) {
       setError(reason instanceof Error ? `案例文件无法读取：${reason.message}` : '案例文件无法读取')
@@ -560,7 +567,7 @@ export default function ReducedOrderWorkbench() {
 
   if (!topology) return <main><div className="panel loading-state">正在加载独立模型预设……</div></main>
 
-  return <main className="model-main">
+  return <main className="model-main" data-view={modelView}>
     <aside className="panel controls model-controls">
       <div className="panel-title"><Network size={18}/><span>独立模型输入</span></div>
       <label>解析校核预设
@@ -574,9 +581,9 @@ export default function ReducedOrderWorkbench() {
         <p>本页不调用论文 Fig. 8 夹具；所有结论仅适用于下方声明的低频降阶模型。</p>
       </div>
       <div className="compact-fields three">
-        <label>时长 / s<input type="number" min="0.1" max="300" step="1" value={simulationTime} onChange={event => setSimulationTime(numeric(event.target.value, 20))}/></label>
-        <label>步长 / s<input type="number" min="0.001" max="1" step="0.01" value={timeStep} onChange={event => setTimeStep(numeric(event.target.value, 0.02))}/></label>
-        <label>扰动 / mrad<input type="number" min="-100" max="100" step="0.5" value={initialAngleMrad} onChange={event => setInitialAngleMrad(numeric(event.target.value, 1))}/></label>
+        <label>时长 / s<input aria-label="低频模型仿真时长" type="number" min="0.1" max="300" step="1" value={simulationTime} onChange={event => { setSimulationTime(numeric(event.target.value, 20)); setResult(null); setModelView('editor') }}/></label>
+        <label>步长 / s<input aria-label="低频模型仿真步长" type="number" min="0.001" max="1" step="0.01" value={timeStep} onChange={event => { setTimeStep(numeric(event.target.value, 0.02)); setResult(null); setModelView('editor') }}/></label>
+        <label>扰动 / mrad<input aria-label="低频模型初始相角扰动" type="number" min="-100" max="100" step="0.5" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(numeric(event.target.value, 1)); setResult(null); setModelView('editor') }}/></label>
       </div>
       <button onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在建立状态空间…' : '验证拓扑并分析'}</button>
       <div className="button-row">
@@ -592,7 +599,14 @@ export default function ReducedOrderWorkbench() {
     </aside>
 
     <section className="workspace">
-      <div className="panel model-editor">
+      <div className="model-viewbar">
+        <div><small>REDUCED-ORDER WORKBENCH</small><b>{modelView === 'editor' ? '网络与控制编辑' : '分析结果'}</b></div>
+        <div className="view-switch" role="tablist" aria-label="低频模型工作视图">
+          <button data-testid="reduced-view-editor" role="tab" aria-selected={modelView === 'editor'} className={modelView === 'editor' ? 'active' : ''} onClick={() => setModelView('editor')}>模型编辑</button>
+          <button data-testid="reduced-view-results" role="tab" aria-selected={modelView === 'results'} className={modelView === 'results' ? 'active' : ''} disabled={!result} onClick={() => setModelView('results')}>分析结果</button>
+        </div>
+      </div>
+      <div className="panel model-editor" hidden={modelView !== 'editor'}>
         <div className="panel-title"><Box size={18}/><span>可编辑网络与控制参数</span><em>NetworkTopology/1.0</em></div>
         <div className="editor-toolbar">
           <div><b>{topology.name}</b><small>{topology.buses.length} 母线 · {topology.lines.length} 线路 · {topology.grid_forming_converters.length} 台 VSM</small></div>
@@ -625,7 +639,7 @@ export default function ReducedOrderWorkbench() {
           </div>)}
         </div></details>
 
-        <details open><summary>母线参数</summary><div className="editable-table">
+        <details><summary>母线参数 <small>{topology.buses.length} 个节点</small></summary><div className="editable-table">
           {topology.buses.map((bus, index) => <div className="edit-row bus-row" key={`${bus.id}-${index}`}>
             <label>ID<input value={bus.id} onChange={event => updateBus(index, { id: event.target.value })}/></label>
             <label>名称<input value={bus.name} onChange={event => updateBus(index, { name: event.target.value })}/></label>
@@ -634,7 +648,7 @@ export default function ReducedOrderWorkbench() {
           </div>)}
         </div></details>
 
-        <details open><summary>线路参数</summary><div className="editable-table">
+        <details><summary>线路参数 <small>{topology.lines.length} 条支路</small></summary><div className="editable-table">
           {topology.lines.map((line, index) => <div className="edit-row line-row" key={`${line.id}-${index}`}>
             <label>ID<input value={line.id} onChange={event => updateLine(index, { id: event.target.value })}/></label>
             <label>首端<select value={line.from_bus_id} onChange={event => updateLine(index, { from_bus_id: event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
@@ -645,7 +659,7 @@ export default function ReducedOrderWorkbench() {
           </div>)}
         </div></details>
 
-        <details open><summary>VSM 控制参数</summary><div className="editable-table">
+        <details><summary>VSM 控制参数 <small>{topology.grid_forming_converters.length} 台设备</small></summary><div className="editable-table">
           {topology.grid_forming_converters.map((gfm, index) => <div className="edit-row gfm-row" key={`${gfm.id}-${index}`}>
             <label>ID<input value={gfm.id} onChange={event => updateGfm(index, { id: event.target.value })}/></label>
             <label>接入母线<select value={gfm.bus_id} onChange={event => updateGfm(index, { bus_id: event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
@@ -657,6 +671,7 @@ export default function ReducedOrderWorkbench() {
         </div></details>
       </div>
 
+      <section className="model-result-stage" hidden={modelView !== 'results'}>
       {result ? <>
         <div className="metrics four">
           <article className={`metric ${statusClass}`}>{result.result.stability === 'stable' ? <CircleCheck/> : <ShieldAlert/>}<div><small>闭环极点分类</small><strong>{stabilityText[result.result.stability]}</strong><p>容差 {result.result.stability_tolerance_per_s.toExponential(1)} s⁻¹</p></div></article>
@@ -700,6 +715,7 @@ export default function ReducedOrderWorkbench() {
         </div>
         <div className="panel provenance-card"><div className="panel-title"><ShieldAlert size={18}/><span>模型适用范围与交叉核对</span></div><p>{result.model_scope.statement}</p><div className="assumption-grid">{result.model_scope.assumptions.map(item => <span key={item}>{item}</span>)}</div></div>
       </> : <div className="panel empty-state"><Network size={34}/><h2>编辑网络后运行分析</h2><p>后端先校验实体 ID、连接关系、额定电压、控制参数与接地条件，再构造同步刚度、状态矩阵、闭环极点和线性自由响应。</p></div>}
+      </section>
     </section>
   </main>
 }

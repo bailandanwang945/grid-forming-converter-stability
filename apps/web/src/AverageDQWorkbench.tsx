@@ -15,10 +15,12 @@ import {
   MathWorksExternalEvidenceResult,
   MathWorksTeamComparisonResult,
   NetworkTopology,
+  SiennaTest08AuditResult,
   getAverageDQPreset,
   getAverageDQAlignedStepEvidence,
   getMathWorksExternalEvidence,
   getMathWorksTeamComparison,
+  getSiennaTest08Audit,
   getAverageDQPortIdentificationReportHtml,
   getAverageDQReportHtml,
   runAverageDQAblation,
@@ -95,7 +97,11 @@ function formatStepOutcome(outcome: string) {
   return '数值失败'
 }
 
+type ResearchStudyId = 'hierarchy' | 'ablation' | 'boundary' | 'port' | 'external' | 'sienna'
+
 export default function AverageDQWorkbench() {
+  const [workspaceView, setWorkspaceView] = useState<'analysis' | 'studies'>('analysis')
+  const [activeStudy, setActiveStudy] = useState<ResearchStudyId>('hierarchy')
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
   const [parameters, setParameters] = useState<AverageDQParameters | null>(null)
   const [result, setResult] = useState<AverageDQResult | null>(null)
@@ -106,12 +112,14 @@ export default function AverageDQWorkbench() {
   const [externalEvidence, setExternalEvidence] = useState<MathWorksExternalEvidenceResult | null>(null)
   const [crossModelComparison, setCrossModelComparison] = useState<MathWorksTeamComparisonResult | null>(null)
   const [alignedStepEvidence, setAlignedStepEvidence] = useState<AverageDQAlignedStepResult | null>(null)
+  const [siennaAudit, setSiennaAudit] = useState<SiennaTest08AuditResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
   const [ablationRunning, setAblationRunning] = useState(false)
   const [boundaryRunning, setBoundaryRunning] = useState(false)
   const [portIdentificationRunning, setPortIdentificationRunning] = useState(false)
   const [externalEvidenceRunning, setExternalEvidenceRunning] = useState(false)
+  const [siennaAuditRunning, setSiennaAuditRunning] = useState(false)
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
@@ -353,6 +361,7 @@ export default function AverageDQWorkbench() {
 
   async function scanModelHierarchy() {
     if (!topology || !parameters) return
+    setActiveStudy('hierarchy')
     setScanRunning(true)
     setError('')
     try {
@@ -370,6 +379,7 @@ export default function AverageDQWorkbench() {
   }
 
   async function runFixedAblation() {
+    setActiveStudy('ablation')
     setAblationRunning(true)
     setError('')
     try {
@@ -382,6 +392,7 @@ export default function AverageDQWorkbench() {
   }
 
   async function runFixedBoundary() {
+    setActiveStudy('boundary')
     setBoundaryRunning(true)
     setError('')
     try {
@@ -394,6 +405,7 @@ export default function AverageDQWorkbench() {
   }
 
   async function runFixedPortIdentification() {
+    setActiveStudy('port')
     setPortIdentificationRunning(true)
     setError('')
     try {
@@ -406,6 +418,7 @@ export default function AverageDQWorkbench() {
   }
 
   async function loadExternalEvidence() {
+    setActiveStudy('external')
     setExternalEvidenceRunning(true)
     setError('')
     try {
@@ -421,6 +434,19 @@ export default function AverageDQWorkbench() {
       setError(reason instanceof Error ? reason.message : 'MathWorks 外部验证证据读取失败')
     } finally {
       setExternalEvidenceRunning(false)
+    }
+  }
+
+  async function runSiennaTest08Audit() {
+    setActiveStudy('sienna')
+    setSiennaAuditRunning(true)
+    setError('')
+    try {
+      setSiennaAudit(await getSiennaTest08Audit())
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'Sienna Test 08 方程复核失败')
+    } finally {
+      setSiennaAuditRunning(false)
     }
   }
 
@@ -464,24 +490,64 @@ export default function AverageDQWorkbench() {
     result.operating_point.closed_rhs_residual_inf,
   ) : null
   const firstDisagreement = scanResult?.result.rows.flat().find(point => point.stability_agreement === false)
+  const studyStates: Record<ResearchStudyId, { label: string; running: boolean; completed: boolean }> = {
+    hierarchy: { label: '模型层级', running: scanRunning, completed: Boolean(scanResult) },
+    ablation: { label: '模态消融', running: ablationRunning, completed: Boolean(ablationResult) },
+    boundary: { label: '临界边界', running: boundaryRunning, completed: Boolean(boundaryResult) },
+    port: { label: '端口辨识', running: portIdentificationRunning, completed: Boolean(portIdentificationResult) },
+    external: {
+      label: '外部对照',
+      running: externalEvidenceRunning,
+      completed: Boolean(externalEvidence && crossModelComparison && alignedStepEvidence),
+    },
+    sienna: { label: '开源复核', running: siennaAuditRunning, completed: Boolean(siennaAudit) },
+  }
+  const studyIds = Object.keys(studyStates) as ResearchStudyId[]
+  const completedStudyCount = studyIds.filter(id => studyStates[id].completed).length
+  const activeStudyState = studyStates[activeStudy]
+  const studyCardClass = (id: ResearchStudyId, extra: string) => [
+    'study-task',
+    extra,
+    activeStudy === id ? 'selected' : '',
+    studyStates[id].completed ? 'completed' : '',
+    studyStates[id].running ? 'running' : '',
+  ].filter(Boolean).join(' ')
+  const studyStatusText = (id: ResearchStudyId) => studyStates[id].running
+    ? '计算中'
+    : studyStates[id].completed ? '已完成' : '未运行'
 
-  return <main className="average-dq-workbench">
+  return <main className="average-dq-workbench" data-view={workspaceView}>
     <aside className="panel controls">
       <div className="panel-title"><SlidersHorizontal size={18}/><span>平均值 dq 参数</span></div>
       <p className="scope-note">首版固定为单台 VSM、LCL 滤波器、单条外部 RL 线路和无限大母线。这里修改的是实际计算参数，不是显示层滑杆。</p>
-      <div className="parameter-grid">
-        <label>P* / p.u.<input type="number" step="0.05" value={converter.active_power_setpoint_pu} onChange={event => updateConverter('active_power_setpoint_pu', Number(event.target.value))}/></label>
-        <label>Q* / p.u.<input type="number" step="0.05" value={converter.reactive_power_setpoint_pu} onChange={event => updateConverter('reactive_power_setpoint_pu', Number(event.target.value))}/></label>
-        <label>V* / p.u.<input type="number" step="0.01" value={converter.voltage_setpoint_pu} onChange={event => updateConverter('voltage_setpoint_pu', Number(event.target.value))}/></label>
-        <label>阻尼 D<input type="number" step="1" value={converter.damping_coefficient_pu} onChange={event => updateConverter('damping_coefficient_pu', Number(event.target.value))}/></label>
-        <label>线路 R / p.u.<input type="number" step="0.01" value={line.resistance_pu} onChange={event => updateLine('resistance_pu', Number(event.target.value))}/></label>
-        <label>线路 X / p.u.<input type="number" step="0.05" value={line.reactance_pu} onChange={event => updateLine('reactance_pu', Number(event.target.value))}/></label>
-        <label>滤波器 X1<input type="number" step="0.01" value={parameters.converter_side_reactance_pu} onChange={event => updateParameter('converter_side_reactance_pu', Number(event.target.value))}/></label>
-        <label>滤波器 Bc<input type="number" step="0.01" value={parameters.filter_capacitor_susceptance_pu} onChange={event => updateParameter('filter_capacitor_susceptance_pu', Number(event.target.value))}/></label>
-        <label>滤波器 X2<input type="number" step="0.01" value={parameters.grid_side_reactance_pu} onChange={event => updateParameter('grid_side_reactance_pu', Number(event.target.value))}/></label>
-        <label>Q–V 下垂 nq<input type="number" step="0.01" value={parameters.reactive_power_voltage_droop_pu} onChange={event => updateParameter('reactive_power_voltage_droop_pu', Number(event.target.value))}/></label>
-        <label>仿真时长 / s<input type="number" step="0.2" value={simulationTime} onChange={event => { setSimulationTime(Number(event.target.value)); setResult(null) }}/></label>
-        <label>初始相角 / mrad<input type="number" step="0.05" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(Number(event.target.value)); setResult(null) }}/></label>
+      <div className="parameter-sections">
+        <details open>
+          <summary><span>运行点与成形控制</span><small>4 项</small></summary>
+          <div className="parameter-grid">
+            <label>P* <span>/ p.u.</span><input aria-label="有功功率给定" type="number" step="0.05" value={converter.active_power_setpoint_pu} onChange={event => updateConverter('active_power_setpoint_pu', Number(event.target.value))}/></label>
+            <label>Q* <span>/ p.u.</span><input aria-label="无功功率给定" type="number" step="0.05" value={converter.reactive_power_setpoint_pu} onChange={event => updateConverter('reactive_power_setpoint_pu', Number(event.target.value))}/></label>
+            <label>V* <span>/ p.u.</span><input aria-label="电压幅值给定" type="number" step="0.01" value={converter.voltage_setpoint_pu} onChange={event => updateConverter('voltage_setpoint_pu', Number(event.target.value))}/></label>
+            <label>阻尼 D<input aria-label="VSM 阻尼系数" type="number" step="1" value={converter.damping_coefficient_pu} onChange={event => updateConverter('damping_coefficient_pu', Number(event.target.value))}/></label>
+          </div>
+        </details>
+        <details>
+          <summary><span>线路、滤波器与下垂</span><small>6 项</small></summary>
+          <div className="parameter-grid">
+            <label>线路 R <span>/ p.u.</span><input aria-label="线路电阻" type="number" step="0.01" value={line.resistance_pu} onChange={event => updateLine('resistance_pu', Number(event.target.value))}/></label>
+            <label>线路 X <span>/ p.u.</span><input aria-label="线路电抗" type="number" step="0.05" value={line.reactance_pu} onChange={event => updateLine('reactance_pu', Number(event.target.value))}/></label>
+            <label>滤波器 X1<input aria-label="变流器侧滤波电抗" type="number" step="0.01" value={parameters.converter_side_reactance_pu} onChange={event => updateParameter('converter_side_reactance_pu', Number(event.target.value))}/></label>
+            <label>滤波器 Bc<input aria-label="滤波电容电纳" type="number" step="0.01" value={parameters.filter_capacitor_susceptance_pu} onChange={event => updateParameter('filter_capacitor_susceptance_pu', Number(event.target.value))}/></label>
+            <label>滤波器 X2<input aria-label="电网侧滤波电抗" type="number" step="0.01" value={parameters.grid_side_reactance_pu} onChange={event => updateParameter('grid_side_reactance_pu', Number(event.target.value))}/></label>
+            <label>Q–V 下垂 nq<input aria-label="无功电压下垂系数" type="number" step="0.01" value={parameters.reactive_power_voltage_droop_pu} onChange={event => updateParameter('reactive_power_voltage_droop_pu', Number(event.target.value))}/></label>
+          </div>
+        </details>
+        <details>
+          <summary><span>仿真设置</span><small>2 项</small></summary>
+          <div className="parameter-grid">
+            <label>仿真时长 <span>/ s</span><input aria-label="仿真时长" type="number" step="0.2" value={simulationTime} onChange={event => { setSimulationTime(Number(event.target.value)); setResult(null) }}/></label>
+            <label>初始相角 <span>/ mrad</span><input aria-label="初始相角扰动" type="number" step="0.05" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(Number(event.target.value)); setResult(null) }}/></label>
+          </div>
+        </details>
       </div>
       <button className="primary-analysis-button" onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在求工作点并积分…' : '运行平均值 dq 分析'}</button>
       <button className="quiet-button" onClick={() => download('average-dq-case.json', JSON.stringify({ topology, parameters }, null, 2))}><Download size={15}/>保存当前模型参数</button>
@@ -490,9 +556,16 @@ export default function AverageDQWorkbench() {
     </aside>
 
     <section className="workspace">
+      <div className="workbench-viewbar">
+        <div><small>AVERAGE-DQ WORKBENCH</small><b>{workspaceView === 'analysis' ? '模型分析' : '研究验证'}</b></div>
+        <div className="view-switch" role="tablist" aria-label="平均值 dq 工作视图">
+          <button role="tab" aria-selected={workspaceView === 'analysis'} className={workspaceView === 'analysis' ? 'active' : ''} onClick={() => setWorkspaceView('analysis')}>模型分析</button>
+          <button role="tab" aria-selected={workspaceView === 'studies'} className={workspaceView === 'studies' ? 'active' : ''} onClick={() => setWorkspaceView('studies')}>研究验证</button>
+        </div>
+      </div>
       <div className="study-launcher" aria-label="固定研究任务">
-        <article className="study-task hierarchy-task">
-          <div className="study-task-heading"><span>01</span><small>MODEL HIERARCHY</small></div>
+        <article className={studyCardClass('hierarchy', 'hierarchy-task')}>
+          <button type="button" className="study-task-heading study-task-select" data-testid="study-select-hierarchy" aria-pressed={activeStudy === 'hierarchy'} onClick={() => setActiveStudy('hierarchy')}><span>01</span><small>MODEL HIERARCHY</small><em data-testid="study-status-hierarchy">{studyStatusText('hierarchy')}</em></button>
           <h3>D–X 模型层级对照</h3>
           <p>逐点重算42个参数点，比较16状态模型与三状态近似的稳定性分类。</p>
           <div className="study-task-actions">
@@ -500,8 +573,8 @@ export default function AverageDQWorkbench() {
             <button className="icon-action" aria-label="导出层级扫描 JSON" disabled={!scanResult} onClick={() => scanResult && download(`${scanResult.run_id}.json`, JSON.stringify(scanResult, null, 2))}><Download size={15}/></button>
           </div>
         </article>
-        <article className="study-task ablation-task">
-          <div className="study-task-heading"><span>02</span><small>MODAL ABLATION</small></div>
+        <article className={studyCardClass('ablation', 'ablation-task')}>
+          <button type="button" className="study-task-heading study-task-select" data-testid="study-select-ablation" aria-pressed={activeStudy === 'ablation'} onClick={() => setActiveStudy('ablation')}><span>02</span><small>MODAL ABLATION</small><em data-testid="study-status-ablation">{studyStatusText('ablation')}</em></button>
           <h3>固定19点模态消融</h3>
           <p data-testid="average-dq-ablation-fixed-scope">冻结 D=60、外部线路 X=0.1 p.u.，以固定 19 点追踪控制与LCL参数变化下的候选模态。</p>
           <div className="study-task-actions">
@@ -509,8 +582,8 @@ export default function AverageDQWorkbench() {
             <button className="icon-action" aria-label="导出模态消融 JSON" data-testid="average-dq-ablation-export" disabled={!ablationResult} onClick={() => ablationResult && download(`${ablationResult.run_id}.json`, JSON.stringify(ablationResult, null, 2))}><Download size={15}/></button>
           </div>
         </article>
-        <article className="study-task boundary-task">
-          <div className="study-task-heading"><span>03</span><small>BOUNDARY TRACE</small></div>
+        <article className={studyCardClass('boundary', 'boundary-task')}>
+          <button type="button" className="study-task-heading study-task-select" data-testid="study-select-boundary" aria-pressed={activeStudy === 'boundary'} onClick={() => setActiveStudy('boundary')}><span>03</span><small>BOUNDARY TRACE</small><em data-testid="study-status-boundary">{studyStatusText('boundary')}</em></button>
           <h3>四条一维临界边界</h3>
           <p data-testid="average-dq-boundary-fixed-scope">在同一锚点沿四条单因素路径，分别求解附加模态过零与完整模型稳定边界。</p>
           <div className="study-task-actions">
@@ -518,8 +591,8 @@ export default function AverageDQWorkbench() {
             <button className="icon-action" aria-label="导出临界边界 JSON" data-testid="average-dq-boundary-export" disabled={!boundaryResult} onClick={() => boundaryResult && download(`${boundaryResult.run_id}.json`, JSON.stringify(boundaryResult, null, 2))}><Download size={15}/></button>
           </div>
         </article>
-        <article className="study-task port-identification-task">
-          <div className="study-task-heading"><span>04</span><small>PORT IDENTIFICATION</small></div>
+        <article className={studyCardClass('port', 'port-identification-task')}>
+          <button type="button" className="study-task-heading study-task-select" data-testid="study-select-port" aria-pressed={activeStudy === 'port'} onClick={() => setActiveStudy('port')}><span>04</span><small>PORT IDENTIFICATION</small><em data-testid="study-status-port">{studyStatusText('port')}</em></button>
           <h3>三频点端口正弦辨识</h3>
           <p data-testid="average-dq-port-identification-fixed-scope">固定 0.2、2、20 Hz，由非线性 PCC 电压与端口电流相量反演导纳，并与局部线性化逐元素核对。</p>
           <div className="study-task-actions has-two-icons">
@@ -528,8 +601,8 @@ export default function AverageDQWorkbench() {
             <button className="icon-action" aria-label="生成端口辨识报告" data-testid="average-dq-port-identification-report" disabled={!portIdentificationResult || portIdentificationRunning} onClick={openPortIdentificationReport}><BookOpenCheck size={15}/></button>
           </div>
         </article>
-        <article className="study-task external-evidence-task">
-          <div className="study-task-heading"><span>05</span><small>EXTERNAL REFERENCE</small></div>
+        <article className={studyCardClass('external', 'external-evidence-task')}>
+          <button type="button" className="study-task-heading study-task-select" data-testid="study-select-external" aria-pressed={activeStudy === 'external'} onClick={() => setActiveStudy('external')}><span>05</span><small>EXTERNAL REFERENCE</small><em data-testid="study-status-external">{studyStatusText('external')}</em></button>
           <h3>MathWorks 固定模型参照</h3>
           <p data-testid="mathworks-external-evidence-fixed-scope">对齐50 Hz阻尼归一化、SCR、X/R与有功工作点，比较外部时域分类和团队16状态模型局部极点。</p>
           <div className="study-task-actions">
@@ -538,7 +611,28 @@ export default function AverageDQWorkbench() {
             <button className="icon-action" aria-label="导出团队非线性阶跃 JSON" data-testid="average-dq-aligned-step-export" disabled={!alignedStepEvidence} onClick={() => alignedStepEvidence && download(`${alignedStepEvidence.study_id}.json`, JSON.stringify(alignedStepEvidence, null, 2))}><Download size={15}/></button>
           </div>
         </article>
+        <article className={studyCardClass('sienna', 'external-evidence-task')}>
+          <button type="button" className="study-task-heading study-task-select" data-testid="study-select-sienna" aria-pressed={activeStudy === 'sienna'} onClick={() => setActiveStudy('sienna')}><span>06</span><small>OPEN-SOURCE BENCHMARK</small><em data-testid="study-status-sienna">{studyStatusText('sienna')}</em></button>
+          <h3>Sienna Test 08 方程复核</h3>
+          <p data-testid="sienna-test08-fixed-scope">按固定开源源码独立转写19状态 VSM 方程，重算平衡点残差和全部特征值；不要求本机安装 Julia。</p>
+          <div className="study-task-actions">
+            <button data-testid="sienna-test08-audit-run" onClick={runSiennaTest08Audit} disabled={siennaAuditRunning}>{siennaAuditRunning ? '正在重算19状态谱…' : '运行开源方程复核'}</button>
+            <button className="icon-action" aria-label="导出 Sienna Test 08 复核 JSON" data-testid="sienna-test08-audit-export" disabled={!siennaAudit} onClick={() => siennaAudit && download(`${siennaAudit.benchmark_id}.json`, JSON.stringify(siennaAudit, null, 2))}><Download size={15}/></button>
+          </div>
+        </article>
       </div>
+
+      <nav className="study-result-nav research-navigation" aria-label="研究结果切换">
+        <div><small>RESULT FOCUS</small><b>{completedStudyCount} / {studyIds.length} 项已有结果</b></div>
+        <div className="study-result-tabs">
+          {studyIds.map(id => <button key={id} type="button" className={activeStudy === id ? 'active' : ''} aria-current={activeStudy === id ? 'page' : undefined} onClick={() => setActiveStudy(id)}>
+            <span className={studyStates[id].running ? 'running' : studyStates[id].completed ? 'completed' : ''}/>{studyStates[id].label}
+          </button>)}
+        </div>
+      </nav>
+      {!activeStudyState.completed && <div className="panel study-result-empty research-navigation" data-testid="study-result-empty">
+        <Activity size={24}/><div><b>{activeStudyState.label}{activeStudyState.running ? '正在计算' : '尚未运行'}</b><p>{activeStudyState.running ? '计算完成后，结果将在这里显示；切换视图不会中止后台请求。' : '从上方对应任务卡启动计算。选择任务只改变结果焦点，不会触发计算。'}</p></div>
+      </div>}
 
       <div className="result-toolbar">
         <div><small>LIVE ANALYSIS</small><b>{result ? '当前结果可追溯' : '等待运行模型'}</b></div>
@@ -579,7 +673,7 @@ export default function AverageDQWorkbench() {
         <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>变流器端口导纳范数</span><em>网络流入变流器为正 · 全局同步 dq 坐标</em></div><EChart option={admittanceChart} style={{ height: 330 }}/></div>
         <div className="panel provenance-card"><div className="panel-title"><BookOpenCheck size={18}/><span>模型身份与结论边界</span></div><p>{result.model_scope.statement}</p><p>{result.result.quasisteady_reduction_comparison.interpretation}</p><dl><div><dt>模型层级</dt><dd>正序平均值 ODE，16 个状态</dd></div><div><dt>工作点同步刚度 Kδ</dt><dd>{result.result.quasisteady_reduction_comparison.synchronizing_stiffness_pu_per_rad.toFixed(5)} p.u./rad</dd></div><div><dt>匹配同步模态衰减率误差</dt><dd>{result.result.quasisteady_reduction_comparison.decay_rate_relative_error === null ? '不适用' : `${(result.result.quasisteady_reduction_comparison.decay_rate_relative_error * 100).toFixed(2)}%`}</dd></div><div><dt>硬件参数拟合</dt><dd>未进行</dd></div></dl></div>
       </> : <div className="panel empty-state"><Activity size={34}/><h2>编辑参数后运行16状态模型</h2><p>平台会先求解工作点并检查功率平衡，再计算闭环极点、端口导纳以及非线性—线性小扰动响应。</p></div>}
-      {scanResult && <>
+      {scanResult && <section className="research-output" data-testid="study-result-hierarchy" hidden={activeStudy !== 'hierarchy'}>
         <div className="panel evidence-strip">
           <div><small>扫描点数</small><b>{scanResult.result.point_count}</b></div>
           <div><small>两层分类一致</small><b>{scanResult.result.counts.agreement}</b></div>
@@ -587,8 +681,8 @@ export default function AverageDQWorkbench() {
           <div><small>不可计算点</small><b>{scanResult.result.counts.invalid}</b></div>
         </div>
         <div className="panel chart-card"><div className="panel-title"><ShieldAlert size={18}/><span>16状态—三状态 D–X 层级对照</span><em>逐点重算，不做显示层插值</em></div><EChart option={scanChart} style={{ height: 390 }}/>{firstDisagreement && <div className="evidence-strip"><div><small>首个失配锚点</small><b>D={firstDisagreement.damping_coefficient_pu}，X={firstDisagreement.line_reactance_pu}</b></div><div><small>16状态最右极点实部</small><b>{firstDisagreement.full_dominant_real_per_s?.toFixed(4)} s⁻¹</b></div><div><small>匹配同步模态实部</small><b>{firstDisagreement.matched_full_mode_real_per_s?.toFixed(4)} s⁻¹</b></div><div><small>主要参与状态</small><b>{firstDisagreement.full_dominant_participation?.slice(0, 4).map(item => stateNames[item.state] ?? item.state).join('、')}</b></div></div>}<p className="scope-note">{scanResult.model_scope.interpretation} {scanResult.model_scope.statement}</p></div>
-      </>}
-      {ablationResult && <section data-testid="average-dq-ablation-results">
+      </section>}
+      {ablationResult && <section className="research-output" data-study="ablation" data-testid="average-dq-ablation-results" hidden={activeStudy !== 'ablation'}>
         <div className="panel evidence-strip" data-testid="average-dq-ablation-summary">
           <div><small>固定消融点数</small><b>{ablationResult.result.point_count}</b></div>
           <div><small>整体稳定 / 失稳</small><b>{ablationResult.result.summary.stability_counts.stable} / {ablationResult.result.summary.stability_counts.unstable}</b></div>
@@ -616,7 +710,7 @@ export default function AverageDQWorkbench() {
           <p className="scope-note" data-testid="average-dq-ablation-tracking-boundary">{ablationResult.model_scope.tracking_boundary}</p>
         </div>
       </section>}
-      {boundaryResult && <section data-testid="average-dq-boundary-results">
+      {boundaryResult && <section className="research-output" data-study="boundary" data-testid="average-dq-boundary-results" hidden={activeStudy !== 'boundary'}>
         <div className="panel evidence-strip" data-testid="average-dq-boundary-summary">
           <div><small>冻结单因素路径</small><b>{boundaryResult.result.path_count}</b></div>
           <div><small>附加模态 / 整体边界收敛</small><b>{boundaryResult.result.converged_extra_mode_boundaries} / {boundaryResult.result.converged_overall_boundaries}</b></div>
@@ -645,7 +739,7 @@ export default function AverageDQWorkbench() {
           <p className="scope-note" data-testid="average-dq-boundary-interpretation">{boundaryResult.result.interpretation_boundary}</p>
         </div>
       </section>}
-      {portIdentificationResult && <section data-testid="average-dq-port-identification-results">
+      {portIdentificationResult && <section className="research-output" data-study="port" data-testid="average-dq-port-identification-results" hidden={activeStudy !== 'port'}>
         <div className="panel evidence-strip" data-testid="average-dq-port-identification-summary">
           <div><small>三频点判定</small><b>{portIdentificationResult.result.summary.passed ? '全部通过' : '存在未通过点'}</b></div>
           <div><small>最大幅值误差</small><b>{(portIdentificationResult.result.summary.maximum_magnitude_relative_error * 100).toFixed(4)}%</b></div>
@@ -672,7 +766,7 @@ export default function AverageDQWorkbench() {
           <p className="scope-note" data-testid="average-dq-port-identification-boundary">{portIdentificationResult.model_scope.statement} 设备开端口矩阵并非渐近稳定，因此采用稳定闭环源电压注入；本结果不评价论文稳定性充分条件。</p>
         </div>
       </section>}
-      {externalEvidence && <section data-testid="mathworks-external-evidence-results">
+      {externalEvidence && <section className="research-output" data-study="external" data-testid="mathworks-external-evidence-results" hidden={activeStudy !== 'external'}>
         <div className="panel evidence-strip" data-testid="mathworks-external-evidence-summary">
           <div><small>三点 SCR 供应商分类</small><b>{externalEvidence.summary.three_point_vendor_outcomes.join(' / ')}</b></div>
           <div><small>2×4 因子稳定点</small><b>{externalEvidence.summary.factorial_stable_point_count} / {externalEvidence.summary.factorial_point_count}</b></div>
@@ -739,6 +833,24 @@ export default function AverageDQWorkbench() {
           </div>
           <p className="scope-note" data-testid="average-dq-aligned-step-boundary">D=1.056 在团队模型中由两种求解器共同确认于8秒内收敛，因此当前分歧不能归结为该团队模型在同一阶跃下的大扰动失稳；后续应优先核对两套模型的内环、滤波、限幅、初始化与分类器差异，但现有证据尚不能唯一归因。D=0.6 只报告“越出团队模型诊断范围”，不等同于物理失稳。该结果不是可信 EMT、硬件确认或论文稳定性充分条件验证。</p>
         </div>}
+      </section>}
+      {siennaAudit && <section className="research-output panel cross-model-comparison" data-study="sienna" data-testid="sienna-test08-audit-results" hidden={activeStudy !== 'sienna'}>
+          <div className="panel-title"><BookOpenCheck size={18}/><span>Sienna Test 08 · 19状态开源方程复核</span><em>PSID v0.16.2 · BSD-3-Clause</em></div>
+          <div className="panel evidence-strip" data-testid="sienna-test08-audit-summary">
+            <div><small>状态数</small><b>{siennaAudit.model_contract.state_count}</b></div>
+            <div><small>平衡点残差</small><b>{siennaAudit.results.initial_residual_inf.toExponential(2)}</b></div>
+            <div><small>特征值最大误差 / s⁻¹</small><b>{siennaAudit.results.matched_eigenvalue_max_error_per_s.toExponential(2)}</b></div>
+            <div><small>冻结谱基频</small><b>{siennaAudit.model_contract.system_frequency_hz_used_by_frozen_result} Hz</b></div>
+          </div>
+          <div className="table-scroll">
+            <table>
+              <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>
+              <tbody>{siennaAudit.results.computed_eigenvalues.slice(-5).reverse().map((pole, index) => <tr key={`${pole.real_per_s}-${pole.imag_per_s}-${index}`}>
+                <td>{pole.real_per_s.toFixed(6)}</td><td>{pole.imag_per_s.toFixed(6)}</td><td>{pole.oscillation_frequency_hz.toFixed(6)}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；若机械代入 RAW 文件末尾的 50 Hz，快速电磁模态约按 5/6 缩放且不再通过。这里没有运行 Julia 或 PSCAD，也没有据此确认结构不同的团队16状态模型、MathWorks模型或论文稳定性充分条件。</p>
       </section>}
     </section>
   </main>
