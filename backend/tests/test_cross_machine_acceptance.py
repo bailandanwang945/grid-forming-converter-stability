@@ -99,6 +99,7 @@ def _write_valid_evidence(
         "gfm-runtime-acceptance/1.3",
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
     ):
         runtime["checks"]["fig8_sensitivity"] = {
             "baseline_reconstruction_exact": True,
@@ -111,6 +112,7 @@ def _write_valid_evidence(
     if runtime_schema in (
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
     ):
         runtime["checks"]["average_dq_port_identification"] = {
             "preset_id": "average-dq-smib-verification",
@@ -127,7 +129,10 @@ def _write_valid_evidence(
             "emt_validation": False,
             "report": "passed",
         }
-    if runtime_schema == "gfm-runtime-acceptance/1.5":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
+    ):
         runtime["checks"]["mathworks_team_comparison"] = {
             "run_id": "mathworks-team-aligned-eight-point-comparison-v1",
             "point_count": 8,
@@ -153,10 +158,32 @@ def _write_valid_evidence(
             "quantitative_transition_reproduced": False,
             "same_full_physical_model": False,
             "same_classifier": False,
-            "nonlinear_team_step_completed": False,
+            "nonlinear_team_step_completed": (
+                runtime_schema == "gfm-runtime-acceptance/1.6"
+            ),
             "paper_sufficient_condition_evaluated": False,
             "physical_hardware_validation": False,
         }
+        if runtime_schema == "gfm-runtime-acceptance/1.6":
+            runtime["checks"]["mathworks_team_comparison"][
+                "nonlinear_team_step_study_id"
+            ] = "average-dq-aligned-three-point-nonlinear-step-v1"
+            runtime["checks"]["average_dq_aligned_nonlinear_step"] = {
+                "study_id": "average-dq-aligned-three-point-nonlinear-step-v1",
+                "point_count": 3,
+                "solver_agreement_count": 3,
+                "outcomes_by_damping": {
+                    "0.6": "departed_declared_diagnostic_range",
+                    "1.056": "converged_within_horizon",
+                    "2.0": "converged_within_horizon",
+                },
+                "disagreement_coordinate_outcome": "converged_within_horizon",
+                "low_damping_exit_event": "grid_current_limit",
+                "same_full_model_as_mathworks": False,
+                "diagnostic_exit_is_physical_instability": False,
+                "emt_validation": False,
+                "hardware_validation": False,
+            }
     (directory / "cross-machine-acceptance.json").write_text(json.dumps(acceptance))
     (directory / "runtime-evidence.json").write_text(json.dumps(runtime))
     (directory / "acceptance-summary.txt").write_text("passed")
@@ -275,6 +302,28 @@ class CrossMachineAcceptanceTest(unittest.TestCase):
             )
         self.assertFalse(review.automated_evidence_passed)
         self.assertIn("八点对照", " ".join(review.errors))
+
+    def test_runtime_1p6_requires_aligned_nonlinear_step_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            _write_valid_evidence(
+                directory,
+                runtime_schema="gfm-runtime-acceptance/1.6",
+            )
+            runtime_path = directory / "runtime-evidence.json"
+            runtime = json.loads(runtime_path.read_text())
+            runtime["checks"]["average_dq_aligned_nonlinear_step"][
+                "disagreement_coordinate_outcome"
+            ] = "numerical_pending"
+            runtime_path.write_text(json.dumps(runtime))
+            review = review_cross_machine_evidence(
+                directory,
+                expected_version=VERSION,
+                expected_commit=COMMIT,
+                expected_zip_sha256=ZIP_HASH,
+            )
+        self.assertFalse(review.automated_evidence_passed)
+        self.assertIn("三点非线性阶跃", " ".join(review.errors))
 
 
 if __name__ == "__main__":

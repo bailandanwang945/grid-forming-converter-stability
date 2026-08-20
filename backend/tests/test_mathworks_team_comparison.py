@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 from backend.api.app import app
 from backend.core.mathworks_team_comparison import (
     evaluate_mathworks_team_comparison,
+    source_impedance_from_scr,
 )
 
 
@@ -34,6 +35,14 @@ class MathWorksTeamComparisonTest(unittest.TestCase):
         self.assertEqual(mapping["x_by_r"], 5.0)
         self.assertEqual(mapping["pre_step_active_power_pu"], 0.6)
         self.assertEqual(mapping["post_step_active_power_pu"], 0.8)
+
+    def test_public_scr_mapping_rejects_nonphysical_inputs(self) -> None:
+        resistance, reactance = source_impedance_from_scr(5.0, 5.0)
+        self.assertAlmostEqual((resistance**2 + reactance**2) ** 0.5, 0.2)
+        self.assertAlmostEqual(reactance / resistance, 5.0)
+        for scr, x_by_r in ((0.0, 5.0), (-1.0, 5.0), (5.0, 0.0)):
+            with self.assertRaises(ValueError):
+                source_impedance_from_scr(scr, x_by_r)
 
     def test_eight_point_comparison_preserves_the_single_disagreement(self) -> None:
         summary = self.result["summary"]
@@ -85,7 +94,11 @@ class MathWorksTeamComparisonTest(unittest.TestCase):
         self.assertFalse(
             payload["boundary_comparison"]["quantitative_transition_reproduced"]
         )
-        self.assertFalse(payload["scope"]["nonlinear_team_step_completed"])
+        self.assertTrue(payload["scope"]["nonlinear_team_step_completed"])
+        self.assertEqual(
+            payload["scope"]["nonlinear_team_step_study_id"],
+            "average-dq-aligned-three-point-nonlinear-step-v1",
+        )
 
     def test_frozen_json_csv_and_hashes_match_recomputation(self) -> None:
         root = Path(__file__).resolve().parents[2]
@@ -94,7 +107,7 @@ class MathWorksTeamComparisonTest(unittest.TestCase):
         csv_path = result_root / "mathworks_team_aligned_points.csv"
         self.assertEqual(
             hashlib.sha256(json_path.read_bytes()).hexdigest(),
-            "a66a634813cd946da10157983b28e0468369ba3915d0b721a5a6e4b6d41c3cea",
+            "2c1082339b41d9b615dfc3ee638005a550fbd96f43efcae396c9285fc0138116",
         )
         self.assertEqual(
             hashlib.sha256(csv_path.read_bytes()).hexdigest(),

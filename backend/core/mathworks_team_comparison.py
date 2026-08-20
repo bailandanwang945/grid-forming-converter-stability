@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from math import sqrt
+from math import isfinite, sqrt
 from typing import Any
 
 import numpy as np
@@ -22,18 +22,28 @@ BOUNDARY_LOWER_DAMPING_MW_PU_PER_HZ = 0.6
 BOUNDARY_UPPER_DAMPING_MW_PU_PER_HZ = 1.056
 
 
-def _source_impedance(scr: float, x_by_r: float = X_BY_R) -> tuple[float, float]:
+def source_impedance_from_scr(
+    scr: float, x_by_r: float = X_BY_R
+) -> tuple[float, float]:
+    """Map the frozen ``SCR`` and ``X/R`` convention to series ``R, X``."""
+
+    if not isfinite(scr) or scr <= 0.0:
+        raise ValueError("SCR must be a finite positive number.")
+    if not isfinite(x_by_r) or x_by_r <= 0.0:
+        raise ValueError("X/R must be a finite positive number.")
     resistance = 1.0 / (scr * sqrt(1.0 + x_by_r**2))
     return resistance, x_by_r * resistance
 
 
-def _team_case(
+def build_aligned_team_case(
     scr: float,
     damping_mw_pu_per_hz: float,
     active_power_setpoint_pu: float,
 ):
+    """Build one team-model case on the disclosed MathWorks coordinate map."""
+
     topology, parameters = build_average_dq_verification_case()
-    resistance, reactance = _source_impedance(scr)
+    resistance, reactance = source_impedance_from_scr(scr)
     topology.lines[0].resistance_pu = resistance
     topology.lines[0].reactance_pu = reactance
     topology.grid_forming_converters[0].active_power_setpoint_pu = (
@@ -57,7 +67,7 @@ def _spectral_abscissa(
     damping_mw_pu_per_hz: float,
     active_power_setpoint_pu: float,
 ) -> float:
-    model = _team_case(
+    model = build_aligned_team_case(
         BOUNDARY_SCR,
         damping_mw_pu_per_hz,
         active_power_setpoint_pu,
@@ -102,15 +112,19 @@ def evaluate_mathworks_team_comparison() -> dict[str, Any]:
     for external_point in external_factorial["points"]:
         scr = float(external_point["scr"])
         damping_mw = float(external_point["dampingCoefficientPu"])
-        pre_model = _team_case(scr, damping_mw, PRE_STEP_ACTIVE_POWER_PU)
-        post_model = _team_case(scr, damping_mw, POST_STEP_ACTIVE_POWER_PU)
+        pre_model = build_aligned_team_case(
+            scr, damping_mw, PRE_STEP_ACTIVE_POWER_PU
+        )
+        post_model = build_aligned_team_case(
+            scr, damping_mw, POST_STEP_ACTIVE_POWER_PU
+        )
         pre_stability = pre_model.stability.value
         post_stability = post_model.stability.value
         external_stable = external_point["vendorOutcome"] == "Stable"
         team_endpoints_same_class = pre_stability == post_stability
         team_stable = pre_stability == "stable" and post_stability == "stable"
         agreement = team_endpoints_same_class and external_stable == team_stable
-        resistance, reactance = _source_impedance(scr)
+        resistance, reactance = source_impedance_from_scr(scr)
         points.append(
             {
                 "scr": scr,
@@ -179,7 +193,8 @@ def evaluate_mathworks_team_comparison() -> dict[str, Any]:
             "disagreement_points": disagreement_points,
             "interpretation": (
                 "八个对齐坐标中七点分类一致，支持所测范围内控制—电网耦合的定性趋势；"
-                "SCR=5、D=1.056 pu/Hz 处不一致，且定量过渡位置未复现。"
+                "SCR=5、D=1.056 pu/Hz 处不一致；团队模型在同一有功阶跃下收敛，"
+                "因此分歧并未由团队模型的大扰动响应消除，且定量过渡位置未复现。"
             ),
         },
         "points": points,
@@ -209,7 +224,10 @@ def evaluate_mathworks_team_comparison() -> dict[str, Any]:
             "same_full_physical_model": False,
             "same_classifier": False,
             "same_controller_inner_loops": False,
-            "nonlinear_team_step_completed": False,
+            "nonlinear_team_step_completed": True,
+            "nonlinear_team_step_study_id": (
+                "average-dq-aligned-three-point-nonlinear-step-v1"
+            ),
             "paper_sufficient_condition_evaluated": False,
             "physical_hardware_validation": False,
             "statement": (

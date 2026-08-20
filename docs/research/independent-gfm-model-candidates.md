@@ -13,7 +13,7 @@
 - 研究所需证据至少包括频域 $2\times2$ 导纳、闭环极点和时域扰动响应；
 - 外部模型只能作为有版本记录的只读来源，项目派生接口和试验脚本应由本项目维护。
 
-调研日期：2026-07-16。本文仅依据官方文档、机构数据仓储、作者仓库和论文随附资料进行候选评估；本轮未下载模型。
+初次调研日期：2026-07-16；2026-08-20 补充核查活跃开源动态框架。本文仅依据官方文档、机构数据仓储、作者仓库和论文随附资料进行候选评估。
 
 ## 2. 评价方法
 
@@ -36,6 +36,8 @@
 | MathWorks 岛屿微电网下垂控制示例 | R2024b 内置示例；当前文档已演化为多保真度版本 | 随 MATLAB 产品许可 | 是，但必须固定 R2024b 模型副本 | 低保真平均开关模型原则上可线性化；模型级验证待做 | 需隔离单台逆变器并固定公共参考系，改造成本较高 | 低保真约为分钟内，高保真数分钟 | **备用参照模型** |
 | Naderi `Dynamic Modeling and Simulation of Interconnected Microgrids` | Mendeley Data V1，2022-11-18，DOI 固定 | CC BY 4.0 | 未明确；使用 SimPowerSystems，需在 R2024b 实测 | 随附独立小信号 `.m` 文件，闭环特征值分析条件最好 | 数据页未说明单机端口导纳，不能假定可以直接取得 | 中等 | **极点与时域交叉验证候选** |
 | Imperix TN168/TN169/TN170 | 技术说明 TN168，2024-01-30；关联下垂与 VSG 说明 | 下载模型许可未在技术说明中明确给出 | MATLAB/Simulink R2016a 以上；另需 ACG SDK 2024.2 以上 | 可研究，但专用块集和硬件实现结构增加线性化成本 | dq 电压、电流接口清楚；仍需建立交流端口频响测量 | 中等至较高 | **用于接口和控制整定参考，不作基线** |
+| Sienna `PowerSimulationsDynamics.jl` | `v0.16.2`，commit `dfb56d8` | BSD-3-Clause | Julia，不依赖 MATLAB | Test 08 为19状态 VSM—无穷大母线并核对特征值与 PSCAD 频率；Test 23 为15状态下垂 GFM 并核对 PSCAD 相角 | 可从公开组件构造端口响应，仍需冻结坐标与基值 | 中等 | **第三方动态实现参照首选** |
+| JuliaEnergy `PowerDynamics.jl` | `v5.0.0`，commit `b46f595` | 以 MIT 为主，个别文件 MPL-2.0 | Julia，不依赖 MATLAB | 方程式组件可符号组装和线性化 | L/LC/LCL、双闭环、虚拟阻抗和端口方向透明 | 中等 | **方程审计首选，不先作为产品依赖** |
 | `Different-Inverter-Control-Models-Simulink` | GitHub 默认分支；File Exchange 标为 1.0.0，2025-12-25 | GitHub 仓库未见许可证文件 | 作者声明需要 R2024b 与 SPS | 未提供线性化工作流；仓库仅有少量提交和说明 | 未说明 | 可能较低，但审计成本高 | **暂不采用** |
 | `Microgrid Dynamic Operation` | File Exchange 1.0.2，2023-10-26 | File Exchange 提供许可入口，但公开列表未解析出正文 | 官方列示仅兼容 R2020a--R2021a | 未提供线性化或极点流程 | 未说明 | 中等 | **因版本不符淘汰** |
 
@@ -84,6 +86,14 @@
 `Different-Inverter-Control-Models-Simulink` 同时包含 VSG、下垂、功率同步和其他控制方法，并明确面向 R2024b 与 Specialized Power Systems。[File Exchange 条目](https://www.mathworks.com/matlabcentral/fileexchange/182913-different-inverter-control-models-simulink) 但其 GitHub 仓库没有固定 release，提交历史很短，且未见许可证文件；因此不能仅因“能够运行”就作为可归档、可修改的正式模型。[GitHub 仓库](https://github.com/mshasan4003/Different-Inverter-Control-Models-Simulink)
 
 `Microgrid Dynamic Operation` 的版本为 1.0.2，公开页面明确列示兼容范围仅为 R2020a--R2021a；在 R2024b 项目中使用会引入升级和行为差异风险，故淘汰。[File Exchange 条目](https://www.mathworks.com/matlabcentral/fileexchange/93235-microgrid-dynamic-operation)
+
+### 4.6 Sienna 与 PowerDynamics 开源动态框架
+
+2026-08-20 对用户解压完整包的核查改变了“外部参照必须来自 MATLAB”的早期假设。Sienna `PowerSimulationsDynamics.jl v0.16.2` 的 Test 08 是19状态 VSM—无穷大母线模型：同时核对初始化、小信号特征值，并用 ResidualModel/IDA 与 MassMatrixModel/Rodas5 两条数值路径比较同一 PSCAD 频率波形，测试门为 `||ω-ω_PSCAD||≤1e-4`。Test 23 则是15状态下垂型构网变流器，核对特征值并比较 PSCAD 相角。完整包含参考 CSV 和 PSCAD 工程，不只是测试脚本。它比一般社区 Simulink 文件更适合回答“我们的动态实现是否与另一套透明实现一致”。[固定发布](https://github.com/Sienna-Platform/PowerSimulationsDynamics.jl/tree/v0.16.2) [Test 08](https://github.com/Sienna-Platform/PowerSimulationsDynamics.jl/blob/v0.16.2/test/test_case_VirtualSynchMachine.jl) [Test 23](https://github.com/Sienna-Platform/PowerSimulationsDynamics.jl/blob/v0.16.2/test/test_case_droopinverter.jl)
+
+`PowerDynamics.jl v5.0.0` 的 `ComposableInverter` 将滤波器、dq 双闭环、虚拟阻抗、下垂和坐标变换直接写成方程式组件，与团队16状态模型的结构接近。该来源适合逐式检查单位、符号、前馈和端口方向；但 v5 新组件不能仅凭2022年的框架论文被称为逐组件实验确认。[固定发布](https://github.com/JuliaEnergy/PowerDynamics.jl/tree/v5.0.0) [组件源码](https://github.com/JuliaEnergy/PowerDynamics.jl/blob/v5.0.0/src/Library/Renewables/ComposableInverter.jl)
+
+这两个项目都不应立即成为交付软件的 Julia 运行时依赖。第一步只读取固定版本建立方程映射；只有映射显示工况能够公平比较后，才在隔离环境优先运行 Sienna Test 08，并以 Test 23 辅助拆分外环与共同内环结构。
 
 ## 5. 版本更迭对选择的影响
 

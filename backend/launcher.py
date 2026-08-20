@@ -465,7 +465,9 @@ def _verify_mathworks_team_comparison(url: str) -> dict[str, object]:
         is not False
         or scope.get("same_full_physical_model") is not False
         or scope.get("same_classifier") is not False
-        or scope.get("nonlinear_team_step_completed") is not False
+        or scope.get("nonlinear_team_step_completed") is not True
+        or scope.get("nonlinear_team_step_study_id")
+        != "average-dq-aligned-three-point-nonlinear-step-v1"
         or scope.get("paper_sufficient_condition_evaluated") is not False
         or scope.get("physical_hardware_validation") is not False
     ):
@@ -493,10 +495,98 @@ def _verify_mathworks_team_comparison(url: str) -> dict[str, object]:
         "same_full_physical_model": scope["same_full_physical_model"],
         "same_classifier": scope["same_classifier"],
         "nonlinear_team_step_completed": scope["nonlinear_team_step_completed"],
+        "nonlinear_team_step_study_id": scope["nonlinear_team_step_study_id"],
         "paper_sufficient_condition_evaluated": scope[
             "paper_sufficient_condition_evaluated"
         ],
         "physical_hardware_validation": scope["physical_hardware_validation"],
+    }
+
+
+def _verify_average_dq_aligned_nonlinear_step(url: str) -> dict[str, object]:
+    with urllib.request.urlopen(
+        f"{url}/api/evidence/average-dq-aligned-nonlinear-step",
+        timeout=45.0,
+    ) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    summary = payload.get("summary", {})
+    scope = payload.get("scope", {})
+    points = payload.get("points", [])
+    point_map = {
+        point.get("damping_mathworks_pu_per_hz"): point
+        for point in points
+        if isinstance(point, dict)
+    }
+    expected_outcomes = {
+        0.6: "departed_declared_diagnostic_range",
+        1.056: "converged_within_horizon",
+        2.0: "converged_within_horizon",
+    }
+    point_contract_passed = len(point_map) == 3
+    for damping, expected_outcome in expected_outcomes.items():
+        point = point_map.get(damping, {})
+        solver_results = point.get("solver_results", [])
+        point_contract_passed = point_contract_passed and bool(
+            point.get("study_outcome") == expected_outcome
+            and point.get("solver_agreement") is True
+            and {solver.get("method") for solver in solver_results}
+            == {"Radau", "LSODA"}
+            and all(
+                solver.get("outcome") == expected_outcome
+                for solver in solver_results
+            )
+        )
+    low_damping_solvers = point_map.get(0.6, {}).get("solver_results", [])
+    mismatch_solvers = point_map.get(1.056, {}).get("solver_results", [])
+    if (
+        response.status != 200
+        or payload.get("schema_version")
+        != "gfm-average-dq-nonlinear-step-study/1.0"
+        or payload.get("status") != "completed"
+        or summary.get("point_count") != 3
+        or summary.get("solver_agreement_count") != 3
+        or summary.get("disagreement_coordinate_outcome")
+        != "converged_within_horizon"
+        or not point_contract_passed
+        or not all(
+            solver.get("event_name") == "grid_current_limit"
+            for solver in low_damping_solvers
+        )
+        or not all(
+            solver.get("event_name") is None
+            and solver.get("completed_time_s") == 8.0
+            and solver.get("active_power_settling_time_s") == 1.82
+            and solver.get("frequency_settling_time_s") == 2.11
+            for solver in mismatch_solvers
+        )
+        or scope.get("same_full_model_as_mathworks") is not False
+        or scope.get("diagnostic_exit_is_physical_instability") is not False
+        or scope.get("emt_validation") is not False
+        or scope.get("hardware_validation") is not False
+    ):
+        raise RuntimeError(
+            "Packaged average-dq aligned nonlinear-step evidence verification failed."
+        )
+
+    return {
+        "study_id": payload["study_id"],
+        "point_count": summary["point_count"],
+        "solver_agreement_count": summary["solver_agreement_count"],
+        "outcomes_by_damping": {
+            str(damping): point_map[damping]["study_outcome"]
+            for damping in expected_outcomes
+        },
+        "disagreement_coordinate_outcome": summary[
+            "disagreement_coordinate_outcome"
+        ],
+        "low_damping_exit_event": low_damping_solvers[0]["event_name"],
+        "same_full_model_as_mathworks": scope["same_full_model_as_mathworks"],
+        "diagnostic_exit_is_physical_instability": scope[
+            "diagnostic_exit_is_physical_instability"
+        ],
+        "emt_validation": scope["emt_validation"],
+        "hardware_validation": scope["hardware_validation"],
     }
 
 
@@ -543,7 +633,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.5",
+        "schema_version": "gfm-runtime-acceptance/1.6",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),
@@ -568,6 +658,9 @@ def run(
                 _verify_average_dq_port_identification(url)
             ),
             "mathworks_team_comparison": _verify_mathworks_team_comparison(url),
+            "average_dq_aligned_nonlinear_step": (
+                _verify_average_dq_aligned_nonlinear_step(url)
+            ),
         }
         evidence["status"] = "passed"
         if evidence_file:

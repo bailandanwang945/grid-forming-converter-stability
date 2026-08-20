@@ -210,9 +210,56 @@ def acceptance_app() -> FastAPI:
             "scope": {
                 "same_full_physical_model": False,
                 "same_classifier": False,
-                "nonlinear_team_step_completed": False,
+                "nonlinear_team_step_completed": True,
+                "nonlinear_team_step_study_id": (
+                    "average-dq-aligned-three-point-nonlinear-step-v1"
+                ),
                 "paper_sufficient_condition_evaluated": False,
                 "physical_hardware_validation": False,
+            },
+        }
+
+    @app.get("/api/evidence/average-dq-aligned-nonlinear-step")
+    def average_dq_aligned_nonlinear_step() -> dict:
+        points = []
+        for damping, outcome, event_name, power_settling, frequency_settling in (
+            (0.6, "departed_declared_diagnostic_range", "grid_current_limit", None, None),
+            (1.056, "converged_within_horizon", None, 1.82, 2.11),
+            (2.0, "converged_within_horizon", None, 0.75, 0.77),
+        ):
+            points.append(
+                {
+                    "damping_mathworks_pu_per_hz": damping,
+                    "study_outcome": outcome,
+                    "solver_agreement": True,
+                    "solver_results": [
+                        {
+                            "method": method,
+                            "outcome": outcome,
+                            "event_name": event_name,
+                            "completed_time_s": 1.47 if event_name else 8.0,
+                            "active_power_settling_time_s": power_settling,
+                            "frequency_settling_time_s": frequency_settling,
+                        }
+                        for method in ("Radau", "LSODA")
+                    ],
+                }
+            )
+        return {
+            "schema_version": "gfm-average-dq-nonlinear-step-study/1.0",
+            "study_id": "average-dq-aligned-three-point-nonlinear-step-v1",
+            "status": "completed",
+            "summary": {
+                "point_count": 3,
+                "solver_agreement_count": 3,
+                "disagreement_coordinate_outcome": "converged_within_horizon",
+            },
+            "points": points,
+            "scope": {
+                "same_full_model_as_mathworks": False,
+                "diagnostic_exit_is_physical_instability": False,
+                "emt_validation": False,
+                "hardware_validation": False,
             },
         }
 
@@ -261,7 +308,7 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertEqual(evidence["status"], "passed")
             self.assertEqual(
                 evidence["schema_version"],
-                "gfm-runtime-acceptance/1.5",
+                "gfm-runtime-acceptance/1.6",
             )
             self.assertEqual(
                 evidence["checks"]["fig8"]["uncovered_points"],
@@ -271,6 +318,18 @@ class ReleaseLauncherTest(unittest.TestCase):
                 evidence["checks"]["fig8_sensitivity"][
                     "nine_point_detects_uncovered_region"
                 ]
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq_aligned_nonlinear_step"][
+                    "disagreement_coordinate_outcome"
+                ],
+                "converged_within_horizon",
+            )
+            self.assertEqual(
+                evidence["checks"]["average_dq_aligned_nonlinear_step"][
+                    "low_damping_exit_event"
+                ],
+                "grid_current_limit",
             )
             self.assertEqual(
                 evidence["checks"]["fig8_sensitivity"]["report"],

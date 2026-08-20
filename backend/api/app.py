@@ -20,6 +20,10 @@ from backend.core.mathworks_external_evidence import (
 from backend.core.mathworks_team_comparison import (
     evaluate_mathworks_team_comparison,
 )
+from backend.core.average_dq_nonlinear_step_study import (
+    AverageDQNonlinearStepEvidenceError,
+    load_frozen_aligned_nonlinear_step_evidence,
+)
 from backend.core.average_dq_model import (
     AverageDQModelError,
     STATE_LABELS,
@@ -1193,6 +1197,16 @@ def mathworks_team_comparison() -> dict:
     try:
         return evaluate_mathworks_team_comparison()
     except MathWorksExternalEvidenceError as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@app.get("/api/evidence/average-dq-aligned-nonlinear-step")
+def average_dq_aligned_nonlinear_step_evidence() -> dict:
+    """Return hash-verified full traces from the frozen three-point study."""
+
+    try:
+        return load_frozen_aligned_nonlinear_step_evidence()
+    except AverageDQNonlinearStepEvidenceError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
 

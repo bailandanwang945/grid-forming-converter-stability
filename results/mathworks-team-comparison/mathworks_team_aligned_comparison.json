@@ -28,7 +28,7 @@
         "team_post_step_stability": "stable"
       }
     ],
-    "interpretation": "八个对齐坐标中七点分类一致，支持所测范围内控制—电网耦合的定性趋势；SCR=5、D=1.056 pu/Hz 处不一致，且定量过渡位置未复现。"
+    "interpretation": "八个对齐坐标中七点分类一致，支持所测范围内控制—电网耦合的定性趋势；SCR=5、D=1.056 pu/Hz 处不一致；团队模型在同一有功阶跃下收敛，因此分歧并未由团队模型的大扰动响应消除，且定量过渡位置未复现。"
   },
   "points": [
     {
@@ -245,7 +245,8 @@
     "same_full_physical_model": false,
     "same_classifier": false,
     "same_controller_inner_loops": false,
-    "nonlinear_team_step_completed": false,
+    "nonlinear_team_step_completed": true,
+    "nonlinear_team_step_study_id": "average-dq-aligned-three-point-nonlinear-step-v1",
     "paper_sufficient_condition_evaluated": false,
     "physical_hardware_validation": false,
     "statement": "只对齐阻尼归一化、SCR、X/R、基频和有功工作点；七点一致不构成模型确认，一点不一致也不构成对任一模型的证伪。"

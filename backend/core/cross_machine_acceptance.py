@@ -99,8 +99,9 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.3",
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
     ):
-        errors.append("运行时证据版本不是受支持的 1.2、1.3、1.4 或 1.5")
+        errors.append("运行时证据版本不是受支持的 1.2、1.3、1.4、1.5 或 1.6")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -187,6 +188,13 @@ def review_cross_machine_evidence(
         if isinstance(runtime_checks.get("mathworks_team_comparison"), dict)
         else {}
     )
+    aligned_nonlinear_step = (
+        runtime_checks.get("average_dq_aligned_nonlinear_step")
+        if isinstance(
+            runtime_checks.get("average_dq_aligned_nonlinear_step"), dict
+        )
+        else {}
+    )
     if runtime.get("status") != "passed" or runtime_checks.get("health") != "passed":
         errors.append("运行时健康检查未通过")
     if frontend.get("index") != "passed" or frontend.get("local_asset_count", 0) < 2:
@@ -202,6 +210,7 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.3",
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
     ):
         if (
             fig8_sensitivity.get("baseline_reconstruction_exact") is not True
@@ -256,6 +265,7 @@ def review_cross_machine_evidence(
     if runtime_schema in (
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
     ):
         if (
             port_identification.get("preset_id")
@@ -293,7 +303,10 @@ def review_cross_machine_evidence(
     ):
         warnings.append("旧版运行时证据未包含三频点端口正弦辨识检查")
 
-    if runtime_schema == "gfm-runtime-acceptance/1.5":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.5",
+        "gfm-runtime-acceptance/1.6",
+    ):
         roots = mathworks_team_comparison.get(
             "team_local_eigenvalue_boundaries_pu_per_hz", []
         )
@@ -330,7 +343,12 @@ def review_cross_machine_evidence(
             is not False
             or mathworks_team_comparison.get("same_classifier") is not False
             or mathworks_team_comparison.get("nonlinear_team_step_completed")
-            is not False
+            is not (runtime_schema == "gfm-runtime-acceptance/1.6")
+            or (
+                runtime_schema == "gfm-runtime-acceptance/1.6"
+                and mathworks_team_comparison.get("nonlinear_team_step_study_id")
+                != "average-dq-aligned-three-point-nonlinear-step-v1"
+            )
             or mathworks_team_comparison.get(
                 "paper_sufficient_condition_evaluated"
             )
@@ -345,6 +363,40 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.4",
     ):
         warnings.append("旧版运行时证据未包含 MathWorks—团队模型八点对照")
+
+    if runtime_schema == "gfm-runtime-acceptance/1.6":
+        if (
+            aligned_nonlinear_step.get("study_id")
+            != "average-dq-aligned-three-point-nonlinear-step-v1"
+            or aligned_nonlinear_step.get("point_count") != 3
+            or aligned_nonlinear_step.get("solver_agreement_count") != 3
+            or aligned_nonlinear_step.get("outcomes_by_damping")
+            != {
+                "0.6": "departed_declared_diagnostic_range",
+                "1.056": "converged_within_horizon",
+                "2.0": "converged_within_horizon",
+            }
+            or aligned_nonlinear_step.get("disagreement_coordinate_outcome")
+            != "converged_within_horizon"
+            or aligned_nonlinear_step.get("low_damping_exit_event")
+            != "grid_current_limit"
+            or aligned_nonlinear_step.get("same_full_model_as_mathworks")
+            is not False
+            or aligned_nonlinear_step.get(
+                "diagnostic_exit_is_physical_instability"
+            )
+            is not False
+            or aligned_nonlinear_step.get("emt_validation") is not False
+            or aligned_nonlinear_step.get("hardware_validation") is not False
+        ):
+            errors.append("团队平均值 dq 三点非线性阶跃证据不一致")
+    elif runtime_schema in (
+        "gfm-runtime-acceptance/1.2",
+        "gfm-runtime-acceptance/1.3",
+        "gfm-runtime-acceptance/1.4",
+        "gfm-runtime-acceptance/1.5",
+    ):
+        warnings.append("旧版运行时证据未包含团队平均值 dq 三点非线性阶跃")
 
     for required_file in ("acceptance-summary.txt", "runtime-console.log"):
         if not (directory / required_file).is_file():

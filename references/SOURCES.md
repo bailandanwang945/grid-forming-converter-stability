@@ -32,3 +32,13 @@
 - 迟永宁，江炳蔚，范译文，等：《构网型变流器：控制与稳定特性》，《高电压技术》，2025, 51(4): 1527–1542，DOI: 10.13336/j.1003-6520.hve.20241154：构网型变流器扰动建模、惯量阻尼、故障电流和宽频振荡研究综述。<https://doi.org/10.13336/j.1003-6520.hve.20241154>
 
 上述来源表明，参数稳定域、特征根/阻抗灵敏度、参数化分散稳定条件和可变运行点确认区域均已有研究。本项目的可辩护增量应收缩为：对 Cifelli–Anta 小增益—小相位充分判据在 GFM 低频非扇形问题上的适用性、保守性来源和数值不确定性进行可复现评估，而不是声称上述一般方法本身为首创。
+
+## 开源动态模型与工程规范补充（2026-08-20）
+
+- Sienna Platform，`PowerSimulationsDynamics.jl`，固定发布 `v0.16.2`，commit `dfb56d80b7a019b2d287f1da4d65157d6de134fa`，BSD-3-Clause。2026-08-20 已核读用户解压的完整固定版本：Test 08 是19状态 VSM—无穷大母线，执行 `P_ref=0.5→0.7`，同时核对初始化、19个小信号特征值以及 PSCAD 频率波形；Test 23 是15状态下垂型构网变流器—无穷大母线，并核对 PSCAD 相角波形。归档还包含两个 PSCAD 工程、参考 CSV、固定初值和特征值。该来源适合作为团队平均值模型的第三方动态实现参照，但因控制结构和参数不同，不直接替代 MathWorks VSM 工况。<https://github.com/Sienna-Platform/PowerSimulationsDynamics.jl/tree/v0.16.2>
+- J. D. Lara, R. Henriquez-Auba, M. Bossart, D. S. Callaway, C. Barrows, “PowerSimulationsDynamics.jl -- An Open Source Modeling Package for Modern Power Systems with Inverter-Based Resources,” arXiv:2308.02921，及 J. D. Lara 等，“Revisiting Power Systems Time-domain Simulation Methods and Models,” *IEEE Transactions on Power Systems*, DOI: 10.1109/TPWRS.2023.3303291。前者说明软件结构，后者用于核对现代电力系统时域仿真的模型与数值方法边界。<https://arxiv.org/abs/2308.02921>
+- JuliaEnergy，`PowerDynamics.jl`，固定发布 `v5.0.0`，commit `b46f59506c76e625995f4587d5113737a68ea512`。其 `ComposableInverter` 明确公开 L/LC/LCL 滤波器、dq 电压—电流双闭环、虚拟阻抗、下垂外环、坐标变换和功率符号，可用于逐式核对团队16状态模型；项目整体以 MIT 为主，部分派生文件为 MPL-2.0，使用具体文件前仍须核对文件头。该版本中的新构网组件不能仅凭框架论文被称为已单独实验验证。<https://github.com/JuliaEnergy/PowerDynamics.jl/tree/v5.0.0>
+- A. Plietzsch 等，“PowerDynamics.jl--An experimentally validated open-source package for the dynamical analysis of power grids,” *SoftwareX*, 17, 100861, 2022，DOI: 10.1016/j.softx.2021.100861。该论文支持对框架整体可复现性和实验对照历史的描述，不自动确认 `v5.0.0` 后加入的每一种变流器组件。<https://doi.org/10.1016/j.softx.2021.100861>
+- UNIFI Consortium，“UNIFI Specifications for Grid-Forming Inverter-Based Resources: Version 3,” 2026-01-30，DOI: 10.2172/3016250。**当前仅核对了题名、版本、日期、发布机构和 DOI 元数据，尚未取得并阅读正文。** 因此它只登记为可能相关的候选规范，不能据此声称其中包含哪些具体功能、试验项目或判据，也暂不作为团队模型与实验设计的依据。因 OSTI 下载端点连接失败，尚未在仓库归档 PDF；后续取得原文并完成内容核查后，再决定是否采用并登记文件 SHA-256。<https://doi.org/10.2172/3016250>
+
+上述开源项目的 GitHub 关注量仅用于判断社区规模，不作为模型正确性的证据。2026-08-20 核查时，`PowerSimulationsDynamics.jl` 约 220 stars、`PowerDynamics.jl` 约 134 stars，且近期均有正式发布；数值可能随时间变化，研究引用固定 tag 与 commit，不固定关注量。

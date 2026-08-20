@@ -307,7 +307,29 @@ try {
   if (externalDownload.suggestedFilename() !== 'mathworks-team-aligned-eight-point-comparison-v1.json') {
     throw new Error('MathWorks-team comparison JSON export failed.')
   }
-  console.log('[browser] MathWorks frozen evidence and team-model comparison passed.')
+  await page.getByTestId('average-dq-aligned-step-results').waitFor({ timeout: 15000 })
+  const nonlinearStepSummary = await page.getByTestId('average-dq-aligned-step-summary').innerText()
+  for (const evidence of ['固定对照点\n3', '双求解器一致\n3 / 3', '原分歧点 D=1.056\n8 秒内收敛', 'D=0.6\n越出诊断范围']) {
+    if (!nonlinearStepSummary.includes(evidence)) {
+      throw new Error(`Aligned nonlinear-step summary is missing ${evidence}: ${nonlinearStepSummary}`)
+    }
+  }
+  for (const damping of ['0.6', '1.056', '2']) {
+    await page.getByTestId(`average-dq-aligned-step-row-${damping}`).waitFor({ timeout: 15000 })
+  }
+  const nonlinearStepBoundary = await page.getByTestId('average-dq-aligned-step-boundary').innerText()
+  for (const evidence of ['不能归结为该团队模型', '不等同于物理失稳', '不是可信 EMT', '论文稳定性充分条件']) {
+    if (!nonlinearStepBoundary.includes(evidence)) {
+      throw new Error(`Aligned nonlinear-step boundary is missing ${evidence}.`)
+    }
+  }
+  const nonlinearStepDownloadPromise = page.waitForEvent('download')
+  await page.getByTestId('average-dq-aligned-step-export').click()
+  const nonlinearStepDownload = await nonlinearStepDownloadPromise
+  if (nonlinearStepDownload.suggestedFilename() !== 'average-dq-aligned-three-point-nonlinear-step-v1.json') {
+    throw new Error('Aligned nonlinear-step JSON export failed.')
+  }
+  console.log('[browser] MathWorks evidence, cross-model comparison, and aligned nonlinear-step study passed.')
 
   await page.getByLabel('P* / p.u.').fill('0.4')
   await page.getByRole('button', { name: /运行平均值 dq 分析/ }).click()

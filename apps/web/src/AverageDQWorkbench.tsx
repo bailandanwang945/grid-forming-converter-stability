@@ -6,6 +6,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import { Activity, BookOpenCheck, CircleCheck, Download, Gauge, Play, ShieldAlert, SlidersHorizontal } from 'lucide-react'
 import {
   AverageDQAblationResult,
+  AverageDQAlignedStepResult,
   AverageDQBoundaryResult,
   AverageDQParameters,
   AverageDQPortIdentificationResult,
@@ -15,6 +16,7 @@ import {
   MathWorksTeamComparisonResult,
   NetworkTopology,
   getAverageDQPreset,
+  getAverageDQAlignedStepEvidence,
   getMathWorksExternalEvidence,
   getMathWorksTeamComparison,
   getAverageDQPortIdentificationReportHtml,
@@ -85,6 +87,14 @@ function leadingParticipationGroup(groups: Record<string, number>) {
   return leading ? `${leading[0]}（${(leading[1] * 100).toFixed(1)}%）` : '—'
 }
 
+function formatStepOutcome(outcome: string) {
+  if (outcome === 'converged_within_horizon') return '8 秒内收敛'
+  if (outcome === 'departed_declared_diagnostic_range') return '越出诊断范围'
+  if (outcome === 'bounded_not_converged_within_horizon') return '有界但未收敛'
+  if (outcome === 'numerical_pending') return '数值待定'
+  return '数值失败'
+}
+
 export default function AverageDQWorkbench() {
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
   const [parameters, setParameters] = useState<AverageDQParameters | null>(null)
@@ -95,6 +105,7 @@ export default function AverageDQWorkbench() {
   const [portIdentificationResult, setPortIdentificationResult] = useState<AverageDQPortIdentificationResult | null>(null)
   const [externalEvidence, setExternalEvidence] = useState<MathWorksExternalEvidenceResult | null>(null)
   const [crossModelComparison, setCrossModelComparison] = useState<MathWorksTeamComparisonResult | null>(null)
+  const [alignedStepEvidence, setAlignedStepEvidence] = useState<AverageDQAlignedStepResult | null>(null)
   const [running, setRunning] = useState(false)
   const [scanRunning, setScanRunning] = useState(false)
   const [ablationRunning, setAblationRunning] = useState(false)
@@ -153,6 +164,34 @@ export default function AverageDQWorkbench() {
       ],
     }
   }, [result])
+
+  const alignedStepChart = useMemo(() => {
+    if (!alignedStepEvidence) return {}
+    return {
+      animationDuration: 350,
+      grid: { left: 68, right: 28, top: 48, bottom: 54 },
+      tooltip: { trigger: 'axis' },
+      legend: { top: 4 },
+      xAxis: { type: 'value', name: '阶跃后时间 / s', nameLocation: 'middle', nameGap: 34 },
+      yAxis: { type: 'value', name: '有功测量 / p.u.' },
+      series: alignedStepEvidence.points.map(point => {
+        const solver = point.solver_results.find(item => item.method === 'Radau') ?? point.solver_results[0]
+        return {
+          name: `D_MW=${point.damping_mathworks_pu_per_hz}`,
+          type: 'line',
+          symbol: 'none',
+          data: solver.time_s.map((time, index) => [time, solver.states[index][2]]),
+          markLine: {
+            silent: true,
+            symbol: 'none',
+            lineStyle: { color: '#59635f', type: 'dashed' },
+            label: { formatter: 'P*=0.8', position: 'insideEndTop' },
+            data: [{ yAxis: 0.8 }],
+          },
+        }
+      }),
+    }
+  }, [alignedStepEvidence])
 
   const admittanceChart = useMemo(() => {
     if (!result) return {}
@@ -370,12 +409,14 @@ export default function AverageDQWorkbench() {
     setExternalEvidenceRunning(true)
     setError('')
     try {
-      const [evidence, comparison] = await Promise.all([
+      const [evidence, comparison, nonlinearStep] = await Promise.all([
         getMathWorksExternalEvidence(),
         getMathWorksTeamComparison(),
+        getAverageDQAlignedStepEvidence(),
       ])
       setExternalEvidence(evidence)
       setCrossModelComparison(comparison)
+      setAlignedStepEvidence(nonlinearStep)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'MathWorks 外部验证证据读取失败')
     } finally {
@@ -492,8 +533,9 @@ export default function AverageDQWorkbench() {
           <h3>MathWorks 固定模型参照</h3>
           <p data-testid="mathworks-external-evidence-fixed-scope">对齐50 Hz阻尼归一化、SCR、X/R与有功工作点，比较外部时域分类和团队16状态模型局部极点。</p>
           <div className="study-task-actions">
-            <button data-testid="mathworks-external-evidence-load" onClick={loadExternalEvidence} disabled={externalEvidenceRunning}>{externalEvidenceRunning ? '正在重算八点对照…' : '运行外部—团队对照'}</button>
+            <button data-testid="mathworks-external-evidence-load" onClick={loadExternalEvidence} disabled={externalEvidenceRunning}>{externalEvidenceRunning ? '正在读取并重算…' : '运行外部—团队对照'}</button>
             <button className="icon-action" aria-label="导出跨模型对照 JSON" data-testid="mathworks-team-comparison-export" disabled={!crossModelComparison} onClick={() => crossModelComparison && download(`${crossModelComparison.run_id}.json`, JSON.stringify(crossModelComparison, null, 2))}><Download size={15}/></button>
+            <button className="icon-action" aria-label="导出团队非线性阶跃 JSON" data-testid="average-dq-aligned-step-export" disabled={!alignedStepEvidence} onClick={() => alignedStepEvidence && download(`${alignedStepEvidence.study_id}.json`, JSON.stringify(alignedStepEvidence, null, 2))}><Download size={15}/></button>
           </div>
         </article>
       </div>
@@ -668,6 +710,34 @@ export default function AverageDQWorkbench() {
             {crossModelComparison.boundary_comparison.team_local_eigenvalue_boundaries.map(boundary => <div key={boundary.active_power_setpoint_pu}><small>团队局部极点边界 · P*={boundary.active_power_setpoint_pu}</small><b>{boundary.damping_mw_equivalent_pu_per_hz.toFixed(6)} p.u./Hz 等效值</b></div>)}
           </div>
           <p className="scope-note" data-testid="mathworks-team-comparison-boundary">{crossModelComparison.summary.interpretation} {crossModelComparison.scope.statement} 外部供应商时域阈值与团队局部特征根并非同一种证据，差值不命名为预测误差。</p>
+        </div>}
+        {alignedStepEvidence && <div className="panel cross-model-comparison" data-testid="average-dq-aligned-step-results">
+          <div className="panel-title"><Activity size={18}/><span>团队模型三点非线性有功阶跃</span><em>Radau + LSODA · P*=0.6→0.8 p.u.</em></div>
+          <div className="panel evidence-strip" data-testid="average-dq-aligned-step-summary">
+            <div><small>固定对照点</small><b>{alignedStepEvidence.summary.point_count}</b></div>
+            <div><small>双求解器一致</small><b>{alignedStepEvidence.summary.solver_agreement_count} / {alignedStepEvidence.summary.point_count}</b></div>
+            <div><small>原分歧点 D=1.056</small><b>{formatStepOutcome(alignedStepEvidence.summary.disagreement_coordinate_outcome)}</b></div>
+            <div><small>D=0.6</small><b>{formatStepOutcome(alignedStepEvidence.points[0].study_outcome)}</b></div>
+          </div>
+          <EChart option={alignedStepChart} style={{ height: 360 }}/>
+          <div className="table-scroll">
+            <table>
+              <thead><tr>{['D_MW / p.u./Hz', '外部分类', '团队局部极点', '团队非线性阶跃', '退出事件', '最大频差 / Hz', '有功整定 / s'].map(label => <th key={label}>{label}</th>)}</tr></thead>
+              <tbody>{alignedStepEvidence.points.map(point => {
+                const solver = point.solver_results.find(item => item.method === 'Radau') ?? point.solver_results[0]
+                return <tr key={point.damping_mathworks_pu_per_hz} data-testid={`average-dq-aligned-step-row-${point.damping_mathworks_pu_per_hz}`}>
+                  <td>{point.damping_mathworks_pu_per_hz}</td>
+                  <td>{point.external_vendor_outcome === 'Stable' ? '稳定' : '失稳'}</td>
+                  <td>{point.team_post_step_local_stability === 'stable' ? '稳定' : point.team_post_step_local_stability === 'unstable' ? '失稳' : '临界'}</td>
+                  <td className={point.study_outcome === 'converged_within_horizon' ? 'comparison-agree' : 'comparison-disagree'}>{formatStepOutcome(point.study_outcome)}</td>
+                  <td>{solver.event_name === 'grid_current_limit' ? '电网侧电流诊断限值' : solver.event_name ?? '无'}</td>
+                  <td>{solver.maximum_frequency_deviation_hz?.toFixed(6) ?? '—'}</td>
+                  <td>{solver.active_power_settling_time_s?.toFixed(2) ?? '—'}</td>
+                </tr>
+              })}</tbody>
+            </table>
+          </div>
+          <p className="scope-note" data-testid="average-dq-aligned-step-boundary">D=1.056 在团队模型中由两种求解器共同确认于8秒内收敛，因此当前分歧不能归结为该团队模型在同一阶跃下的大扰动失稳；后续应优先核对两套模型的内环、滤波、限幅、初始化与分类器差异，但现有证据尚不能唯一归因。D=0.6 只报告“越出团队模型诊断范围”，不等同于物理失稳。该结果不是可信 EMT、硬件确认或论文稳定性充分条件验证。</p>
         </div>}
       </section>}
     </section>

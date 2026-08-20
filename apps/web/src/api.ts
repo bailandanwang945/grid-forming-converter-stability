@@ -1003,9 +1003,71 @@ export type MathWorksTeamComparisonResult = {
     same_classifier: boolean
     same_controller_inner_loops: boolean
     nonlinear_team_step_completed: boolean
+    nonlinear_team_step_study_id: string
     paper_sufficient_condition_evaluated: boolean
     physical_hardware_validation: boolean
     statement: string
+  }
+}
+
+export type AverageDQAlignedStepSolverResult = {
+  method: 'Radau' | 'LSODA'
+  outcome: 'converged_within_horizon' | 'bounded_not_converged_within_horizon' | 'departed_declared_diagnostic_range' | 'numerical_failure'
+  solver_success: boolean
+  event_name: string | null
+  event_time_s: number | null
+  completed_time_s: number
+  sample_count: number
+  elapsed_wall_time_s: number
+  maximum_frequency_deviation_hz: number | null
+  active_power_settling_time_s: number | null
+  frequency_settling_time_s: number | null
+  final_metrics: {
+    frequency_error_pu: number
+    active_power_error_pu: number
+    angle_error_rad: number
+    grid_current_error_pu: number
+  } | null
+  time_s: number[]
+  states: number[][]
+}
+
+export type AverageDQAlignedStepResult = {
+  schema_version: string
+  study_id: string
+  status: 'completed'
+  research_question: string
+  contract: {
+    scr: number
+    damping_mathworks_pu_per_hz: number[]
+    active_power_step_pu: number[]
+    duration_s: number
+    sample_step_s: number
+    solver_methods: string[]
+  }
+  points: Array<{
+    scr: number
+    damping_mathworks_pu_per_hz: number
+    damping_team_native_pu_per_pu_frequency: number
+    external_vendor_outcome: 'Stable' | 'Unstable'
+    team_pre_step_local_stability: 'stable' | 'marginal' | 'unstable'
+    team_post_step_local_stability: 'stable' | 'marginal' | 'unstable'
+    solver_agreement: boolean
+    study_outcome: string
+    solver_results: AverageDQAlignedStepSolverResult[]
+  }>
+  summary: {
+    point_count: number
+    solver_agreement_count: number
+    disagreement_coordinate_outcome: string
+    interpretation: string
+  }
+  scope: {
+    same_full_model_as_mathworks: boolean
+    emt_validation: boolean
+    hardware_validation: boolean
+    diagnostic_exit_is_physical_instability: boolean
+    saturation_and_protection_modelled: boolean
   }
 }
 
@@ -1083,6 +1145,15 @@ export async function getMathWorksTeamComparison(): Promise<MathWorksTeamCompari
   if (!response.ok) {
     const detail = await response.json().catch(() => null)
     throw new Error(detail?.detail ?? `跨模型对照服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
+export async function getAverageDQAlignedStepEvidence(): Promise<AverageDQAlignedStepResult> {
+  const response = await fetch('/api/evidence/average-dq-aligned-nonlinear-step')
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    throw new Error(detail?.detail ?? `团队非线性阶跃证据服务返回 ${response.status}`)
   }
   return response.json()
 }

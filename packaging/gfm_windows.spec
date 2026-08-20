@@ -14,6 +14,7 @@ external_validation_root = (
     project_root / "results" / "mathworks-gfm-external-validation"
 )
 cross_model_comparison_root = project_root / "results" / "mathworks-team-comparison"
+nonlinear_step_root = project_root / "results" / "average-dq-nonlinear-step"
 build_info = Path(os.environ["GFM_BUILD_INFO"])
 
 datas = [
@@ -30,6 +31,10 @@ datas = [
     (
         str(cross_model_comparison_root),
         "results/mathworks-team-comparison",
+    ),
+    (
+        str(nonlinear_step_root),
+        "results/average-dq-nonlinear-step",
     ),
     (str(build_info), "."),
 ]
