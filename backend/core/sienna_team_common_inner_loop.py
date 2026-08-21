@@ -259,6 +259,19 @@ def _linear_matrices(rhs) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     return state_matrix, input_matrix
 
 
+def team_common_inner_loop_matrices(
+    parameters: CommonInnerLoopParameters,
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Return the ten-state team-coordinate ``A, B`` matrices."""
+
+    _validate(parameters)
+    return _linear_matrices(
+        lambda state, inputs: team_common_inner_loop_rhs(
+            state, inputs, parameters
+        )
+    )
+
+
 def _state_transform(
     parameters: CommonInnerLoopParameters, angle_rad: float
 ) -> NDArray[np.float64]:

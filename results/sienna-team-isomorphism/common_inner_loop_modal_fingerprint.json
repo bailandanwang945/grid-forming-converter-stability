@@ -1,0 +1,2976 @@
+{
+  "schema_version": "gfm-common-inner-loop-modal-fingerprint/1.0",
+  "status": "passed",
+  "source_contract": {
+    "parameter_source": "Sienna PSID v0.16.2 Test 08 component values",
+    "base_parameters": {
+      "frequency_hz": 60.0,
+      "voltage_kp": 0.59,
+      "voltage_ki_per_s": 736.0,
+      "current_kp": 1.27,
+      "current_ki_per_s": 14.3,
+      "converter_side_resistance_pu": 0.003,
+      "converter_side_reactance_pu": 0.08,
+      "filter_capacitor_susceptance_pu": 0.074,
+      "grid_side_resistance_pu": 0.01,
+      "grid_side_reactance_pu": 0.2,
+      "virtual_resistance_pu": 0.0,
+      "virtual_reactance_pu": 0.2,
+      "resistive_drop_feedforward_gain": 0.0,
+      "synchronous_frequency_pu": 1.0,
+      "current_feedforward_gain": 1.0,
+      "voltage_feedforward_gain": 1.0,
+      "active_damping_gain": 0.0
+    },
+    "factor_levels": [
+      0.8,
+      1.2
+    ],
+    "parameter_variation": "one factor at a time; voltage/current PI Kp and Ki are scaled jointly; X1, Bc and X2 are filter parameters"
+  },
+  "matching_gates": {
+    "minimum_confidence": 0.55,
+    "minimum_combined_mac": 0.35,
+    "minimum_individual_mac": 0.8,
+    "maximum_normalized_eigenvalue_distance": 0.3,
+    "maximum_condition_number": 100000000.0,
+    "maximum_eigenpair_residual": 1e-10,
+    "minimum_relative_candidate_margin": 0.2,
+    "maximum_refinement_depth": 4
+  },
+  "variants": {
+    "10_state_omit_rfif": {
+      "state_count": 10,
+      "resistive_drop_feedforward_gain": 0.0,
+      "active_damping_gain": 0.0,
+      "active_damping_cutoff_rad_s": null,
+      "baseline_named_branch": {
+        "eigenvalue": {
+          "real_per_s": 117.1371464864823,
+          "imag_per_s": 652.5798335638734,
+          "oscillation_frequency_hz": 103.8613062737768
+        },
+        "group_participation_frozen_coordinates": {
+          "voltage_pi": 0.14823880244891524,
+          "current_pi": 0.002768086715010912,
+          "converter_current": 0.16285482597266665,
+          "capacitor_voltage": 0.03229900422499322,
+          "grid_side_filter_current": 0.6538392806384139
+        },
+        "lcl_group_total": 0.8489931108360738,
+        "control_state_group_total": 0.15100688916392616,
+        "condition_number": 3.1942018151349503,
+        "right_eigenpair_residual": 8.924586422088136e-16,
+        "left_eigenpair_residual": 2.68764130862436e-16
+      },
+      "factor_paths": {
+        "voltage_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 133.06472969673928,
+                "imag_per_s": 625.8374690131812,
+                "oscillation_frequency_hz": 99.60512676556867
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16856680554547374,
+                "current_pi": 0.003245446278959869,
+                "converter_current": 0.1842313965879257,
+                "capacitor_voltage": 0.034694870039207945,
+                "grid_side_filter_current": 0.6092614815484327
+              },
+              "lcl_group_total": 0.8281877481755664,
+              "control_state_group_total": 0.1718122518244336,
+              "condition_number": 3.655984167654881,
+              "right_eigenpair_residual": 3.412933830182276e-16,
+              "left_eigenpair_residual": 1.412590467724254e-16
+            },
+            "real_shift_from_baseline_per_s": 15.927583210256984,
+            "frequency_shift_from_baseline_hz": -4.256179508208132,
+            "minimum_right_mac": 0.9998571094832742,
+            "minimum_left_mac": 0.9958998503251876,
+            "maximum_normalized_eigenvalue_distance": 0.04694688090942526,
+            "maximum_condition_number": 3.655984167654881,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998571094832742,
+                "left_mac": 0.9958998503251876,
+                "combined_mac": 0.9978765182531191,
+                "normalized_eigenvalue_distance": 0.04694688090942526,
+                "relative_candidate_margin": 0.4142853364470446,
+                "condition_number": 3.655984167654881,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 133.06472969673928,
+                  "imag_per_s": 625.8374690131812,
+                  "oscillation_frequency_hz": 99.60512676556867
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 103.46040369204002,
+                "imag_per_s": 671.2704082783258,
+                "oscillation_frequency_hz": 106.8360036288103
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1323068321974603,
+                "current_pi": 0.002420372143474251,
+                "converter_current": 0.14589236591997504,
+                "capacitor_voltage": 0.02997839434201851,
+                "grid_side_filter_current": 0.6894020353970719
+              },
+              "lcl_group_total": 0.8652727956590655,
+              "control_state_group_total": 0.13472720434093458,
+              "condition_number": 2.859998412301801,
+              "right_eigenpair_residual": 3.0719260827822784e-16,
+              "left_eigenpair_residual": 1.36092385760013e-16
+            },
+            "real_shift_from_baseline_per_s": -13.676742794442276,
+            "frequency_shift_from_baseline_hz": 2.974697355033489,
+            "minimum_right_mac": 0.9999207922495003,
+            "minimum_left_mac": 0.9962372331700414,
+            "maximum_normalized_eigenvalue_distance": 0.03493179984609572,
+            "maximum_condition_number": 3.1942018151349503,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999207922495003,
+                "left_mac": 0.9962372331700414,
+                "combined_mac": 0.9980773133679764,
+                "normalized_eigenvalue_distance": 0.03493179984609572,
+                "relative_candidate_margin": 0.4374799731085388,
+                "condition_number": 3.1942018151349503,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 103.46040369204002,
+                  "imag_per_s": 671.2704082783258,
+                  "oscillation_frequency_hz": 106.8360036288103
+                }
+              }
+            ]
+          }
+        },
+        "current_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 128.34836251129877,
+                "imag_per_s": 626.6907984225463,
+                "oscillation_frequency_hz": 99.74093835915481
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16571469138812428,
+                "current_pi": 0.003257475729497922,
+                "converter_current": 0.18488314736832465,
+                "capacitor_voltage": 0.02790026714196698,
+                "grid_side_filter_current": 0.6182444183720863
+              },
+              "lcl_group_total": 0.8310278328823779,
+              "control_state_group_total": 0.1689721671176222,
+              "condition_number": 3.2642138676824013,
+              "right_eigenpair_residual": 5.347162644974715e-16,
+              "left_eigenpair_residual": 1.3702046467252934e-16
+            },
+            "real_shift_from_baseline_per_s": 11.21121602481648,
+            "frequency_shift_from_baseline_hz": -4.120367914621993,
+            "minimum_right_mac": 0.9997015162067111,
+            "minimum_left_mac": 0.9883341661162561,
+            "maximum_normalized_eigenvalue_distance": 0.04255187145350758,
+            "maximum_condition_number": 3.2642138676824013,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9997015162067111,
+                "left_mac": 0.9883341661162561,
+                "combined_mac": 0.9940015917418425,
+                "normalized_eigenvalue_distance": 0.04255187145350758,
+                "relative_candidate_margin": 0.4221886008509421,
+                "condition_number": 3.2642138676824013,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 128.34836251129877,
+                  "imag_per_s": 626.6907984225463,
+                  "oscillation_frequency_hz": 99.74093835915481
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 107.90298119530725,
+                "imag_per_s": 671.642826316204,
+                "oscillation_frequency_hz": 106.8952758004352
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1347763792988611,
+                "current_pi": 0.002412283149128941,
+                "converter_current": 0.14562776877953026,
+                "capacitor_voltage": 0.035994418455736414,
+                "grid_side_filter_current": 0.6811891503167431
+              },
+              "lcl_group_total": 0.8628113375520098,
+              "control_state_group_total": 0.13718866244799005,
+              "condition_number": 3.1772045730421503,
+              "right_eigenpair_residual": 3.7399574103281293e-16,
+              "left_eigenpair_residual": 1.4531577132344705e-16
+            },
+            "real_shift_from_baseline_per_s": -9.234165291175046,
+            "frequency_shift_from_baseline_hz": 3.0339695266583924,
+            "minimum_right_mac": 0.9998433473378573,
+            "minimum_left_mac": 0.9930881667909633,
+            "maximum_normalized_eigenvalue_distance": 0.03194791927372486,
+            "maximum_condition_number": 3.1942018151349503,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998433473378573,
+                "left_mac": 0.9930881667909633,
+                "combined_mac": 0.9964600327589126,
+                "normalized_eigenvalue_distance": 0.03194791927372486,
+                "relative_candidate_margin": 0.43310505058088944,
+                "condition_number": 3.1942018151349503,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 107.90298119530725,
+                  "imag_per_s": 671.642826316204,
+                  "oscillation_frequency_hz": 106.8952758004352
+                }
+              }
+            ]
+          }
+        },
+        "converter_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 105.404676182495,
+                "imag_per_s": 675.3097143985771,
+                "oscillation_frequency_hz": 107.47887916450962
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1318546546256791,
+                "current_pi": 0.002341145563656797,
+                "converter_current": 0.14187840550448783,
+                "capacitor_voltage": 0.03678219394842189,
+                "grid_side_filter_current": 0.6871436003577545
+              },
+              "lcl_group_total": 0.8658041998106641,
+              "control_state_group_total": 0.1341958001893359,
+              "condition_number": 3.3901998763131034,
+              "right_eigenpair_residual": 2.031883957029229e-16,
+              "left_eigenpair_residual": 1.1765856533774874e-16
+            },
+            "real_shift_from_baseline_per_s": -11.732470303987299,
+            "frequency_shift_from_baseline_hz": 3.6175728907328195,
+            "minimum_right_mac": 0.9997726536036671,
+            "minimum_left_mac": 0.9997496590335518,
+            "maximum_normalized_eigenvalue_distance": 0.038580529319678,
+            "maximum_condition_number": 3.3901998763131034,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9997726536036671,
+                "left_mac": 0.9997496590335518,
+                "combined_mac": 0.9997611562524998,
+                "normalized_eigenvalue_distance": 0.038580529319678,
+                "relative_candidate_margin": 0.431706752894548,
+                "condition_number": 3.3901998763131034,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 105.404676182495,
+                  "imag_per_s": 675.3097143985771,
+                  "oscillation_frequency_hz": 107.47887916450962
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 126.70991614903603,
+                "imag_per_s": 631.9054085920504,
+                "oscillation_frequency_hz": 100.57086934392866
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16240753794678164,
+                "current_pi": 0.0031596506953568597,
+                "converter_current": 0.1808190746965373,
+                "capacitor_voltage": 0.028725217835914946,
+                "grid_side_filter_current": 0.6248885188254092
+              },
+              "lcl_group_total": 0.8344328113578614,
+              "control_state_group_total": 0.1655671886421385,
+              "condition_number": 3.0311970730735593,
+              "right_eigenpair_residual": 4.2629767783171647e-16,
+              "left_eigenpair_residual": 1.4975864862881892e-16
+            },
+            "real_shift_from_baseline_per_s": 9.572769662553739,
+            "frequency_shift_from_baseline_hz": -3.2904369298481475,
+            "minimum_right_mac": 0.9998069507244809,
+            "minimum_left_mac": 0.9997805436949991,
+            "maximum_normalized_eigenvalue_distance": 0.03436316353838698,
+            "maximum_condition_number": 3.1942018151349503,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998069507244809,
+                "left_mac": 0.9997805436949991,
+                "combined_mac": 0.9997937471225556,
+                "normalized_eigenvalue_distance": 0.03436316353838698,
+                "relative_candidate_margin": 0.42434523527811996,
+                "condition_number": 3.1942018151349503,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 126.70991614903603,
+                  "imag_per_s": 631.9054085920504,
+                  "oscillation_frequency_hz": 100.57086934392866
+                }
+              }
+            ]
+          }
+        },
+        "filter_capacitor_susceptance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 112.42283581852018,
+                "imag_per_s": 652.379665033269,
+                "oscillation_frequency_hz": 103.82944846267968
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14566830552815355,
+                "current_pi": 0.0027788102317021146,
+                "converter_current": 0.16324027395075735,
+                "capacitor_voltage": 0.025659502155724996,
+                "grid_side_filter_current": 0.662653108133662
+              },
+              "lcl_group_total": 0.8515528842401443,
+              "control_state_group_total": 0.14844711575985567,
+              "condition_number": 3.181652838839725,
+              "right_eigenpair_residual": 5.660145778057494e-16,
+              "left_eigenpair_residual": 1.6790023860276612e-16
+            },
+            "real_shift_from_baseline_per_s": -4.71431066796211,
+            "frequency_shift_from_baseline_hz": -0.03185781109713175,
+            "minimum_right_mac": 0.9999906360719271,
+            "minimum_left_mac": 0.9995707501674179,
+            "maximum_normalized_eigenvalue_distance": 0.007116879260793355,
+            "maximum_condition_number": 3.1942018151349503,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999906360719271,
+                "left_mac": 0.9995707501674179,
+                "combined_mac": 0.9997806710768165,
+                "normalized_eigenvalue_distance": 0.007116879260793355,
+                "relative_candidate_margin": 0.4280965862637386,
+                "condition_number": 3.1942018151349503,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 112.42283581852018,
+                  "imag_per_s": 652.379665033269,
+                  "oscillation_frequency_hz": 103.82944846267968
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 121.92029397500038,
+                "imag_per_s": 652.5331064935598,
+                "oscillation_frequency_hz": 103.85386942956019
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.15094321221237483,
+                "current_pi": 0.0027556371162840753,
+                "converter_current": 0.16231720721496362,
+                "capacitor_voltage": 0.038972223004045445,
+                "grid_side_filter_current": 0.6450117204523319
+              },
+              "lcl_group_total": 0.8463011506713409,
+              "control_state_group_total": 0.1536988493286589,
+              "condition_number": 3.204005393889644,
+              "right_eigenpair_residual": 6.454977683141711e-16,
+              "left_eigenpair_residual": 1.118786893254354e-16
+            },
+            "real_shift_from_baseline_per_s": 4.7831474885180825,
+            "frequency_shift_from_baseline_hz": -0.007436844216617799,
+            "minimum_right_mac": 0.9999903666317242,
+            "minimum_left_mac": 0.9995696316122432,
+            "maximum_normalized_eigenvalue_distance": 0.0072146416886798275,
+            "maximum_condition_number": 3.204005393889644,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999903666317242,
+                "left_mac": 0.9995696316122432,
+                "combined_mac": 0.9997799769898699,
+                "normalized_eigenvalue_distance": 0.0072146416886798275,
+                "relative_candidate_margin": 0.4369390865128157,
+                "condition_number": 3.204005393889644,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 121.92029397500038,
+                  "imag_per_s": 652.5331064935598,
+                  "oscillation_frequency_hz": 103.85386942956019
+                }
+              }
+            ]
+          }
+        },
+        "grid_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 149.52096300686094,
+                "imag_per_s": 690.9215302195801,
+                "oscillation_frequency_hz": 109.96357682306251
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1702796027505541,
+                "current_pi": 0.0030733384617011874,
+                "converter_current": 0.19277154777286387,
+                "capacitor_voltage": 0.03589512728790522,
+                "grid_side_filter_current": 0.5979803837269755
+              },
+              "lcl_group_total": 0.8266470587877446,
+              "control_state_group_total": 0.17335294121225528,
+              "condition_number": 3.4673841743836156,
+              "right_eigenpair_residual": 3.9789485772416035e-16,
+              "left_eigenpair_residual": 2.0901672580375516e-16
+            },
+            "real_shift_from_baseline_per_s": 32.383816520378645,
+            "frequency_shift_from_baseline_hz": 6.102270549285705,
+            "minimum_right_mac": 0.9998905893849513,
+            "minimum_left_mac": 0.9967640373350366,
+            "maximum_normalized_eigenvalue_distance": 0.07569668821714849,
+            "maximum_condition_number": 3.4673841743836156,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998905893849513,
+                "left_mac": 0.9967640373350366,
+                "combined_mac": 0.9983260893959716,
+                "normalized_eigenvalue_distance": 0.07569668821714849,
+                "relative_candidate_margin": 0.39092657650889623,
+                "condition_number": 3.4673841743836156,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 149.52096300686094,
+                  "imag_per_s": 690.9215302195801,
+                  "oscillation_frequency_hz": 109.96357682306251
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 94.07154936293384,
+                "imag_per_s": 621.652681789683,
+                "oscillation_frequency_hz": 98.93909719316112
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.13048141399736068,
+                "current_pi": 0.0025145182243112097,
+                "converter_current": 0.14029796087462132,
+                "capacitor_voltage": 0.029001978551907018,
+                "grid_side_filter_current": 0.6977041283517997
+              },
+              "lcl_group_total": 0.8670040677783281,
+              "control_state_group_total": 0.1329959322216719,
+              "condition_number": 2.9634169047001238,
+              "right_eigenpair_residual": 4.631020309173956e-16,
+              "left_eigenpair_residual": 2.329958164679579e-16
+            },
+            "real_shift_from_baseline_per_s": -23.065597123548457,
+            "frequency_shift_from_baseline_hz": -4.922209080615684,
+            "minimum_right_mac": 0.9999361291580595,
+            "minimum_left_mac": 0.9970742882276868,
+            "maximum_normalized_eigenvalue_distance": 0.05819105369977952,
+            "maximum_condition_number": 3.1942018151349503,
+            "maximum_eigenpair_residual": 8.924586422088136e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999361291580595,
+                "left_mac": 0.9970742882276868,
+                "combined_mac": 0.9985041833930495,
+                "normalized_eigenvalue_distance": 0.05819105369977952,
+                "relative_candidate_margin": 0.4527050045133795,
+                "condition_number": 3.1942018151349503,
+                "right_eigenpair_residual": 8.924586422088136e-16,
+                "left_eigenpair_residual": 2.68764130862436e-16,
+                "eigenvalue": {
+                  "real_per_s": 94.07154936293384,
+                  "imag_per_s": 621.652681789683,
+                  "oscillation_frequency_hz": 98.93909719316112
+                }
+              }
+            ]
+          }
+        }
+      },
+      "sensitivity_ranking": [
+        {
+          "factor_name": "grid_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": -136.7550808567604,
+          "central_frequency_sensitivity_hz_per_log_factor": -27.189712282124244,
+          "maximum_absolute_real_shift_per_s": 32.383816520378645
+        },
+        {
+          "factor_name": "voltage_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -73.01325172671044,
+          "central_frequency_sensitivity_hz_per_log_factor": 17.833536643830445,
+          "maximum_absolute_real_shift_per_s": 15.927583210256984
+        },
+        {
+          "factor_name": "converter_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": 52.54518709624091,
+          "central_frequency_sensitivity_hz_per_log_factor": -17.037248538629235,
+          "maximum_absolute_real_shift_per_s": 11.732470303987299
+        },
+        {
+          "factor_name": "current_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -50.42451472923632,
+          "central_frequency_sensitivity_hz_per_log_factor": 17.64476720243916,
+          "maximum_absolute_real_shift_per_s": 11.21121602481648
+        },
+        {
+          "factor_name": "filter_capacitor_susceptance",
+          "central_real_sensitivity_per_log_factor_per_s": 23.423613935102388,
+          "central_frequency_sensitivity_hz_per_log_factor": 0.06022951517199174,
+          "maximum_absolute_real_shift_per_s": 4.7831474885180825
+        }
+      ],
+      "all_pre_registered_endpoints_matched": true,
+      "candidate_interaction_evidence": {
+        "status": "consistent",
+        "lcl_participation_minimum": 0.5,
+        "control_participation_minimum": 0.05,
+        "real_shift_evidence_minimum_per_s": 5.0,
+        "maximum_pi_factor_real_shift_per_s": 15.927583210256984,
+        "maximum_lcl_factor_real_shift_per_s": 32.383816520378645,
+        "statement": "Within the frozen intermediate model and state basis, the named branch has material LCL and control-state participation and responds to both PI and LCL one-factor perturbations. This supports an electrical-control interaction hypothesis but is not a unique causal attribution."
+      }
+    },
+    "10_state_include_rfif": {
+      "state_count": 10,
+      "resistive_drop_feedforward_gain": 1.0,
+      "active_damping_gain": 0.0,
+      "active_damping_cutoff_rad_s": null,
+      "baseline_named_branch": {
+        "eigenvalue": {
+          "real_per_s": 119.21536174509264,
+          "imag_per_s": 654.0902744153199,
+          "oscillation_frequency_hz": 104.10170040153244
+        },
+        "group_participation_frozen_coordinates": {
+          "voltage_pi": 0.14818334528292026,
+          "current_pi": 0.00275083936763939,
+          "converter_current": 0.1629459428528167,
+          "capacitor_voltage": 0.03249599092982232,
+          "grid_side_filter_current": 0.6536238815668014
+        },
+        "lcl_group_total": 0.8490658153494404,
+        "control_state_group_total": 0.15093418465055966,
+        "condition_number": 3.1897497787920766,
+        "right_eigenpair_residual": 4.0206437939432987e-16,
+        "left_eigenpair_residual": 1.5665994458215332e-16
+      },
+      "factor_paths": {
+        "voltage_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 135.503011954606,
+                "imag_per_s": 627.4069144213904,
+                "oscillation_frequency_hz": 99.85491176019804
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16835313399834595,
+                "current_pi": 0.0032216565581996443,
+                "converter_current": 0.1843590639194868,
+                "capacitor_voltage": 0.03496660172228597,
+                "grid_side_filter_current": 0.6090995438016815
+              },
+              "lcl_group_total": 0.8284252094434543,
+              "control_state_group_total": 0.1715747905565456,
+              "condition_number": 3.6491684128905417,
+              "right_eigenpair_residual": 4.553870713762739e-16,
+              "left_eigenpair_residual": 1.3018616635904533e-16
+            },
+            "real_shift_from_baseline_per_s": 16.28765020951336,
+            "frequency_shift_from_baseline_hz": -4.246788641334399,
+            "minimum_right_mac": 0.9998557738055237,
+            "minimum_left_mac": 0.9958985087438945,
+            "maximum_normalized_eigenvalue_distance": 0.04701945997682359,
+            "maximum_condition_number": 3.6491684128905417,
+            "maximum_eigenpair_residual": 4.553870713762739e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998557738055237,
+                "left_mac": 0.9958985087438945,
+                "combined_mac": 0.9978751796151129,
+                "normalized_eigenvalue_distance": 0.04701945997682359,
+                "relative_candidate_margin": 0.4141473888999514,
+                "condition_number": 3.6491684128905417,
+                "right_eigenpair_residual": 4.553870713762739e-16,
+                "left_eigenpair_residual": 1.5665994458215332e-16,
+                "eigenvalue": {
+                  "real_per_s": 135.503011954606,
+                  "imag_per_s": 627.4069144213904,
+                  "oscillation_frequency_hz": 99.85491176019804
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 105.25553735601858,
+                "imag_per_s": 672.7069838533461,
+                "oscillation_frequency_hz": 107.06464173269985
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.13234424779682175,
+                "current_pi": 0.0024072752278398416,
+                "converter_current": 0.14596135374293506,
+                "capacitor_voltage": 0.03012512956121946,
+                "grid_side_filter_current": 0.6891619936711838
+              },
+              "lcl_group_total": 0.8652484769753384,
+              "control_state_group_total": 0.1347515230246616,
+              "condition_number": 2.857010411873805,
+              "right_eigenpair_residual": 6.683016502885729e-16,
+              "left_eigenpair_residual": 1.4445039480406888e-16
+            },
+            "real_shift_from_baseline_per_s": -13.959824389074058,
+            "frequency_shift_from_baseline_hz": 2.9629413311674093,
+            "minimum_right_mac": 0.999919991193662,
+            "minimum_left_mac": 0.99623738855228,
+            "maximum_normalized_eigenvalue_distance": 0.03499844033778736,
+            "maximum_condition_number": 3.1897497787920766,
+            "maximum_eigenpair_residual": 6.683016502885729e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.999919991193662,
+                "left_mac": 0.99623738855228,
+                "combined_mac": 0.9980769914129834,
+                "normalized_eigenvalue_distance": 0.03499844033778736,
+                "relative_candidate_margin": 0.43749562119323904,
+                "condition_number": 3.1897497787920766,
+                "right_eigenpair_residual": 6.683016502885729e-16,
+                "left_eigenpair_residual": 1.5665994458215332e-16,
+                "eigenvalue": {
+                  "real_per_s": 105.25553735601858,
+                  "imag_per_s": 672.7069838533461,
+                  "oscillation_frequency_hz": 107.06464173269985
+                }
+              }
+            ]
+          }
+        },
+        "current_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 130.73559587686916,
+                "imag_per_s": 628.3399500645622,
+                "oscillation_frequency_hz": 100.00340899488977
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16543745601369025,
+                "current_pi": 0.003234796032917385,
+                "converter_current": 0.18506526899694714,
+                "capacitor_voltage": 0.028118357374945398,
+                "grid_side_filter_current": 0.6181441215814998
+              },
+              "lcl_group_total": 0.8313277479533924,
+              "control_state_group_total": 0.16867225204660763,
+              "condition_number": 3.2591572289873287,
+              "right_eigenpair_residual": 6.163231552184603e-16,
+              "left_eigenpair_residual": 1.0158612511583416e-16
+            },
+            "real_shift_from_baseline_per_s": 11.520234131776519,
+            "frequency_shift_from_baseline_hz": -4.098291406642678,
+            "minimum_right_mac": 0.9997039395272351,
+            "minimum_left_mac": 0.9883400520418851,
+            "maximum_normalized_eigenvalue_distance": 0.042429379327456385,
+            "maximum_condition_number": 3.2591572289873287,
+            "maximum_eigenpair_residual": 6.163231552184603e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9997039395272351,
+                "left_mac": 0.9883400520418851,
+                "combined_mac": 0.9940057563308299,
+                "normalized_eigenvalue_distance": 0.042429379327456385,
+                "relative_candidate_margin": 0.4222400159713798,
+                "condition_number": 3.2591572289873287,
+                "right_eigenpair_residual": 6.163231552184603e-16,
+                "left_eigenpair_residual": 1.5665994458215332e-16,
+                "eigenvalue": {
+                  "real_per_s": 130.73559587686916,
+                  "imag_per_s": 628.3399500645622,
+                  "oscillation_frequency_hz": 100.00340899488977
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 109.74556983404463,
+                "imag_per_s": 673.0326675109854,
+                "oscillation_frequency_hz": 107.11647589669741
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.13487736148011445,
+                "current_pi": 0.002398553242739663,
+                "converter_current": 0.14566707323214856,
+                "capacitor_voltage": 0.03617210559408886,
+                "grid_side_filter_current": 0.6808849064509084
+              },
+              "lcl_group_total": 0.8627240852771458,
+              "control_state_group_total": 0.1372759147228541,
+              "condition_number": 3.1731586227506283,
+              "right_eigenpair_residual": 2.893075929601688e-16,
+              "left_eigenpair_residual": 1.9873323387496847e-16
+            },
+            "real_shift_from_baseline_per_s": -9.469791911048006,
+            "frequency_shift_from_baseline_hz": 3.0147754951649666,
+            "minimum_right_mac": 0.9998444366720465,
+            "minimum_left_mac": 0.9930920789310547,
+            "maximum_normalized_eigenvalue_distance": 0.031852464942615524,
+            "maximum_condition_number": 3.1897497787920766,
+            "maximum_eigenpair_residual": 4.0206437939432987e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998444366720465,
+                "left_mac": 0.9930920789310547,
+                "combined_mac": 0.9964625382934834,
+                "normalized_eigenvalue_distance": 0.031852464942615524,
+                "relative_candidate_margin": 0.4330445851211319,
+                "condition_number": 3.1897497787920766,
+                "right_eigenpair_residual": 4.0206437939432987e-16,
+                "left_eigenpair_residual": 1.9873323387496847e-16,
+                "eigenvalue": {
+                  "real_per_s": 109.74556983404463,
+                  "imag_per_s": 673.0326675109854,
+                  "oscillation_frequency_hz": 107.11647589669741
+                }
+              }
+            ]
+          }
+        },
+        "converter_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 107.64346248756661,
+                "imag_per_s": 677.0139289651676,
+                "oscillation_frequency_hz": 107.75011333687172
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.13201608127090414,
+                "current_pi": 0.0023247294980466085,
+                "converter_current": 0.14191703070673023,
+                "capacitor_voltage": 0.036999056405053354,
+                "grid_side_filter_current": 0.6867431021192656
+              },
+              "lcl_group_total": 0.8656591892310492,
+              "control_state_group_total": 0.13434081076895074,
+              "condition_number": 3.3848018987353097,
+              "right_eigenpair_residual": 4.544370259910635e-16,
+              "left_eigenpair_residual": 1.0846595193784117e-16
+            },
+            "real_shift_from_baseline_per_s": -11.571899257526027,
+            "frequency_shift_from_baseline_hz": 3.648412935339278,
+            "minimum_right_mac": 0.9997725270644764,
+            "minimum_left_mac": 0.9997485553938329,
+            "maximum_normalized_eigenvalue_distance": 0.038622596450554735,
+            "maximum_condition_number": 3.3848018987353097,
+            "maximum_eigenpair_residual": 4.544370259910635e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9997725270644764,
+                "left_mac": 0.9997485553938329,
+                "combined_mac": 0.9997605411573073,
+                "normalized_eigenvalue_distance": 0.038622596450554735,
+                "relative_candidate_margin": 0.4315483456559838,
+                "condition_number": 3.3848018987353097,
+                "right_eigenpair_residual": 4.544370259910635e-16,
+                "left_eigenpair_residual": 1.5665994458215332e-16,
+                "eigenvalue": {
+                  "real_per_s": 107.64346248756661,
+                  "imag_per_s": 677.0139289651676,
+                  "oscillation_frequency_hz": 107.75011333687172
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 128.65183259213046,
+                "imag_per_s": 633.2584669729385,
+                "oscillation_frequency_hz": 100.78621527353891
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16221527002158415,
+                "current_pi": 0.003141739872463542,
+                "converter_current": 0.18095399908753565,
+                "capacitor_voltage": 0.028903774301595176,
+                "grid_side_filter_current": 0.6247852167168215
+              },
+              "lcl_group_total": 0.8346429901059523,
+              "control_state_group_total": 0.1653570098940477,
+              "condition_number": 3.027443180646469,
+              "right_eigenpair_residual": 8.519327901762942e-16,
+              "left_eigenpair_residual": 1.2414037273749029e-16
+            },
+            "real_shift_from_baseline_per_s": 9.436470847037825,
+            "frequency_shift_from_baseline_hz": -3.3154851279935205,
+            "minimum_right_mac": 0.9998068663802623,
+            "minimum_left_mac": 0.9997796888937269,
+            "maximum_normalized_eigenvalue_distance": 0.03439707899360396,
+            "maximum_condition_number": 3.1897497787920766,
+            "maximum_eigenpair_residual": 8.519327901762942e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998068663802623,
+                "left_mac": 0.9997796888937269,
+                "combined_mac": 0.9997932775446485,
+                "normalized_eigenvalue_distance": 0.03439707899360396,
+                "relative_candidate_margin": 0.4243813852779488,
+                "condition_number": 3.1897497787920766,
+                "right_eigenpair_residual": 8.519327901762942e-16,
+                "left_eigenpair_residual": 1.5665994458215332e-16,
+                "eigenvalue": {
+                  "real_per_s": 128.65183259213046,
+                  "imag_per_s": 633.2584669729385,
+                  "oscillation_frequency_hz": 100.78621527353891
+                }
+              }
+            ]
+          }
+        },
+        "filter_capacitor_susceptance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 114.44771492936465,
+                "imag_per_s": 653.9447745200217,
+                "oscillation_frequency_hz": 104.07854337397639
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14554233958831456,
+                "current_pi": 0.002762371229773555,
+                "converter_current": 0.1633691968497654,
+                "capacitor_voltage": 0.02582387096889898,
+                "grid_side_filter_current": 0.6625022213632474
+              },
+              "lcl_group_total": 0.8516952891819118,
+              "control_state_group_total": 0.1483047108180881,
+              "condition_number": 3.177860563687641,
+              "right_eigenpair_residual": 8.263137948321854e-16,
+              "left_eigenpair_residual": 1.7825215561647293e-16
+            },
+            "real_shift_from_baseline_per_s": -4.767646815727986,
+            "frequency_shift_from_baseline_hz": -0.023157027556052857,
+            "minimum_right_mac": 0.9999904746355412,
+            "minimum_left_mac": 0.9995701832875866,
+            "maximum_normalized_eigenvalue_distance": 0.007174180508953214,
+            "maximum_condition_number": 3.1897497787920766,
+            "maximum_eigenpair_residual": 8.263137948321854e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999904746355412,
+                "left_mac": 0.9995701832875866,
+                "combined_mac": 0.99978030687611,
+                "normalized_eigenvalue_distance": 0.007174180508953214,
+                "relative_candidate_margin": 0.4281173825187514,
+                "condition_number": 3.1897497787920766,
+                "right_eigenpair_residual": 8.263137948321854e-16,
+                "left_eigenpair_residual": 1.7825215561647293e-16,
+                "eigenvalue": {
+                  "real_per_s": 114.44771492936465,
+                  "imag_per_s": 653.9447745200217,
+                  "oscillation_frequency_hz": 104.07854337397639
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 124.04756130161641,
+                "imag_per_s": 653.9838342842336,
+                "oscillation_frequency_hz": 104.08475992852671
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.15095229630960105,
+                "current_pi": 0.0027376035835237015,
+                "converter_current": 0.1623704930120125,
+                "capacitor_voltage": 0.03919736239820535,
+                "grid_side_filter_current": 0.6447422446966574
+              },
+              "lcl_group_total": 0.8463101001068752,
+              "control_state_group_total": 0.15368989989312476,
+              "condition_number": 3.198847937381908,
+              "right_eigenpair_residual": 1.047291172071375e-15,
+              "left_eigenpair_residual": 1.335603857577821e-16
+            },
+            "real_shift_from_baseline_per_s": 4.832199556523776,
+            "frequency_shift_from_baseline_hz": -0.016940473005732,
+            "minimum_right_mac": 0.9999902071513784,
+            "minimum_left_mac": 0.9995691881624295,
+            "maximum_normalized_eigenvalue_distance": 0.007269696359055025,
+            "maximum_condition_number": 3.198847937381908,
+            "maximum_eigenpair_residual": 1.047291172071375e-15,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999902071513784,
+                "left_mac": 0.9995691881624295,
+                "combined_mac": 0.9997796754948978,
+                "normalized_eigenvalue_distance": 0.007269696359055025,
+                "relative_candidate_margin": 0.4368114051815136,
+                "condition_number": 3.198847937381908,
+                "right_eigenpair_residual": 1.047291172071375e-15,
+                "left_eigenpair_residual": 1.5665994458215332e-16,
+                "eigenvalue": {
+                  "real_per_s": 124.04756130161641,
+                  "imag_per_s": 653.9838342842336,
+                  "oscillation_frequency_hz": 104.08475992852671
+                }
+              }
+            ]
+          }
+        },
+        "grid_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 152.10663671231117,
+                "imag_per_s": 692.4870927759835,
+                "oscillation_frequency_hz": 110.2127438426337
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.17002147308801085,
+                "current_pi": 0.0030524429098883043,
+                "converter_current": 0.19288030204990048,
+                "capacitor_voltage": 0.036113790890138685,
+                "grid_side_filter_current": 0.5979319910620617
+              },
+              "lcl_group_total": 0.8269260840021009,
+              "control_state_group_total": 0.17307391599789915,
+              "condition_number": 3.4605745050071115,
+              "right_eigenpair_residual": 6.599785081612746e-16,
+              "left_eigenpair_residual": 1.844872819119348e-16
+            },
+            "real_shift_from_baseline_per_s": 32.891274967218536,
+            "frequency_shift_from_baseline_hz": 6.1110434411012555,
+            "minimum_right_mac": 0.9998880773213987,
+            "minimum_left_mac": 0.9967650606924968,
+            "maximum_normalized_eigenvalue_distance": 0.07604302455101787,
+            "maximum_condition_number": 3.4605745050071115,
+            "maximum_eigenpair_residual": 6.599785081612746e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998880773213987,
+                "left_mac": 0.9967650606924968,
+                "combined_mac": 0.9983253478085027,
+                "normalized_eigenvalue_distance": 0.07604302455101787,
+                "relative_candidate_margin": 0.3909169889416573,
+                "condition_number": 3.4605745050071115,
+                "right_eigenpair_residual": 6.599785081612746e-16,
+                "left_eigenpair_residual": 1.844872819119348e-16,
+                "eigenvalue": {
+                  "real_per_s": 152.10663671231117,
+                  "imag_per_s": 692.4870927759835,
+                  "oscillation_frequency_hz": 110.2127438426337
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 95.76635373869937,
+                "imag_per_s": 623.0832300081847,
+                "oscillation_frequency_hz": 99.16677601346697
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.13056063881596672,
+                "current_pi": 0.002500216089555909,
+                "converter_current": 0.14038005668786374,
+                "capacitor_voltage": 0.029179268769550806,
+                "grid_side_filter_current": 0.6973798196370629
+              },
+              "lcl_group_total": 0.8669391450944774,
+              "control_state_group_total": 0.13306085490552264,
+              "condition_number": 2.960791379414104,
+              "right_eigenpair_residual": 3.7363423917084896e-16,
+              "left_eigenpair_residual": 1.730903010768141e-16
+            },
+            "real_shift_from_baseline_per_s": -23.44900800639327,
+            "frequency_shift_from_baseline_hz": -4.934924388065465,
+            "minimum_right_mac": 0.9999345233202275,
+            "minimum_left_mac": 0.9970770500574786,
+            "maximum_normalized_eigenvalue_distance": 0.058470980932223186,
+            "maximum_condition_number": 3.1897497787920766,
+            "maximum_eigenpair_residual": 4.0206437939432987e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999345233202275,
+                "left_mac": 0.9970770500574786,
+                "combined_mac": 0.9985047645168066,
+                "normalized_eigenvalue_distance": 0.058470980932223186,
+                "relative_candidate_margin": 0.45254907881311546,
+                "condition_number": 3.1897497787920766,
+                "right_eigenpair_residual": 4.0206437939432987e-16,
+                "left_eigenpair_residual": 1.730903010768141e-16,
+                "eigenvalue": {
+                  "real_per_s": 95.76635373869937,
+                  "imag_per_s": 623.0832300081847,
+                  "oscillation_frequency_hz": 99.16677601346697
+                }
+              }
+            ]
+          }
+        }
+      },
+      "sensitivity_ranking": [
+        {
+          "factor_name": "grid_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": -138.95223496908676,
+          "central_frequency_sensitivity_hz_per_log_factor": -27.242708702372568,
+          "maximum_absolute_real_shift_per_s": 32.891274967218536
+        },
+        {
+          "factor_name": "voltage_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -74.59945133063934,
+          "central_frequency_sensitivity_hz_per_log_factor": 17.78138199398035,
+          "maximum_absolute_real_shift_per_s": 16.28765020951336
+        },
+        {
+          "factor_name": "converter_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": 51.81301592777136,
+          "central_frequency_sensitivity_hz_per_log_factor": -17.175085905234212,
+          "maximum_absolute_real_shift_per_s": 11.571899257526027
+        },
+        {
+          "factor_name": "current_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -51.76777390478961,
+          "central_frequency_sensitivity_hz_per_log_factor": 17.5429815280434,
+          "maximum_absolute_real_shift_per_s": 11.520234131776519
+        },
+        {
+          "factor_name": "filter_capacitor_susceptance",
+          "central_real_sensitivity_per_log_factor_per_s": 23.676134346166354,
+          "central_frequency_sensitivity_hz_per_log_factor": 0.015331910011508298,
+          "maximum_absolute_real_shift_per_s": 4.832199556523776
+        }
+      ],
+      "all_pre_registered_endpoints_matched": true,
+      "candidate_interaction_evidence": {
+        "status": "consistent",
+        "lcl_participation_minimum": 0.5,
+        "control_participation_minimum": 0.05,
+        "real_shift_evidence_minimum_per_s": 5.0,
+        "maximum_pi_factor_real_shift_per_s": 16.28765020951336,
+        "maximum_lcl_factor_real_shift_per_s": 32.891274967218536,
+        "statement": "Within the frozen intermediate model and state basis, the named branch has material LCL and control-state participation and responds to both PI and LCL one-factor perturbations. This supports an electrical-control interaction hypothesis but is not a unique causal attribution."
+      }
+    },
+    "12_state_omit_rfif": {
+      "state_count": 12,
+      "resistive_drop_feedforward_gain": 0.0,
+      "active_damping_gain": 0.2,
+      "active_damping_cutoff_rad_s": 50.0,
+      "baseline_named_branch": {
+        "eigenvalue": {
+          "real_per_s": 122.0138314980916,
+          "imag_per_s": 627.9979664986665,
+          "oscillation_frequency_hz": 99.94898061992127
+        },
+        "group_participation_frozen_coordinates": {
+          "voltage_pi": 0.16064310535976767,
+          "current_pi": 0.0031639742062406113,
+          "active_damping_filter": 0.002517965765734608,
+          "converter_current": 0.1476523013789489,
+          "capacitor_voltage": 0.027406957973758368,
+          "grid_side_filter_current": 0.6586156953155498
+        },
+        "lcl_group_total": 0.833674954668257,
+        "control_state_group_total": 0.1663250453317429,
+        "condition_number": 2.9604515798124895,
+        "right_eigenpair_residual": 4.3272737209614e-16,
+        "left_eigenpair_residual": 1.0493273426310331e-16
+      },
+      "factor_paths": {
+        "voltage_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 134.49807701518768,
+                "imag_per_s": 599.4785296820507,
+                "oscillation_frequency_hz": 95.40997127635988
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.17955549180796582,
+                "current_pi": 0.003663591378783547,
+                "active_damping_filter": 0.0028479058736359925,
+                "converter_current": 0.16535901140576956,
+                "capacitor_voltage": 0.028828067285259253,
+                "grid_side_filter_current": 0.6197459322485859
+              },
+              "lcl_group_total": 0.8139330109396147,
+              "control_state_group_total": 0.18606698906038535,
+              "condition_number": 3.359029386029291,
+              "right_eigenpair_residual": 4.611948541722697e-16,
+              "left_eigenpair_residual": 1.580789963731931e-16
+            },
+            "real_shift_from_baseline_per_s": 12.48424551709607,
+            "frequency_shift_from_baseline_hz": -4.539009343561389,
+            "minimum_right_mac": 0.9998486186930141,
+            "minimum_left_mac": 0.9959703681281693,
+            "maximum_normalized_eigenvalue_distance": 0.04866375955154251,
+            "maximum_condition_number": 3.359029386029291,
+            "maximum_eigenpair_residual": 4.611948541722697e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998486186930141,
+                "left_mac": 0.9959703681281693,
+                "combined_mac": 0.9979076093667805,
+                "normalized_eigenvalue_distance": 0.04866375955154251,
+                "relative_candidate_margin": 0.4062474929818206,
+                "condition_number": 3.359029386029291,
+                "right_eigenpair_residual": 4.611948541722697e-16,
+                "left_eigenpair_residual": 1.580789963731931e-16,
+                "eigenvalue": {
+                  "real_per_s": 134.49807701518768,
+                  "imag_per_s": 599.4785296820507,
+                  "oscillation_frequency_hz": 95.40997127635988
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 110.5303316895062,
+                "imag_per_s": 648.7755715478606,
+                "oscillation_frequency_hz": 103.25583916911164
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14538362711061376,
+                "current_pi": 0.002793002764351574,
+                "active_damping_filter": 0.0022618328525750063,
+                "converter_current": 0.1334277685289078,
+                "capacitor_voltage": 0.02588600238007839,
+                "grid_side_filter_current": 0.6902477663634736
+              },
+              "lcl_group_total": 0.8495615372724599,
+              "control_state_group_total": 0.15043846272754033,
+              "condition_number": 2.6730323004534666,
+              "right_eigenpair_residual": 5.628705030502528e-16,
+              "left_eigenpair_residual": 1.0011617536909231e-16
+            },
+            "real_shift_from_baseline_per_s": -11.483499808585407,
+            "frequency_shift_from_baseline_hz": 3.3068585491903657,
+            "minimum_right_mac": 0.999912011429488,
+            "minimum_left_mac": 0.9963452264576161,
+            "maximum_normalized_eigenvalue_distance": 0.03710849295801598,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 5.628705030502528e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.999912011429488,
+                "left_mac": 0.9963452264576161,
+                "combined_mac": 0.9981270257163682,
+                "normalized_eigenvalue_distance": 0.03710849295801598,
+                "relative_candidate_margin": 0.4393842161112449,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 5.628705030502528e-16,
+                "left_eigenpair_residual": 1.0493273426310331e-16,
+                "eigenvalue": {
+                  "real_per_s": 110.5303316895062,
+                  "imag_per_s": 648.7755715478606,
+                  "oscillation_frequency_hz": 103.25583916911164
+                }
+              }
+            ]
+          }
+        },
+        "current_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 130.92191228898605,
+                "imag_per_s": 600.507137937749,
+                "oscillation_frequency_hz": 95.57367936475939
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.17747020648866507,
+                "current_pi": 0.0036755294768902715,
+                "active_damping_filter": 0.002848105077781076,
+                "converter_current": 0.16602685793262195,
+                "capacitor_voltage": 0.023230548107359347,
+                "grid_side_filter_current": 0.6267487529166822
+              },
+              "lcl_group_total": 0.8160061589566635,
+              "control_state_group_total": 0.1839938410433364,
+              "condition_number": 3.0115670990089685,
+              "right_eigenpair_residual": 9.097018220980377e-16,
+              "left_eigenpair_residual": 9.043821939892079e-17
+            },
+            "real_shift_from_baseline_per_s": 8.908080790894445,
+            "frequency_shift_from_baseline_hz": -4.3753012551618795,
+            "minimum_right_mac": 0.9996556251617476,
+            "minimum_left_mac": 0.9885616638936577,
+            "maximum_normalized_eigenvalue_distance": 0.045171529589029764,
+            "maximum_condition_number": 3.0115670990089685,
+            "maximum_eigenpair_residual": 9.097018220980377e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9996556251617476,
+                "left_mac": 0.9885616638936577,
+                "combined_mac": 0.9940931687374941,
+                "normalized_eigenvalue_distance": 0.045171529589029764,
+                "relative_candidate_margin": 0.42190901756180804,
+                "condition_number": 3.0115670990089685,
+                "right_eigenpair_residual": 9.097018220980377e-16,
+                "left_eigenpair_residual": 1.0493273426310331e-16,
+                "eigenvalue": {
+                  "real_per_s": 130.92191228898605,
+                  "imag_per_s": 600.507137937749,
+                  "oscillation_frequency_hz": 95.57367936475939
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 114.15983453638549,
+                "imag_per_s": 648.7086202968795,
+                "oscillation_frequency_hz": 103.24518354657181
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14728351221368363,
+                "current_pi": 0.002785368307467979,
+                "active_damping_filter": 0.002262018591444469,
+                "converter_current": 0.13310680175268058,
+                "capacitor_voltage": 0.03101079088335204,
+                "grid_side_filter_current": 0.6835515082513712
+              },
+              "lcl_group_total": 0.8476691008874039,
+              "control_state_group_total": 0.1523308991125961,
+              "condition_number": 2.956733214012186,
+              "right_eigenpair_residual": 2.1601084994089243e-16,
+              "left_eigenpair_residual": 1.162928006608267e-16
+            },
+            "real_shift_from_baseline_per_s": -7.853996961706116,
+            "frequency_shift_from_baseline_hz": 3.2962029266505364,
+            "minimum_right_mac": 0.9998142069716981,
+            "minimum_left_mac": 0.9931818037426067,
+            "maximum_normalized_eigenvalue_distance": 0.03462316155487825,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 4.3272737209614e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998142069716981,
+                "left_mac": 0.9931818037426067,
+                "combined_mac": 0.9964924874215736,
+                "normalized_eigenvalue_distance": 0.03462316155487825,
+                "relative_candidate_margin": 0.42900095822206724,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 4.3272737209614e-16,
+                "left_eigenpair_residual": 1.162928006608267e-16,
+                "eigenvalue": {
+                  "real_per_s": 114.15983453638549,
+                  "imag_per_s": 648.7086202968795,
+                  "oscillation_frequency_hz": 103.24518354657181
+                }
+              }
+            ]
+          }
+        },
+        "converter_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 113.17086082896654,
+                "imag_per_s": 647.7027294174843,
+                "oscillation_frequency_hz": 103.085091040905
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14704685706276796,
+                "current_pi": 0.002790600490303465,
+                "active_damping_filter": 0.002700731509016387,
+                "converter_current": 0.1272425236384807,
+                "capacitor_voltage": 0.030722594810075776,
+                "grid_side_filter_current": 0.6894966924893557
+              },
+              "lcl_group_total": 0.8474618109379122,
+              "control_state_group_total": 0.15253818906208783,
+              "condition_number": 3.1072877166745814,
+              "right_eigenpair_residual": 3.5143427389149033e-16,
+              "left_eigenpair_residual": 1.268364997282949e-16
+            },
+            "real_shift_from_baseline_per_s": -8.842970669125066,
+            "frequency_shift_from_baseline_hz": 3.136110420983733,
+            "minimum_right_mac": 0.9998228379252262,
+            "minimum_left_mac": 0.9997643070996145,
+            "maximum_normalized_eigenvalue_distance": 0.0337606060682096,
+            "maximum_condition_number": 3.1072877166745814,
+            "maximum_eigenpair_residual": 4.3272737209614e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998228379252262,
+                "left_mac": 0.9997643070996145,
+                "combined_mac": 0.9997935720840997,
+                "normalized_eigenvalue_distance": 0.0337606060682096,
+                "relative_candidate_margin": 0.42695392541304794,
+                "condition_number": 3.1072877166745814,
+                "right_eigenpair_residual": 4.3272737209614e-16,
+                "left_eigenpair_residual": 1.268364997282949e-16,
+                "eigenvalue": {
+                  "real_per_s": 113.17086082896654,
+                  "imag_per_s": 647.7027294174843,
+                  "oscillation_frequency_hz": 103.085091040905
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 129.40581233868897,
+                "imag_per_s": 609.9083683223521,
+                "oscillation_frequency_hz": 97.0699316516147
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.17260539202008235,
+                "current_pi": 0.003511944414116534,
+                "active_damping_filter": 0.0023627939239448284,
+                "converter_current": 0.1654223149188665,
+                "capacitor_voltage": 0.02469582302542825,
+                "grid_side_filter_current": 0.6314017316975615
+              },
+              "lcl_group_total": 0.8215198696418563,
+              "control_state_group_total": 0.17848013035814372,
+              "condition_number": 2.834352957548831,
+              "right_eigenpair_residual": 6.900209378373021e-16,
+              "left_eigenpair_residual": 1.3531811281744161e-16
+            },
+            "real_shift_from_baseline_per_s": 7.39198084059737,
+            "frequency_shift_from_baseline_hz": -2.8790489683065785,
+            "minimum_right_mac": 0.9998452426270071,
+            "minimum_left_mac": 0.9997907899033249,
+            "maximum_normalized_eigenvalue_distance": 0.030546133897982282,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 6.900209378373021e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998452426270071,
+                "left_mac": 0.9997907899033249,
+                "combined_mac": 0.9998180158944612,
+                "normalized_eigenvalue_distance": 0.030546133897982282,
+                "relative_candidate_margin": 0.42527021129011927,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 6.900209378373021e-16,
+                "left_eigenpair_residual": 1.3531811281744161e-16,
+                "eigenvalue": {
+                  "real_per_s": 129.40581233868897,
+                  "imag_per_s": 609.9083683223521,
+                  "oscillation_frequency_hz": 97.0699316516147
+                }
+              }
+            ]
+          }
+        },
+        "filter_capacitor_susceptance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 118.25134152713528,
+                "imag_per_s": 628.256708242109,
+                "oscillation_frequency_hz": 99.99016064737435
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.15867793249192857,
+                "current_pi": 0.0031736495678003785,
+                "active_damping_filter": 0.0025151257854568575,
+                "converter_current": 0.14810048243202223,
+                "capacitor_voltage": 0.021836133513630618,
+                "grid_side_filter_current": 0.6656966762091612
+              },
+              "lcl_group_total": 0.835633292154814,
+              "control_state_group_total": 0.1643667078451858,
+              "condition_number": 2.953619634039781,
+              "right_eigenpair_residual": 6.273390539787983e-16,
+              "left_eigenpair_residual": 9.739495492086745e-17
+            },
+            "real_shift_from_baseline_per_s": -3.7624899709563238,
+            "frequency_shift_from_baseline_hz": 0.0411800274530797,
+            "minimum_right_mac": 0.9999934745305494,
+            "minimum_left_mac": 0.9996181549853808,
+            "maximum_normalized_eigenvalue_distance": 0.005895158960867345,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 6.273390539787983e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999934745305494,
+                "left_mac": 0.9996181549853808,
+                "combined_mac": 0.9998057971464499,
+                "normalized_eigenvalue_distance": 0.005895158960867345,
+                "relative_candidate_margin": 0.4281085081473037,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 6.273390539787983e-16,
+                "left_eigenpair_residual": 1.0493273426310331e-16,
+                "eigenvalue": {
+                  "real_per_s": 118.25134152713528,
+                  "imag_per_s": 628.256708242109,
+                  "oscillation_frequency_hz": 99.99016064737435
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 125.79408284052917,
+                "imag_per_s": 627.571423117218,
+                "oscillation_frequency_hz": 99.88109413232061
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1626756487968688,
+                "current_pi": 0.0031527805569876366,
+                "active_damping_filter": 0.0025191380292884616,
+                "converter_current": 0.1471089131808586,
+                "capacitor_voltage": 0.03298737502093123,
+                "grid_side_filter_current": 0.6515561444150653
+              },
+              "lcl_group_total": 0.8316524326168551,
+              "control_state_group_total": 0.1683475673831449,
+              "condition_number": 2.9658456642265207,
+              "right_eigenpair_residual": 4.578478195743169e-16,
+              "left_eigenpair_residual": 1.216347692092862e-16
+            },
+            "real_shift_from_baseline_per_s": 3.780251342437566,
+            "frequency_shift_from_baseline_hz": -0.0678864876006578,
+            "minimum_right_mac": 0.9999933478461892,
+            "minimum_left_mac": 0.9996184046276524,
+            "maximum_normalized_eigenvalue_distance": 0.005946528981429321,
+            "maximum_condition_number": 2.9658456642265207,
+            "maximum_eigenpair_residual": 4.578478195743169e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999933478461892,
+                "left_mac": 0.9996184046276524,
+                "combined_mac": 0.9998058586607066,
+                "normalized_eigenvalue_distance": 0.005946528981429321,
+                "relative_candidate_margin": 0.43277240976502573,
+                "condition_number": 2.9658456642265207,
+                "right_eigenpair_residual": 4.578478195743169e-16,
+                "left_eigenpair_residual": 1.216347692092862e-16,
+                "eigenvalue": {
+                  "real_per_s": 125.79408284052917,
+                  "imag_per_s": 627.571423117218,
+                  "oscillation_frequency_hz": 99.88109413232061
+                }
+              }
+            ]
+          }
+        },
+        "grid_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 151.48968584001744,
+                "imag_per_s": 663.4549258122131,
+                "oscillation_frequency_hz": 105.59213096168043
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1812472321187103,
+                "current_pi": 0.0034446116536339063,
+                "active_damping_filter": 0.00245430293609508,
+                "converter_current": 0.1749299988158783,
+                "capacitor_voltage": 0.030465193570795468,
+                "grid_side_filter_current": 0.6074586609048868
+              },
+              "lcl_group_total": 0.8128538532915606,
+              "control_state_group_total": 0.1871461467084393,
+              "condition_number": 3.2270254995154914,
+              "right_eigenpair_residual": 6.974845888897857e-16,
+              "left_eigenpair_residual": 1.8394016689063587e-16
+            },
+            "real_shift_from_baseline_per_s": 29.47585434192584,
+            "frequency_shift_from_baseline_hz": 5.643150341759154,
+            "minimum_right_mac": 0.9999148265592898,
+            "minimum_left_mac": 0.996627331992878,
+            "maximum_normalized_eigenvalue_distance": 0.07207415213327811,
+            "maximum_condition_number": 3.2270254995154914,
+            "maximum_eigenpair_residual": 6.974845888897857e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999148265592898,
+                "left_mac": 0.996627331992878,
+                "combined_mac": 0.998269725982866,
+                "normalized_eigenvalue_distance": 0.07207415213327811,
+                "relative_candidate_margin": 0.3934398024648624,
+                "condition_number": 3.2270254995154914,
+                "right_eigenpair_residual": 6.974845888897857e-16,
+                "left_eigenpair_residual": 1.8394016689063587e-16,
+                "eigenvalue": {
+                  "real_per_s": 151.48968584001744,
+                  "imag_per_s": 663.4549258122131,
+                  "oscillation_frequency_hz": 105.59213096168043
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 100.78768643306068,
+                "imag_per_s": 599.9745263619525,
+                "oscillation_frequency_hz": 95.48891159972341
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1439003625942447,
+                "current_pi": 0.0029245776500506386,
+                "active_damping_filter": 0.0025239218439545553,
+                "converter_current": 0.1273752239551995,
+                "capacitor_voltage": 0.024694702575761826,
+                "grid_side_filter_current": 0.6985812113807888
+              },
+              "lcl_group_total": 0.8506511379117501,
+              "control_state_group_total": 0.1493488620882499,
+              "condition_number": 2.7447978597936227,
+              "right_eigenpair_residual": 5.37116111570975e-16,
+              "left_eigenpair_residual": 1.3293559615354196e-16
+            },
+            "real_shift_from_baseline_per_s": -21.22614506503092,
+            "frequency_shift_from_baseline_hz": -4.460069020197859,
+            "minimum_right_mac": 0.9999495442397739,
+            "minimum_left_mac": 0.9970028188665359,
+            "maximum_normalized_eigenvalue_distance": 0.05495164971877073,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 5.37116111570975e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999495442397739,
+                "left_mac": 0.9970028188665359,
+                "combined_mac": 0.9984750944972851,
+                "normalized_eigenvalue_distance": 0.05495164971877073,
+                "relative_candidate_margin": 0.4469183990599779,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 5.37116111570975e-16,
+                "left_eigenpair_residual": 1.3293559615354196e-16,
+                "eigenvalue": {
+                  "real_per_s": 100.78768643306068,
+                  "imag_per_s": 599.9745263619525,
+                  "oscillation_frequency_hz": 95.48891159972341
+                }
+              }
+            ]
+          }
+        },
+        "active_damping_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 121.27022382636049,
+                "imag_per_s": 632.5764427595792,
+                "oscillation_frequency_hz": 100.67766774867442
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.15846002110089086,
+                "current_pi": 0.0030915511557411696,
+                "active_damping_filter": 0.0020524916313329426,
+                "converter_current": 0.15045946267177351,
+                "capacitor_voltage": 0.028285793489143583,
+                "grid_side_filter_current": 0.6576506799511179
+              },
+              "lcl_group_total": 0.836395936112035,
+              "control_state_group_total": 0.16360406388796497,
+              "condition_number": 2.9987713515493413,
+              "right_eigenpair_residual": 7.053667711610087e-16,
+              "left_eigenpair_residual": 1.1830015330775582e-16
+            },
+            "real_shift_from_baseline_per_s": -0.7436076717311124,
+            "frequency_shift_from_baseline_hz": 0.7286871287531513,
+            "minimum_right_mac": 0.9999916234103868,
+            "minimum_left_mac": 0.9994701561831146,
+            "maximum_normalized_eigenvalue_distance": 0.00725054002409515,
+            "maximum_condition_number": 2.9987713515493413,
+            "maximum_eigenpair_residual": 7.053667711610087e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999916234103868,
+                "left_mac": 0.9994701561831146,
+                "combined_mac": 0.9997308557965917,
+                "normalized_eigenvalue_distance": 0.00725054002409515,
+                "relative_candidate_margin": 0.43124756052478663,
+                "condition_number": 2.9987713515493413,
+                "right_eigenpair_residual": 7.053667711610087e-16,
+                "left_eigenpair_residual": 1.1830015330775582e-16,
+                "eigenvalue": {
+                  "real_per_s": 121.27022382636049,
+                  "imag_per_s": 632.5764427595792,
+                  "oscillation_frequency_hz": 100.67766774867442
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 122.66302044291993,
+                "imag_per_s": 623.5709097299051,
+                "oscillation_frequency_hz": 99.24439265182446
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16269753372038098,
+                "current_pi": 0.003233410618905902,
+                "active_damping_filter": 0.0029663579552918233,
+                "converter_current": 0.14495002171651583,
+                "capacitor_voltage": 0.026571381932343277,
+                "grid_side_filter_current": 0.6595812940565622
+              },
+              "lcl_group_total": 0.8311026977054213,
+              "control_state_group_total": 0.1688973022945787,
+              "condition_number": 2.9257176262699,
+              "right_eigenpair_residual": 5.104423210086377e-16,
+              "left_eigenpair_residual": 1.1531587938493045e-16
+            },
+            "real_shift_from_baseline_per_s": 0.6491889448283246,
+            "frequency_shift_from_baseline_hz": -0.7045879680968135,
+            "minimum_right_mac": 0.9999920742265831,
+            "minimum_left_mac": 0.9994801290922586,
+            "maximum_normalized_eigenvalue_distance": 0.0069940820170151675,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 5.104423210086377e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999920742265831,
+                "left_mac": 0.9994801290922586,
+                "combined_mac": 0.9997360688897949,
+                "normalized_eigenvalue_distance": 0.0069940820170151675,
+                "relative_candidate_margin": 0.42912822996752886,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 5.104423210086377e-16,
+                "left_eigenpair_residual": 1.1531587938493045e-16,
+                "eigenvalue": {
+                  "real_per_s": 122.66302044291993,
+                  "imag_per_s": 623.5709097299051,
+                  "oscillation_frequency_hz": 99.24439265182446
+                }
+              }
+            ]
+          }
+        },
+        "active_damping_cutoff": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 121.69148007716666,
+                "imag_per_s": 627.8592382367636,
+                "oscillation_frequency_hz": 99.92690133129288
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1605411533209093,
+                "current_pi": 0.0031637374174677867,
+                "active_damping_filter": 0.002028803750598707,
+                "converter_current": 0.14758339010935542,
+                "capacitor_voltage": 0.027366018449643734,
+                "grid_side_filter_current": 0.6593168969520252
+              },
+              "lcl_group_total": 0.8342663055110244,
+              "control_state_group_total": 0.1657336944889758,
+              "condition_number": 2.9601448434447293,
+              "right_eigenpair_residual": 4.849926405848903e-16,
+              "left_eigenpair_residual": 1.263495019382044e-16
+            },
+            "real_shift_from_baseline_per_s": -0.32235142092494584,
+            "frequency_shift_from_baseline_hz": -0.022079288628391022,
+            "minimum_right_mac": 0.9999972993981633,
+            "minimum_left_mac": 0.9999968781902807,
+            "maximum_normalized_eigenvalue_distance": 0.0005485590735801228,
+            "maximum_condition_number": 2.9604515798124895,
+            "maximum_eigenpair_residual": 4.849926405848903e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999972993981633,
+                "left_mac": 0.9999968781902807,
+                "combined_mac": 0.9999970887941998,
+                "normalized_eigenvalue_distance": 0.0005485590735801228,
+                "relative_candidate_margin": 0.4311283338823635,
+                "condition_number": 2.9604515798124895,
+                "right_eigenpair_residual": 4.849926405848903e-16,
+                "left_eigenpair_residual": 1.263495019382044e-16,
+                "eigenvalue": {
+                  "real_per_s": 121.69148007716666,
+                  "imag_per_s": 627.8592382367636,
+                  "oscillation_frequency_hz": 99.92690133129288
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 122.32996162883165,
+                "imag_per_s": 628.1446771298499,
+                "oscillation_frequency_hz": 99.97233034207824
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1607390881060315,
+                "current_pi": 0.0031640549408102096,
+                "active_damping_filter": 0.002998877424230128,
+                "converter_current": 0.14772620028994027,
+                "capacitor_voltage": 0.027449226042818922,
+                "grid_side_filter_current": 0.657922553196169
+              },
+              "lcl_group_total": 0.8330979795289282,
+              "control_state_group_total": 0.16690202047107183,
+              "condition_number": 2.960779615082303,
+              "right_eigenpair_residual": 2.877532397843662e-16,
+              "left_eigenpair_residual": 1.3395117273358055e-16
+            },
+            "real_shift_from_baseline_per_s": 0.31613013074004925,
+            "frequency_shift_from_baseline_hz": 0.02334972215696942,
+            "minimum_right_mac": 0.999997336748085,
+            "minimum_left_mac": 0.9999969305703985,
+            "maximum_normalized_eigenvalue_distance": 0.0005447739903188395,
+            "maximum_condition_number": 2.960779615082303,
+            "maximum_eigenpair_residual": 4.3272737209614e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.999997336748085,
+                "left_mac": 0.9999969305703985,
+                "combined_mac": 0.9999971336592212,
+                "normalized_eigenvalue_distance": 0.0005447739903188395,
+                "relative_candidate_margin": 0.43113212187238464,
+                "condition_number": 2.960779615082303,
+                "right_eigenpair_residual": 4.3272737209614e-16,
+                "left_eigenpair_residual": 1.3395117273358055e-16,
+                "eigenvalue": {
+                  "real_per_s": 122.32996162883165,
+                  "imag_per_s": 628.1446771298499,
+                  "oscillation_frequency_hz": 99.97233034207824
+                }
+              }
+            ]
+          }
+        }
+      },
+      "sensitivity_ranking": [
+        {
+          "factor_name": "grid_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": -125.04651668678527,
+          "central_frequency_sensitivity_hz_per_log_factor": -24.917604893543192,
+          "maximum_absolute_real_shift_per_s": 29.47585434192584
+        },
+        {
+          "factor_name": "voltage_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -59.11173328208478,
+          "central_frequency_sensitivity_hz_per_log_factor": 19.350291149241734,
+          "maximum_absolute_real_shift_per_s": 12.48424551709607
+        },
+        {
+          "factor_name": "current_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -41.34037039786173,
+          "central_frequency_sensitivity_hz_per_log_factor": 18.92025732523924,
+          "maximum_absolute_real_shift_per_s": 8.908080790894445
+        },
+        {
+          "factor_name": "converter_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": 40.04031711994193,
+          "central_frequency_sensitivity_hz_per_log_factor": -14.8352084285528,
+          "maximum_absolute_real_shift_per_s": 8.842970669125066
+        },
+        {
+          "factor_name": "filter_capacitor_susceptance",
+          "central_real_sensitivity_per_log_factor_per_s": 18.60268901703311,
+          "central_frequency_sensitivity_hz_per_log_factor": -0.2689911237063641,
+          "maximum_absolute_real_shift_per_s": 3.780251342437566
+        },
+        {
+          "factor_name": "active_damping_gain",
+          "central_real_sensitivity_per_log_factor_per_s": 3.43505911780672,
+          "central_frequency_sensitivity_hz_per_log_factor": -3.5348913338989845,
+          "maximum_absolute_real_shift_per_s": 0.7436076717311124
+        },
+        {
+          "factor_name": "active_damping_cutoff",
+          "central_real_sensitivity_per_log_factor_per_s": 1.5746892615348544,
+          "central_frequency_sensitivity_hz_per_log_factor": 0.11204172659227074,
+          "maximum_absolute_real_shift_per_s": 0.32235142092494584
+        }
+      ],
+      "all_pre_registered_endpoints_matched": true,
+      "candidate_interaction_evidence": {
+        "status": "consistent",
+        "lcl_participation_minimum": 0.5,
+        "control_participation_minimum": 0.05,
+        "real_shift_evidence_minimum_per_s": 5.0,
+        "maximum_pi_factor_real_shift_per_s": 12.48424551709607,
+        "maximum_lcl_factor_real_shift_per_s": 29.47585434192584,
+        "statement": "Within the frozen intermediate model and state basis, the named branch has material LCL and control-state participation and responds to both PI and LCL one-factor perturbations. This supports an electrical-control interaction hypothesis but is not a unique causal attribution."
+      }
+    },
+    "12_state_include_rfif": {
+      "state_count": 12,
+      "resistive_drop_feedforward_gain": 1.0,
+      "active_damping_gain": 0.2,
+      "active_damping_cutoff_rad_s": 50.0,
+      "baseline_named_branch": {
+        "eigenvalue": {
+          "real_per_s": 123.89318932165776,
+          "imag_per_s": 629.2657131761982,
+          "oscillation_frequency_hz": 100.15074877023876
+        },
+        "group_participation_frozen_coordinates": {
+          "voltage_pi": 0.16040743231913818,
+          "current_pi": 0.0031459033085718536,
+          "active_damping_filter": 0.0025236252296800643,
+          "converter_current": 0.14772499439355802,
+          "capacitor_voltage": 0.027560753387337808,
+          "grid_side_filter_current": 0.6586372913617141
+        },
+        "lcl_group_total": 0.8339230391426099,
+        "control_state_group_total": 0.16607696085739007,
+        "condition_number": 2.95632374398684,
+        "right_eigenpair_residual": 7.193668942666836e-16,
+        "left_eigenpair_residual": 1.3715401659394778e-16
+      },
+      "factor_paths": {
+        "voltage_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 136.66204198083523,
+                "imag_per_s": 600.7849091195089,
+                "oscillation_frequency_hz": 95.61788802138496
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1791502586239831,
+                "current_pi": 0.0036389957058219763,
+                "active_damping_filter": 0.0028566834352967384,
+                "converter_current": 0.1654575138025261,
+                "capacitor_voltage": 0.02903679451481018,
+                "grid_side_filter_current": 0.6198597539175619
+              },
+              "lcl_group_total": 0.8143540622348981,
+              "control_state_group_total": 0.18564593776510183,
+              "condition_number": 3.3529511297343206,
+              "right_eigenpair_residual": 3.193916920954051e-16,
+              "left_eigenpair_residual": 1.3985632636484206e-16
+            },
+            "real_shift_from_baseline_per_s": 12.768852659177469,
+            "frequency_shift_from_baseline_hz": -4.532860748853807,
+            "minimum_right_mac": 0.9998477142210836,
+            "minimum_left_mac": 0.9959711351995874,
+            "maximum_normalized_eigenvalue_distance": 0.0486666596251407,
+            "maximum_condition_number": 3.3529511297343206,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998477142210836,
+                "left_mac": 0.9959711351995874,
+                "combined_mac": 0.9979075422901088,
+                "normalized_eigenvalue_distance": 0.0486666596251407,
+                "relative_candidate_margin": 0.4063497467100704,
+                "condition_number": 3.3529511297343206,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3985632636484206e-16,
+                "eigenvalue": {
+                  "real_per_s": 136.66204198083523,
+                  "imag_per_s": 600.7849091195089,
+                  "oscillation_frequency_hz": 95.61788802138496
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 112.18094911906911,
+                "imag_per_s": 649.9946400720711,
+                "oscillation_frequency_hz": 103.44985995070748
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14525562173496318,
+                "current_pi": 0.0027791326448681933,
+                "active_damping_filter": 0.002265739472148369,
+                "converter_current": 0.13348433248962266,
+                "capacitor_voltage": 0.026002185335466367,
+                "grid_side_filter_current": 0.6902129883229313
+              },
+              "lcl_group_total": 0.8496995061480204,
+              "control_state_group_total": 0.15030049385197974,
+              "condition_number": 2.670148138305756,
+              "right_eigenpair_residual": 3.8415680623742343e-16,
+              "left_eigenpair_residual": 1.7282341313725268e-16
+            },
+            "real_shift_from_baseline_per_s": -11.712240202588646,
+            "frequency_shift_from_baseline_hz": 3.299111180468704,
+            "minimum_right_mac": 0.9999114208182421,
+            "minimum_left_mac": 0.9963469780847686,
+            "maximum_normalized_eigenvalue_distance": 0.03712336495428059,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999114208182421,
+                "left_mac": 0.9963469780847686,
+                "combined_mac": 0.9981276083170443,
+                "normalized_eigenvalue_distance": 0.03712336495428059,
+                "relative_candidate_margin": 0.4395332800046896,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.7282341313725268e-16,
+                "eigenvalue": {
+                  "real_per_s": 112.18094911906911,
+                  "imag_per_s": 649.9946400720711,
+                  "oscillation_frequency_hz": 103.44985995070748
+                }
+              }
+            ]
+          }
+        },
+        "current_pi_joint_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 133.05496686487618,
+                "imag_per_s": 601.8715469760413,
+                "oscillation_frequency_hz": 95.79083180760286
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.17702540279241086,
+                "current_pi": 0.003651944973853541,
+                "active_damping_filter": 0.0028574643024576393,
+                "converter_current": 0.1661615051043588,
+                "capacitor_voltage": 0.023395581604524734,
+                "grid_side_filter_current": 0.6269081012223944
+              },
+              "lcl_group_total": 0.8164651879312779,
+              "control_state_group_total": 0.18353481206872205,
+              "condition_number": 3.0068122087156053,
+              "right_eigenpair_residual": 7.653777407216259e-16,
+              "left_eigenpair_residual": 2.2126631509072526e-16
+            },
+            "real_shift_from_baseline_per_s": 9.16177754321842,
+            "frequency_shift_from_baseline_hz": -4.359916962635906,
+            "minimum_right_mac": 0.9996584865697036,
+            "minimum_left_mac": 0.9885698485018314,
+            "maximum_normalized_eigenvalue_distance": 0.04503903486747967,
+            "maximum_condition_number": 3.0068122087156053,
+            "maximum_eigenpair_residual": 7.653777407216259e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9996584865697036,
+                "left_mac": 0.9885698485018314,
+                "combined_mac": 0.9940987066794634,
+                "normalized_eigenvalue_distance": 0.04503903486747967,
+                "relative_candidate_margin": 0.4221342769537207,
+                "condition_number": 3.0068122087156053,
+                "right_eigenpair_residual": 7.653777407216259e-16,
+                "left_eigenpair_residual": 2.2126631509072526e-16,
+                "eigenvalue": {
+                  "real_per_s": 133.05496686487618,
+                  "imag_per_s": 601.8715469760413,
+                  "oscillation_frequency_hz": 95.79083180760286
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 115.84213437673222,
+                "imag_per_s": 649.8901197324999,
+                "oscillation_frequency_hz": 103.43322502201107
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14719775196379162,
+                "current_pi": 0.0027708948083843684,
+                "active_damping_filter": 0.0022655871654275834,
+                "converter_current": 0.13314260068409556,
+                "capacitor_voltage": 0.031153291826957814,
+                "grid_side_filter_current": 0.6834698735513429
+              },
+              "lcl_group_total": 0.8477657660623963,
+              "control_state_group_total": 0.15223423393760355,
+              "condition_number": 2.9530049925522555,
+              "right_eigenpair_residual": 3.5173822471596905e-16,
+              "left_eigenpair_residual": 7.220843629427475e-17
+            },
+            "real_shift_from_baseline_per_s": -8.05105494492554,
+            "frequency_shift_from_baseline_hz": 3.2824762517723047,
+            "minimum_right_mac": 0.9998155229003526,
+            "minimum_left_mac": 0.9931866779256024,
+            "maximum_normalized_eigenvalue_distance": 0.03452135302954605,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998155229003526,
+                "left_mac": 0.9931866779256024,
+                "combined_mac": 0.9964955884136418,
+                "normalized_eigenvalue_distance": 0.03452135302954605,
+                "relative_candidate_margin": 0.4291013665557201,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 115.84213437673222,
+                  "imag_per_s": 649.8901197324999,
+                  "oscillation_frequency_hz": 103.43322502201107
+                }
+              }
+            ]
+          }
+        },
+        "converter_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 115.17736328870154,
+                "imag_per_s": 649.1041659550829,
+                "oscillation_frequency_hz": 103.3081365932934
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14693242715180785,
+                "current_pi": 0.002773149925324637,
+                "active_damping_filter": 0.002705764164822339,
+                "converter_current": 0.12727879668598402,
+                "capacitor_voltage": 0.03088906348264712,
+                "grid_side_filter_current": 0.6894207985894141
+              },
+              "lcl_group_total": 0.8475886587580452,
+              "control_state_group_total": 0.15241134124195482,
+              "condition_number": 3.1024075548694814,
+              "right_eigenpair_residual": 5.639747269259924e-16,
+              "left_eigenpair_residual": 8.351785454594365e-17
+            },
+            "real_shift_from_baseline_per_s": -8.715826032956215,
+            "frequency_shift_from_baseline_hz": 3.1573878230546364,
+            "minimum_right_mac": 0.9998228846024373,
+            "minimum_left_mac": 0.9997633549385699,
+            "maximum_normalized_eigenvalue_distance": 0.03378618191284222,
+            "maximum_condition_number": 3.1024075548694814,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998228846024373,
+                "left_mac": 0.9997633549385699,
+                "combined_mac": 0.9997931193274393,
+                "normalized_eigenvalue_distance": 0.03378618191284222,
+                "relative_candidate_margin": 0.42703233473743096,
+                "condition_number": 3.1024075548694814,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 115.17736328870154,
+                  "imag_per_s": 649.1041659550829,
+                  "oscillation_frequency_hz": 103.3081365932934
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 131.17503345777624,
+                "imag_per_s": 611.0633787762722,
+                "oscillation_frequency_hz": 97.25375727467889
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.17228862208708495,
+                "current_pi": 0.003493360803985247,
+                "active_damping_filter": 0.002368799414445981,
+                "converter_current": 0.16552800027664,
+                "capacitor_voltage": 0.02483762416002109,
+                "grid_side_filter_current": 0.6314835932578227
+              },
+              "lcl_group_total": 0.8218492176944837,
+              "control_state_group_total": 0.17815078230551618,
+              "condition_number": 2.83080112566868,
+              "right_eigenpair_residual": 9.260781802101995e-16,
+              "left_eigenpair_residual": 1.6196630384589755e-16
+            },
+            "real_shift_from_baseline_per_s": 7.28184413611848,
+            "frequency_shift_from_baseline_hz": -2.896991495559876,
+            "minimum_right_mac": 0.9998452836948019,
+            "minimum_left_mac": 0.9997900182549616,
+            "maximum_normalized_eigenvalue_distance": 0.030568286437136966,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 9.260781802101995e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9998452836948019,
+                "left_mac": 0.9997900182549616,
+                "combined_mac": 0.9998176505930285,
+                "normalized_eigenvalue_distance": 0.030568286437136966,
+                "relative_candidate_margin": 0.42543056404719815,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 9.260781802101995e-16,
+                "left_eigenpair_residual": 1.6196630384589755e-16,
+                "eigenvalue": {
+                  "real_per_s": 131.17503345777624,
+                  "imag_per_s": 611.0633787762722,
+                  "oscillation_frequency_hz": 97.25375727467889
+                }
+              }
+            ]
+          }
+        },
+        "filter_capacitor_susceptance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 120.09658759555492,
+                "imag_per_s": 629.5673091761265,
+                "oscillation_frequency_hz": 100.19874926444409
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.15839718699024147,
+                "current_pi": 0.003156337672773495,
+                "active_damping_filter": 0.002521184379255424,
+                "converter_current": 0.14819850900699633,
+                "capacitor_voltage": 0.021963801728186738,
+                "grid_side_filter_current": 0.6657629802225464
+              },
+              "lcl_group_total": 0.8359252909577295,
+              "control_state_group_total": 0.16407470904227037,
+              "condition_number": 2.9499216930689673,
+              "right_eigenpair_residual": 5.888596917779485e-16,
+              "left_eigenpair_residual": 1.2413233820442166e-16
+            },
+            "real_shift_from_baseline_per_s": -3.7966017261028355,
+            "frequency_shift_from_baseline_hz": 0.04800049420532889,
+            "minimum_right_mac": 0.9999933722034456,
+            "minimum_left_mac": 0.9996179378532042,
+            "maximum_normalized_eigenvalue_distance": 0.005938387797587463,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999933722034456,
+                "left_mac": 0.9996179378532042,
+                "combined_mac": 0.999805637406031,
+                "normalized_eigenvalue_distance": 0.005938387797587463,
+                "relative_candidate_margin": 0.4282623703697786,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 120.09658759555492,
+                  "imag_per_s": 629.5673091761265,
+                  "oscillation_frequency_hz": 100.19874926444409
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 127.70463349866304,
+                "imag_per_s": 628.7937966913994,
+                "oscillation_frequency_hz": 100.07564092895647
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16248196407611712,
+                "current_pi": 0.0031339647409637838,
+                "active_damping_filter": 0.002524392580142293,
+                "converter_current": 0.14715644167268183,
+                "capacitor_voltage": 0.03316446751411577,
+                "grid_side_filter_current": 0.6515387694159792
+              },
+              "lcl_group_total": 0.8318596786027768,
+              "control_state_group_total": 0.16814032139722318,
+              "condition_number": 2.961268940516778,
+              "right_eigenpair_residual": 5.42236840965306e-16,
+              "left_eigenpair_residual": 1.3137658691342628e-16
+            },
+            "real_shift_from_baseline_per_s": 3.811444177005285,
+            "frequency_shift_from_baseline_hz": -0.07510784128228659,
+            "minimum_right_mac": 0.9999932469227549,
+            "minimum_left_mac": 0.9996182704987564,
+            "maximum_normalized_eigenvalue_distance": 0.005988261557457412,
+            "maximum_condition_number": 2.961268940516778,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999932469227549,
+                "left_mac": 0.9996182704987564,
+                "combined_mac": 0.9998057411314261,
+                "normalized_eigenvalue_distance": 0.005988261557457412,
+                "relative_candidate_margin": 0.43285375655531966,
+                "condition_number": 2.961268940516778,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 127.70463349866304,
+                  "imag_per_s": 628.7937966913994,
+                  "oscillation_frequency_hz": 100.07564092895647
+                }
+              }
+            ]
+          }
+        },
+        "grid_side_filter_reactance": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 153.8089075788172,
+                "imag_per_s": 664.7925080719328,
+                "oscillation_frequency_hz": 105.80501379010684
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1808355276752917,
+                "current_pi": 0.0034230263917642174,
+                "active_damping_filter": 0.0024589474422111583,
+                "converter_current": 0.1750247013012423,
+                "capacitor_voltage": 0.03063886724796432,
+                "grid_side_filter_current": 0.6076189299415263
+              },
+              "lcl_group_total": 0.813282498490733,
+              "control_state_group_total": 0.18671750150926708,
+              "condition_number": 3.2211224214058016,
+              "right_eigenpair_residual": 4.846956000117537e-16,
+              "left_eigenpair_residual": 2.6436562135988383e-16
+            },
+            "real_shift_from_baseline_per_s": 29.915718257159455,
+            "frequency_shift_from_baseline_hz": 5.65426501986808,
+            "minimum_right_mac": 0.9999130396813601,
+            "minimum_left_mac": 0.9966275377563922,
+            "maximum_normalized_eigenvalue_distance": 0.07241741157845116,
+            "maximum_condition_number": 3.2211224214058016,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999130396813601,
+                "left_mac": 0.9966275377563922,
+                "combined_mac": 0.9982689370646287,
+                "normalized_eigenvalue_distance": 0.07241741157845116,
+                "relative_candidate_margin": 0.39354788929999324,
+                "condition_number": 3.2211224214058016,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 2.6436562135988383e-16,
+                "eigenvalue": {
+                  "real_per_s": 153.8089075788172,
+                  "imag_per_s": 664.7925080719328,
+                  "oscillation_frequency_hz": 105.80501379010684
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 102.34179910510164,
+                "imag_per_s": 601.1649122449228,
+                "oscillation_frequency_hz": 95.67836739718494
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.14378755487047573,
+                "current_pi": 0.0029093899077288097,
+                "active_damping_filter": 0.0025304407754030435,
+                "converter_current": 0.12743587805714623,
+                "capacitor_voltage": 0.024831888762331417,
+                "grid_side_filter_current": 0.6985048476269147
+              },
+              "lcl_group_total": 0.8507726144463923,
+              "control_state_group_total": 0.1492273855536076,
+              "condition_number": 2.7420121111734113,
+              "right_eigenpair_residual": 5.556569459530257e-16,
+              "left_eigenpair_residual": 1.2494707651319925e-16
+            },
+            "real_shift_from_baseline_per_s": -21.551390216556115,
+            "frequency_shift_from_baseline_hz": -4.472381373053823,
+            "minimum_right_mac": 0.9999484074992269,
+            "minimum_left_mac": 0.9970049451293098,
+            "maximum_normalized_eigenvalue_distance": 0.05521748515801886,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999484074992269,
+                "left_mac": 0.9970049451293098,
+                "combined_mac": 0.9984755916650678,
+                "normalized_eigenvalue_distance": 0.05521748515801886,
+                "relative_candidate_margin": 0.4469701402181566,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 102.34179910510164,
+                  "imag_per_s": 601.1649122449228,
+                  "oscillation_frequency_hz": 95.67836739718494
+                }
+              }
+            ]
+          }
+        },
+        "active_damping_gain": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 123.18585756317722,
+                "imag_per_s": 633.886189237757,
+                "oscillation_frequency_hz": 100.88612037487361
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.1582528334456869,
+                "current_pi": 0.0030736060351568093,
+                "active_damping_filter": 0.002057049141864378,
+                "converter_current": 0.1505353973281661,
+                "capacitor_voltage": 0.028446939400275553,
+                "grid_side_filter_current": 0.6576341746488503
+              },
+              "lcl_group_total": 0.836616511377292,
+              "control_state_group_total": 0.1633834886227081,
+              "condition_number": 2.9945824718727914,
+              "right_eigenpair_residual": 5.793597509082448e-16,
+              "left_eigenpair_residual": 1.1408768391125016e-16
+            },
+            "real_shift_from_baseline_per_s": -0.7073317584805352,
+            "frequency_shift_from_baseline_hz": 0.7353716046348472,
+            "minimum_right_mac": 0.9999915510913752,
+            "minimum_left_mac": 0.9994705677077685,
+            "maximum_normalized_eigenvalue_distance": 0.007288270255630011,
+            "maximum_condition_number": 2.9945824718727914,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999915510913752,
+                "left_mac": 0.9994705677077685,
+                "combined_mac": 0.9997310254624835,
+                "normalized_eigenvalue_distance": 0.007288270255630011,
+                "relative_candidate_margin": 0.43134412303247066,
+                "condition_number": 2.9945824718727914,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 123.18585756317722,
+                  "imag_per_s": 633.886189237757,
+                  "oscillation_frequency_hz": 100.88612037487361
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 124.50764045888887,
+                "imag_per_s": 624.79930442156,
+                "oscillation_frequency_hz": 99.43989773906918
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16243629029233825,
+                "current_pi": 0.003215230130266729,
+                "active_damping_filter": 0.0029731030239859785,
+                "converter_current": 0.14501966666261748,
+                "capacitor_voltage": 0.0267183475046939,
+                "grid_side_filter_current": 0.6596373623860978
+              },
+              "lcl_group_total": 0.8313753765534092,
+              "control_state_group_total": 0.16862462344659096,
+              "condition_number": 2.9216476045054423,
+              "right_eigenpair_residual": 5.831003868857947e-16,
+              "left_eigenpair_residual": 1.190440276866822e-16
+            },
+            "real_shift_from_baseline_per_s": 0.6144511372311143,
+            "frequency_shift_from_baseline_hz": -0.7108510311695896,
+            "minimum_right_mac": 0.9999920069430795,
+            "minimum_left_mac": 0.9994805437747116,
+            "maximum_normalized_eigenvalue_distance": 0.007029708216230255,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999920069430795,
+                "left_mac": 0.9994805437747116,
+                "combined_mac": 0.9997362426509476,
+                "normalized_eigenvalue_distance": 0.007029708216230255,
+                "relative_candidate_margin": 0.4292771875657054,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 124.50764045888887,
+                  "imag_per_s": 624.79930442156,
+                  "oscillation_frequency_hz": 99.43989773906918
+                }
+              }
+            ]
+          }
+        },
+        "active_damping_cutoff": {
+          "factor_0p8": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 123.56828823857637,
+                "imag_per_s": 629.128453784569,
+                "oscillation_frequency_hz": 100.1289032595752
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16030188619161362,
+                "current_pi": 0.0031455831811940315,
+                "active_damping_filter": 0.0020334866842348924,
+                "converter_current": 0.1476576748996884,
+                "capacitor_voltage": 0.027519996909781224,
+                "grid_side_filter_current": 0.6593413721334879
+              },
+              "lcl_group_total": 0.8345190439429575,
+              "control_state_group_total": 0.16548095605704255,
+              "condition_number": 2.956034752389962,
+              "right_eigenpair_residual": 4.873406380342068e-16,
+              "left_eigenpair_residual": 1.3373838191481566e-16
+            },
+            "real_shift_from_baseline_per_s": -0.3249010830813859,
+            "frequency_shift_from_baseline_hz": -0.021845510663571308,
+            "minimum_right_mac": 0.9999972769929614,
+            "minimum_left_mac": 0.9999968969331458,
+            "maximum_normalized_eigenvalue_distance": 0.0005499449294790515,
+            "maximum_condition_number": 2.95632374398684,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 0.8,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999972769929614,
+                "left_mac": 0.9999968969331458,
+                "combined_mac": 0.9999970869630355,
+                "normalized_eigenvalue_distance": 0.0005499449294790515,
+                "relative_candidate_margin": 0.4312564662934872,
+                "condition_number": 2.95632374398684,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 123.56828823857637,
+                  "imag_per_s": 629.128453784569,
+                  "oscillation_frequency_hz": 100.1289032595752
+                }
+              }
+            ]
+          },
+          "factor_1p2": {
+            "status": "matched",
+            "path_steps_including_rejected_direct_attempts": 1,
+            "accepted_step_count": 1,
+            "endpoint": {
+              "eigenvalue": {
+                "real_per_s": 124.21188712972543,
+                "imag_per_s": 629.4109988423168,
+                "oscillation_frequency_hz": 100.17387170216193
+              },
+              "group_participation_frozen_coordinates": {
+                "voltage_pi": 0.16050702497522218,
+                "current_pi": 0.0031460672935790636,
+                "active_damping_filter": 0.00300544523865087,
+                "converter_current": 0.14779729400493313,
+                "capacitor_voltage": 0.02760284230160804,
+                "grid_side_filter_current": 0.6579413261860066
+              },
+              "lcl_group_total": 0.8333414624925478,
+              "control_state_group_total": 0.1666585375074521,
+              "condition_number": 2.9566336455296853,
+              "right_eigenpair_residual": 2.9712724628923095e-16,
+              "left_eigenpair_residual": 1.2765315289344271e-16
+            },
+            "real_shift_from_baseline_per_s": 0.3186978080676681,
+            "frequency_shift_from_baseline_hz": 0.023122931923161973,
+            "minimum_right_mac": 0.9999973149382423,
+            "minimum_left_mac": 0.9999969492644463,
+            "maximum_normalized_eigenvalue_distance": 0.0005461195319214428,
+            "maximum_condition_number": 2.9566336455296853,
+            "maximum_eigenpair_residual": 7.193668942666836e-16,
+            "steps": [
+              {
+                "from_factor": 1.0,
+                "to_factor": 1.2,
+                "status": "matched",
+                "reason": "accepted",
+                "right_mac": 0.9999973149382423,
+                "left_mac": 0.9999969492644463,
+                "combined_mac": 0.9999971321013276,
+                "normalized_eigenvalue_distance": 0.0005461195319214428,
+                "relative_candidate_margin": 0.4312635806339016,
+                "condition_number": 2.9566336455296853,
+                "right_eigenpair_residual": 7.193668942666836e-16,
+                "left_eigenpair_residual": 1.3715401659394778e-16,
+                "eigenvalue": {
+                  "real_per_s": 124.21188712972543,
+                  "imag_per_s": 629.4109988423168,
+                  "oscillation_frequency_hz": 100.17387170216193
+                }
+              }
+            ]
+          }
+        }
+      },
+      "sensitivity_ranking": [
+        {
+          "factor_name": "grid_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": -126.93350782722813,
+          "central_frequency_sensitivity_hz_per_log_factor": -24.975383061125097,
+          "maximum_absolute_real_shift_per_s": 29.915718257159455
+        },
+        {
+          "factor_name": "voltage_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -60.377804087732734,
+          "central_frequency_sensitivity_hz_per_log_factor": 19.316019486523135,
+          "maximum_absolute_real_shift_per_s": 12.768852659177469
+        },
+        {
+          "factor_name": "current_pi_joint_gain",
+          "central_real_sensitivity_per_log_factor_per_s": -42.45206836281499,
+          "central_frequency_sensitivity_hz_per_log_factor": 18.848460845537122,
+          "maximum_absolute_real_shift_per_s": 9.16177754321842
+        },
+        {
+          "factor_name": "converter_side_filter_reactance",
+          "central_real_sensitivity_per_log_factor_per_s": 39.45510932794509,
+          "central_frequency_sensitivity_hz_per_log_factor": -14.931936676039237,
+          "maximum_absolute_real_shift_per_s": 8.715826032956215
+        },
+        {
+          "factor_name": "filter_capacitor_susceptance",
+          "central_real_sensitivity_per_log_factor_per_s": 18.763749952754388,
+          "central_frequency_sensitivity_hz_per_log_factor": -0.3036225140605055,
+          "maximum_absolute_real_shift_per_s": 3.811444177005285
+        },
+        {
+          "factor_name": "active_damping_gain",
+          "central_real_sensitivity_per_log_factor_per_s": 3.259917732203588,
+          "central_frequency_sensitivity_hz_per_log_factor": -3.5668238940516526,
+          "maximum_absolute_real_shift_per_s": 0.7073317584805352
+        },
+        {
+          "factor_name": "active_damping_cutoff",
+          "central_real_sensitivity_per_log_factor_per_s": 1.5873101736225446,
+          "central_frequency_sensitivity_hz_per_log_factor": 0.1109058256493361,
+          "maximum_absolute_real_shift_per_s": 0.3249010830813859
+        }
+      ],
+      "all_pre_registered_endpoints_matched": true,
+      "candidate_interaction_evidence": {
+        "status": "consistent",
+        "lcl_participation_minimum": 0.5,
+        "control_participation_minimum": 0.05,
+        "real_shift_evidence_minimum_per_s": 5.0,
+        "maximum_pi_factor_real_shift_per_s": 12.768852659177469,
+        "maximum_lcl_factor_real_shift_per_s": 29.915718257159455,
+        "statement": "Within the frozen intermediate model and state basis, the named branch has material LCL and control-state participation and responds to both PI and LCL one-factor perturbations. This supports an electrical-control interaction hypothesis but is not a unique causal attribution."
+      }
+    }
+  },
+  "tracking_counterexample": {
+    "change": "directly scale the grid-side filter reactance X2 from 1.0 to 5.0 in the ten-state omit-Rfif path",
+    "direct_jump": {
+      "status": "pending",
+      "reason": "left-mac-below-threshold;eigenvalue-distance-above-threshold",
+      "right_mac": 0.9980087018143564,
+      "left_mac": 0.6089753550878426,
+      "combined_mac": 0.7795913696085627,
+      "normalized_eigenvalue_distance": 0.34471756658407904,
+      "relative_candidate_margin": 0.6452194474518995,
+      "condition_number": 3.1942018151349503,
+      "right_eigenpair_residual": 1.084273682252838e-15,
+      "left_eigenpair_residual": 2.68764130862436e-16
+    },
+    "direct_jump_rejected": true,
+    "refined_path_status": "matched",
+    "refined_path_step_count_including_rejected_attempt": 3,
+    "refined_endpoint": {
+      "eigenvalue": {
+        "real_per_s": 13.182009348576571,
+        "imag_per_s": 449.0389450197748,
+        "oscillation_frequency_hz": 71.46676774066698
+      },
+      "group_participation_frozen_coordinates": {
+        "voltage_pi": 0.034662838491121194,
+        "current_pi": 0.0008655982288988736,
+        "converter_current": 0.034521944176404466,
+        "capacitor_voltage": 0.008035021400269696,
+        "grid_side_filter_current": 0.9219145977033059
+      },
+      "lcl_group_total": 0.9644715632799801,
+      "control_state_group_total": 0.03552843672002007,
+      "condition_number": 1.6484846798888122,
+      "right_eigenpair_residual": 1.084273682252838e-15,
+      "left_eigenpair_residual": 1.224141114135789e-16
+    },
+    "refinement_recovers_branch": true
+  },
+  "hypothesis_test": {
+    "hypothesis": "the approximately 100 Hz branch in the frozen common models has material LCL and control-state participation and responds continuously to both PI and LCL one-factor perturbations",
+    "consistent_in_all_four_variants": true,
+    "result": "supported-as-bounded-candidate-interaction"
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "team_original_model_modified": false,
+    "fixed_input_common_intermediate_only": true,
+    "state_scaling": "identity in the frozen team-coordinate basis",
+    "participation_invariant_to_future_state_rescaling": false,
+    "full_spectrum_global_continuation": false,
+    "outer_controls_compared": false,
+    "pll_compared": false,
+    "modulation_or_limits_compared": false,
+    "external_network_dynamics_compared": false,
+    "grid_strength_scanned": false,
+    "grid_side_reactance_meaning": "X2 is the grid-side LCL filter reactance, not external grid reactance and not SCR",
+    "causal_attribution_established": false,
+    "statement": "The result identifies a tracked wide-frequency branch and bounded parameter associations inside four common fixed-input intermediate models. It does not establish a unique mechanism for either original converter, a continuous stability boundary, or a claim about the paper sufficient condition."
+  }
+}

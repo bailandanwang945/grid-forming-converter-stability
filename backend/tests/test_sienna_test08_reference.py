@@ -148,6 +148,33 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             self.assertFalse(variant["stability_classification_changed"])
         self.assertTrue(scope["team_common_active_damping_variants_compared"])
 
+        modal_fingerprint = payload["common_inner_loop_modal_fingerprint"]
+        self.assertEqual(modal_fingerprint["status"], "passed")
+        self.assertEqual(len(modal_fingerprint["variants"]), 4)
+        baseline = modal_fingerprint["variants"]["10_state_omit_rfif"][
+            "baseline_named_branch"
+        ]
+        self.assertGreater(
+            baseline["group_participation_frozen_coordinates"][
+                "grid_side_filter_current"
+            ],
+            0.6,
+        )
+        self.assertEqual(
+            modal_fingerprint["variants"]["10_state_omit_rfif"][
+                "sensitivity_ranking"
+            ][0]["factor_name"],
+            "grid_side_filter_reactance",
+        )
+        self.assertTrue(
+            modal_fingerprint["tracking_counterexample"][
+                "refinement_recovers_branch"
+            ]
+        )
+        self.assertTrue(
+            scope["team_common_inner_loop_modal_fingerprint_evaluated"]
+        )
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -224,6 +251,10 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         )
         self.assertEqual(payload["common_inner_loop"]["status"], "passed")
         self.assertEqual(payload["common_active_damping"]["status"], "passed")
+        self.assertEqual(
+            payload["common_inner_loop_modal_fingerprint"]["status"],
+            "passed",
+        )
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 

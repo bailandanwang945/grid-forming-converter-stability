@@ -145,6 +145,27 @@ def _linear_matrices_12(rhs) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     return state_matrix, input_matrix
 
 
+def team_common_active_damping_matrices(
+    parameters: CommonInnerLoopParameters,
+    *,
+    active_damping_cutoff_rad_s: float,
+    active_damping_gain: float,
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Return the twelve-state team-coordinate ``A, B`` matrices."""
+
+    _validate(parameters)
+    _validate_active_damping(active_damping_cutoff_rad_s, active_damping_gain)
+    return _linear_matrices_12(
+        lambda state, inputs: team_common_active_damping_rhs(
+            state,
+            inputs,
+            parameters,
+            active_damping_cutoff_rad_s=active_damping_cutoff_rad_s,
+            active_damping_gain=active_damping_gain,
+        )
+    )
+
+
 def _state_transform_12(
     parameters: CommonInnerLoopParameters, angle_rad: float
 ) -> NDArray[np.float64]:

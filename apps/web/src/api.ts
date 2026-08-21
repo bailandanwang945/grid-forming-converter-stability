@@ -1303,6 +1303,60 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_inner_loop_modal_fingerprint: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    variants: Record<string, {
+      state_count: number
+      resistive_drop_feedforward_gain: number
+      active_damping_gain: number
+      active_damping_cutoff_rad_s: number | null
+      baseline_named_branch: {
+        eigenvalue: {
+          real_per_s: number
+          imag_per_s: number
+          oscillation_frequency_hz: number
+        }
+        group_participation_frozen_coordinates: Record<string, number>
+        lcl_group_total: number
+        control_state_group_total: number
+        condition_number: number
+        right_eigenpair_residual: number
+        left_eigenpair_residual: number
+      }
+      sensitivity_ranking: Array<{
+        factor_name: string
+        central_real_sensitivity_per_log_factor_per_s: number
+        central_frequency_sensitivity_hz_per_log_factor: number
+        maximum_absolute_real_shift_per_s: number
+      }>
+      all_pre_registered_endpoints_matched: boolean
+      candidate_interaction_evidence: {
+        status: 'consistent' | 'not-supported'
+        statement: string
+      }
+    }>
+    tracking_counterexample: {
+      direct_jump_rejected: boolean
+      refined_path_status: 'matched' | 'pending'
+      refined_path_step_count_including_rejected_attempt: number
+      refinement_recovers_branch: boolean
+    }
+    hypothesis_test: {
+      hypothesis: string
+      consistent_in_all_four_variants: boolean
+      result: 'supported-as-bounded-candidate-interaction' | 'not-supported'
+    }
+    scope: {
+      state_scaling: string
+      participation_invariant_to_future_state_rescaling: boolean
+      full_spectrum_global_continuation: boolean
+      grid_strength_scanned: boolean
+      grid_side_reactance_meaning: string
+      causal_attribution_established: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1314,6 +1368,7 @@ export type SiennaTest08AuditResult = {
     team_complete_inner_control_compared: boolean
     team_common_inner_loop_variants_compared: boolean
     team_common_active_damping_variants_compared: boolean
+    team_common_inner_loop_modal_fingerprint_evaluated: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

@@ -18,6 +18,9 @@ from scipy.optimize import linear_sum_assignment
 from backend.core.sienna_team_common_active_damping import (
     sienna_team_common_active_damping_audit,
 )
+from backend.core.sienna_team_inner_loop_modal_fingerprint import (
+    run_common_inner_loop_modal_fingerprint,
+)
 from backend.core.sienna_team_common_inner_loop import (
     CommonInnerLoopParameters,
     sienna_team_common_inner_loop_audit,
@@ -522,6 +525,9 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         active_damping_cutoff_rad_s=parameters.active_damping_cutoff_rad_s,
         active_damping_gain=parameters.active_damping_gain,
     )
+    common_inner_loop_modal_fingerprint = (
+        run_common_inner_loop_modal_fingerprint()
+    )
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -542,7 +548,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.4",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.5",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -553,6 +559,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and inner_control_mapping["pi_state_mapping"]["status"] == "passed"
             and common_inner_loop["status"] == "passed"
             and common_active_damping["status"] == "passed"
+            and common_inner_loop_modal_fingerprint["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -615,6 +622,9 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         "inner_control_mapping": inner_control_mapping,
         "common_inner_loop": common_inner_loop,
         "common_active_damping": common_active_damping,
+        "common_inner_loop_modal_fingerprint": (
+            common_inner_loop_modal_fingerprint
+        ),
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -626,6 +636,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "team_complete_inner_control_compared": False,
             "team_common_inner_loop_variants_compared": True,
             "team_common_active_damping_variants_compared": True,
+            "team_common_inner_loop_modal_fingerprint_evaluated": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
@@ -634,7 +645,9 @@ def sienna_test08_audit_payload() -> dict[str, object]:
                 "layer and PI-state scaling are compared separately; the original "
                 "complete inner controls remain non-isomorphic. Two explicitly "
                 "labelled common inner-loop variants are equation-isomorphic but "
-                "are not either original full model. This audit does not rerun Julia "
+                "are not either original full model. Their approximately 100 Hz "
+                "branch is tracked separately under bounded one-factor changes; "
+                "that diagnostic is not a causal attribution. This audit does not rerun Julia "
                 "or PSCAD and does not validate the team's different 16-state model."
             ),
         },

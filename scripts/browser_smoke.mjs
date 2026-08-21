@@ -340,8 +340,20 @@ try {
       throw new Error(`Sienna-team active-damping summary is missing ${evidence}: ${activeDampingSummary}`)
     }
   }
+  const modalFingerprintSummary = await page.getByTestId('sienna-team-modal-fingerprint-summary').innerText()
+  for (const evidence of ['10状态命名支路频率\n103.86 Hz', '网侧滤波电流参与度\n65.4%', '局部实部灵敏度首项\nX2（滤波器）', '电气—控制相互作用假设\n有界支持']) {
+    if (!modalFingerprintSummary.includes(evidence)) {
+      throw new Error(`Sienna-team modal-fingerprint summary is missing ${evidence}: ${modalFingerprintSummary}`)
+    }
+  }
+  const modalFingerprintTable = await page.getByTestId('sienna-team-modal-fingerprint-table').innerText()
+  for (const evidence of ['10状态 · 关闭 Rfif', '103.861', '65.4%', '14.8%', 'X2（网侧滤波电抗）', '32.384', '12状态 · 加入 Rfif', '100.151']) {
+    if (!modalFingerprintTable.includes(evidence)) {
+      throw new Error(`Sienna-team modal-fingerprint table is missing ${evidence}: ${modalFingerprintTable}`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
-  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
+  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
     }

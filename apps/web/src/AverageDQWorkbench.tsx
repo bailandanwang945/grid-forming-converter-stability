@@ -866,6 +866,29 @@ export default function AverageDQWorkbench() {
             <div><small>加入 Rfif 路径 α 变化 / s⁻¹</small><b>{siennaAudit.common_active_damping.variants.both_include_resistive_drop_feedforward.spectral_abscissa_change_per_s.toFixed(3)}</b></div>
             <div><small>“仅缺有源阻尼”假设</small><b>{siennaAudit.common_active_damping.hypothesis_test.supported_for_both_structural_paths ? '支持' : '不支持'}</b></div>
           </div>
+          <div className="panel evidence-strip" data-testid="sienna-team-modal-fingerprint-summary">
+            <div><small>10状态命名支路频率</small><b>{siennaAudit.common_inner_loop_modal_fingerprint.variants['10_state_omit_rfif'].baseline_named_branch.eigenvalue.oscillation_frequency_hz.toFixed(2)} Hz</b></div>
+            <div><small>网侧滤波电流参与度</small><b>{(100 * siennaAudit.common_inner_loop_modal_fingerprint.variants['10_state_omit_rfif'].baseline_named_branch.group_participation_frozen_coordinates.grid_side_filter_current).toFixed(1)}%</b></div>
+            <div><small>局部实部灵敏度首项</small><b>X2（滤波器）</b></div>
+            <div><small>电气—控制相互作用假设</small><b>{siennaAudit.common_inner_loop_modal_fingerprint.hypothesis_test.consistent_in_all_four_variants ? '有界支持' : '不支持'}</b></div>
+          </div>
+          <div className="table-scroll" data-testid="sienna-team-modal-fingerprint-table">
+            <table>
+              <thead><tr><th>中间模型</th><th>频率 / Hz</th><th>网侧滤波电流</th><th>电压 PI</th><th>局部灵敏度首项</th><th>最大实部位移 / s⁻¹</th></tr></thead>
+              <tbody>{Object.entries(siennaAudit.common_inner_loop_modal_fingerprint.variants).map(([variantName, variant]) => {
+                const topSensitivity = variant.sensitivity_ranking[0]
+                const participation = variant.baseline_named_branch.group_participation_frozen_coordinates
+                return <tr key={variantName}>
+                  <td>{variantName.replace('_state_', '状态 · ').replace('omit_rfif', '关闭 Rfif').replace('include_rfif', '加入 Rfif')}</td>
+                  <td>{variant.baseline_named_branch.eigenvalue.oscillation_frequency_hz.toFixed(3)}</td>
+                  <td>{(100 * participation.grid_side_filter_current).toFixed(1)}%</td>
+                  <td>{(100 * participation.voltage_pi).toFixed(1)}%</td>
+                  <td>{topSensitivity.factor_name === 'grid_side_filter_reactance' ? 'X2（网侧滤波电抗）' : topSensitivity.factor_name}</td>
+                  <td>{topSensitivity.maximum_absolute_real_shift_per_s.toFixed(3)}</td>
+                </tr>
+              })}</tbody>
+            </table>
+          </div>
           <div className="table-scroll">
             <table>
               <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>
@@ -874,7 +897,7 @@ export default function AverageDQWorkbench() {
               </tr>)}</tbody>
             </table>
           </div>
-          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但原始完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。软件因此保留两个不改动原始基线的10状态中间算例，分别让双方同时关闭或同时加入该项；两条路径均通过方程门，在 PCC 电压与参考电压固定时都呈现内环特征根失稳。再向双方同时加入 Test 08 的两状态有源阻尼后，两条路径仍失稳，谱横坐标反而分别增加约 4.877 与 4.678 s⁻¹；因此“仅缺有源阻尼即可改变分类”的假设在本中间模型中不受支持，但这不是对有源阻尼一般作用的否定。共有层不包含 Sienna 的代数网络、团队的动态外部线路、外环、PLL、调制或限幅，因而仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
+          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但原始完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。软件因此保留两个不改动原始基线的10状态中间算例，分别让双方同时关闭或同时加入该项；两条路径均通过方程门，在 PCC 电压与参考电压固定时都呈现内环特征根失稳。再向双方同时加入 Test 08 的两状态有源阻尼后，两条路径仍失稳，谱横坐标反而分别增加约 4.877 与 4.678 s⁻¹；因此“仅缺有源阻尼即可改变分类”的假设在本中间模型中不受支持，但这不是对有源阻尼一般作用的否定。进一步的模态指纹表明，在冻结的团队坐标基下，约 100 Hz 命名支路主要集中于网侧滤波电流状态，并具有可辨识的电压 PI 参与；X2 是已测 ±20% 单因素范围内最强的局部实部灵敏度项。这里的 X2 是 LCL 网侧滤波电抗，不是外部电网电抗或 SCR；参与度也不对未来任意状态重缩放保持不变。该结果只为电气—控制相互作用提供有界数值支持，不构成唯一机理、连续稳定边界或因果证明。共有层不包含 Sienna 的代数网络、团队的动态外部线路、外环、PLL、调制或限幅，因而仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
       </section>}
     </section>
   </main>
