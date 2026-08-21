@@ -175,6 +175,15 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             scope["team_common_inner_loop_modal_fingerprint_evaluated"]
         )
 
+        common_outer = payload["common_outer_loop"]
+        self.assertEqual(common_outer["status"], "passed")
+        self.assertEqual(common_outer["model_contract"]["state_count"], 13)
+        self.assertTrue(common_outer["counterexample"]["gate_rejected_mismatch"])
+        self.assertFalse(
+            common_outer["scope"]["power_measurement_port_originally_identical"]
+        )
+        self.assertTrue(scope["team_common_outer_loop_power_ports_compared"])
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -255,6 +264,7 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             payload["common_inner_loop_modal_fingerprint"]["status"],
             "passed",
         )
+        self.assertEqual(payload["common_outer_loop"]["status"], "passed")
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 

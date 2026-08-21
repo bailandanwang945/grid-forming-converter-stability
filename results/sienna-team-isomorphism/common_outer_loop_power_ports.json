@@ -1,0 +1,179 @@
+{
+  "schema_version": "gfm-sienna-team-common-outer-loop/1.0",
+  "status": "passed",
+  "model_contract": {
+    "state_count": 13,
+    "team_state_labels": [
+      "angle_rad",
+      "frequency_pu",
+      "measured_reactive_power_pu",
+      "voltage_integral_output_d_pu",
+      "voltage_integral_output_q_pu",
+      "current_integral_output_d_pu",
+      "current_integral_output_q_pu",
+      "converter_current_d_pu",
+      "converter_current_q_pu",
+      "capacitor_voltage_d_pu",
+      "capacitor_voltage_q_pu",
+      "grid_current_d_pu",
+      "grid_current_q_pu"
+    ],
+    "source_state_labels": [
+      "theta_outer_rad",
+      "omega_outer_pu",
+      "measured_reactive_power_pu",
+      "voltage_error_integral_d",
+      "voltage_error_integral_q",
+      "current_error_integral_d",
+      "current_error_integral_q",
+      "converter_current_real_pu",
+      "converter_current_imag_pu",
+      "capacitor_voltage_real_pu",
+      "capacitor_voltage_imag_pu",
+      "grid_current_real_pu",
+      "grid_current_imag_pu"
+    ],
+    "pcc_voltage_global_pu": [
+      1.0,
+      0.0
+    ],
+    "ideal_limits": {
+      "team_active_power_measurement_delay_s": 0.0,
+      "team_modulation_delay_s": 0.0,
+      "sienna_pll_damping_gain": 0.0
+    },
+    "parameter_mapping": {
+      "team_virtual_inertia_s": "Sienna Ta",
+      "team_damping_coefficient_pu": "Sienna komega",
+      "team_reactive_measurement_time_s": "1 / Sienna omega_f"
+    }
+  },
+  "verification_gates": {
+    "equilibrium_residual_inf_max": 1e-08,
+    "rhs_and_matrix_difference_max_per_s": 1e-05,
+    "mixed_power_port_difference_min_per_s": 1.0
+  },
+  "variants": {
+    "filter_capacitor": {
+      "equilibrium_residual_inf": 2.220446049250313e-13,
+      "rhs_difference_inf": 7.631694319854857e-13,
+      "state_matrix_max_abs_difference_per_s": 6.723600449731748e-07,
+      "spectral_abscissa_per_s": 195.1453879662384,
+      "stable_by_eigenvalues": false,
+      "oscillatory_modes": [
+        {
+          "real_per_s": -4.949723596161419,
+          "imag_per_s": 21.247015666713136,
+          "frequency_hz": 3.381567569308338
+        },
+        {
+          "real_per_s": -1136.65450732631,
+          "imag_per_s": 298.97004352474175,
+          "frequency_hz": 47.58256026336175
+        },
+        {
+          "real_per_s": 195.1453879662384,
+          "imag_per_s": 702.2191282636369,
+          "frequency_hz": 111.76164539683948
+        },
+        {
+          "real_per_s": -2265.1458719118564,
+          "imag_per_s": 3893.0680677426644,
+          "frequency_hz": 619.6010267744587
+        },
+        {
+          "real_per_s": -2728.1889173636864,
+          "imag_per_s": 4234.829684472419,
+          "frequency_hz": 673.994077436077
+        }
+      ],
+      "equilibrium": {
+        "angle_rad": 0.19683287132737176,
+        "frequency_pu": 1.0,
+        "measured_reactive_power_pu": 0.0454151212949217,
+        "voltage_integral_output_d_pu": -4.726286361231496e-17,
+        "voltage_integral_output_q_pu": -3.4864484822397354e-18,
+        "current_integral_output_d_pu": 0.001495539881324998,
+        "current_integral_output_q_pu": -5.6899435872125345e-05,
+        "converter_current_d_pu": 0.4985132937749275,
+        "converter_current_q_pu": -0.018966478624040613,
+        "capacitor_voltage_d_pu": 1.0042596401360304,
+        "capacitor_voltage_q_pu": -0.09824857977432548,
+        "grid_current_d_pu": 0.49124289887162736,
+        "grid_current_q_pu": -0.09328169199410685
+      }
+    },
+    "pcc": {
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "rhs_difference_inf": 2.0780885136468912e-13,
+      "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+      "spectral_abscissa_per_s": 200.01310118561136,
+      "stable_by_eigenvalues": false,
+      "oscillatory_modes": [
+        {
+          "real_per_s": -11.259849016465953,
+          "imag_per_s": 9.119004909034219e-06,
+          "frequency_hz": 1.4513347073520553e-06
+        },
+        {
+          "real_per_s": -4.9054123711944495,
+          "imag_per_s": 21.383583248108216,
+          "frequency_hz": 3.4033029749534696
+        },
+        {
+          "real_per_s": -1141.040163608586,
+          "imag_per_s": 271.67748314975296,
+          "frequency_hz": 43.23881437004829
+        },
+        {
+          "real_per_s": 200.01310118561136,
+          "imag_per_s": 700.832156851385,
+          "frequency_hz": 111.54090204065244
+        },
+        {
+          "real_per_s": -2263.6427983339704,
+          "imag_per_s": 3919.488146040403,
+          "frequency_hz": 623.8059128324187
+        },
+        {
+          "real_per_s": -2739.5965060070275,
+          "imag_per_s": 4217.949656646775,
+          "frequency_hz": 671.307537568097
+        }
+      ],
+      "equilibrium": {
+        "angle_rad": 0.1963640789558039,
+        "frequency_pu": 1.0,
+        "measured_reactive_power_pu": 0.011979240771941783,
+        "voltage_integral_output_d_pu": 1.2860937556276636e-17,
+        "voltage_integral_output_q_pu": -1.4052118798426956e-18,
+        "current_integral_output_d_pu": 0.0014932970142088413,
+        "current_integral_output_q_pu": -0.00010567010256760718,
+        "converter_current_d_pu": 0.49776567140291506,
+        "converter_current_q_pu": -0.035223367522536186,
+        "capacitor_voltage_d_pu": 1.0076453302472808,
+        "capacitor_voltage_q_pu": -0.0981012359879612,
+        "grid_current_d_pu": 0.49050617993980594,
+        "grid_current_q_pu": -0.10978912196083494
+      }
+    }
+  },
+  "counterexample": {
+    "change": "team uses filter-capacitor power while the transformed source uses PCC power at the same loaded equilibrium",
+    "state_matrix_max_abs_difference_per_s": 499.9999999917293,
+    "gate_rejected_mismatch": true
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "team_original_model_modified": false,
+    "common_intermediate_cases_only": true,
+    "loaded_equilibrium": true,
+    "power_measurement_port_originally_identical": false,
+    "active_power_measurement_dynamics_compared": false,
+    "modulation_dynamics_compared": false,
+    "pll_damping_compared": false,
+    "active_damping_compared": false,
+    "external_network_dynamics_compared": false,
+    "statement": "The two thirteen-state cases close the common VSM, Q-V and inner-loop equations under separately declared shared power ports. They are not either original full model. A mixed power port is a rejected structural mismatch, not a parameter error."
+  }
+}

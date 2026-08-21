@@ -21,6 +21,9 @@ from backend.core.sienna_team_common_active_damping import (
 from backend.core.sienna_team_inner_loop_modal_fingerprint import (
     run_common_inner_loop_modal_fingerprint,
 )
+from backend.core.sienna_team_common_outer_loop import (
+    run_common_outer_loop_audit,
+)
 from backend.core.sienna_team_common_inner_loop import (
     CommonInnerLoopParameters,
     sienna_team_common_inner_loop_audit,
@@ -528,6 +531,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
     common_inner_loop_modal_fingerprint = (
         run_common_inner_loop_modal_fingerprint()
     )
+    common_outer_loop = run_common_outer_loop_audit()
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -548,7 +552,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.5",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.6",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -560,6 +564,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and common_inner_loop["status"] == "passed"
             and common_active_damping["status"] == "passed"
             and common_inner_loop_modal_fingerprint["status"] == "passed"
+            and common_outer_loop["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -625,6 +630,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         "common_inner_loop_modal_fingerprint": (
             common_inner_loop_modal_fingerprint
         ),
+        "common_outer_loop": common_outer_loop,
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -637,6 +643,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "team_common_inner_loop_variants_compared": True,
             "team_common_active_damping_variants_compared": True,
             "team_common_inner_loop_modal_fingerprint_evaluated": True,
+            "team_common_outer_loop_power_ports_compared": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
@@ -647,7 +654,10 @@ def sienna_test08_audit_payload() -> dict[str, object]:
                 "labelled common inner-loop variants are equation-isomorphic but "
                 "are not either original full model. Their approximately 100 Hz "
                 "branch is tracked separately under bounded one-factor changes; "
-                "that diagnostic is not a causal attribution. This audit does not rerun Julia "
+                "that diagnostic is not a causal attribution. Two loaded common "
+                "outer-loop cases separately align the capacitor and PCC power "
+                "ports; mixing those original port choices is rejected as a "
+                "structural mismatch. This audit does not rerun Julia "
                 "or PSCAD and does not validate the team's different 16-state model."
             ),
         },

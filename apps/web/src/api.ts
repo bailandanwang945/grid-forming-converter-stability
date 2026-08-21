@@ -1357,6 +1357,52 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_outer_loop: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      state_count: number
+      pcc_voltage_global_pu: number[]
+      ideal_limits: {
+        team_active_power_measurement_delay_s: number
+        team_modulation_delay_s: number
+        sienna_pll_damping_gain: number
+      }
+      parameter_mapping: Record<string, string>
+    }
+    verification_gates: {
+      equilibrium_residual_inf_max: number
+      rhs_and_matrix_difference_max_per_s: number
+      mixed_power_port_difference_min_per_s: number
+    }
+    variants: Record<'filter_capacitor' | 'pcc', {
+      equilibrium_residual_inf: number
+      rhs_difference_inf: number
+      state_matrix_max_abs_difference_per_s: number
+      spectral_abscissa_per_s: number
+      stable_by_eigenvalues: boolean
+      oscillatory_modes: Array<{
+        real_per_s: number
+        imag_per_s: number
+        frequency_hz: number
+      }>
+      equilibrium: Record<string, number>
+    }>
+    counterexample: {
+      change: string
+      state_matrix_max_abs_difference_per_s: number
+      gate_rejected_mismatch: boolean
+    }
+    scope: {
+      source_baselines_modified: boolean
+      team_original_model_modified: boolean
+      common_intermediate_cases_only: boolean
+      loaded_equilibrium: boolean
+      power_measurement_port_originally_identical: boolean
+      external_network_dynamics_compared: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1369,6 +1415,7 @@ export type SiennaTest08AuditResult = {
     team_common_inner_loop_variants_compared: boolean
     team_common_active_damping_variants_compared: boolean
     team_common_inner_loop_modal_fingerprint_evaluated: boolean
+    team_common_outer_loop_power_ports_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

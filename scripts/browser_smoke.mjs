@@ -352,8 +352,20 @@ try {
       throw new Error(`Sienna-team modal-fingerprint table is missing ${evidence}: ${modalFingerprintTable}`)
     }
   }
+  const commonOuterSummary = await page.getByTestId('sienna-team-common-outer-loop-summary').innerText()
+  for (const evidence of ['共有外环中间模型\n13 状态', '电容端测量谱横坐标 / s⁻¹\n195.145', 'PCC 测量谱横坐标 / s⁻¹\n200.013', '混用功率端口反例 / s⁻¹\n500.0']) {
+    if (!commonOuterSummary.includes(evidence)) {
+      throw new Error(`Sienna-team common outer-loop summary is missing ${evidence}: ${commonOuterSummary}`)
+    }
+  }
+  const commonOuterTable = await page.getByTestId('sienna-team-common-outer-loop-table').innerText()
+  for (const evidence of ['滤波电容端', '3.382', '111.762', 'PCC', '3.403', '111.541', '失稳']) {
+    if (!commonOuterTable.includes(evidence)) {
+      throw new Error(`Sienna-team common outer-loop table is missing ${evidence}: ${commonOuterTable}`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
-  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
+  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '功率测量位置不同', '13状态中间算例', '约 3.4 Hz 低频支路', '结构差异而非参数误差', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
     }
