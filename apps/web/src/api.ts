@@ -1109,12 +1109,57 @@ export type SiennaTest08AuditResult = {
       interpretation: string
     }
   }
+  common_lcl_isomorphism: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    common_layer: {
+      state_count: number
+      state_labels: string[]
+      input_count: number
+      input_labels: string[]
+      terminal_definition: string
+      source_coordinates: string
+      team_coordinates: string
+      alignment_angle_rad: number
+    }
+    verification_gates: {
+      matrix_and_rhs_max_abs_difference_per_s: number
+      counterfactual_state_matrix_difference_min_per_s: number
+    }
+    results: {
+      state_matrix_max_abs_difference_per_s: number
+      input_matrix_max_abs_difference_per_s: number
+      probe_rhs_max_abs_difference_per_s: number
+      counterfactual: {
+        change: string
+        state_matrix_max_abs_difference_per_s: number
+        input_matrix_max_abs_difference_per_s: number
+        probe_rhs_max_abs_difference_per_s: number
+      }
+    }
+    network_interface: {
+      network_reactance_pu_system_base: number
+      network_reactance_pu_device_base: number
+      included_in_common_lcl_gate: boolean
+      reason: string
+    }
+    scope: {
+      common_lcl_equations_isomorphic: boolean
+      full_state_dimensions_equal: boolean
+      outer_controls_compared: boolean
+      pll_or_active_damping_compared: boolean
+      external_network_dynamics_compared: boolean
+      full_model_eigenvalues_comparable_from_this_gate: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
     pscad_rerun: boolean
     upstream_pscad_trace_present_in_fixed_source: boolean
     team_16_state_model_validated_by_this_audit: boolean
+    team_common_lcl_layer_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

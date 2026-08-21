@@ -316,8 +316,14 @@ try {
       throw new Error(`Sienna Test 08 audit summary is missing ${evidence}: ${siennaSummary}`)
     }
   }
+  const commonLclSummary = await page.getByTestId('sienna-team-common-lcl-summary').innerText()
+  for (const evidence of ['共有 LCL 状态\n6', '状态矩阵最大差 / s⁻¹\n9.09e-13', '输入矩阵最大差 / s⁻¹\n9.09e-13', '1% Xg 错配反例 / s⁻¹\n18.663']) {
+    if (!commonLclSummary.includes(evidence)) {
+      throw new Error(`Sienna-team common LCL summary is missing ${evidence}: ${commonLclSummary}`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
-  for (const evidence of ['没有运行 Julia 或 PSCAD', '团队16状态模型', '论文稳定性充分条件']) {
+  for (const evidence of ['六状态 LCL 层', 'PCC 电压为外部输入', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
     }

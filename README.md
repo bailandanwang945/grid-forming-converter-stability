@@ -159,7 +159,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 - 闭合工作簿主导极点 `0.578 Hz` 与论文正文 `1.2 Hz` 的差异；
 - 对 Simplus 非线性模型的近奇异和异常初始化现象，仅保留为未建立完整因果解释的兼容性问题；受污染响应不作为研究证据；
-- MathWorks 固定模型与团队16状态模型已经完成八点局部极点比较和三点团队非线性阶跃：唯一分歧点的团队模型阶跃收敛，说明差异来自完整模型或分类口径，而不是团队局部线性化与自身非线性方程互相矛盾；下一步按 [`docs/research/sienna-team-equation-mapping.md`](docs/research/sienna-team-equation-mapping.md) 建立与 Sienna Test 08 的同构化中间算例，再决定是否安装 Julia 复跑第三方 VSM—PSCAD 基线；
+- MathWorks 固定模型与团队16状态模型已经完成八点局部极点比较和三点团队非线性阶跃；Sienna Test 08 与团队模型的同构化中间算例已闭合第一层六状态 LCL—PCC 方程门，坐标旋转后的状态/输入矩阵最大差约为 `9.1×10^-13 s^-1`，1% 网侧滤波电抗错配会被反例门检出。下一步按 [`docs/research/sienna-team-equation-mapping.md`](docs/research/sienna-team-equation-mapping.md) 对齐双 PI、前馈、虚拟阻抗和有源阻尼，再决定是否安装 Julia 复跑第三方 VSM—PSCAD 基线；
 - 完成另一台电脑的断网启动、案例重算、导出和退出清理验收；
 - 取得学院正式结项通知、模板与提交规则；软件之外的答辩材料由团队另行处理，本开发流程不制作或修改 PPT/PDF。
 

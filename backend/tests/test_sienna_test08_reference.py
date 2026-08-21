@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from dataclasses import replace
 
 import numpy as np
 from fastapi.testclient import TestClient
@@ -14,6 +15,10 @@ from backend.core.sienna_test08_reference import (
     sienna_test08_audit_payload,
     sienna_test08_rhs,
     terminal_voltage_from_grid_current,
+)
+from backend.core.sienna_team_lcl_isomorphism import (
+    CommonLCLParameters,
+    sienna_team_common_lcl_audit,
 )
 
 
@@ -67,7 +72,91 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertFalse(scope["julia_runtime_executed_on_this_machine"])
         self.assertFalse(scope["pscad_rerun"])
         self.assertFalse(scope["team_16_state_model_validated_by_this_audit"])
+        self.assertTrue(scope["team_common_lcl_layer_compared"])
         self.assertFalse(scope["paper_sufficient_condition_evaluated"])
+
+        common = payload["common_lcl_isomorphism"]
+        self.assertEqual(common["status"], "passed")
+        self.assertEqual(common["common_layer"]["state_count"], 6)
+        self.assertLess(
+            common["results"]["state_matrix_max_abs_difference_per_s"], 1.0e-10
+        )
+        self.assertGreater(
+            common["results"]["counterfactual"][
+                "state_matrix_max_abs_difference_per_s"
+            ],
+            1.0,
+        )
+        self.assertFalse(
+            common["network_interface"]["included_in_common_lcl_gate"]
+        )
+        self.assertAlmostEqual(
+            common["network_interface"]["network_reactance_pu_device_base"],
+            0.0020625,
+            places=12,
+        )
+        self.assertFalse(common["scope"]["full_state_dimensions_equal"])
+        self.assertFalse(
+            common["scope"]["full_model_eigenvalues_comparable_from_this_gate"]
+        )
+
+    def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
+        source = SiennaTest08Parameters()
+        common = CommonLCLParameters(
+            frequency_hz=source.frequency_hz,
+            converter_side_resistance_pu=source.converter_side_resistance_pu,
+            converter_side_reactance_pu=source.converter_side_reactance_pu,
+            filter_capacitor_susceptance_pu=(
+                source.filter_capacitor_susceptance_pu
+            ),
+            grid_side_resistance_pu=source.grid_side_resistance_pu,
+            grid_side_reactance_pu=source.grid_side_reactance_pu,
+        )
+        for angle in (0.0, 0.1978641793142158, -1.2, np.pi):
+            with self.subTest(angle=angle):
+                audit = sienna_team_common_lcl_audit(
+                    common,
+                    common,
+                    angle_rad=angle,
+                    network_reactance_pu_system_base=(
+                        source.network_reactance_pu_system_base
+                    ),
+                    system_base_power_mva=source.system_base_power_mva,
+                    device_base_power_mva=source.device_base_power_mva,
+                )
+                self.assertEqual(audit["status"], "passed")
+                self.assertLess(
+                    audit["results"]["probe_rhs_max_abs_difference_per_s"],
+                    1.0e-10,
+                )
+
+    def test_common_lcl_gate_rejects_a_parameter_mismatch(self) -> None:
+        source = SiennaTest08Parameters()
+        common = CommonLCLParameters(
+            frequency_hz=source.frequency_hz,
+            converter_side_resistance_pu=source.converter_side_resistance_pu,
+            converter_side_reactance_pu=source.converter_side_reactance_pu,
+            filter_capacitor_susceptance_pu=(
+                source.filter_capacitor_susceptance_pu
+            ),
+            grid_side_resistance_pu=source.grid_side_resistance_pu,
+            grid_side_reactance_pu=source.grid_side_reactance_pu,
+        )
+        mismatched_team = replace(common, grid_side_reactance_pu=0.21)
+        audit = sienna_team_common_lcl_audit(
+            common,
+            mismatched_team,
+            angle_rad=0.2,
+            network_reactance_pu_system_base=(
+                source.network_reactance_pu_system_base
+            ),
+            system_base_power_mva=source.system_base_power_mva,
+            device_base_power_mva=source.device_base_power_mva,
+        )
+        self.assertEqual(audit["status"], "failed")
+        self.assertGreater(
+            audit["results"]["state_matrix_max_abs_difference_per_s"], 1.0
+        )
 
     def test_api_recomputes_the_audit_with_the_same_claim_boundary(self) -> None:
         response = self.client.get("/api/reference/sienna-test08/audit")
@@ -75,6 +164,7 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         payload = response.json()
         self.assertEqual(payload["status"], "passed")
         self.assertEqual(len(payload["results"]["computed_eigenvalues"]), 19)
+        self.assertEqual(payload["common_lcl_isomorphism"]["status"], "passed")
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 
