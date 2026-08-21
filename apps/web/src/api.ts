@@ -1071,6 +1071,25 @@ export type AverageDQAlignedStepResult = {
   }
 }
 
+type SiennaDelayPole = {
+  real_per_s: number
+  imag_per_s: number
+  frequency_hz: number
+}
+
+type SiennaDelayTracking = {
+  status: 'anchor' | 'matched' | 'pending'
+  reason: string
+  right_mac?: number
+  left_mac?: number
+  combined_mac?: number
+  normalized_eigenvalue_distance?: number
+  relative_candidate_margin?: number
+  condition_number?: number
+  right_eigenpair_residual?: number
+  left_eigenpair_residual?: number
+}
+
 export type SiennaTest08AuditResult = {
   schema_version: string
   benchmark_id: string
@@ -1403,6 +1422,76 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_active_power_measurement_delay: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      state_count: number
+      ideal_limit_state_count: number
+      team_state_labels: string[]
+      source_state_labels: string[]
+      power_measurement_equation: string
+      delay_levels_s: number[]
+      team_declared_time_constant_s: number
+      pcc_voltage_global_pu: number[]
+    }
+    verification_gates: {
+      equilibrium_residual_inf_max: number
+      rhs_and_matrix_difference_max_per_s: number
+      mixed_power_port_difference_min_per_s: number
+    }
+    variants: Record<'filter_capacitor' | 'pcc', {
+      ideal_thirteen_state_limit: {
+        low_frequency_mode: SiennaDelayPole
+        wide_frequency_mode: SiennaDelayPole
+      }
+      points: Array<{
+        active_power_time_constant_s: number
+        equilibrium_residual_inf: number
+        rhs_difference_inf: number
+        state_matrix_max_abs_difference_per_s: number
+        spectral_abscissa_per_s: number
+        stable_by_eigenvalues: boolean
+        low_frequency_mode: {
+          pole: SiennaDelayPole
+          tracking: SiennaDelayTracking
+        }
+        wide_frequency_mode: {
+          pole: SiennaDelayPole
+          tracking: SiennaDelayTracking
+        }
+        measurement_associated_pole: SiennaDelayPole
+      }>
+      endpoint_normalized_displacement_from_0p01s: {
+        low_frequency_mode: number
+        wide_frequency_mode: number
+      }
+      candidate_hypothesis_low_branch_moves_more: boolean
+    }>
+    counterexample: {
+      change: string
+      state_matrix_max_abs_difference_per_s: number
+      gate_rejected_mismatch: boolean
+    }
+    hypothesis_test: {
+      hypothesis: string
+      supported_in_both_port_conventions: boolean
+      result: 'supported-in-bounded-scan' | 'not-supported-in-bounded-scan'
+    }
+    scope: {
+      source_baselines_modified: boolean
+      team_original_model_modified: boolean
+      common_intermediate_cases_only: boolean
+      power_measurement_port_held_common_within_each_variant: boolean
+      ideal_limit_force_matched_to_fourteen_state_spectrum: boolean
+      whole_system_hopf_margin_claimed: boolean
+      modulation_dynamics_compared: boolean
+      pll_or_frequency_estimator_compared: boolean
+      external_network_dynamics_compared: boolean
+      paper_sufficient_condition_evaluated: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1416,6 +1505,7 @@ export type SiennaTest08AuditResult = {
     team_common_active_damping_variants_compared: boolean
     team_common_inner_loop_modal_fingerprint_evaluated: boolean
     team_common_outer_loop_power_ports_compared: boolean
+    team_common_active_power_measurement_delay_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

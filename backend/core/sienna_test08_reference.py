@@ -18,6 +18,9 @@ from scipy.optimize import linear_sum_assignment
 from backend.core.sienna_team_common_active_damping import (
     sienna_team_common_active_damping_audit,
 )
+from backend.core.sienna_team_active_power_measurement_delay import (
+    run_common_active_power_measurement_delay_audit,
+)
 from backend.core.sienna_team_inner_loop_modal_fingerprint import (
     run_common_inner_loop_modal_fingerprint,
 )
@@ -532,6 +535,9 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         run_common_inner_loop_modal_fingerprint()
     )
     common_outer_loop = run_common_outer_loop_audit()
+    common_active_power_measurement_delay = (
+        run_common_active_power_measurement_delay_audit()
+    )
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -552,7 +558,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.6",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.7",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -565,6 +571,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and common_active_damping["status"] == "passed"
             and common_inner_loop_modal_fingerprint["status"] == "passed"
             and common_outer_loop["status"] == "passed"
+            and common_active_power_measurement_delay["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -631,6 +638,9 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             common_inner_loop_modal_fingerprint
         ),
         "common_outer_loop": common_outer_loop,
+        "common_active_power_measurement_delay": (
+            common_active_power_measurement_delay
+        ),
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -644,6 +654,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "team_common_active_damping_variants_compared": True,
             "team_common_inner_loop_modal_fingerprint_evaluated": True,
             "team_common_outer_loop_power_ports_compared": True,
+            "team_common_active_power_measurement_delay_compared": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
@@ -657,7 +668,11 @@ def sienna_test08_audit_payload() -> dict[str, object]:
                 "that diagnostic is not a causal attribution. Two loaded common "
                 "outer-loop cases separately align the capacitor and PCC power "
                 "ports; mixing those original port choices is rejected as a "
-                "structural mismatch. This audit does not rerun Julia "
+                "structural mismatch. A bounded fourteen-state extension then "
+                "adds the same first-order active-power measurement delay to "
+                "both equation paths and tracks the low- and wide-frequency "
+                "branches separately; it is not a whole-system Hopf-margin "
+                "study. This audit does not rerun Julia "
                 "or PSCAD and does not validate the team's different 16-state model."
             ),
         },

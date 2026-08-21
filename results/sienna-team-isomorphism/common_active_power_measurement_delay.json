@@ -1,0 +1,603 @@
+{
+  "schema_version": "gfm-sienna-team-active-power-delay/1.0",
+  "status": "passed",
+  "model_contract": {
+    "state_count": 14,
+    "ideal_limit_state_count": 13,
+    "team_state_labels": [
+      "angle_rad",
+      "frequency_pu",
+      "measured_active_power_pu",
+      "measured_reactive_power_pu",
+      "voltage_integral_output_d_pu",
+      "voltage_integral_output_q_pu",
+      "current_integral_output_d_pu",
+      "current_integral_output_q_pu",
+      "converter_current_d_pu",
+      "converter_current_q_pu",
+      "capacitor_voltage_d_pu",
+      "capacitor_voltage_q_pu",
+      "grid_current_d_pu",
+      "grid_current_q_pu"
+    ],
+    "source_state_labels": [
+      "theta_outer_rad",
+      "omega_outer_pu",
+      "measured_active_power_pu",
+      "measured_reactive_power_pu",
+      "voltage_error_integral_d",
+      "voltage_error_integral_q",
+      "current_error_integral_d",
+      "current_error_integral_q",
+      "converter_current_real_pu",
+      "converter_current_imag_pu",
+      "capacitor_voltage_real_pu",
+      "capacitor_voltage_imag_pu",
+      "grid_current_real_pu",
+      "grid_current_imag_pu"
+    ],
+    "power_measurement_equation": "Tm * d(pm)/dt = p - pm",
+    "delay_levels_s": [
+      0.01,
+      0.025,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "team_declared_time_constant_s": 0.1,
+    "pcc_voltage_global_pu": [
+      1.0,
+      0.0
+    ]
+  },
+  "verification_gates": {
+    "equilibrium_residual_inf_max": 1e-08,
+    "rhs_and_matrix_difference_max_per_s": 1e-05,
+    "mixed_power_port_difference_min_per_s": 1.0
+  },
+  "variants": {
+    "filter_capacitor": {
+      "ideal_thirteen_state_limit": {
+        "low_frequency_mode": {
+          "real_per_s": -4.949723596161419,
+          "imag_per_s": 21.247015666713136,
+          "frequency_hz": 3.381567569308338
+        },
+        "wide_frequency_mode": {
+          "real_per_s": 195.1453879662384,
+          "imag_per_s": 702.2191282636369,
+          "frequency_hz": 111.76164539683948
+        }
+      },
+      "points": [
+        {
+          "active_power_time_constant_s": 0.01,
+          "equilibrium_residual_inf": 2.220446049250313e-13,
+          "rhs_difference_inf": 7.631694319854857e-13,
+          "state_matrix_max_abs_difference_per_s": 6.723600449731748e-07,
+          "spectral_abscissa_per_s": 195.10666103061493,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.554722138795438,
+              "imag_per_s": 21.147274713458263,
+              "frequency_hz": 3.365693303569127
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "closest-to-ideal-limit-pole"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 195.10666103061493,
+              "imag_per_s": 702.4672181010727,
+              "frequency_hz": 111.80113012079826
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "closest-to-ideal-limit-pole"
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -104.83950431606247,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.025,
+          "equilibrium_residual_inf": 2.220446049250313e-13,
+          "rhs_difference_inf": 7.631694319854857e-13,
+          "state_matrix_max_abs_difference_per_s": 6.723600449731748e-07,
+          "spectral_abscissa_per_s": 195.12470946715507,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.13106774734034043,
+              "imag_per_s": 19.562621804236453,
+              "frequency_hz": 3.1134879599815237
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9855573216583944,
+              "left_mac": 0.9998985099334782,
+              "combined_mac": 0.9927020184225769,
+              "normalized_eigenvalue_distance": 0.135942981288553,
+              "relative_candidate_margin": 0.26040499873394224,
+              "condition_number": 38.54674518184246,
+              "right_eigenpair_residual": 9.170380475662808e-16,
+              "left_eigenpair_residual": 8.746424254901334e-18
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 195.12470946715507,
+              "imag_per_s": 702.4765545787915,
+              "frequency_hz": 111.80261606737827
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9982266846383501,
+              "left_mac": 0.9999999990473105,
+              "combined_mac": 0.9991129484134164,
+              "normalized_eigenvalue_distance": 2.787200475185005e-05,
+              "relative_candidate_margin": 0.7573067844837982,
+              "condition_number": 3.6306201586574818,
+              "right_eigenpair_residual": 7.636137250388922e-16,
+              "left_eigenpair_residual": 7.589528222714263e-16
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -49.715676957968036,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.05,
+          "equilibrium_residual_inf": 2.220446049250313e-13,
+          "rhs_difference_inf": 7.631694319854857e-13,
+          "state_matrix_max_abs_difference_per_s": 6.723600449731748e-07,
+          "spectral_abscissa_per_s": 195.13124056456945,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": 1.40519388101417,
+              "imag_per_s": 16.972733383857207,
+              "frequency_hz": 2.7012944158217063
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9843175099954218,
+              "left_mac": 0.9998767368928058,
+              "combined_mac": 0.9920666207269924,
+              "normalized_eigenvalue_distance": 0.15392525907106264,
+              "relative_candidate_margin": 0.2999073880460288,
+              "condition_number": 35.20568180578773,
+              "right_eigenpair_residual": 2.09528921845469e-15,
+              "left_eigenpair_residual": 1.568853637462417e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 195.13124056456945,
+              "imag_per_s": 702.4791399251575,
+              "frequency_hz": 111.80302753803203
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9997870417227066,
+              "left_mac": 0.9999999998861651,
+              "combined_mac": 0.9998935151349347,
+              "normalized_eigenvalue_distance": 9.634417193790685e-06,
+              "relative_candidate_margin": 0.757580726794229,
+              "condition_number": 3.6226035415947893,
+              "right_eigenpair_residual": 7.636137250388922e-16,
+              "left_eigenpair_residual": 6.977385381560967e-16
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -11.259873163658638,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.1,
+          "equilibrium_residual_inf": 2.220446049250313e-13,
+          "rhs_difference_inf": 7.631694319854857e-13,
+          "state_matrix_max_abs_difference_per_s": 6.723600449731748e-07,
+          "spectral_abscissa_per_s": 195.13459433748054,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": 2.04582527907214,
+              "imag_per_s": 13.90324474649087,
+              "frequency_hz": 2.2127701264204473
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9840423608638083,
+              "left_mac": 0.9998342760739413,
+              "combined_mac": 0.9919068915479707,
+              "normalized_eigenvalue_distance": 0.18411515831513706,
+              "relative_candidate_margin": 0.31136084586612633,
+              "condition_number": 33.58462333585383,
+              "right_eigenpair_residual": 3.161045616724304e-15,
+              "left_eigenpair_residual": 1.568853637462417e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 195.13459433748054,
+              "imag_per_s": 702.4803190458207,
+              "frequency_hz": 111.80321520091408
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999454045243922,
+              "left_mac": 0.9999999999708415,
+              "combined_mac": 0.9999727018750239,
+              "normalized_eigenvalue_distance": 4.876046768813181e-06,
+              "relative_candidate_margin": 0.7559541484847776,
+              "condition_number": 3.6213306784347683,
+              "right_eigenpair_residual": 5.89565600399115e-16,
+              "left_eigenpair_residual": 2.6170342234181827e-15
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -11.25981706567591,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.2,
+          "equilibrium_residual_inf": 2.220446049250313e-13,
+          "rhs_difference_inf": 7.631694319854857e-13,
+          "state_matrix_max_abs_difference_per_s": 6.723600449731748e-07,
+          "spectral_abscissa_per_s": 195.13629226209173,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": 1.9955600437889238,
+              "imag_per_s": 11.012226946058073,
+              "frequency_hz": 1.7526503529149091
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9885748836431525,
+              "left_mac": 0.9997940259296371,
+              "combined_mac": 0.994168628981276,
+              "normalized_eigenvalue_distance": 0.2057541789872215,
+              "relative_candidate_margin": 0.28713410927282396,
+              "condition_number": 36.42155230434183,
+              "right_eigenpair_residual": 3.161045616724304e-15,
+              "left_eigenpair_residual": 1.2046706721256109e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 195.13629226209173,
+              "imag_per_s": 702.480878831723,
+              "frequency_hz": 111.8033042936075
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999861890864189,
+              "left_mac": 0.9999999999926255,
+              "combined_mac": 0.9999930945156794,
+              "normalized_eigenvalue_distance": 2.4521654586218393e-06,
+              "relative_candidate_margin": 0.7553899538030933,
+              "condition_number": 3.620982535800473,
+              "right_eigenpair_residual": 4.692143507170959e-16,
+              "left_eigenpair_residual": 2.6170342234181827e-15
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -11.259804267307834,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        }
+      ],
+      "endpoint_normalized_displacement_from_0p01s": {
+        "low_frequency_mode": 0.521554487099916,
+        "wide_frequency_mode": 4.475440997105057e-05
+      },
+      "candidate_hypothesis_low_branch_moves_more": true
+    },
+    "pcc": {
+      "ideal_thirteen_state_limit": {
+        "low_frequency_mode": {
+          "real_per_s": -4.9054123711944495,
+          "imag_per_s": 21.383583248108216,
+          "frequency_hz": 3.4033029749534696
+        },
+        "wide_frequency_mode": {
+          "real_per_s": 200.01310118561136,
+          "imag_per_s": 700.832156851385,
+          "frequency_hz": 111.54090204065244
+        }
+      },
+      "points": [
+        {
+          "active_power_time_constant_s": 0.01,
+          "equilibrium_residual_inf": 2.4868995751603507e-13,
+          "rhs_difference_inf": 2.0780885136468912e-13,
+          "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+          "spectral_abscissa_per_s": 200.00469864955582,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.487681199915447,
+              "imag_per_s": 21.262498517934628,
+              "frequency_hz": 3.3840317416133945
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "closest-to-ideal-limit-pole"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 200.00469864955582,
+              "imag_per_s": 701.0744023560504,
+              "frequency_hz": 111.57945661016174
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "closest-to-ideal-limit-pole"
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -104.97639240874432,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.025,
+          "equilibrium_residual_inf": 2.4868995751603507e-13,
+          "rhs_difference_inf": 2.0780885136468912e-13,
+          "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+          "spectral_abscissa_per_s": 200.02302188782085,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.062525743393674,
+              "imag_per_s": 19.646325159725315,
+              "frequency_hz": 3.126809762760954
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9856191922151969,
+              "left_mac": 0.9998980118130569,
+              "combined_mac": 0.9927329301986343,
+              "normalized_eigenvalue_distance": 0.13613634272678243,
+              "relative_candidate_margin": 0.26138281254482015,
+              "condition_number": 38.919808745781886,
+              "right_eigenpair_residual": 1.1652705292111093e-15,
+              "left_eigenpair_residual": 8.447902224766887e-18
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 200.02302188782085,
+              "imag_per_s": 701.0813860888738,
+              "frequency_hz": 111.58056810576183
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.998478534618549,
+              "left_mac": 0.9999999991075365,
+              "combined_mac": 0.9992389772859359,
+              "normalized_eigenvalue_distance": 2.6896840591965674e-05,
+              "relative_candidate_margin": 0.753890644268645,
+              "condition_number": 3.7225263723398823,
+              "right_eigenpair_residual": 9.105937939290686e-16,
+              "left_eigenpair_residual": 8.175913888248464e-16
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -49.85401793753719,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.05,
+          "equilibrium_residual_inf": 2.4868995751603507e-13,
+          "rhs_difference_inf": 2.0780885136468912e-13,
+          "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+          "spectral_abscissa_per_s": 200.0295697860717,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": 1.4617440390271241,
+              "imag_per_s": 17.034945306134937,
+              "frequency_hz": 2.7111957507714557
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9844938031356189,
+              "left_mac": 0.9998767316075438,
+              "combined_mac": 0.9921554546375901,
+              "normalized_eigenvalue_distance": 0.15390537291463888,
+              "relative_candidate_margin": 0.3004289224906499,
+              "condition_number": 35.56191382903027,
+              "right_eigenpair_residual": 1.6604851331352505e-15,
+              "left_eigenpair_residual": 1.0977843228663161e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 200.0295697860717,
+              "imag_per_s": 701.083155911938,
+              "frequency_hz": 111.58084978185087
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9998171708035483,
+              "left_mac": 0.9999999998932179,
+              "combined_mac": 0.9999085811696916,
+              "normalized_eigenvalue_distance": 9.303611026779811e-06,
+              "relative_candidate_margin": 0.7534180564364574,
+              "condition_number": 3.715451806299048,
+              "right_eigenpair_residual": 8.003150169763213e-16,
+              "left_eigenpair_residual": 2.1230904721098963e-15
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -11.259868700706422,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.1,
+          "equilibrium_residual_inf": 2.4868995751603507e-13,
+          "rhs_difference_inf": 2.0780885136468912e-13,
+          "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+          "spectral_abscissa_per_s": 200.0329168572161,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": 2.0885257284484755,
+              "imag_per_s": 13.951940499328497,
+              "frequency_hz": 2.2205202961921366
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9843029496106781,
+              "left_mac": 0.9998347290161503,
+              "combined_mac": 0.9920384432539849,
+              "normalized_eigenvalue_distance": 0.18400727779790493,
+              "relative_candidate_margin": 0.31064298039396204,
+              "condition_number": 34.02878547621727,
+              "right_eigenpair_residual": 1.7625365462197995e-15,
+              "left_eigenpair_residual": 1.0977843228663161e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 200.0329168572161,
+              "imag_per_s": 701.0839227929117,
+              "frequency_hz": 111.58097183474861
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999531090484597,
+              "left_mac": 0.999999999972633,
+              "combined_mac": 0.9999765542356951,
+              "normalized_eigenvalue_distance": 4.709898113840397e-06,
+              "relative_candidate_margin": 0.7515640913576085,
+              "condition_number": 3.7143263444116346,
+              "right_eigenpair_residual": 5.043741189051742e-16,
+              "left_eigenpair_residual": 2.1230904721098963e-15
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -11.259820116198233,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        },
+        {
+          "active_power_time_constant_s": 0.2,
+          "equilibrium_residual_inf": 2.4868995751603507e-13,
+          "rhs_difference_inf": 2.0780885136468912e-13,
+          "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+          "spectral_abscissa_per_s": 200.0346075633034,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": 2.0268972378426193,
+              "imag_per_s": 11.052007188412013,
+              "frequency_hz": 1.758981575122932
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9888023501578526,
+              "left_mac": 0.9997950872980781,
+              "combined_mac": 0.9942835269663352,
+              "normalized_eigenvalue_distance": 0.2056076381714695,
+              "relative_candidate_margin": 0.2858685151239558,
+              "condition_number": 36.94580715799464,
+              "right_eigenpair_residual": 2.8567246068333036e-15,
+              "left_eigenpair_residual": 7.222136200086398e-18
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": 200.0346075633034,
+              "imag_per_s": 701.0842754906656,
+              "frequency_hz": 111.58102796833957
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999881352066246,
+              "left_mac": 0.9999999999930769,
+              "combined_mac": 0.999994067582254,
+              "normalized_eigenvalue_distance": 2.3689366838006753e-06,
+              "relative_candidate_margin": 0.7509587888784719,
+              "condition_number": 3.7140179016102053,
+              "right_eigenpair_residual": 8.858244716646237e-16,
+              "left_eigenpair_residual": 2.0388384389577583e-15
+            }
+          },
+          "measurement_associated_pole": {
+            "real_per_s": -11.259806653954502,
+            "imag_per_s": 0.0,
+            "frequency_hz": 0.0
+          }
+        }
+      ],
+      "endpoint_normalized_displacement_from_0p01s": {
+        "low_frequency_mode": 0.5215000810807241,
+        "wide_frequency_mode": 4.320221928543324e-05
+      },
+      "candidate_hypothesis_low_branch_moves_more": true
+    }
+  },
+  "counterexample": {
+    "change": "team uses filter-capacitor power while the transformed source uses PCC power at Tm=0.1 s",
+    "state_matrix_max_abs_difference_per_s": 499.9999999917293,
+    "gate_rejected_mismatch": true
+  },
+  "hypothesis_test": {
+    "hypothesis": "active-power measurement delay moves the named low-frequency branch more than the named wide-frequency branch",
+    "supported_in_both_port_conventions": true,
+    "result": "supported-in-bounded-scan"
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "team_original_model_modified": false,
+    "common_intermediate_cases_only": true,
+    "power_measurement_port_held_common_within_each_variant": true,
+    "ideal_limit_force_matched_to_fourteen_state_spectrum": false,
+    "whole_system_hopf_margin_claimed": false,
+    "modulation_dynamics_compared": false,
+    "pll_or_frequency_estimator_compared": false,
+    "external_network_dynamics_compared": false,
+    "paper_sufficient_condition_evaluated": false,
+    "statement": "The scan reports branch-specific motion in two fourteen-state common intermediate models. Because the wide-frequency branch is already in the right half-plane, these results are not a whole-system Hopf stability-margin study."
+  }
+}

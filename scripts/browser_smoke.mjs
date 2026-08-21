@@ -364,8 +364,26 @@ try {
       throw new Error(`Sienna-team common outer-loop table is missing ${evidence}: ${commonOuterTable}`)
     }
   }
+  const activePowerDelaySummary = await page.getByTestId('sienna-team-active-power-delay-summary').innerText()
+  for (const evidence of ['共同延迟模型\n14 状态', '两种端口扫描点\n10', '低频支路位移更显著\n有界支持', '混用功率端口反例 / s⁻¹\n500.0']) {
+    if (!activePowerDelaySummary.includes(evidence)) {
+      throw new Error(`Sienna-team active-power-delay summary is missing ${evidence}: ${activePowerDelaySummary}`)
+    }
+  }
+  const activePowerDelayTable = await page.getByTestId('sienna-team-active-power-delay-table').innerText()
+  for (const evidence of ['滤波电容端', '0.010', '-2.555', '3.366', '195.107', 'PCC', '0.200', '2.027', '1.759', '200.035']) {
+    if (!activePowerDelayTable.includes(evidence)) {
+      throw new Error(`Sienna-team active-power-delay table is missing ${evidence}: ${activePowerDelayTable}`)
+    }
+  }
+  const activePowerDelayBoundary = await page.getByTestId('sienna-team-active-power-delay-boundary').innerText()
+  for (const evidence of ['0.025～0.05 s 之间穿越虚轴', '宽频支路在扫描起点已经失稳', '不是整机 Hopf 稳定裕度', '没有比较调制、PLL 或外部网络动态']) {
+    if (!activePowerDelayBoundary.includes(evidence)) {
+      throw new Error(`Sienna-team active-power-delay boundary is missing ${evidence}.`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
-  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '功率测量位置不同', '13状态中间算例', '约 3.4 Hz 低频支路', '结构差异而非参数误差', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
+  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '功率测量位置不同', '13状态中间算例', '约 3.4 Hz 低频支路', '结构差异而非参数误差', '14状态中间算例', '低频支路在 Tm=0.025～0.05 s 之间过零', '不是整机稳定裕度', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
     }

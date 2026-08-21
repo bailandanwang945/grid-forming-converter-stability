@@ -184,6 +184,21 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         )
         self.assertTrue(scope["team_common_outer_loop_power_ports_compared"])
 
+        delayed_power = payload["common_active_power_measurement_delay"]
+        self.assertEqual(delayed_power["status"], "passed")
+        self.assertEqual(delayed_power["model_contract"]["state_count"], 14)
+        self.assertTrue(
+            delayed_power["counterexample"]["gate_rejected_mismatch"]
+        )
+        self.assertTrue(
+            delayed_power["hypothesis_test"][
+                "supported_in_both_port_conventions"
+            ]
+        )
+        self.assertTrue(
+            scope["team_common_active_power_measurement_delay_compared"]
+        )
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -265,6 +280,10 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             "passed",
         )
         self.assertEqual(payload["common_outer_loop"]["status"], "passed")
+        self.assertEqual(
+            payload["common_active_power_measurement_delay"]["status"],
+            "passed",
+        )
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 

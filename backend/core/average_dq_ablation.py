@@ -279,6 +279,34 @@ def match_mode(
     )[0]
 
 
+def match_modes(
+    references: tuple[ModalSignature, ...],
+    state_matrix: NDArray[np.float64],
+    *,
+    minimum_confidence: float = DEFAULT_MINIMUM_CONFIDENCE,
+    minimum_combined_mac: float = DEFAULT_MINIMUM_COMBINED_MAC,
+    minimum_individual_mac: float = DEFAULT_MINIMUM_INDIVIDUAL_MAC,
+    maximum_normalized_distance: float = DEFAULT_MAXIMUM_NORMALIZED_DISTANCE,
+    maximum_condition_number: float = DEFAULT_MAXIMUM_CONDITION_NUMBER,
+    maximum_eigenpair_residual: float = DEFAULT_MAXIMUM_EIGENPAIR_RESIDUAL,
+    minimum_relative_margin: float = DEFAULT_MINIMUM_RELATIVE_MARGIN,
+) -> tuple[ModeMatch, ...]:
+    """Match named modes jointly so two references cannot claim one candidate."""
+
+    candidates = _all_signatures(_validate_matrix(state_matrix))
+    return _assign_signatures(
+        references,
+        candidates,
+        minimum_confidence=minimum_confidence,
+        minimum_combined_mac=minimum_combined_mac,
+        minimum_individual_mac=minimum_individual_mac,
+        maximum_normalized_distance=maximum_normalized_distance,
+        maximum_condition_number=maximum_condition_number,
+        maximum_eigenpair_residual=maximum_eigenpair_residual,
+        minimum_relative_margin=minimum_relative_margin,
+    )
+
+
 def _modal_diagnostics(
     state_matrix: NDArray[np.float64], match: ModeMatch
 ) -> tuple[tuple[tuple[str, float], ...], float, float, float]:
