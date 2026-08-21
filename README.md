@@ -159,7 +159,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 - 闭合工作簿主导极点 `0.578 Hz` 与论文正文 `1.2 Hz` 的差异；
 - 对 Simplus 非线性模型的近奇异和异常初始化现象，仅保留为未建立完整因果解释的兼容性问题；受污染响应不作为研究证据；
-- MathWorks 固定模型与团队16状态模型已经完成八点局部极点比较和三点团队非线性阶跃；Sienna Test 08 与团队模型的同构化中间算例已闭合六状态 LCL—PCC 方程门，并确认双 PI 状态可由 `η=Kiξ` 换元。完整内环仍存在参数开关不能消除的 `Rf·if` 电阻压降前馈结构缺口，因而尚未同构。下一步按 [`docs/research/sienna-team-equation-mapping.md`](docs/research/sienna-team-equation-mapping.md) 建立来源标签明确的共有内环中间算例，再决定是否安装 Julia 复跑第三方 VSM—PSCAD 基线；
+- MathWorks 固定模型与团队16状态模型已经完成八点局部极点比较和三点团队非线性阶跃；Sienna Test 08 与团队模型的同构化中间算例已闭合六状态 LCL—PCC 方程门、双 PI 状态换元及两条10状态共有内环路径。原始内环仍存在 `Rf·if` 结构缺口；两个不改基线的中间算例分别让双方同时关闭或加入该项，均通过方程门，但在固定参考与 PCC 电压下都呈现内环特征根失稳。下一步按 [`docs/research/sienna-team-equation-mapping.md`](docs/research/sienna-team-equation-mapping.md) 加入双方共有的两状态有源阻尼对照，再决定是否安装 Julia 复跑第三方 VSM—PSCAD 基线；
 - 完成另一台电脑的断网启动、案例重算、导出和退出清理验收；
 - 取得学院正式结项通知、模板与提交规则；软件之外的答辩材料由团队另行处理，本开发流程不制作或修改 PPT/PDF。
 

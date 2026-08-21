@@ -119,6 +119,20 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertTrue(scope["team_pi_state_scaling_compared"])
         self.assertFalse(scope["team_complete_inner_control_compared"])
 
+        common_inner = payload["common_inner_loop"]
+        self.assertEqual(common_inner["status"], "passed")
+        self.assertEqual(common_inner["common_model"]["state_count"], 10)
+        self.assertEqual(len(common_inner["variants"]), 2)
+        self.assertTrue(
+            common_inner["counterfactual"]["gate_rejected_mismatch"]
+        )
+        self.assertFalse(
+            common_inner["structural_choice_sensitivity"][
+                "stability_classification_changed"
+            ]
+        )
+        self.assertTrue(scope["team_common_inner_loop_variants_compared"])
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -193,6 +207,7 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
                 "test08_and_team_complete_inner_controls_isomorphic"
             ]
         )
+        self.assertEqual(payload["common_inner_loop"]["status"], "passed")
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 

@@ -1185,6 +1185,61 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_inner_loop: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    common_model: {
+      state_count: number
+      source_state_labels: string[]
+      team_state_labels: string[]
+      input_count: number
+      input_labels: string[]
+      alignment_angle_rad: number
+      current_feedforward_gain: number
+      voltage_feedforward_gain: number
+      active_damping_gain: number
+    }
+    variants: {
+      both_omit_resistive_drop_feedforward: {
+        status: 'passed' | 'failed'
+        state_matrix_max_abs_difference_per_s: number
+        input_matrix_max_abs_difference_per_s: number
+        probe_rhs_max_abs_difference_per_s: number
+        spectral_abscissa_per_s: number
+        stable_by_eigenvalues: boolean
+      }
+      both_include_resistive_drop_feedforward: {
+        status: 'passed' | 'failed'
+        state_matrix_max_abs_difference_per_s: number
+        input_matrix_max_abs_difference_per_s: number
+        probe_rhs_max_abs_difference_per_s: number
+        spectral_abscissa_per_s: number
+        stable_by_eigenvalues: boolean
+      }
+    }
+    structural_choice_sensitivity: {
+      maximum_matched_eigenvalue_displacement_per_s: number
+      spectral_abscissa_change_per_s: number
+      stability_classification_changed: boolean
+    }
+    counterfactual: {
+      change: string
+      state_matrix_max_abs_difference_per_s: number
+      input_matrix_max_abs_difference_per_s: number
+      probe_rhs_max_abs_difference_per_s: number
+      gate_rejected_mismatch: boolean
+    }
+    scope: {
+      source_baselines_modified: boolean
+      both_intermediate_variants_isomorphic: boolean
+      outer_controls_compared: boolean
+      pll_compared: boolean
+      active_damping_compared: boolean
+      modulation_or_limits_compared: boolean
+      external_network_dynamics_compared: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1194,6 +1249,7 @@ export type SiennaTest08AuditResult = {
     team_common_lcl_layer_compared: boolean
     team_pi_state_scaling_compared: boolean
     team_complete_inner_control_compared: boolean
+    team_common_inner_loop_variants_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

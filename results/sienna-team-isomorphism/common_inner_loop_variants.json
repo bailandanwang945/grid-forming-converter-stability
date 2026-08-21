@@ -1,0 +1,192 @@
+{
+  "schema_version": "gfm-sienna-team-common-inner-loop-audit/1.0",
+  "status": "passed",
+  "common_model": {
+    "state_count": 10,
+    "source_state_labels": [
+      "voltage_error_integral_d",
+      "voltage_error_integral_q",
+      "current_error_integral_d",
+      "current_error_integral_q",
+      "converter_current_real_pu",
+      "converter_current_imag_pu",
+      "capacitor_voltage_real_pu",
+      "capacitor_voltage_imag_pu",
+      "grid_current_real_pu",
+      "grid_current_imag_pu"
+    ],
+    "team_state_labels": [
+      "voltage_integral_output_d_pu",
+      "voltage_integral_output_q_pu",
+      "current_integral_output_d_pu",
+      "current_integral_output_q_pu",
+      "converter_current_d_pu",
+      "converter_current_q_pu",
+      "capacitor_voltage_d_pu",
+      "capacitor_voltage_q_pu",
+      "grid_current_d_pu",
+      "grid_current_q_pu"
+    ],
+    "input_count": 4,
+    "input_labels": [
+      "voltage_reference_d_pu",
+      "voltage_reference_q_pu",
+      "pcc_voltage_d_pu",
+      "pcc_voltage_q_pu"
+    ],
+    "alignment_angle_rad": 0.1978641793142158,
+    "current_feedforward_gain": 1.0,
+    "voltage_feedforward_gain": 1.0,
+    "active_damping_gain": 0.0
+  },
+  "verification_gate": {
+    "matrix_and_rhs_max_abs_difference_per_s": 1e-10,
+    "counterfactual_state_matrix_difference_min_per_s": 1.0
+  },
+  "variants": {
+    "both_omit_resistive_drop_feedforward": {
+      "status": "passed",
+      "resistive_drop_feedforward_gain": 0.0,
+      "state_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+      "input_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+      "probe_rhs_max_abs_difference_per_s": 9.094947017729282e-13,
+      "spectral_abscissa_per_s": 117.1371464864823,
+      "stable_by_eigenvalues": false,
+      "eigenvalues": [
+        {
+          "real_per_s": -2735.1709093762665,
+          "imag_per_s": -4199.964881071542,
+          "oscillation_frequency_hz": 668.4451716349002
+        },
+        {
+          "real_per_s": -2735.1709093762665,
+          "imag_per_s": 4199.964881071542,
+          "oscillation_frequency_hz": 668.4451716349002
+        },
+        {
+          "real_per_s": -2280.2249603778196,
+          "imag_per_s": -3929.827283046246,
+          "oscillation_frequency_hz": 625.451437594203
+        },
+        {
+          "real_per_s": -2280.2249603778196,
+          "imag_per_s": 3929.827283046246,
+          "oscillation_frequency_hz": 625.451437594203
+        },
+        {
+          "real_per_s": -1108.2021601150952,
+          "imag_per_s": -168.7349889121936,
+          "oscillation_frequency_hz": 26.85500755793176
+        },
+        {
+          "real_per_s": -1108.2021601150952,
+          "imag_per_s": 168.7349889121936,
+          "oscillation_frequency_hz": 26.85500755793176
+        },
+        {
+          "real_per_s": -11.259844568553675,
+          "imag_per_s": -0.00020581542875008907,
+          "oscillation_frequency_hz": 3.2756542850154466e-05
+        },
+        {
+          "real_per_s": -11.259844568553675,
+          "imag_per_s": 0.00020581542875008907,
+          "oscillation_frequency_hz": 3.2756542850154466e-05
+        },
+        {
+          "real_per_s": 117.1371464864823,
+          "imag_per_s": -652.5798335638734,
+          "oscillation_frequency_hz": 103.8613062737768
+        },
+        {
+          "real_per_s": 117.1371464864823,
+          "imag_per_s": 652.5798335638734,
+          "oscillation_frequency_hz": 103.8613062737768
+        }
+      ]
+    },
+    "both_include_resistive_drop_feedforward": {
+      "status": "passed",
+      "resistive_drop_feedforward_gain": 1.0,
+      "state_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+      "input_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+      "probe_rhs_max_abs_difference_per_s": 4.547473508864641e-13,
+      "spectral_abscissa_per_s": 119.21536174509264,
+      "stable_by_eigenvalues": false,
+      "eigenvalues": [
+        {
+          "real_per_s": -2731.847147259363,
+          "imag_per_s": -4207.895277799436,
+          "oscillation_frequency_hz": 669.7073334748244
+        },
+        {
+          "real_per_s": -2731.847147259363,
+          "imag_per_s": 4207.895277799436,
+          "oscillation_frequency_hz": 669.7073334748244
+        },
+        {
+          "real_per_s": -2277.264391305882,
+          "imag_per_s": -3936.950518501449,
+          "oscillation_frequency_hz": 626.585135727706
+        },
+        {
+          "real_per_s": -2277.264391305882,
+          "imag_per_s": 3936.950518501449,
+          "oscillation_frequency_hz": 626.585135727706
+        },
+        {
+          "real_per_s": -1102.4275498334482,
+          "imag_per_s": -171.05360226812127,
+          "oscillation_frequency_hz": 27.224026334646542
+        },
+        {
+          "real_per_s": -1102.4275498334482,
+          "imag_per_s": 171.05360226812127,
+          "oscillation_frequency_hz": 27.224026334646542
+        },
+        {
+          "real_per_s": -11.259834356498729,
+          "imag_per_s": -0.0008054163617767784,
+          "oscillation_frequency_hz": 0.00012818599522386456
+        },
+        {
+          "real_per_s": -11.259834356498729,
+          "imag_per_s": 0.0008054163617767784,
+          "oscillation_frequency_hz": 0.00012818599522386456
+        },
+        {
+          "real_per_s": 119.21536174509264,
+          "imag_per_s": -654.0902744153199,
+          "oscillation_frequency_hz": 104.10170040153244
+        },
+        {
+          "real_per_s": 119.21536174509264,
+          "imag_per_s": 654.0902744153199,
+          "oscillation_frequency_hz": 104.10170040153244
+        }
+      ]
+    }
+  },
+  "structural_choice_sensitivity": {
+    "maximum_matched_eigenvalue_displacement_per_s": 8.598754960549094,
+    "spectral_abscissa_change_per_s": 2.078215258610342,
+    "stability_classification_changed": false
+  },
+  "counterfactual": {
+    "change": "source current-feedforward gain changed from 1.0 to 0.99",
+    "state_matrix_max_abs_difference_per_s": 59.84734005088649,
+    "input_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+    "probe_rhs_max_abs_difference_per_s": 21.54504241831819,
+    "gate_rejected_mismatch": true
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "both_intermediate_variants_isomorphic": true,
+    "outer_controls_compared": false,
+    "pll_compared": false,
+    "active_damping_compared": false,
+    "modulation_or_limits_compared": false,
+    "external_network_dynamics_compared": false,
+    "statement": "Both ten-state intermediate variants are equation-isomorphic after PI scaling and LCL coordinate rotation. Their spectral difference measures only the Rf*i_f compensation choice inside this bounded common model, not either original full system."
+  }
+}

@@ -15,6 +15,10 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy.optimize import linear_sum_assignment
 
+from backend.core.sienna_team_common_inner_loop import (
+    CommonInnerLoopParameters,
+    sienna_team_common_inner_loop_audit,
+)
 from backend.core.sienna_team_inner_control_mapping import (
     CascadedPIParameters,
     sienna_team_inner_control_mapping_audit,
@@ -487,6 +491,29 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             resistive_drop_feedforward_gain=1.0,
         ),
     )
+    common_inner_loop = sienna_team_common_inner_loop_audit(
+        CommonInnerLoopParameters(
+            frequency_hz=parameters.frequency_hz,
+            voltage_kp=parameters.voltage_kp,
+            voltage_ki_per_s=parameters.voltage_ki,
+            current_kp=parameters.current_kp,
+            current_ki_per_s=parameters.current_ki,
+            converter_side_resistance_pu=(
+                parameters.converter_side_resistance_pu
+            ),
+            converter_side_reactance_pu=parameters.converter_side_reactance_pu,
+            filter_capacitor_susceptance_pu=(
+                parameters.filter_capacitor_susceptance_pu
+            ),
+            grid_side_resistance_pu=parameters.grid_side_resistance_pu,
+            grid_side_reactance_pu=parameters.grid_side_reactance_pu,
+            virtual_resistance_pu=parameters.virtual_resistance_pu,
+            virtual_reactance_pu=parameters.virtual_reactance_pu,
+            resistive_drop_feedforward_gain=0.0,
+            synchronous_frequency_pu=parameters.system_frequency_pu,
+        ),
+        angle_rad=float(FROZEN_INITIAL_STATE[0]),
+    )
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -507,7 +534,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.2",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.3",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -516,6 +543,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and audit.matched_eigenvalue_l2_error_per_s < 1.0e-3
             and common_lcl_audit["status"] == "passed"
             and inner_control_mapping["pi_state_mapping"]["status"] == "passed"
+            and common_inner_loop["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -576,6 +604,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         },
         "common_lcl_isomorphism": common_lcl_audit,
         "inner_control_mapping": inner_control_mapping,
+        "common_inner_loop": common_inner_loop,
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -585,15 +614,17 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "team_common_lcl_layer_compared": True,
             "team_pi_state_scaling_compared": True,
             "team_complete_inner_control_compared": False,
+            "team_common_inner_loop_variants_compared": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
                 "The Python transcription reproduces the upstream frozen initial "
                 "condition and 19-eigenvalue regression. The common six-state LCL "
-                "layer and PI-state scaling are compared separately; the complete "
-                "inner controls remain non-isomorphic. This audit does not rerun "
-                "Julia or PSCAD and does not validate the team's different "
-                "16-state model."
+                "layer and PI-state scaling are compared separately; the original "
+                "complete inner controls remain non-isomorphic. Two explicitly "
+                "labelled common inner-loop variants are equation-isomorphic but "
+                "are not either original full model. This audit does not rerun Julia "
+                "or PSCAD and does not validate the team's different 16-state model."
             ),
         },
     }

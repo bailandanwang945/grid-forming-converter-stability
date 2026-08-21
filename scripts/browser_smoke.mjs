@@ -328,8 +328,14 @@ try {
       throw new Error(`Sienna-team inner-control summary is missing ${evidence}: ${innerControlSummary}`)
     }
   }
+  const commonInnerLoopSummary = await page.getByTestId('sienna-team-common-inner-loop-summary').innerText()
+  for (const evidence of ['共有内环状态\n10', '双路径方程门\n通过', '最大匹配谱位移 / s⁻¹\n8.599', '两路径固定输入分类\n失稳 / 失稳']) {
+    if (!commonInnerLoopSummary.includes(evidence)) {
+      throw new Error(`Sienna-team common inner-loop summary is missing ${evidence}: ${commonInnerLoopSummary}`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
-  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '完整内环仍未同构', 'Rfif 电阻压降前馈', 'PCC 电压为外部输入', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
+  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '谱横坐标增加约 2.078 s⁻¹', '不能据此推断任一原始整机的稳定性', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
     }
