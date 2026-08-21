@@ -805,3 +805,13 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 可重复入口 `python experiments/average-dq/run_common_inner_loop_modal_fingerprint.py` 生成 JSON 与52行 CSV；SHA-256 分别为 `8A5318A1C0775F666D4444A1999866AB8203EA757E5350823F16E8932ABC9574` 和 `4482657D5EE492C3633F86C170EA7CA6264F9A9421E66C2AD32EC57BA69A077D`。功能提交为 `4f852c0fa95e682b11301ba2b5398d4494bf4026`。
 - API 的 Sienna 复核契约升至 `gfm-sienna-test08-source-transcription-audit/1.5`；前端在原有 Sienna 证据链中展示四变体频率、参与度和局部灵敏度，没有新增割裂的模型工作区。定向16项测试与 Ruff 通过，前端生产构建通过；后端全量 `204/204` 通过，耗时 `238.875 s` 并输出 `GFM_RELEASE_SMOKE_OK`；真实 Chromium 全流程输出 `BROWSER_E2E_SMOKE_OK`。
 - 下一步进入 M3.2：建立双方共有的 VSM 与 Q–V 外环中间模型，在固定全局 PCC 坐标下恢复角度—功率—电压耦合，并同时跟踪低频同步支路与本轮宽频支路。仍不制作或修改 PPT/PDF，不重建 Windows 冻结包。
+
+## 2026-08-21：共有 VSM/Q–V 外环与功率测量端口结构差异
+
+- 网页检索恢复后，重新核查 Sienna 官方 `v0.16.2` 发布信息、官方模型说明和 PowerDynamics 可组合 DAE 建模边界；固定源码进一步确认 Test 08 的 VSM/Q–V 方程。把团队有功测量与调制延迟取理想极限、令 `M=Ta、D=kω、Tq=1/ωf`，并在双方同时关闭 PLL 阻尼后，共有三个外环状态可以对应。
+- 原始功率测量位置不能直接对应：Test 08 使用滤波电容电压与网侧滤波电流计算功率，团队模型在 PCC 计算功率。为避免改写任一原始基线，建立“双方都在滤波电容端测量”和“双方都在 PCC 测量”两个13状态加载中间算例。
+- 两个算例的平衡点残差分别为 `2.220×10^-13` 与 `2.487×10^-13`；动态坐标旋转与 PI 状态换元后，状态矩阵最大差分别为 `6.724×10^-7` 与 `4.018×10^-7 s^-1`，通过预设 `1×10^-5 s^-1` 有限差分门。混用两个功率端口会产生约 `500 s^-1` 的矩阵差，反例门拒绝该结构错配。
+- 两个端口约定都新增约 `3.4 Hz` 低频支路，并保留约 `112 Hz` 宽频右半平面支路；谱横坐标分别为 `+195.1454` 与 `+200.0131 s^-1`，分类均为失稳。该结果说明功率测量位置会移动极点，但在当前中间模型中宽频支路仍决定分类；不能据此宣称外环或测量端口是唯一机理。
+- 可重复入口 `python experiments/average-dq/run_sienna_team_common_outer_loop.py` 生成 `results/sienna-team-isomorphism/common_outer_loop_power_ports.json`，SHA-256 为 `FA9FC2907D05AA748B7AC04E866B45B80198C398BD1EA0F65A80A6A97C454821`。功能提交为 `93ea3d489eb9e8b486e34923bf9a43350c38267c`；API 契约升至 `gfm-sienna-test08-source-transcription-audit/1.6`，前端在原 Sienna 证据链中展示两个端口约定和低/宽频支路。
+- 定向16项测试、Ruff 与前端生产构建通过；真实 Chromium 全流程输出 `BROWSER_E2E_SMOKE_OK`。全量后端首轮 `211/212`，唯一失败为发布启动器瞬时 `WinError 10053`；同一启动器定向重跑实际启动、输出 `GFM_RELEASE_SMOKE_OK` 并释放端口，因此不把首轮写成全绿。另一次 Python 定向检查曾误从 `apps/web` 子目录启动并因找不到 `backend` 失败，返回仓库根目录后16项通过。
+- 下一步进入 M3.3：保持功率测量端口约定固定，逐项恢复有功测量延迟、调制延迟、PLL/有源阻尼和外部网络动态。仍不制作或修改 PPT/PDF，不重建 Windows 冻结包。
