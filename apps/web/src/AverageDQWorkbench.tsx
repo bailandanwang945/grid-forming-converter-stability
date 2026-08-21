@@ -848,6 +848,12 @@ export default function AverageDQWorkbench() {
             <div><small>输入矩阵最大差 / s⁻¹</small><b>{siennaAudit.common_lcl_isomorphism.results.input_matrix_max_abs_difference_per_s.toExponential(2)}</b></div>
             <div><small>1% Xg 错配反例 / s⁻¹</small><b>{siennaAudit.common_lcl_isomorphism.results.counterfactual.state_matrix_max_abs_difference_per_s.toFixed(3)}</b></div>
           </div>
+          <div className="panel evidence-strip" data-testid="sienna-team-inner-control-summary">
+            <div><small>双 PI 状态换元</small><b>{siennaAudit.inner_control_mapping.pi_state_mapping.status === 'passed' ? '通过' : '失败'}</b></div>
+            <div><small>参数对齐后补偿残差</small><b>{siennaAudit.inner_control_mapping.compensation_mapping.parameter_only_aligned_max_abs_difference.toFixed(3)}</b></div>
+            <div><small>完整内环同构</small><b>{siennaAudit.inner_control_mapping.scope.test08_and_team_complete_inner_controls_isomorphic ? '是' : '否'}</b></div>
+            <div><small>未闭合结构项</small><b>R<sub>f</sub>i<sub>f</sub></b></div>
+          </div>
           <div className="table-scroll">
             <table>
               <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>
@@ -856,7 +862,7 @@ export default function AverageDQWorkbench() {
               </tr>)}</tbody>
             </table>
           </div>
-          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。共有层以 PCC 电压为外部输入，不包含 Sienna 的代数网络、团队的动态外部线路、外环、PLL、有源阻尼或调制动态，因而仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
+          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。共有层以 PCC 电压为外部输入，不包含 Sienna 的代数网络、团队的动态外部线路、外环、PLL 或调制动态，因而仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
       </section>}
     </section>
   </main>

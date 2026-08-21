@@ -15,6 +15,10 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy.optimize import linear_sum_assignment
 
+from backend.core.sienna_team_inner_control_mapping import (
+    CascadedPIParameters,
+    sienna_team_inner_control_mapping_audit,
+)
 from backend.core.sienna_team_lcl_isomorphism import (
     CommonLCLParameters,
     sienna_team_common_lcl_audit,
@@ -445,6 +449,44 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         system_base_power_mva=parameters.system_base_power_mva,
         device_base_power_mva=parameters.device_base_power_mva,
     )
+    inner_control_mapping = sienna_team_inner_control_mapping_audit(
+        CascadedPIParameters(
+            voltage_kp=parameters.voltage_kp,
+            voltage_ki_per_s=parameters.voltage_ki,
+            current_kp=parameters.current_kp,
+            current_ki_per_s=parameters.current_ki,
+            filter_capacitor_susceptance_pu=(
+                parameters.filter_capacitor_susceptance_pu
+            ),
+            converter_side_resistance_pu=(
+                parameters.converter_side_resistance_pu
+            ),
+            converter_side_reactance_pu=parameters.converter_side_reactance_pu,
+            current_feedforward_gain=parameters.current_feedforward,
+            voltage_feedforward_gain=parameters.voltage_feedforward,
+            active_damping_gain=parameters.active_damping_gain,
+            synchronous_frequency_pu=parameters.system_frequency_pu,
+            resistive_drop_feedforward_gain=0.0,
+        ),
+        CascadedPIParameters(
+            voltage_kp=parameters.voltage_kp,
+            voltage_ki_per_s=parameters.voltage_ki,
+            current_kp=parameters.current_kp,
+            current_ki_per_s=parameters.current_ki,
+            filter_capacitor_susceptance_pu=(
+                parameters.filter_capacitor_susceptance_pu
+            ),
+            converter_side_resistance_pu=(
+                parameters.converter_side_resistance_pu
+            ),
+            converter_side_reactance_pu=parameters.converter_side_reactance_pu,
+            current_feedforward_gain=1.0,
+            voltage_feedforward_gain=1.0,
+            active_damping_gain=0.0,
+            synchronous_frequency_pu=parameters.system_frequency_pu,
+            resistive_drop_feedforward_gain=1.0,
+        ),
+    )
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -465,7 +507,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.1",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.2",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -473,6 +515,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and audit.terminal_voltage_error < 1.0e-10
             and audit.matched_eigenvalue_l2_error_per_s < 1.0e-3
             and common_lcl_audit["status"] == "passed"
+            and inner_control_mapping["pi_state_mapping"]["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -532,6 +575,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             },
         },
         "common_lcl_isomorphism": common_lcl_audit,
+        "inner_control_mapping": inner_control_mapping,
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -539,12 +583,17 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "upstream_pscad_trace_present_in_fixed_source": True,
             "team_16_state_model_validated_by_this_audit": False,
             "team_common_lcl_layer_compared": True,
+            "team_pi_state_scaling_compared": True,
+            "team_complete_inner_control_compared": False,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
                 "The Python transcription reproduces the upstream frozen initial "
-                "condition and 19-eigenvalue regression. It does not rerun Julia "
-                "or PSCAD and does not validate the team's different 16-state model."
+                "condition and 19-eigenvalue regression. The common six-state LCL "
+                "layer and PI-state scaling are compared separately; the complete "
+                "inner controls remain non-isomorphic. This audit does not rerun "
+                "Julia or PSCAD and does not validate the team's different "
+                "16-state model."
             ),
         },
     }

@@ -1153,6 +1153,38 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  inner_control_mapping: {
+    schema_version: string
+    status: 'partial' | 'failed'
+    verification_gates: {
+      matrix_max_abs_difference: number
+    }
+    pi_state_mapping: {
+      status: 'passed' | 'failed'
+      source_definition: string
+      team_definition: string
+      coordinate_transform: string
+      state_input_matrix_max_abs_difference: number
+      state_output_matrix_max_abs_difference: number
+      proportional_matrix_max_abs_difference: number
+    }
+    compensation_mapping: {
+      test08_to_team_max_abs_difference: number
+      parameter_only_aligned_max_abs_difference: number
+      parameter_only_aligned_probe_max_abs_difference: number
+      parameter_only_isomorphic: boolean
+      structural_counterfactual_max_abs_difference: number
+      structural_counterfactual_passed: boolean
+      remaining_term: string
+    }
+    scope: {
+      pi_states_isomorphic_after_scaling: boolean
+      test08_and_team_complete_inner_controls_isomorphic: boolean
+      parameter_only_alignment_sufficient: boolean
+      structural_counterfactual_is_source_test08: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1160,6 +1192,8 @@ export type SiennaTest08AuditResult = {
     upstream_pscad_trace_present_in_fixed_source: boolean
     team_16_state_model_validated_by_this_audit: boolean
     team_common_lcl_layer_compared: boolean
+    team_pi_state_scaling_compared: boolean
+    team_complete_inner_control_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

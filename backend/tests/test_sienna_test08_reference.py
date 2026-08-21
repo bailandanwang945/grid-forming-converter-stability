@@ -100,6 +100,25 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             common["scope"]["full_model_eigenvalues_comparable_from_this_gate"]
         )
 
+        inner = payload["inner_control_mapping"]
+        self.assertEqual(inner["status"], "partial")
+        self.assertEqual(inner["pi_state_mapping"]["status"], "passed")
+        self.assertFalse(
+            inner["compensation_mapping"]["parameter_only_isomorphic"]
+        )
+        self.assertAlmostEqual(
+            inner["compensation_mapping"][
+                "parameter_only_aligned_max_abs_difference"
+            ],
+            0.003,
+            places=12,
+        )
+        self.assertFalse(
+            inner["scope"]["test08_and_team_complete_inner_controls_isomorphic"]
+        )
+        self.assertTrue(scope["team_pi_state_scaling_compared"])
+        self.assertFalse(scope["team_complete_inner_control_compared"])
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -165,6 +184,15 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertEqual(payload["status"], "passed")
         self.assertEqual(len(payload["results"]["computed_eigenvalues"]), 19)
         self.assertEqual(payload["common_lcl_isomorphism"]["status"], "passed")
+        self.assertEqual(
+            payload["inner_control_mapping"]["pi_state_mapping"]["status"],
+            "passed",
+        )
+        self.assertFalse(
+            payload["inner_control_mapping"]["scope"][
+                "test08_and_team_complete_inner_controls_isomorphic"
+            ]
+        )
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 

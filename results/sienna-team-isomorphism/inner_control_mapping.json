@@ -1,0 +1,76 @@
+{
+  "schema_version": "gfm-sienna-team-inner-control-mapping-audit/1.0",
+  "status": "partial",
+  "verification_gates": {
+    "matrix_max_abs_difference": 1e-12
+  },
+  "pi_state_mapping": {
+    "status": "passed",
+    "source_definition": "xi_dot = error; output = Kp*error + Ki*xi",
+    "team_definition": "eta_dot = Ki*error; output = Kp*error + eta",
+    "coordinate_transform": "eta = diag(Kiv,Kiv,Kic,Kic) * xi",
+    "state_input_matrix_max_abs_difference": 0.0,
+    "state_output_matrix_max_abs_difference": 1.1102230246251565e-16,
+    "proportional_matrix_max_abs_difference": 0.0
+  },
+  "compensation_mapping": {
+    "test08_to_team_max_abs_difference": 1.2,
+    "parameter_only_aligned_max_abs_difference": 0.003,
+    "parameter_only_aligned_probe_max_abs_difference": 0.0012300000000000644,
+    "parameter_only_isomorphic": false,
+    "structural_counterfactual_max_abs_difference": 0.0,
+    "structural_counterfactual_passed": true,
+    "remaining_term": "team converter-side resistance feed-forward +Rf*i_f has no Test 08 VoltageModeControl gain"
+  },
+  "parameters": {
+    "source_test08": {
+      "voltage_kp": 0.59,
+      "voltage_ki_per_s": 736.0,
+      "current_kp": 1.27,
+      "current_ki_per_s": 14.3,
+      "filter_capacitor_susceptance_pu": 0.074,
+      "converter_side_resistance_pu": 0.003,
+      "converter_side_reactance_pu": 0.08,
+      "current_feedforward_gain": 0.0,
+      "voltage_feedforward_gain": 0.0,
+      "active_damping_gain": 0.2,
+      "synchronous_frequency_pu": 1.0,
+      "resistive_drop_feedforward_gain": 0.0
+    },
+    "team_controller": {
+      "voltage_kp": 0.59,
+      "voltage_ki_per_s": 736.0,
+      "current_kp": 1.27,
+      "current_ki_per_s": 14.3,
+      "filter_capacitor_susceptance_pu": 0.074,
+      "converter_side_resistance_pu": 0.003,
+      "converter_side_reactance_pu": 0.08,
+      "current_feedforward_gain": 1.0,
+      "voltage_feedforward_gain": 1.0,
+      "active_damping_gain": 0.0,
+      "synchronous_frequency_pu": 1.0,
+      "resistive_drop_feedforward_gain": 1.0
+    },
+    "source_after_exposed_parameter_alignment": {
+      "voltage_kp": 0.59,
+      "voltage_ki_per_s": 736.0,
+      "current_kp": 1.27,
+      "current_ki_per_s": 14.3,
+      "filter_capacitor_susceptance_pu": 0.074,
+      "converter_side_resistance_pu": 0.003,
+      "converter_side_reactance_pu": 0.08,
+      "current_feedforward_gain": 1.0,
+      "voltage_feedforward_gain": 1.0,
+      "active_damping_gain": 0.0,
+      "synchronous_frequency_pu": 1.0,
+      "resistive_drop_feedforward_gain": 0.0
+    }
+  },
+  "scope": {
+    "pi_states_isomorphic_after_scaling": true,
+    "test08_and_team_complete_inner_controls_isomorphic": false,
+    "parameter_only_alignment_sufficient": false,
+    "structural_counterfactual_is_source_test08": false,
+    "statement": "The four cascaded PI states are equivalent after integral-state scaling. Test 08 and the team controller remain structurally different because the team voltage command includes Rf*i_f, which Test 08 does not expose as a compensation term."
+  }
+}
