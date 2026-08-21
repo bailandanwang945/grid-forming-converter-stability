@@ -1492,6 +1492,66 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_pll_measurement: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      state_count: number
+      base_state_count: number
+      power_measurement_port: string
+      active_power_time_constant_s: number
+      pll_voltage_ports: string[]
+      pll_cutoff_rad_s: number
+      pll_kp: number
+      pll_ki: number
+      damping_levels: number[]
+      damping_equation: string
+    }
+    cases: Record<string, {
+      pll_voltage_port: string
+      damping_gain: number
+      equilibrium_residual_inf: number
+      rhs_difference_inf: number
+      state_matrix_max_abs_difference_per_s: number
+      spectral_abscissa_per_s: number
+      stable_by_eigenvalues: boolean
+      low_frequency_mode: {
+        pole: SiennaDelayPole
+        tracking: SiennaDelayTracking
+      }
+      wide_frequency_mode: {
+        pole: SiennaDelayPole
+        tracking: SiennaDelayTracking
+      }
+      negative_control: {
+        base_submatrix_max_abs_difference_per_s: number
+        pll_to_converter_feedback_max_abs_per_s: number
+      }
+      continuation?: {
+        status: 'resolved' | 'pending'
+        adaptive_bisection_max_depth: number
+        attempt_count: number
+      }
+    }>
+    hypothesis_tests: {
+      four_common_equations_match: boolean
+      damping_off_is_structural_negative_control: boolean
+      named_modes_resolved: boolean
+      damping_on_low_mode_real_part_position_difference_per_s: number | null
+      measurement_position_effect_conclusion: string
+    }
+    scope: {
+      source_baselines_modified: boolean
+      team_original_model_modified: boolean
+      common_intermediate_cases_only: boolean
+      pll_measurement_position_and_damping_separated: boolean
+      pll_gain_scan_performed: boolean
+      whole_system_hopf_margin_claimed: boolean
+      modulation_or_external_network_dynamics_compared: boolean
+      paper_sufficient_condition_evaluated: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1506,6 +1566,7 @@ export type SiennaTest08AuditResult = {
     team_common_inner_loop_modal_fingerprint_evaluated: boolean
     team_common_outer_loop_power_ports_compared: boolean
     team_common_active_power_measurement_delay_compared: boolean
+    team_common_pll_measurement_position_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

@@ -1,0 +1,532 @@
+{
+  "schema_version": "gfm-sienna-team-common-pll-measurement/1.0",
+  "status": "passed",
+  "model_contract": {
+    "state_count": 18,
+    "base_state_count": 14,
+    "power_measurement_port": "pcc",
+    "active_power_time_constant_s": 0.1,
+    "pll_voltage_ports": [
+      "filter_capacitor",
+      "pcc"
+    ],
+    "pll_cutoff_rad_s": 500.0,
+    "pll_kp": 0.084,
+    "pll_ki": 4.69,
+    "damping_levels": [
+      0.0,
+      400.0
+    ],
+    "damping_equation": "-kd * (omega_vsm - omega_pll) / Ta"
+  },
+  "verification_gates": {
+    "equilibrium_residual_inf_max": 1e-08,
+    "rhs_and_matrix_difference_max_per_s": 1e-05,
+    "negative_control_max_per_s": 1e-08
+  },
+  "cases": {
+    "filter_capacitor__damping_off": {
+      "pll_voltage_port": "filter_capacitor",
+      "damping_gain": 0.0,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "rhs_difference_inf": 2.0780885136468912e-13,
+      "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+      "spectral_abscissa_per_s": 200.03291685721422,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.088525728448907,
+          "imag_per_s": 13.95194049932843,
+          "frequency_hz": 2.220520296192126
+        },
+        "tracking": {
+          "status": "anchor",
+          "reason": "nearest-fourteen-state-mode"
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 200.03291685721422,
+          "imag_per_s": 701.083922792913,
+          "frequency_hz": 111.58097183474881
+        },
+        "tracking": {
+          "status": "anchor",
+          "reason": "nearest-fourteen-state-mode"
+        }
+      },
+      "negative_control": {
+        "base_submatrix_max_abs_difference_per_s": 0.0,
+        "pll_to_converter_feedback_max_abs_per_s": 0.0
+      }
+    },
+    "filter_capacitor__damping_on": {
+      "pll_voltage_port": "filter_capacitor",
+      "damping_gain": 400.0,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "rhs_difference_inf": 2.0780885136468912e-13,
+      "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+      "spectral_abscissa_per_s": 199.499788070396,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": -4.8994277336668866,
+          "imag_per_s": 4.67065361021908,
+          "frequency_hz": 0.7433576095363733
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9911645628302738,
+          "left_mac": 0.9955251190987254,
+          "normalized_eigenvalue_distance": 0.18279895531361504,
+          "condition_number": 60.954111328552216
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 199.499788070396,
+          "imag_per_s": 700.835400318503,
+          "frequency_hz": 111.54141825447704
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999999422586174,
+          "left_mac": 0.9950609976795456,
+          "normalized_eigenvalue_distance": 0.00018717191029051845,
+          "condition_number": 3.8831931006859435
+        }
+      },
+      "negative_control": {
+        "base_submatrix_max_abs_difference_per_s": 199.99999999464893,
+        "pll_to_converter_feedback_max_abs_per_s": 937.9999999947764
+      },
+      "continuation": {
+        "status": "resolved",
+        "adaptive_bisection_max_depth": 7,
+        "attempt_count": 13,
+        "attempts": [
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 400.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold;combined-mac-below-threshold;confidence-below-threshold;eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 200.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold;combined-mac-below-threshold;confidence-below-threshold;eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 100.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold;eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 50.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 25.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 25.0,
+            "to_damping_gain": 50.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 50.0,
+            "to_damping_gain": 100.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 100.0,
+            "to_damping_gain": 200.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 100.0,
+            "to_damping_gain": 150.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 150.0,
+            "to_damping_gain": 200.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 200.0,
+            "to_damping_gain": 400.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 200.0,
+            "to_damping_gain": 300.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 300.0,
+            "to_damping_gain": 400.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          }
+        ]
+      }
+    },
+    "pcc__damping_off": {
+      "pll_voltage_port": "pcc",
+      "damping_gain": 0.0,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "rhs_difference_inf": 2.0780885136468912e-13,
+      "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+      "spectral_abscissa_per_s": 200.0329168572161,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.0885257284484755,
+          "imag_per_s": 13.951940499328497,
+          "frequency_hz": 2.2205202961921366
+        },
+        "tracking": {
+          "status": "anchor",
+          "reason": "nearest-fourteen-state-mode"
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 200.0329168572161,
+          "imag_per_s": 701.0839227929117,
+          "frequency_hz": 111.58097183474861
+        },
+        "tracking": {
+          "status": "anchor",
+          "reason": "nearest-fourteen-state-mode"
+        }
+      },
+      "negative_control": {
+        "base_submatrix_max_abs_difference_per_s": 0.0,
+        "pll_to_converter_feedback_max_abs_per_s": 0.0
+      }
+    },
+    "pcc__damping_on": {
+      "pll_voltage_port": "pcc",
+      "damping_gain": 400.0,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "rhs_difference_inf": 2.0780885136468912e-13,
+      "state_matrix_max_abs_difference_per_s": 4.017816763735027e-07,
+      "spectral_abscissa_per_s": 200.03348408681455,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": -3.7174757565380316,
+          "imag_per_s": 0.0,
+          "frequency_hz": 0.0
+        },
+        "tracking": {
+          "status": "pending",
+          "reason": "eigenvalue-distance-above-threshold;ambiguous-candidate-score;real-axis-transition",
+          "right_mac": 0.9484302305154281,
+          "left_mac": 0.9462664161056327,
+          "normalized_eigenvalue_distance": 0.498511424399667,
+          "condition_number": 63.71225394597912
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 200.03348408681455,
+          "imag_per_s": 701.0832867665594,
+          "frequency_hz": 111.5808706080107
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999999999998793,
+          "left_mac": 0.9950622987572607,
+          "normalized_eigenvalue_distance": 2.713725994824529e-07,
+          "condition_number": 3.8717387729306787
+        }
+      },
+      "negative_control": {
+        "base_submatrix_max_abs_difference_per_s": 199.99999999464893,
+        "pll_to_converter_feedback_max_abs_per_s": 937.9999999947764
+      },
+      "continuation": {
+        "status": "pending",
+        "adaptive_bisection_max_depth": 7,
+        "attempt_count": 22,
+        "attempts": [
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 400.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "right-mac-below-threshold;left-mac-below-threshold;combined-mac-below-threshold;confidence-below-threshold;eigenvalue-distance-above-threshold;real-axis-transition",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 200.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold;confidence-below-threshold;eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 100.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold;eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 50.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "left-mac-below-threshold;eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 0.0,
+            "to_damping_gain": 25.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 25.0,
+            "to_damping_gain": 50.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 50.0,
+            "to_damping_gain": 100.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 100.0,
+            "to_damping_gain": 200.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 100.0,
+            "to_damping_gain": 150.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 150.0,
+            "to_damping_gain": 200.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 200.0,
+            "to_damping_gain": 400.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "eigenvalue-distance-above-threshold;ambiguous-candidate-score;real-axis-transition",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 200.0,
+            "to_damping_gain": 300.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "eigenvalue-distance-above-threshold",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 200.0,
+            "to_damping_gain": 250.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 250.0,
+            "to_damping_gain": 300.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 300.0,
+            "to_damping_gain": 400.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "eigenvalue-distance-above-threshold;ambiguous-candidate-score;real-axis-transition",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 300.0,
+            "to_damping_gain": 350.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "ambiguous-candidate-score",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 300.0,
+            "to_damping_gain": 325.0,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 325.0,
+            "to_damping_gain": 350.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "ambiguous-candidate-score",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 325.0,
+            "to_damping_gain": 337.5,
+            "resolved": true,
+            "low_mode_status": "matched",
+            "low_mode_reason": "accepted",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 337.5,
+            "to_damping_gain": 350.0,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "ambiguous-candidate-score",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 337.5,
+            "to_damping_gain": 343.75,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "ambiguous-candidate-score",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          },
+          {
+            "from_damping_gain": 337.5,
+            "to_damping_gain": 340.625,
+            "resolved": false,
+            "low_mode_status": "pending",
+            "low_mode_reason": "ambiguous-candidate-score",
+            "wide_mode_status": "matched",
+            "wide_mode_reason": "accepted"
+          }
+        ]
+      }
+    }
+  },
+  "hypothesis_tests": {
+    "four_common_equations_match": true,
+    "damping_off_is_structural_negative_control": true,
+    "named_modes_resolved": false,
+    "damping_on_low_mode_real_part_position_difference_per_s": null,
+    "measurement_position_effect_conclusion": "pending-because-a-named-mode-crosses-or-approaches-real-axis"
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "team_original_model_modified": false,
+    "common_intermediate_cases_only": true,
+    "pll_measurement_position_and_damping_separated": true,
+    "pll_gain_scan_performed": false,
+    "whole_system_hopf_margin_claimed": false,
+    "modulation_or_external_network_dynamics_compared": false,
+    "paper_sufficient_condition_evaluated": false,
+    "statement": "The four cases isolate PLL voltage measurement position from the VSM damping feedback switch. They do not establish a unique PLL mechanism or a whole-system stability margin."
+  }
+}

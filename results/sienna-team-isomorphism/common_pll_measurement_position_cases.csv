@@ -1,0 +1,5 @@
+case_id,pll_voltage_port,damping_gain,spectral_abscissa_per_s,stable_by_eigenvalues,low_real_per_s,low_frequency_hz,low_tracking_status,wide_real_per_s,wide_frequency_hz,wide_tracking_status,continuation_status
+filter_capacitor__damping_off,filter_capacitor,0.0,200.03291685721422,False,2.088525728448907,2.220520296192126,anchor,200.03291685721422,111.58097183474881,anchor,not-applicable
+filter_capacitor__damping_on,filter_capacitor,400.0,199.499788070396,False,-4.8994277336668866,0.7433576095363733,matched,199.499788070396,111.54141825447704,matched,resolved
+pcc__damping_off,pcc,0.0,200.0329168572161,False,2.0885257284484755,2.2205202961921366,anchor,200.0329168572161,111.58097183474861,anchor,not-applicable
+pcc__damping_on,pcc,400.0,200.03348408681455,False,-3.7174757565380316,0.0,pending,200.03348408681455,111.5808706080107,matched,pending

@@ -199,6 +199,21 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             scope["team_common_active_power_measurement_delay_compared"]
         )
 
+        common_pll = payload["common_pll_measurement"]
+        self.assertEqual(common_pll["status"], "passed")
+        self.assertEqual(common_pll["model_contract"]["state_count"], 18)
+        self.assertTrue(
+            common_pll["hypothesis_tests"][
+                "damping_off_is_structural_negative_control"
+            ]
+        )
+        self.assertFalse(
+            common_pll["hypothesis_tests"]["named_modes_resolved"]
+        )
+        self.assertTrue(
+            scope["team_common_pll_measurement_position_compared"]
+        )
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -284,6 +299,7 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             payload["common_active_power_measurement_delay"]["status"],
             "passed",
         )
+        self.assertEqual(payload["common_pll_measurement"]["status"], "passed")
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 
