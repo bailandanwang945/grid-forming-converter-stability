@@ -788,3 +788,10 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 功能提交为 `d61fac0d3a4df76f372af6688bb05c76330a7675`。定向14项测试与 Ruff 静态检查通过；前端生产构建通过；真实 Chromium 全流程输出 `BROWSER_E2E_SMOKE_OK`；后端全量 `196/196` 通过，耗时 `386.289 s`，启动器输出 `GFM_RELEASE_SMOKE_OK`。
 - 下一步转向替代解释：建立双方共有的 VSM 角频率与 Q–V 外环，将 PCC 电压保留在固定全局坐标，使角度重新进入功率—电压闭环；团队有功测量延迟与调制延迟先取理想极限，PLL 阻尼在双方同时关闭。只有该层方程、工作点和反例闭合后才比较谱。
 - 本轮未修改第三方只读源码、原始模型、`.gitignore`、`output/ui-review/` 或 `references/_archive/`；未制作或修改 PPT/PDF，也未构建 Windows 冻结包。
+
+## 2026-08-21：下一阶段在线文献与开源模型调研
+
+- 通过arXiv官方接口、GitHub官方API及项目官方文档核查近期论文与维护状态；通用网页检索连续超过一分钟无返回后主动终止，未把无返回的搜索当作调研证据。
+- 新增并登记四篇直接相关原文：内环阻尼、强网内环相关次同步振荡、线路动态对Hopf裕度的影响，以及单环构网控制的LCL谐振与有源阻尼。另核查Sienna、PowerDynamics、VSC_Lib、ATayebi基准、ANDES与PowerImpedance的适用性；stars只用于社区规模筛查。
+- 项目当前共有内环的最右模态约为`100–104 Hz`，加入相同Test 08有源阻尼后仍位于约`100 Hz`。结合文献，原先“直接补共有外环”的排序调整为：先执行共有内环/LCL模态指纹，核查左右特征向量、参与度、条件数及内环带宽、LCL参数、有源阻尼和等效电网强度的单因素灵敏度；随后再加入共有VSM/Q–V外环并同时追踪低频同步分支与宽频分支。
+- 这一调整不声称首次发现内环/LCL失稳，也不把单环droop-I或其他论文参数直接套用于团队双PI模型。阶段结论、失败条件与外部来源边界记录在`docs/research/next-stage-online-review-2026-08-21.md`。

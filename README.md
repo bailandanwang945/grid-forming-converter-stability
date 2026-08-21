@@ -159,7 +159,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 - 闭合工作簿主导极点 `0.578 Hz` 与论文正文 `1.2 Hz` 的差异；
 - 对 Simplus 非线性模型的近奇异和异常初始化现象，仅保留为未建立完整因果解释的兼容性问题；受污染响应不作为研究证据；
-- MathWorks 固定模型与团队16状态模型已经完成八点局部极点比较和三点团队非线性阶跃；Sienna Test 08 与团队模型的同构化中间算例已闭合六状态 LCL—PCC、双 PI、两条10状态共有内环及12状态有源阻尼路径。原始内环仍存在 `Rf·if` 结构缺口；两条固定输入内环路径加入相同有源阻尼后仍呈现特征根失稳，因而“仅缺有源阻尼即可改变分类”的假设在该中间模型中不受支持。下一步按 [`docs/research/sienna-team-equation-mapping.md`](docs/research/sienna-team-equation-mapping.md) 接入双方共有的 VSM 与 Q–V 外环及全局 PCC 坐标耦合，再决定是否安装 Julia 复跑第三方 VSM—PSCAD 基线；
+- MathWorks 固定模型与团队16状态模型已经完成八点局部极点比较和三点团队非线性阶跃；Sienna Test 08 与团队模型的同构化中间算例已闭合六状态 LCL—PCC、双 PI、两条10状态共有内环及12状态有源阻尼路径。原始内环仍存在 `Rf·if` 结构缺口；两条固定输入内环路径加入相同有源阻尼后仍呈现约 `100 Hz` 的特征根失稳，因而“仅缺有源阻尼即可改变分类”的假设在该中间模型中不受支持。根据 [`docs/research/next-stage-online-review-2026-08-21.md`](docs/research/next-stage-online-review-2026-08-21.md) 的在线调研，下一步先完成该内环/LCL宽频模态的参与度与单因素灵敏度核查，再按 [`docs/research/sienna-team-equation-mapping.md`](docs/research/sienna-team-equation-mapping.md) 接入双方共有的 VSM、Q–V 外环和全局 PCC 坐标耦合；方程与工作点闭合后再决定是否安装 Julia 复跑第三方 VSM—PSCAD 基线；
 - 完成另一台电脑的断网启动、案例重算、导出和退出清理验收；
 - 取得学院正式结项通知、模板与提交规则；软件之外的答辩材料由团队另行处理，本开发流程不制作或修改 PPT/PDF。
 

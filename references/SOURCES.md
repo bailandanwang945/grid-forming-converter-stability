@@ -42,3 +42,15 @@
 - UNIFI Consortium，“UNIFI Specifications for Grid-Forming Inverter-Based Resources: Version 3,” 2026-01-30，DOI: 10.2172/3016250。**当前仅核对了题名、版本、日期、发布机构和 DOI 元数据，尚未取得并阅读正文。** 因此它只登记为可能相关的候选规范，不能据此声称其中包含哪些具体功能、试验项目或判据，也暂不作为团队模型与实验设计的依据。因 OSTI 下载端点连接失败，尚未在仓库归档 PDF；后续取得原文并完成内容核查后，再决定是否采用并登记文件 SHA-256。<https://doi.org/10.2172/3016250>
 
 上述开源项目的 GitHub 关注量仅用于判断社区规模，不作为模型正确性的证据。2026-08-20 核查时，`PowerSimulationsDynamics.jl` 约 220 stars、`PowerDynamics.jl` 约 134 stars，且近期均有正式发布；数值可能随时间变化，研究引用固定 tag 与 commit，不固定关注量。
+
+## 内环、LCL与线路动态补充（2026-08-21 在线核查）
+
+- Liang Zhao, Xiongfei Wang, Zheming Jin, “Exploring Damping Effect of Inner Control Loops for Grid-Forming VSCs,” arXiv:2310.09660v1。论文以阻抗与复转矩系数分析外环、内环和电网阻抗共同形成的净阻尼，并讨论同步与次同步模态；本项目只把它用于内环/LCL模态实验设计，不直接套用参数结论。本地PDF：`references/papers/Zhao-Wang-Jin-2023-inner-loop-damping-GFM-VSC-arxiv-2310.09660v1.pdf`，SHA-256：`A1B1FC93FDA1A60456F4836693371D0194F53B78BA46BB6577D45BA66BC6DE2E`。<https://arxiv.org/abs/2310.09660v1>
+- Sushobhan Chatterjee, Sijia Geng, “Effects of Line Dynamics on Stability Margin to Hopf Bifurcation in Grid-Forming Inverters,” arXiv:2412.15449v1。论文在其算例中比较静态与动态线路，说明忽略线路动态可能高估Hopf稳定裕度；该结论不自动归因团队与Sienna的差异。本地PDF：`references/papers/Chatterjee-Geng-2024-line-dynamics-Hopf-GFM-arxiv-2412.15449v1.pdf`，SHA-256：`31BAB593ECA34A201FD03C9D89305871DDCF30C603D139CF0894254DECCCD2AB`。<https://arxiv.org/abs/2412.15449v1>
+- Meng Chen, Yufei Xi, Frede Blaabjerg, Lin Cheng, Ioannis Lestas, “LCL Resonance Analysis and Damping in Single-Loop Grid-Forming Wind Turbines,” arXiv:2504.06981v2。论文指出其单环droop-I结构中的LCL高频稳定性与低频功率环并非必然解耦，且有源阻尼需考虑开环非最小相位特性；本项目不把单环结论直接外推到双PI内环。本地PDF：`references/papers/Chen-et-al-2026-LCL-resonance-single-loop-GFM-arxiv-2504.06981v2.pdf`，SHA-256：`947AE0E0C6115A54C9E68C942D14E1713245DCED7657287EAD4EFC95AB93A37D`。<https://arxiv.org/abs/2504.06981v2>
+- Luke Ian Benedetti, Robin Preece, Panagiotis N. Papadopoulos, “Bifurcation Analysis of Sub-Synchronous Oscillations Related to Grid-Forming Converter Inner Controllers,” arXiv:2607.18894v1。论文针对级联内环构网变流器，以连续化与分岔分析研究强网内环相关振荡及电压/电流控制时间尺度；本项目只采用其“先核查内环时间尺度与模态身份”的方法线索。本地PDF：`references/papers/Benedetti-et-al-2026-inner-controller-SSO-bifurcation-arxiv-2607.18894v1.pdf`，SHA-256：`DB28D1F32F08E0630BCC3BCD111A87901E621F31BF65DD784E59D1F8C9EC995C`。<https://arxiv.org/abs/2607.18894v1>
+- `l2ep-epmlab/VSC_Lib`：MIT许可的MATLAB/SimPowerSystem构网与跟网模型库，公开L/LCL、单机与多节点示例；2026-08-21在线核查约50 stars，最近推送为2025-10-08。适合作为后续结构参照，当前不引入为项目运行依赖。<https://github.com/l2ep-epmlab/VSC_Lib>
+- `ATayebi/GridFormingConverters`：IEEE 9节点 droop、VSM、matching与dVOC算例代码，约138 stars，但最后代码推送为2020-05-30且仓库未声明SPDX许可；只作论文算例线索，不作为当前依赖。<https://github.com/ATayebi/GridFormingConverters>
+- `PowerImpedance.jl`：较新的Julia频域分析项目，公开GFM/GFL、线路电缆和广义奈奎斯特/相位移分析能力；2026-08-21在线核查约9 stars、GPL-3.0。方向相关但社区与项目成熟度尚不足以替代当前作者基线或Sienna固定参照。<https://github.com/Electa-Git/PowerImpedance.jl>
+
+本轮阶段决策见 `docs/research/next-stage-online-review-2026-08-21.md`。GitHub stars与更新时间只用于维护性筛查，不构成模型验证。
