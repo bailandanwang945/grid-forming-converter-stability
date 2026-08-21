@@ -755,7 +755,7 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 可重复入口 `python experiments/average-dq/run_sienna_team_common_lcl_audit.py` 生成 `results/sienna-team-isomorphism/common_lcl_isomorphism.json`，SHA-256 为 `0316B046FDEDF9D08206A2CED4D736A3348B50B9C46582D62A187B2CC1304F17`。API 和前端研究任务同步展示共有层结果、参数错配反例与整模型不可比边界。
 - 功能提交为 `675b747dee1648459271441a3dce79d83472c35e`。定向10项测试、Ruff 静态检查、前端生产构建均通过；后端全量 `178/178` 通过，耗时 `403.682 s`，并输出 `GFM_RELEASE_SMOKE_OK`；真实 Chromium 覆盖四个工作区、全部平均值 `dq` 研究任务、新增同构化摘要和导出边界，输出 `BROWSER_E2E_SMOKE_OK`。
 - 本轮只确认共有六状态 LCL 物理层在所列参数和坐标变换下的方程同构，不确认双 PI、前馈、虚拟阻抗、有源阻尼、外环、PLL、调制动态、外部网络、整机谱、Julia/PSCAD 轨迹或论文稳定性充分条件。下一层应在同一中间算例上对齐双 PI 状态缩放、前馈、解耦与虚拟阻抗，并对有源阻尼采用“双方都关闭”或“双方都显式建模”的公平比较。
-- GitHub HTTPS 在提交前同步检查时连接超时；本地语义提交已形成，远端推送待网络恢复后重试。现有 `.gitignore`、`output/ui-review/` 与 `references/_archive/` 未纳入本轮提交。本轮未制作或修改 PPT/PDF，也未重建 Windows 冻结包。
+- GitHub HTTPS 在提交前同步检查时连接超时；本地语义提交先行形成，随后改用已配置的 SSH 通道成功推送。现有 `.gitignore`、`output/ui-review/` 与 `references/_archive/` 未纳入本轮提交。本轮未制作或修改 PPT/PDF，也未重建 Windows 冻结包。
 
 ## 2026-08-21：双 PI 状态换元与完整内环结构缺口
 
@@ -766,4 +766,4 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 第一轮定向测试曾把理论零残差写成浮点精确等于零，实际 `1.110×10^-16` 导致1项失败；改为按预设 `1×10^-12` 门槛判断后，定向14项通过。另一次验证从 `apps/web` 子目录误启后端测试导致模块找不到，纠正到仓库根目录后通过；这些失败均保留为流程记录。
 - 首轮184项全量回归有183项通过，唯一失败是发布启动器收到 Windows `WinError 10053`；同一启动器定向重跑实际启动、输出 `GFM_RELEASE_SMOKE_OK` 并退出。随后再次执行全量回归，`184/184` 通过，耗时 `60.593 s`，启动器同样通过。前端生产构建和真实 Chromium 全流程通过，得到 `BROWSER_E2E_SMOKE_OK`。
 - 这一结果支持“PI 状态定义可经坐标缩放对应”和“原始两套完整内环尚有明确结构差异”，不支持整机模型确认、唯一失稳机理、Julia/PSCAD 轨迹复现、硬件结论或论文稳定性充分条件评价。下一步需新建来源标签明确的中间控制结构，并在“团队侧关闭 `Rf·if` 补偿”与“中间 Sienna 方程加入该项”之间作公平、可逆的模型选择；原始基线保持只读。
-- GitHub HTTPS 仍连接超时，本地提交继续保留，远端同步待网络恢复；既有无关改动未纳入。本轮未制作或修改 PPT/PDF，也未构建 Windows 冻结包。
+- GitHub HTTPS 仍连接超时，但 SSH 通道已将本轮提交同步到 `origin/research/nontrivial-core`；既有无关改动未纳入。本轮未制作或修改 PPT/PDF，也未构建 Windows 冻结包。
