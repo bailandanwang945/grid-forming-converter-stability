@@ -133,6 +133,21 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         )
         self.assertTrue(scope["team_common_inner_loop_variants_compared"])
 
+        active_damping = payload["common_active_damping"]
+        self.assertEqual(active_damping["status"], "passed")
+        self.assertTrue(
+            active_damping["counterfactual"]["gate_rejected_mismatch"]
+        )
+        self.assertFalse(
+            active_damping["hypothesis_test"][
+                "supported_for_both_structural_paths"
+            ]
+        )
+        for variant in active_damping["variants"].values():
+            self.assertEqual(variant["with_active_damping"]["state_count"], 12)
+            self.assertFalse(variant["stability_classification_changed"])
+        self.assertTrue(scope["team_common_active_damping_variants_compared"])
+
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
         common = CommonLCLParameters(
@@ -208,6 +223,7 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             ]
         )
         self.assertEqual(payload["common_inner_loop"]["status"], "passed")
+        self.assertEqual(payload["common_active_damping"]["status"], "passed")
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 

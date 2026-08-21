@@ -1,0 +1,83 @@
+{
+  "schema_version": "gfm-sienna-team-common-active-damping-audit/1.0",
+  "status": "passed",
+  "active_damping_contract": {
+    "filter_state_count": 2,
+    "cutoff_rad_s": 50.0,
+    "gain": 0.2,
+    "feedback": "-kad * (v_capacitor - phi)",
+    "filter_dynamics": "phi_dot = omega_ad * (v_capacitor - phi)"
+  },
+  "verification_gate": {
+    "matrix_and_rhs_max_abs_difference_per_s": 1e-10,
+    "counterfactual_state_matrix_difference_min_per_s": 0.5
+  },
+  "variants": {
+    "both_omit_resistive_drop_feedforward": {
+      "without_active_damping": {
+        "state_count": 10,
+        "spectral_abscissa_per_s": 117.1371464864823,
+        "stable_by_eigenvalues": false
+      },
+      "with_active_damping": {
+        "state_count": 12,
+        "status": "passed",
+        "state_matrix_max_abs_difference_per_s": 2.7284841053187847e-12,
+        "input_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+        "probe_rhs_max_abs_difference_per_s": 6.821210263296962e-13,
+        "spectral_abscissa_per_s": 122.0138314980916,
+        "stable_by_eigenvalues": false,
+        "rightmost_eigenvalue": {
+          "real_per_s": 122.0138314980916,
+          "imag_per_s": 627.9979664986665,
+          "oscillation_frequency_hz": 99.94898061992127
+        }
+      },
+      "spectral_abscissa_change_per_s": 4.876685011609311,
+      "stability_classification_changed": false
+    },
+    "both_include_resistive_drop_feedforward": {
+      "without_active_damping": {
+        "state_count": 10,
+        "spectral_abscissa_per_s": 119.21536174509264,
+        "stable_by_eigenvalues": false
+      },
+      "with_active_damping": {
+        "state_count": 12,
+        "status": "passed",
+        "state_matrix_max_abs_difference_per_s": 2.7284841053187847e-12,
+        "input_matrix_max_abs_difference_per_s": 9.094947017729282e-13,
+        "probe_rhs_max_abs_difference_per_s": 9.094947017729282e-13,
+        "spectral_abscissa_per_s": 123.89318932165776,
+        "stable_by_eigenvalues": false,
+        "rightmost_eigenvalue": {
+          "real_per_s": 123.89318932165776,
+          "imag_per_s": 629.2657131761982,
+          "oscillation_frequency_hz": 100.15074877023876
+        }
+      },
+      "spectral_abscissa_change_per_s": 4.677827576565122,
+      "stability_classification_changed": false
+    }
+  },
+  "counterfactual": {
+    "change": "source active-damping cutoff multiplied by 0.98",
+    "state_matrix_max_abs_difference_per_s": 1.000000000000007,
+    "probe_rhs_max_abs_difference_per_s": 0.03000000000000136,
+    "gate_rejected_mismatch": true
+  },
+  "hypothesis_test": {
+    "hypothesis": "adding the same Test 08 active-damping states is sufficient to change the fixed-input common-inner-loop classification",
+    "supported_for_both_structural_paths": false
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "team_original_model_modified": false,
+    "common_active_damping_intermediate_only": true,
+    "outer_controls_compared": false,
+    "pll_compared": false,
+    "modulation_or_limits_compared": false,
+    "external_network_dynamics_compared": false,
+    "statement": "The same active-damping states are added only to both common intermediate models. Classification changes, if any, apply only to these fixed-input inner loops and do not establish causality for either original full system."
+  }
+}

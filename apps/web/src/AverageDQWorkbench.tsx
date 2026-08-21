@@ -860,6 +860,12 @@ export default function AverageDQWorkbench() {
             <div><small>最大匹配谱位移 / s⁻¹</small><b>{siennaAudit.common_inner_loop.structural_choice_sensitivity.maximum_matched_eigenvalue_displacement_per_s.toFixed(3)}</b></div>
             <div><small>两路径固定输入分类</small><b>{siennaAudit.common_inner_loop.variants.both_omit_resistive_drop_feedforward.stable_by_eigenvalues ? '稳定' : '失稳'} / {siennaAudit.common_inner_loop.variants.both_include_resistive_drop_feedforward.stable_by_eigenvalues ? '稳定' : '失稳'}</b></div>
           </div>
+          <div className="panel evidence-strip" data-testid="sienna-team-active-damping-summary">
+            <div><small>共有有源阻尼状态</small><b>{siennaAudit.common_active_damping.active_damping_contract.filter_state_count}</b></div>
+            <div><small>关闭 Rfif 路径 α 变化 / s⁻¹</small><b>{siennaAudit.common_active_damping.variants.both_omit_resistive_drop_feedforward.spectral_abscissa_change_per_s.toFixed(3)}</b></div>
+            <div><small>加入 Rfif 路径 α 变化 / s⁻¹</small><b>{siennaAudit.common_active_damping.variants.both_include_resistive_drop_feedforward.spectral_abscissa_change_per_s.toFixed(3)}</b></div>
+            <div><small>“仅缺有源阻尼”假设</small><b>{siennaAudit.common_active_damping.hypothesis_test.supported_for_both_structural_paths ? '支持' : '不支持'}</b></div>
+          </div>
           <div className="table-scroll">
             <table>
               <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>
@@ -868,7 +874,7 @@ export default function AverageDQWorkbench() {
               </tr>)}</tbody>
             </table>
           </div>
-          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但原始完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。软件因此保留两个不改动原始基线的10状态中间算例，分别让双方同时关闭或同时加入该项；两条路径均通过方程门，在 PCC 电压与参考电压固定时都呈现内环特征根失稳，加入该项使谱横坐标增加约 2.078 s⁻¹，但不能据此推断任一原始整机的稳定性。共有层不包含 Sienna 的代数网络、团队的动态外部线路、外环、PLL、有源阻尼状态或调制动态，因而仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
+          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但原始完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。软件因此保留两个不改动原始基线的10状态中间算例，分别让双方同时关闭或同时加入该项；两条路径均通过方程门，在 PCC 电压与参考电压固定时都呈现内环特征根失稳。再向双方同时加入 Test 08 的两状态有源阻尼后，两条路径仍失稳，谱横坐标反而分别增加约 4.877 与 4.678 s⁻¹；因此“仅缺有源阻尼即可改变分类”的假设在本中间模型中不受支持，但这不是对有源阻尼一般作用的否定。共有层不包含 Sienna 的代数网络、团队的动态外部线路、外环、PLL、调制或限幅，因而仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
       </section>}
     </section>
   </main>

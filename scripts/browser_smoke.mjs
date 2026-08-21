@@ -334,8 +334,14 @@ try {
       throw new Error(`Sienna-team common inner-loop summary is missing ${evidence}: ${commonInnerLoopSummary}`)
     }
   }
+  const activeDampingSummary = await page.getByTestId('sienna-team-active-damping-summary').innerText()
+  for (const evidence of ['共有有源阻尼状态\n2', '关闭 Rfif 路径 α 变化 / s⁻¹\n4.877', '加入 Rfif 路径 α 变化 / s⁻¹\n4.678', '“仅缺有源阻尼”假设\n不支持']) {
+    if (!activeDampingSummary.includes(evidence)) {
+      throw new Error(`Sienna-team active-damping summary is missing ${evidence}: ${activeDampingSummary}`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
-  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '谱横坐标增加约 2.078 s⁻¹', '不能据此推断任一原始整机的稳定性', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
+  for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 boundary is missing ${evidence}.`)
     }

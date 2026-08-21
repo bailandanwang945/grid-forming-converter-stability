@@ -15,6 +15,9 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy.optimize import linear_sum_assignment
 
+from backend.core.sienna_team_common_active_damping import (
+    sienna_team_common_active_damping_audit,
+)
 from backend.core.sienna_team_common_inner_loop import (
     CommonInnerLoopParameters,
     sienna_team_common_inner_loop_audit,
@@ -491,28 +494,33 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             resistive_drop_feedforward_gain=1.0,
         ),
     )
-    common_inner_loop = sienna_team_common_inner_loop_audit(
-        CommonInnerLoopParameters(
-            frequency_hz=parameters.frequency_hz,
-            voltage_kp=parameters.voltage_kp,
-            voltage_ki_per_s=parameters.voltage_ki,
-            current_kp=parameters.current_kp,
-            current_ki_per_s=parameters.current_ki,
-            converter_side_resistance_pu=(
-                parameters.converter_side_resistance_pu
-            ),
-            converter_side_reactance_pu=parameters.converter_side_reactance_pu,
-            filter_capacitor_susceptance_pu=(
-                parameters.filter_capacitor_susceptance_pu
-            ),
-            grid_side_resistance_pu=parameters.grid_side_resistance_pu,
-            grid_side_reactance_pu=parameters.grid_side_reactance_pu,
-            virtual_resistance_pu=parameters.virtual_resistance_pu,
-            virtual_reactance_pu=parameters.virtual_reactance_pu,
-            resistive_drop_feedforward_gain=0.0,
-            synchronous_frequency_pu=parameters.system_frequency_pu,
+    common_inner_parameters = CommonInnerLoopParameters(
+        frequency_hz=parameters.frequency_hz,
+        voltage_kp=parameters.voltage_kp,
+        voltage_ki_per_s=parameters.voltage_ki,
+        current_kp=parameters.current_kp,
+        current_ki_per_s=parameters.current_ki,
+        converter_side_resistance_pu=parameters.converter_side_resistance_pu,
+        converter_side_reactance_pu=parameters.converter_side_reactance_pu,
+        filter_capacitor_susceptance_pu=(
+            parameters.filter_capacitor_susceptance_pu
         ),
+        grid_side_resistance_pu=parameters.grid_side_resistance_pu,
+        grid_side_reactance_pu=parameters.grid_side_reactance_pu,
+        virtual_resistance_pu=parameters.virtual_resistance_pu,
+        virtual_reactance_pu=parameters.virtual_reactance_pu,
+        resistive_drop_feedforward_gain=0.0,
+        synchronous_frequency_pu=parameters.system_frequency_pu,
+    )
+    common_inner_loop = sienna_team_common_inner_loop_audit(
+        common_inner_parameters,
         angle_rad=float(FROZEN_INITIAL_STATE[0]),
+    )
+    common_active_damping = sienna_team_common_active_damping_audit(
+        common_inner_parameters,
+        angle_rad=float(FROZEN_INITIAL_STATE[0]),
+        active_damping_cutoff_rad_s=parameters.active_damping_cutoff_rad_s,
+        active_damping_gain=parameters.active_damping_gain,
     )
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
@@ -534,7 +542,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.3",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.4",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -544,6 +552,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and common_lcl_audit["status"] == "passed"
             and inner_control_mapping["pi_state_mapping"]["status"] == "passed"
             and common_inner_loop["status"] == "passed"
+            and common_active_damping["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -605,6 +614,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         "common_lcl_isomorphism": common_lcl_audit,
         "inner_control_mapping": inner_control_mapping,
         "common_inner_loop": common_inner_loop,
+        "common_active_damping": common_active_damping,
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -615,6 +625,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "team_pi_state_scaling_compared": True,
             "team_complete_inner_control_compared": False,
             "team_common_inner_loop_variants_compared": True,
+            "team_common_active_damping_variants_compared": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
