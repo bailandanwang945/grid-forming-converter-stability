@@ -815,3 +815,11 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 可重复入口 `python experiments/average-dq/run_sienna_team_common_outer_loop.py` 生成 `results/sienna-team-isomorphism/common_outer_loop_power_ports.json`，SHA-256 为 `FA9FC2907D05AA748B7AC04E866B45B80198C398BD1EA0F65A80A6A97C454821`。功能提交为 `93ea3d489eb9e8b486e34923bf9a43350c38267c`；API 契约升至 `gfm-sienna-test08-source-transcription-audit/1.6`，前端在原 Sienna 证据链中展示两个端口约定和低/宽频支路。
 - 定向16项测试、Ruff 与前端生产构建通过；真实 Chromium 全流程输出 `BROWSER_E2E_SMOKE_OK`。全量后端首轮 `211/212`，唯一失败为发布启动器瞬时 `WinError 10053`；同一启动器定向重跑实际启动、输出 `GFM_RELEASE_SMOKE_OK` 并释放端口，因此不把首轮写成全绿。另一次 Python 定向检查曾误从 `apps/web` 子目录启动并因找不到 `backend` 失败，返回仓库根目录后16项通过。
 - 下一步进入 M3.3：保持功率测量端口约定固定，逐项恢复有功测量延迟、调制延迟、PLL/有源阻尼和外部网络动态。仍不制作或修改 PPT/PDF，不重建 Windows 冻结包。
+
+## 2026-08-21：M3.3 在线调研、文献归档与现成方案复用决策
+
+- 针对M3.2主动理想化的有功测量延迟、调制延迟、PLL阻尼和固定PCC边界继续检索原始来源。Mitsugi—Baba的IEEE Access论文给出含测量时间常数的VSG三阶Hurwitz关系与CHIL证据；Girona-Badia等的2026年论文说明频率估计器结构、整定和交流电压测量点均需显式建模；Luo等的PESGM论文用稳定边界比较VSG阻尼与PLL阻尼；已有Chatterjee—Geng论文继续约束静态/动态线路的研究边界。
+- 新增两篇本地PDF：频率估计器论文`7017502F…F464E`，VSG阻尼边界作者稿`54BD30C…BA98C`。Mitsugi—Baba论文虽为CC BY 4.0，IEEE下载端点在本机返回HTTP 418；本轮只登记已核对的在线全文和DOI，没有把下载失败写成已归档。
+- 固定`l2ep-epmlab/VSC_Lib` commit `61d1535…`。完整仓库按MATLAB版本重复近千个文件，浅克隆超过有界等待窗口后已终止并清除半成品；改为保存R2021a中与LCL构网、PLL、控制与输出延迟直接相关的14个文件和逐文件哈希清单。核读确认其平均模型采用`TransportDelay(Output_Delay)`，不能与团队一阶调制状态混称为同一实现。
+- 下一项确定为M3.3a：在M3.2两个功率测量端口约定上，双方同时加入`T_m dp_m/dt=p-p_m`，以`0.01/0.025/0.05/0.1/0.2 s`执行14状态连续化，同时跟踪约3.4 Hz同步支路、约112 Hz宽频支路和新增测量极点。13状态理想模型只作降阶极限，不强行续接。
+- 当前共有外环中间模型已有宽频右半平面支路，因此第一轮只报告命名支路移动和方程同构门，不称为整机Hopf稳定裕度。研究问题、主假设、反例与失败条件已写入`docs/research/m3p3-dynamics-restoration-decision-2026-08-21.md`。前端新页面、Julia安装和Windows发布包均不作为本阶段前置条件。
