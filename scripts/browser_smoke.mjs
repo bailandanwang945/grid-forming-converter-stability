@@ -418,6 +418,24 @@ try {
       throw new Error(`Sienna-team delay-realization boundary is missing ${evidence}.`)
     }
   }
+  const lineSummary = await page.getByTestId('average-dq-external-line-summary').innerText()
+  for (const evidence of ['动态线路端口重组\n通过', '固定线路 X/R\n15', '基准同步支路实部变化 / s⁻¹\n0.0109', '位移随 X 单调增大\n不支持']) {
+    if (!lineSummary.includes(evidence)) {
+      throw new Error(`Average-dq external-line summary is missing ${evidence}: ${lineSummary}`)
+    }
+  }
+  const lineTable = await page.getByTestId('average-dq-external-line-table').innerText()
+  for (const evidence of ['0.20', '-1.6406', '0.2265', '稳定 / 失稳', '6.892', '0.50', '模态待定']) {
+    if (!lineTable.includes(evidence)) {
+      throw new Error(`Average-dq external-line table is missing ${evidence}: ${lineTable}`)
+    }
+  }
+  const lineBoundary = await page.getByTestId('average-dq-external-line-boundary').innerText()
+  for (const evidence of ['设备16状态', '中间 α 值仅用于模态连续追踪', '事后诊断量', '不进入预注册 H2/H3', '特征值距离门', '不证明静态线路一般会高估 Hopf 稳定裕度']) {
+    if (!lineBoundary.includes(evidence)) {
+      throw new Error(`Average-dq external-line boundary is missing ${evidence}.`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
   for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '功率测量位置不同', '13状态中间算例', '约 3.4 Hz 低频支路', '结构差异而非参数误差', '14状态中间算例', '低频支路在 Tm=0.025～0.05 s 之间过零', '不是整机稳定裕度', '18状态共同 PLL 算例', 'PCC 低频支路发生实轴过渡', '模态待定', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {

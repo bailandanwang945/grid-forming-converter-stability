@@ -33,6 +33,9 @@ from backend.core.sienna_team_physical_modulation_lag import (
 from backend.core.delay_approximation_audit import (
     run_delay_approximation_audit,
 )
+from backend.core.average_dq_external_line_dynamics import (
+    run_external_line_dynamics_audit,
+)
 from backend.core.sienna_team_inner_loop_modal_fingerprint import (
     run_common_inner_loop_modal_fingerprint,
 )
@@ -554,6 +557,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
     common_modulation_delay = run_common_modulation_delay_audit()
     physical_modulation_lag = run_physical_modulation_frame_audit()
     delay_approximation = run_delay_approximation_audit()
+    external_line_dynamics = run_external_line_dynamics_audit()
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -574,7 +578,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/1.9",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/2.0",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -592,6 +596,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and common_modulation_delay["status"] == "passed"
             and physical_modulation_lag["status"] == "passed"
             and delay_approximation["status"] == "passed"
+            and external_line_dynamics["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -665,6 +670,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         "common_modulation_delay": common_modulation_delay,
         "physical_modulation_lag": physical_modulation_lag,
         "delay_approximation": delay_approximation,
+        "external_line_dynamics": external_line_dynamics,
         "scope": {
             "source_equation_transcription_verified": True,
             "julia_runtime_executed_on_this_machine": False,
@@ -683,6 +689,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "team_common_local_dq_modulation_lag_compared": True,
             "physical_frame_modulation_lag_compared": True,
             "delay_realization_frequency_responses_compared": True,
+            "team_static_and_dynamic_external_line_compared": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
@@ -709,6 +716,9 @@ def sienna_test08_audit_payload() -> dict[str, object]:
                 "a physical-frame first-order lag; exact transport delay and "
                 "Padé orders one through three are compared only by frequency "
                 "response, not by invented finite-dimensional physical modes. "
+                "A separate team-model audit then compares a static algebraic "
+                "line with the complete external RL differential equation; its "
+                "intermediate homotopy values are continuation coordinates. "
                 "This audit does not rerun Julia "
                 "or PSCAD and does not validate the team's different 16-state model."
             ),

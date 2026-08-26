@@ -975,6 +975,31 @@ export default function AverageDQWorkbench() {
             </table>
           </div>
           <p className="scope-note" data-testid="sienna-team-delay-realization-boundary">这里依次区分三种对象：控制器局部 dq 分量的一阶惯性环节、物理固定坐标系中的一阶惯性环节，以及单位幅值的纯时延与 Padé 有理近似。前两者已经分别建立坐标换元检验；纯时延与 Padé 当前只比较 0～200 Hz 频率响应，没有把 Padé 附加极点解释为物理模态，也没有声称完成含精确纯时延的闭环特征根分析。1 ms 下，低频支路的各实现近似重合，而宽频支路的局部 dq 一阶惯性环节出现明显幅值衰减，因此不能把它直接写成“PWM 纯时延”。</p>
+          <div className="panel evidence-strip" data-testid="average-dq-external-line-summary">
+            <div><small>动态线路端口重组</small><b>{siennaAudit.external_line_dynamics.hypothesis_tests.h1_dynamic_reassembly_passed ? '通过' : '失败'}</b></div>
+            <div><small>固定线路 X/R</small><b>{siennaAudit.external_line_dynamics.model_contract.line_x_over_r.toFixed(0)}</b></div>
+            <div><small>基准同步支路实部变化 / s⁻¹</small><b>{siennaAudit.external_line_dynamics.hypothesis_tests.h2_baseline_dynamic_low_mode_moves_right.dynamic_minus_static_real_per_s.toFixed(4)}</b></div>
+            <div><small>位移随 X 单调增大</small><b>{siennaAudit.external_line_dynamics.hypothesis_tests.h3_low_mode_shift_magnitude_increases_with_reactance.result === 'supported-in-bounded-study' ? '有界支持' : '不支持'}</b></div>
+          </div>
+          <div className="table-scroll" data-testid="average-dq-external-line-table">
+            <table>
+              <thead><tr><th>线路 X / p.u.</th><th>静态线路谱横坐标 / s⁻¹</th><th>动态 RL 线路谱横坐标 / s⁻¹</th><th>静态/动态分类</th><th>动态端中频支路 / Hz</th><th>同步支路实部变化 / s⁻¹</th><th>内环—LCL 支路追踪</th></tr></thead>
+              <tbody>{siennaAudit.external_line_dynamics.cases.map(studyCase => {
+                const staticPoint = studyCase.points.find(point => point.line_dynamics_fraction === 0)!
+                const dynamicPoint = studyCase.points.find(point => point.line_dynamics_fraction === 1)!
+                return <tr key={studyCase.line_reactance_pu}>
+                  <td>{studyCase.line_reactance_pu.toFixed(2)}</td>
+                  <td>{staticPoint.spectral_abscissa_per_s.toFixed(4)}</td>
+                  <td>{dynamicPoint.spectral_abscissa_per_s.toFixed(4)}</td>
+                  <td>{staticPoint.stable_by_eigenvalues ? '稳定' : '失稳'} / {dynamicPoint.stable_by_eigenvalues ? '稳定' : '失稳'}</td>
+                  <td>{dynamicPoint.intermediate_frequency_mode.pole.frequency_hz.toFixed(3)}</td>
+                  <td>{studyCase.dynamic_minus_static_low_mode_real_per_s.toFixed(4)}</td>
+                  <td>{studyCase.wide_frequency_mode_resolved ? '已追踪' : '模态待定'}</td>
+                </tr>
+              })}</tbody>
+            </table>
+          </div>
+          <p className="scope-note" data-testid="average-dq-external-line-boundary">本对照在团队平均值 dq 单机无穷大母线模型中保持设备16状态、加载工作点和线路工频阻抗不变，只改变外部线路电磁暂态的保留程度；中间 α 值仅用于模态连续追踪，不是实际线路参数。X=0.2 p.u. 时静态线路为稳定、动态 RL 线路为失稳，决定谱横坐标的是约 6.89 Hz 的中频振荡支路；该支路是在全谱分类差异出现后增加的事后诊断量，不进入预注册 H2/H3。X=0.5 p.u. 的内环—LCL 支路靠近静态端时触发特征值距离门，保留为模态待定。结果不是 Sienna 或 Chatterjee—Geng 算例复现，也不证明静态线路一般会高估 Hopf 稳定裕度。</p>
           <div className="table-scroll">
             <table>
               <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>
@@ -983,7 +1008,7 @@ export default function AverageDQWorkbench() {
               </tr>)}</tbody>
             </table>
           </div>
-          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但原始完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。软件因此保留两个不改动原始基线的10状态中间算例，分别让双方同时关闭或同时加入该项；两条路径均通过方程门，在 PCC 电压与参考电压固定时都呈现内环特征根失稳。再向双方同时加入 Test 08 的两状态有源阻尼后，两条路径仍失稳，谱横坐标反而分别增加约 4.877 与 4.678 s⁻¹；因此“仅缺有源阻尼即可改变分类”的假设在本中间模型中不受支持，但这不是对有源阻尼一般作用的否定。进一步的模态指纹表明，在冻结的团队坐标基下，约 100 Hz 命名支路主要集中于网侧滤波电流状态，并具有可辨识的电压 PI 参与；X2 是已测 ±20% 单因素范围内最强的局部实部灵敏度项。这里的 X2 是 LCL 网侧滤波电抗，不是外部电网电抗或 SCR；参与度也不对未来任意状态重缩放保持不变。该结果只为电气—控制相互作用提供有界数值支持，不构成唯一机理、连续稳定边界或因果证明。共有 VSM 与 Q–V 外环现已在加载平衡点闭合，但原始两套模型的功率测量位置不同：Sienna Test 08 位于滤波电容端，团队模型位于 PCC。软件分别建立“双方都在电容端测量”和“双方都在 PCC 测量”的13状态中间算例；两者都出现约 3.4 Hz 低频支路并保留约 112 Hz 宽频失稳支路。混用原始端口会产生约 500 s⁻¹ 的状态矩阵差，故这是结构差异而非参数误差。随后建立两套14状态中间算例，在每种端口约定内为双方加入相同的一阶有功功率测量延迟；已测范围内，低频支路在 Tm=0.025～0.05 s 之间过零，而既有宽频失稳支路几乎不移动。这支持延迟主要作用于同步低频支路的有界假设，但不是整机稳定裕度。四个18状态共同 PLL 算例进一步分离了电压测量位置与阻尼开关；方程门和关闭阻尼负对照均通过，但 PCC 低频支路发生实轴过渡，当前方法将其保留为模态待定。调制部分现已分别比较局部 dq 一阶惯性环节与物理固定坐标系一阶惯性环节，并完成纯时延及一至三阶 Padé 近似的频率响应核验；仍未完成含精确纯时延的闭环谱，也未比较外部网络动态，仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
+          <p className="scope-note" data-testid="sienna-test08-audit-boundary">该复核按固定源码独立转写方程，并在 60 Hz 下重现上游冻结初值与19个特征值；同时确认两套方程共有的六状态 LCL 层在坐标旋转后等价，1% 网侧滤波电抗错配会被反例门检出。双 PI 的四个积分状态可通过 η=Kᵢξ 严格换元，但原始完整内环仍未同构：即使对齐 Sienna 暴露的前馈与有源阻尼开关，团队电压指令中的 Rfif 电阻压降前馈仍无 Test 08 对应增益。软件因此保留两个不改动原始基线的10状态中间算例，分别让双方同时关闭或同时加入该项；两条路径均通过方程门，在 PCC 电压与参考电压固定时都呈现内环特征根失稳。再向双方同时加入 Test 08 的两状态有源阻尼后，两条路径仍失稳，谱横坐标反而分别增加约 4.877 与 4.678 s⁻¹；因此“仅缺有源阻尼即可改变分类”的假设在本中间模型中不受支持，但这不是对有源阻尼一般作用的否定。进一步的模态指纹表明，在冻结的团队坐标基下，约 100 Hz 命名支路主要集中于网侧滤波电流状态，并具有可辨识的电压 PI 参与；X2 是已测 ±20% 单因素范围内最强的局部实部灵敏度项。这里的 X2 是 LCL 网侧滤波电抗，不是外部电网电抗或 SCR；参与度也不对未来任意状态重缩放保持不变。该结果只为电气—控制相互作用提供有界数值支持，不构成唯一机理、连续稳定边界或因果证明。共有 VSM 与 Q–V 外环现已在加载平衡点闭合，但原始两套模型的功率测量位置不同：Sienna Test 08 位于滤波电容端，团队模型位于 PCC。软件分别建立“双方都在电容端测量”和“双方都在 PCC 测量”的13状态中间算例；两者都出现约 3.4 Hz 低频支路并保留约 112 Hz 宽频失稳支路。混用原始端口会产生约 500 s⁻¹ 的状态矩阵差，故这是结构差异而非参数误差。随后建立两套14状态中间算例，在每种端口约定内为双方加入相同的一阶有功功率测量延迟；已测范围内，低频支路在 Tm=0.025～0.05 s 之间过零，而既有宽频失稳支路几乎不移动。这支持延迟主要作用于同步低频支路的有界假设，但不是整机稳定裕度。四个18状态共同 PLL 算例进一步分离了电压测量位置与阻尼开关；方程门和关闭阻尼负对照均通过，但 PCC 低频支路发生实轴过渡，当前方法将其保留为模态待定。调制部分现已分别比较局部 dq 一阶惯性环节与物理固定坐标系一阶惯性环节，并完成纯时延及一至三阶 Padé 近似的频率响应核验；仍未完成含精确纯时延的闭环谱。外部线路部分已在团队平均值 dq 模型内比较静态代数线路与动态 RL 线路，但尚未建立与 Sienna 网络方程的跨模型同构，因此仍不能逐根比较16状态与19状态整机特征值。这里没有运行 Julia 或 PSCAD，也没有评价 MathWorks模型或论文稳定性充分条件。</p>
       </section>}
     </section>
   </main>

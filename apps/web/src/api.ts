@@ -1645,6 +1645,63 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  external_line_dynamics: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      device_state_count: number
+      line_reactance_levels_pu: number[]
+      line_x_over_r: number
+      line_dynamics_fractions: number[]
+      baseline_line_reactance_pu: number
+      static_line_definition: string
+      dynamic_line_definition: string
+    }
+    dynamic_reassembly_observed_max_abs_difference_per_s: number
+    cases: Array<{
+      line_reactance_pu: number
+      line_resistance_pu: number
+      line_x_over_r: number
+      operating_point_residual_inf: number
+      dynamic_reassembly_max_abs_difference_per_s: number
+      independent_dynamic_closure_difference_per_s: number
+      low_frequency_mode_resolved: boolean
+      intermediate_frequency_mode_resolved: boolean
+      wide_frequency_mode_resolved: boolean
+      dynamic_minus_static_low_mode_real_per_s: number
+      points: Array<{
+        line_dynamics_fraction: number
+        spectral_abscissa_per_s: number
+        stable_by_eigenvalues: boolean
+        low_frequency_mode: { pole: SiennaDelayPole; tracking: SiennaDelayTracking }
+        intermediate_frequency_mode: { pole: SiennaDelayPole; tracking: SiennaDelayTracking }
+        wide_frequency_mode: { pole: SiennaDelayPole; tracking: SiennaDelayTracking }
+      }>
+    }>
+    hypothesis_tests: {
+      h1_dynamic_reassembly_passed: boolean
+      h2_baseline_dynamic_low_mode_moves_right: {
+        result: string
+        dynamic_minus_static_real_per_s: number
+      }
+      h3_low_mode_shift_magnitude_increases_with_reactance: {
+        result: string
+        absolute_real_shifts_per_s: number[]
+      }
+    }
+    scope: {
+      team_average_dq_smib_only: boolean
+      same_device_states_and_operating_point_within_each_case: boolean
+      intermediate_alpha_values_are_physical_parameters: boolean
+      sienna_or_chatterjee_geng_case_reproduced: boolean
+      general_hopf_margin_claimed: boolean
+      all_low_frequency_modes_resolved: boolean
+      all_intermediate_frequency_modes_resolved: boolean
+      all_wide_frequency_modes_resolved: boolean
+      intermediate_frequency_branch_is_posthoc_diagnostic: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1663,6 +1720,7 @@ export type SiennaTest08AuditResult = {
     team_common_local_dq_modulation_lag_compared: boolean
     physical_frame_modulation_lag_compared: boolean
     delay_realization_frequency_responses_compared: boolean
+    team_static_and_dynamic_external_line_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

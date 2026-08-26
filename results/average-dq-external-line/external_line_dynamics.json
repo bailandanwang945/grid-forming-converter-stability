@@ -1,0 +1,1560 @@
+{
+  "schema_version": "gfm-average-dq-external-line-dynamics/1.0",
+  "status": "passed",
+  "model_contract": {
+    "device_state_count": 16,
+    "line_reactance_levels_pu": [
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "line_x_over_r": 15.0,
+    "line_dynamics_fractions": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "baseline_line_reactance_pu": 0.3,
+    "static_line_definition": "alpha=0 algebraic synchronous-frame impedance",
+    "dynamic_line_definition": "alpha=1 complete external RL differential equation"
+  },
+  "verification_gates": {
+    "dynamic_reassembly_max_abs_difference_per_s": 2e-07
+  },
+  "dynamic_reassembly_observed_max_abs_difference_per_s": 5.744254849560093e-09,
+  "cases": [
+    {
+      "line_reactance_pu": 0.05,
+      "line_resistance_pu": 0.0033333333333333335,
+      "line_x_over_r": 15.0,
+      "operating_point_residual_inf": 5.3290705182007514e-14,
+      "dynamic_reassembly_max_abs_difference_per_s": 4.3282852857373655e-09,
+      "independent_dynamic_closure_difference_per_s": 0.0,
+      "low_frequency_mode_resolved": true,
+      "intermediate_frequency_mode_resolved": true,
+      "wide_frequency_mode_resolved": true,
+      "dynamic_minus_static_low_mode_real_per_s": -0.058053285118260356,
+      "points": [
+        {
+          "line_dynamics_fraction": 0.0,
+          "spectral_abscissa_per_s": 8.600796454359823,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.3193465556689016,
+              "imag_per_s": 16.706967096009095,
+              "frequency_hz": 2.6589963974034956
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999886544777977,
+              "left_mac": 0.9999963290824792,
+              "combined_mac": 0.9999924917727759,
+              "normalized_eigenvalue_distance": 0.0009123163149450328,
+              "relative_candidate_margin": 0.5427340649627923,
+              "condition_number": 56.82607939608431,
+              "right_eigenpair_residual": 8.957080472217988e-16,
+              "left_eigenpair_residual": 2.0963791847338615e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 8.600796454359823,
+              "imag_per_s": 32.45400192443898,
+              "frequency_hz": 5.165214829388347
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999961597745017,
+              "left_mac": 0.9999892241737842,
+              "combined_mac": 0.9999926919681301,
+              "normalized_eigenvalue_distance": 0.005553555547318896,
+              "relative_candidate_margin": 0.46845921152312037,
+              "condition_number": 64.22937385808513,
+              "right_eigenpair_residual": 4.2305897360701734e-16,
+              "left_eigenpair_residual": 4.143908446578204e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -645.2020630557165,
+              "imag_per_s": 360.2219309792882,
+              "frequency_hz": 57.331100925461264
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.999863640107037,
+              "left_mac": 0.9994071319815206,
+              "combined_mac": 0.9996353599848182,
+              "normalized_eigenvalue_distance": 0.04655343408640372,
+              "relative_candidate_margin": 0.48041746976418825,
+              "condition_number": 5.1495490364077625,
+              "right_eigenpair_residual": 4.535180486416576e-16,
+              "left_eigenpair_residual": 6.736618971758702e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.25,
+          "spectral_abscissa_per_s": 8.628086162825436,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.3337870715767435,
+              "imag_per_s": 16.71186814675786,
+              "frequency_hz": 2.6597764238565054
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999886293940641,
+              "left_mac": 0.99999630398721,
+              "combined_mac": 0.9999924666832746,
+              "normalized_eigenvalue_distance": 0.0009172146621943387,
+              "relative_candidate_margin": 0.5391390453127359,
+              "condition_number": 56.94546707879221,
+              "right_eigenpair_residual": 6.594349846193653e-16,
+              "left_eigenpair_residual": 1.5060613280908672e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 8.628086162825436,
+              "imag_per_s": 32.270508966114825,
+              "frequency_hz": 5.136011018048503
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999961757778049,
+              "left_mac": 0.9999891648755997,
+              "combined_mac": 0.9999926703205582,
+              "normalized_eigenvalue_distance": 0.005546935600304947,
+              "relative_candidate_margin": 0.4654985738908441,
+              "condition_number": 64.32119283759549,
+              "right_eigenpair_residual": 4.113878232641138e-16,
+              "left_eigenpair_residual": 5.162384907055885e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -617.7199963955603,
+              "imag_per_s": 342.18151929965313,
+              "frequency_hz": 54.459880231234585
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9998843196980478,
+              "left_mac": 0.9994906280166428,
+              "combined_mac": 0.9996874544771458,
+              "normalized_eigenvalue_distance": 0.044150910401848806,
+              "relative_candidate_margin": 0.4753429289259028,
+              "condition_number": 5.289196352336609,
+              "right_eigenpair_residual": 4.586253765695338e-16,
+              "left_eigenpair_residual": 1.8459756765331177e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.5,
+          "spectral_abscissa_per_s": 8.653636493599658,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.34827346628730327,
+              "imag_per_s": 16.71690272130301,
+              "frequency_hz": 2.6605777012817313
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999886047823816,
+              "left_mac": 0.9999962783310212,
+              "combined_mac": 0.999992441549341,
+              "normalized_eigenvalue_distance": 0.0009223757978870855,
+              "relative_candidate_margin": 0.5355447490481128,
+              "condition_number": 57.06691739141881,
+              "right_eigenpair_residual": 6.594349846193653e-16,
+              "left_eigenpair_residual": 1.1952872059997844e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 8.653636493599658,
+              "imag_per_s": 32.08793942424586,
+              "frequency_hz": 5.106954173002035
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.99999619110635,
+              "left_mac": 0.999989106569624,
+              "combined_mac": 0.9999926488317131,
+              "normalized_eigenvalue_distance": 0.0055400696089349865,
+              "relative_candidate_margin": 0.46254175991704405,
+              "condition_number": 64.41325794803521,
+              "right_eigenpair_residual": 5.067663837484395e-16,
+              "left_eigenpair_residual": 5.162384907055885e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -592.7499295097314,
+              "imag_per_s": 325.80164581795,
+              "frequency_hz": 51.85294239940167
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.999900800869548,
+              "left_mac": 0.9995590607921518,
+              "combined_mac": 0.9997299162286212,
+              "normalized_eigenvalue_distance": 0.04197016751256052,
+              "relative_candidate_margin": 0.4708714809041421,
+              "condition_number": 5.429193672770074,
+              "right_eigenpair_residual": 5.119419629550577e-16,
+              "left_eigenpair_residual": 8.549526746523013e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.75,
+          "spectral_abscissa_per_s": 8.677497697297163,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.3628097123660585,
+              "imag_per_s": 16.72207092682411,
+              "frequency_hz": 2.661400246737329
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.999988580664794,
+              "left_mac": 0.9999962521103933,
+              "combined_mac": 0.9999924163802373,
+              "normalized_eigenvalue_distance": 0.0009277987846888536,
+              "relative_candidate_margin": 0.5319520686069233,
+              "condition_number": 57.19041315150967,
+              "right_eigenpair_residual": 6.870550198159155e-16,
+              "left_eigenpair_residual": 1.1952872059997844e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 8.677497697297163,
+              "imag_per_s": 31.906316242248028,
+              "frequency_hz": 5.078047945807001
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.999996205749978,
+              "left_mac": 0.999989049259475,
+              "combined_mac": 0.9999926274983245,
+              "normalized_eigenvalue_distance": 0.005532971013727538,
+              "relative_candidate_margin": 0.4595895054513184,
+              "condition_number": 64.50561784061766,
+              "right_eigenpair_residual": 5.067663837484395e-16,
+              "left_eigenpair_residual": 2.4036505068567613e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -569.9640880606486,
+              "imag_per_s": 310.85966275077425,
+              "frequency_hz": 49.47485193466525
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999140816691238,
+              "left_mac": 0.9996157772642841,
+              "combined_mac": 0.9997649183408988,
+              "normalized_eigenvalue_distance": 0.03998127657981795,
+              "relative_candidate_margin": 0.4669363691247539,
+              "condition_number": 5.569240290879731,
+              "right_eigenpair_residual": 6.845582163612314e-16,
+              "left_eigenpair_residual": 1.5497497551155459e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 1.0,
+          "spectral_abscissa_per_s": 8.699719760611973,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.37739984078716193,
+              "imag_per_s": 16.727372800535665,
+              "frequency_hz": 2.662244066146172
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 8.699719760611973,
+              "imag_per_s": 31.725660543890797,
+              "frequency_hz": 5.04929569841573
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -549.0888681761197,
+              "imag_per_s": 297.17253004886413,
+              "frequency_hz": 47.29647710840153
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "line_reactance_pu": 0.1,
+      "line_resistance_pu": 0.006666666666666667,
+      "line_x_over_r": 15.0,
+      "operating_point_residual_inf": 2.362554596402333e-13,
+      "dynamic_reassembly_max_abs_difference_per_s": 2.442021840364399e-09,
+      "independent_dynamic_closure_difference_per_s": 0.0,
+      "low_frequency_mode_resolved": true,
+      "intermediate_frequency_mode_resolved": true,
+      "wide_frequency_mode_resolved": true,
+      "dynamic_minus_static_low_mode_real_per_s": -0.039081853878048856,
+      "points": [
+        {
+          "line_dynamics_fraction": 0.0,
+          "spectral_abscissa_per_s": 5.401275034023713,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.1387257177275658,
+              "imag_per_s": 14.756165906830123,
+              "frequency_hz": 2.3485167451561146
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999744918945556,
+              "left_mac": 0.9999936535107116,
+              "combined_mac": 0.9999840726567369,
+              "normalized_eigenvalue_distance": 0.0006651371605464821,
+              "relative_candidate_margin": 0.5932683966003147,
+              "condition_number": 46.244645385376465,
+              "right_eigenpair_residual": 1.3886414622781454e-15,
+              "left_eigenpair_residual": 2.3198131500081504e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 5.401275034023713,
+              "imag_per_s": 37.92473130294469,
+              "frequency_hz": 6.035908452295584
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999882539635497,
+              "left_mac": 0.9999785269883834,
+              "combined_mac": 0.9999833904641396,
+              "normalized_eigenvalue_distance": 0.00923062050371575,
+              "relative_candidate_margin": 0.4836784439089492,
+              "condition_number": 53.12667052985027,
+              "right_eigenpair_residual": 3.3394154722048486e-16,
+              "left_eigenpair_residual": 4.2618353450573814e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -644.7658589071698,
+              "imag_per_s": 419.527608017496,
+              "frequency_hz": 66.76989257950355
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9994682469917195,
+              "left_mac": 0.9976493019941023,
+              "combined_mac": 0.9985583603258039,
+              "normalized_eigenvalue_distance": 0.09431442761852951,
+              "relative_candidate_margin": 0.45402944557980934,
+              "condition_number": 5.021425480944071,
+              "right_eigenpair_residual": 2.270440627513108e-16,
+              "left_eigenpair_residual": 2.698773540264717e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.25,
+          "spectral_abscissa_per_s": 5.5411306733341394,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.148568023222284,
+              "imag_per_s": 14.755961602884684,
+              "frequency_hz": 2.348484229173305
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999744241046632,
+              "left_mac": 0.9999936347426589,
+              "combined_mac": 0.9999840293775292,
+              "normalized_eigenvalue_distance": 0.0006614938870312374,
+              "relative_candidate_margin": 0.5927703597173217,
+              "condition_number": 46.29375287469591,
+              "right_eigenpair_residual": 1.203077941467221e-15,
+              "left_eigenpair_residual": 1.3183623135858826e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 5.5411306733341394,
+              "imag_per_s": 37.60296426253048,
+              "frequency_hz": 5.984697637289613
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999884531748273,
+              "left_mac": 0.9999782451096989,
+              "combined_mac": 0.9999833491292374,
+              "normalized_eigenvalue_distance": 0.009224449426734109,
+              "relative_candidate_margin": 0.4846928492979085,
+              "condition_number": 53.176042260290295,
+              "right_eigenpair_residual": 5.464429000404042e-16,
+              "left_eigenpair_residual": 1.6628758489109783e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -592.0347071957857,
+              "imag_per_s": 379.3146502333858,
+              "frequency_hz": 60.3698015718167
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9996123327540162,
+              "left_mac": 0.9982325591503672,
+              "combined_mac": 0.9989222077235594,
+              "normalized_eigenvalue_distance": 0.08518346505004319,
+              "relative_candidate_margin": 0.4447173910039197,
+              "condition_number": 5.292923587497654,
+              "right_eigenpair_residual": 6.482157434983114e-16,
+              "left_eigenpair_residual": 2.698773540264717e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.5,
+          "spectral_abscissa_per_s": 5.6729346266970335,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.1583579554634085,
+              "imag_per_s": 14.756113323982092,
+              "frequency_hz": 2.3485083763359285
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999743554764688,
+              "left_mac": 0.999993613535334,
+              "combined_mac": 0.9999839844595416,
+              "normalized_eigenvalue_distance": 0.0006591717552631302,
+              "relative_candidate_margin": 0.5923288227320922,
+              "condition_number": 46.34791129262544,
+              "right_eigenpair_residual": 1.203077941467221e-15,
+              "left_eigenpair_residual": 1.0948775786179018e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 5.6729346266970335,
+              "imag_per_s": 37.28104603235426,
+              "frequency_hz": 5.933462759685673
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999886503195456,
+              "left_mac": 0.999977969227602,
+              "combined_mac": 0.9999833097593128,
+              "normalized_eigenvalue_distance": 0.009215630694253317,
+              "relative_candidate_margin": 0.48572594909184724,
+              "condition_number": 53.222738475709576,
+              "right_eigenpair_residual": 5.464429000404042e-16,
+              "left_eigenpair_residual": 1.74643437433365e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -548.1171279700303,
+              "imag_per_s": 345.8597214569148,
+              "frequency_hz": 55.04528428625405
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9997063139267965,
+              "left_mac": 0.998637483259026,
+              "combined_mac": 0.9991717556746758,
+              "normalized_eigenvalue_distance": 0.07756392118026147,
+              "relative_candidate_margin": 0.43729148903054327,
+              "condition_number": 5.565586619215674,
+              "right_eigenpair_residual": 6.482157434983114e-16,
+              "left_eigenpair_residual": 4.461297279342524e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.75,
+          "spectral_abscissa_per_s": 5.796860443800181,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.168102220725026,
+              "imag_per_s": 14.756622824485127,
+              "frequency_hz": 2.3485894658594946
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999742859792715,
+              "left_mac": 0.9999935898471971,
+              "combined_mac": 0.9999839378666536,
+              "normalized_eigenvalue_distance": 0.0006581944870381798,
+              "relative_candidate_margin": 0.5919441074561735,
+              "condition_number": 46.407181586866315,
+              "right_eigenpair_residual": 9.543269853790581e-16,
+              "left_eigenpair_residual": 5.311314239688889e-18
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 5.796860443800181,
+              "imag_per_s": 36.959321017938414,
+              "frequency_hz": 5.88225863332508
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999888448462018,
+              "left_mac": 0.9999776991566984,
+              "combined_mac": 0.9999832719859215,
+              "normalized_eigenvalue_distance": 0.009204360381737803,
+              "relative_candidate_margin": 0.4867772116631779,
+              "condition_number": 53.26735767145721,
+              "right_eigenpair_residual": 2.4964043210179654e-16,
+              "left_eigenpair_residual": 1.74643437433365e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -510.9964449317041,
+              "imag_per_s": 317.57985149188704,
+              "frequency_hz": 50.54440319132386
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9997699171668188,
+              "left_mac": 0.9989288775970775,
+              "combined_mac": 0.9993493089059368,
+              "normalized_eigenvalue_distance": 0.07110721613121382,
+              "relative_candidate_margin": 0.4313996193108349,
+              "condition_number": 5.837862371638676,
+              "right_eigenpair_residual": 3.5558260079058144e-16,
+              "left_eigenpair_residual": 4.219807904487904e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 1.0,
+          "spectral_abscissa_per_s": 5.9130981690220406,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.1778075716056147,
+              "imag_per_s": 14.757491923938767,
+              "frequency_hz": 2.3487277873335795
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 5.9130981690220406,
+              "imag_per_s": 36.63811182684888,
+              "frequency_hz": 5.831136602796631
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -479.2192607020145,
+              "imag_per_s": 293.3615621820662,
+              "frequency_hz": 46.689942734436265
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "line_reactance_pu": 0.2,
+      "line_resistance_pu": 0.013333333333333334,
+      "line_x_over_r": 15.0,
+      "operating_point_residual_inf": 2.7711166694643907e-13,
+      "dynamic_reassembly_max_abs_difference_per_s": 3.93606569559779e-09,
+      "independent_dynamic_closure_difference_per_s": 0.0,
+      "low_frequency_mode_resolved": true,
+      "intermediate_frequency_mode_resolved": true,
+      "wide_frequency_mode_resolved": true,
+      "dynamic_minus_static_low_mode_real_per_s": -0.002818412110347168,
+      "points": [
+        {
+          "line_dynamics_fraction": 0.0,
+          "spectral_abscissa_per_s": -1.6406056605579042,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.224077401452937,
+              "imag_per_s": 12.075002676348452,
+              "frequency_hz": 1.9217963637887219
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999638624864761,
+              "left_mac": 0.999992869792814,
+              "combined_mac": 0.9999783660344648,
+              "normalized_eigenvalue_distance": 0.0003128014706478768,
+              "relative_candidate_margin": 0.5224372990955756,
+              "condition_number": 34.305546048611774,
+              "right_eigenpair_residual": 1.0425660444418241e-15,
+              "left_eigenpair_residual": 1.1827931587072466e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.6406056605579042,
+              "imag_per_s": 44.938251502645144,
+              "frequency_hz": 7.152144860552768
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999555265403328,
+              "left_mac": 0.999968001468946,
+              "combined_mac": 0.9999617639851858,
+              "normalized_eigenvalue_distance": 0.013998656130267264,
+              "relative_candidate_margin": 0.443093286417713,
+              "condition_number": 43.44603641965576,
+              "right_eigenpair_residual": 3.900384441774107e-16,
+              "left_eigenpair_residual": 4.33432185290276e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -643.7561262477427,
+              "imag_per_s": 540.4640664261602,
+              "frequency_hz": 86.01752773526988
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9979438533456235,
+              "left_mac": 0.9907469660695161,
+              "combined_mac": 0.994338898469681,
+              "normalized_eigenvalue_distance": 0.19305900460309752,
+              "relative_candidate_margin": 0.4231490132194795,
+              "condition_number": 4.712362866592068,
+              "right_eigenpair_residual": 3.1877042785107364e-16,
+              "left_eigenpair_residual": 1.195425050214725e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.25,
+          "spectral_abscissa_per_s": -1.144725783498059,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.224739784346127,
+              "imag_per_s": 12.071220756737215,
+              "frequency_hz": 1.9211944525882174
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999638799744615,
+              "left_mac": 0.9999929125751666,
+              "combined_mac": 0.9999783961694503,
+              "normalized_eigenvalue_distance": 0.0002737696520607695,
+              "relative_candidate_margin": 0.5214358886682061,
+              "condition_number": 34.26933006879381,
+              "right_eigenpair_residual": 9.632128110435447e-16,
+              "left_eigenpair_residual": 7.15520451037709e-18
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -1.144725783498059,
+              "imag_per_s": 44.559499822138925,
+              "frequency_hz": 7.091864658395841
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999564949228312,
+              "left_mac": 0.99996695058065,
+              "combined_mac": 0.9999617227380749,
+              "normalized_eigenvalue_distance": 0.014103984938121034,
+              "relative_candidate_margin": 0.44454433653194325,
+              "condition_number": 43.45766532159337,
+              "right_eigenpair_residual": 5.997112160962903e-16,
+              "left_eigenpair_residual": 1.6984448010575683e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -546.03702847302,
+              "imag_per_s": 445.7558908484465,
+              "frequency_hz": 70.94425344086162
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9988635030593027,
+              "left_mac": 0.9944173089344468,
+              "combined_mac": 0.9966379265837049,
+              "normalized_eigenvalue_distance": 0.1599590500797128,
+              "relative_candidate_margin": 0.408088714530862,
+              "condition_number": 5.217229905376826,
+              "right_eigenpair_residual": 5.657806641696342e-16,
+              "left_eigenpair_residual": 1.195425050214725e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.5,
+          "spectral_abscissa_per_s": -0.6672305687247055,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.225428522640432,
+              "imag_per_s": 12.067932573638156,
+              "frequency_hz": 1.920671121994211
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999638918402196,
+              "left_mac": 0.9999929502837662,
+              "combined_mac": 0.9999784209564415,
+              "normalized_eigenvalue_distance": 0.00023534948258203305,
+              "relative_candidate_margin": 0.5205211669285437,
+              "condition_number": 34.239328966634766,
+              "right_eigenpair_residual": 1.1072798212577864e-15,
+              "left_eigenpair_residual": 7.156401524419293e-18
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.6672305687247055,
+              "imag_per_s": 44.15950256090718,
+              "frequency_hz": 7.028203117047589
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999575464473858,
+              "left_mac": 0.9999659315448328,
+              "combined_mac": 0.9999617389873202,
+              "normalized_eigenvalue_distance": 0.01418860394184805,
+              "relative_candidate_margin": 0.44605800509206744,
+              "condition_number": 43.45766532159337,
+              "right_eigenpair_residual": 5.997112160962903e-16,
+              "left_eigenpair_residual": 1.6984448010575683e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -476.2063020328296,
+              "imag_per_s": 378.0570383510434,
+              "frequency_hz": 60.16964642425081
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9992873133989048,
+              "left_mac": 0.9963787254099993,
+              "combined_mac": 0.997831959621851,
+              "normalized_eigenvalue_distance": 0.13596848616578128,
+              "relative_candidate_margin": 0.39753327540837746,
+              "condition_number": 5.730530155566788,
+              "right_eigenpair_residual": 5.657806641696342e-16,
+              "left_eigenpair_residual": 7.487689346883963e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.75,
+          "spectral_abscissa_per_s": -0.20971925039699357,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.226146299300657,
+              "imag_per_s": 12.06513575673453,
+              "frequency_hz": 1.9202259947590758
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999638981140608,
+              "left_mac": 0.9999929829833589,
+              "combined_mac": 0.9999784404429665,
+              "normalized_eigenvalue_distance": 0.00019778242691337143,
+              "relative_candidate_margin": 0.5196931725063719,
+              "condition_number": 34.215507379996126,
+              "right_eigenpair_residual": 1.1072798212577864e-15,
+              "left_eigenpair_residual": 7.552018219283117e-18
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -0.20971925039699357,
+              "imag_per_s": 43.74015640426105,
+              "frequency_hz": 6.961462103350769
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999586677983721,
+              "left_mac": 0.9999649486523078,
+              "combined_mac": 0.9999618082204086,
+              "normalized_eigenvalue_distance": 0.014252757348720026,
+              "relative_candidate_margin": 0.44763069306765346,
+              "condition_number": 43.4445447256233,
+              "right_eigenpair_residual": 4.2173517918642907e-16,
+              "left_eigenpair_residual": 1.510220012471617e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -424.0086738720904,
+              "imag_per_s": 327.2706633872691,
+              "frequency_hz": 52.086743807047654
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9995050905288483,
+              "left_mac": 0.9975376527080435,
+              "combined_mac": 0.9985208870503851,
+              "normalized_eigenvalue_distance": 0.11780117279017321,
+              "relative_candidate_margin": 0.3902911765246061,
+              "condition_number": 6.245200006245824,
+              "right_eigenpair_residual": 6.6108901931916e-16,
+              "left_eigenpair_residual": 7.487689346883963e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 1.0,
+          "spectral_abscissa_per_s": 0.22649689697808562,
+          "stable_by_eigenvalues": false,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.226895813563284,
+              "imag_per_s": 12.06282830534436,
+              "frequency_hz": 1.9198587524643858
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": 0.22649689697808562,
+              "imag_per_s": 43.30351587702892,
+              "frequency_hz": 6.891968605087524
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -383.5817535837395,
+              "imag_per_s": 287.8119047595448,
+              "frequency_hz": 45.80668732317535
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "line_reactance_pu": 0.3,
+      "line_resistance_pu": 0.02,
+      "line_x_over_r": 15.0,
+      "operating_point_residual_inf": 5.950795411990839e-14,
+      "dynamic_reassembly_max_abs_difference_per_s": 5.744254849560093e-09,
+      "independent_dynamic_closure_difference_per_s": 0.0,
+      "low_frequency_mode_resolved": true,
+      "intermediate_frequency_mode_resolved": true,
+      "wide_frequency_mode_resolved": true,
+      "dynamic_minus_static_low_mode_real_per_s": 0.010862691731040819,
+      "points": [
+        {
+          "line_dynamics_fraction": 0.0,
+          "spectral_abscissa_per_s": -2.8018860550371536,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.8018860550371536,
+              "imag_per_s": 10.310409574195605,
+              "frequency_hz": 1.6409526490352344
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.999965810320612,
+              "left_mac": 0.9999941928501797,
+              "combined_mac": 0.9999800014846979,
+              "normalized_eigenvalue_distance": 0.0003623136503833697,
+              "relative_candidate_margin": 0.49366034765264416,
+              "condition_number": 27.71110111724892,
+              "right_eigenpair_residual": 1.2019002264802957e-15,
+              "left_eigenpair_residual": 1.3773009717200478e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -8.548947715402672,
+              "imag_per_s": 48.31292928608521,
+              "frequency_hz": 7.689241511129655
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999028591642652,
+              "left_mac": 0.9999649548919272,
+              "combined_mac": 0.9999339065460794,
+              "normalized_eigenvalue_distance": 0.016581258661731883,
+              "relative_candidate_margin": 0.42506778181590676,
+              "condition_number": 39.123751696042206,
+              "right_eigenpair_residual": 4.998336104415925e-16,
+              "left_eigenpair_residual": 1.952346474442043e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -643.4959405236636,
+              "imag_per_s": 663.348559460769,
+              "frequency_hz": 105.57520223106945
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.995437383903049,
+              "left_mac": 0.9796843263756374,
+              "combined_mac": 0.9875294440664467,
+              "normalized_eigenvalue_distance": 0.2943221574267342,
+              "relative_candidate_margin": 0.4066465157027321,
+              "condition_number": 4.360093917442036,
+              "right_eigenpair_residual": 5.224928179518229e-16,
+              "left_eigenpair_residual": 2.402467988319185e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.25,
+          "spectral_abscissa_per_s": -2.798988360044339,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.798988360044339,
+              "imag_per_s": 10.3078445075384,
+              "frequency_hz": 1.64054440599738
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999658544466704,
+              "left_mac": 0.9999942451285672,
+              "combined_mac": 0.9999800496868629,
+              "normalized_eigenvalue_distance": 0.00032826297813118424,
+              "relative_candidate_margin": 0.492737410147417,
+              "condition_number": 27.680520678661367,
+              "right_eigenpair_residual": 1.3072889014933407e-15,
+              "left_eigenpair_residual": 1.943281914795792e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -7.7606136791949005,
+              "imag_per_s": 48.13381351900193,
+              "frequency_hz": 7.660734351412655
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999034847001826,
+              "left_mac": 0.9999628913596618,
+              "combined_mac": 0.9999331875887488,
+              "normalized_eigenvalue_distance": 0.01696222209031358,
+              "relative_candidate_margin": 0.42691781183315325,
+              "condition_number": 39.20410629908011,
+              "right_eigenpair_residual": 7.660413621726696e-16,
+              "left_eigenpair_residual": 2.054587343622597e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -506.57547010482926,
+              "imag_per_s": 503.7665732033225,
+              "frequency_hz": 80.17694028977392
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9980432349214267,
+              "left_mac": 0.9896583214215113,
+              "combined_mac": 0.9938419354094665,
+              "normalized_eigenvalue_distance": 0.22666640579022845,
+              "relative_candidate_margin": 0.3883312036232295,
+              "condition_number": 5.046374194098761,
+              "right_eigenpair_residual": 6.954457881996159e-16,
+              "left_eigenpair_residual": 7.262733721113055e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.5,
+          "spectral_abscissa_per_s": -2.796212737767046,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.796212737767046,
+              "imag_per_s": 10.30570371115692,
+              "frequency_hz": 1.6402036876711141
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999658914387565,
+              "left_mac": 0.9999942926075577,
+              "combined_mac": 0.9999800919223267,
+              "normalized_eigenvalue_distance": 0.0002962025036034123,
+              "relative_candidate_margin": 0.49189435616389915,
+              "condition_number": 27.654820428346696,
+              "right_eigenpair_residual": 1.3072889014933407e-15,
+              "left_eigenpair_residual": 1.943281914795792e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -6.972350488225797,
+              "imag_per_s": 47.90386695413731,
+              "frequency_hz": 7.624137218967449
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999046068596364,
+              "left_mac": 0.9999608288838796,
+              "combined_mac": 0.9999327174766169,
+              "normalized_eigenvalue_distance": 0.017305590970029983,
+              "relative_candidate_margin": 0.4288901608007715,
+              "condition_number": 39.23473967402954,
+              "right_eigenpair_residual": 7.660413621726696e-16,
+              "left_eigenpair_residual": 2.098290388218707e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -420.7492819771235,
+              "imag_per_s": 403.33160763675323,
+              "frequency_hz": 64.19221906059012
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9989342627919728,
+              "left_mac": 0.9940325763200107,
+              "combined_mac": 0.9964804056364758,
+              "normalized_eigenvalue_distance": 0.18299813122433128,
+              "relative_candidate_margin": 0.3757165709912332,
+              "condition_number": 5.763041531922184,
+              "right_eigenpair_residual": 7.021929098523107e-16,
+              "left_eigenpair_residual": 8.305851963105541e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.75,
+          "spectral_abscissa_per_s": -2.7935580615609252,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.7935580615609252,
+              "imag_per_s": 10.303985429735205,
+              "frequency_hz": 1.6399302146892252
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999659213813068,
+              "left_mac": 0.9999943353834427,
+              "combined_mac": 0.9999801282814533,
+              "normalized_eigenvalue_distance": 0.00026675522451144213,
+              "relative_candidate_margin": 0.49113106738475676,
+              "condition_number": 27.63395965119667,
+              "right_eigenpair_residual": 9.60881518961367e-16,
+              "left_eigenpair_residual": 1.0811373762075418e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -6.190392152951005,
+              "imag_per_s": 47.622416082194086,
+              "frequency_hz": 7.579342921460161
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999062223582255,
+              "left_mac": 0.999958795518035,
+              "combined_mac": 0.9999325085926148,
+              "normalized_eigenvalue_distance": 0.017605559952926324,
+              "relative_candidate_margin": 0.4309813066458762,
+              "condition_number": 39.23473967402954,
+              "right_eigenpair_residual": 4.605314998330248e-16,
+              "left_eigenpair_residual": 2.794916993870973e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -362.44593184711033,
+              "imag_per_s": 334.44250269341376,
+              "frequency_hz": 53.22817748368132
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9993016251790559,
+              "left_mac": 0.9963104923589333,
+              "combined_mac": 0.9978049379499118,
+              "normalized_eigenvalue_distance": 0.15259098073355168,
+              "relative_candidate_margin": 0.36737011023657296,
+              "condition_number": 6.4945706196727855,
+              "right_eigenpair_residual": 7.021929098523107e-16,
+              "left_eigenpair_residual": 8.305851963105541e-16
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 1.0,
+          "spectral_abscissa_per_s": -2.791023363306113,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -2.791023363306113,
+              "imag_per_s": 10.302688223008612,
+              "frequency_hz": 1.639723757826476
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -5.421146108155718,
+              "imag_per_s": 47.289946702528354,
+              "frequency_hz": 7.526428776259664
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -320.40972496623453,
+              "imag_per_s": 284.37895112288874,
+              "frequency_hz": 45.26031578249624
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "line_reactance_pu": 0.5,
+      "line_resistance_pu": 0.03333333333333333,
+      "line_x_over_r": 15.0,
+      "operating_point_residual_inf": 3.9102054927298013e-13,
+      "dynamic_reassembly_max_abs_difference_per_s": 4.132402864343021e-09,
+      "independent_dynamic_closure_difference_per_s": 0.0,
+      "low_frequency_mode_resolved": true,
+      "intermediate_frequency_mode_resolved": true,
+      "wide_frequency_mode_resolved": false,
+      "dynamic_minus_static_low_mode_real_per_s": 0.014767931743670637,
+      "points": [
+        {
+          "line_dynamics_fraction": 0.0,
+          "spectral_abscissa_per_s": -3.421837431860736,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -3.421837431860736,
+              "imag_per_s": 8.026508339735566,
+              "frequency_hz": 1.2774584780372373
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999752878101849,
+              "left_mac": 0.9999964184747955,
+              "combined_mac": 0.9999858530866762,
+              "normalized_eigenvalue_distance": 0.00045517973739541665,
+              "relative_candidate_margin": 0.46833992276053926,
+              "condition_number": 21.469629977907406,
+              "right_eigenpair_residual": 1.6433567280032904e-15,
+              "left_eigenpair_residual": 9.681351369573731e-18
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -19.415983487232168,
+              "imag_per_s": 49.20315425006516,
+              "frequency_hz": 7.830925214610869
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9997821857141335,
+              "left_mac": 0.9999671698668263,
+              "combined_mac": 0.9998746735125517,
+              "normalized_eigenvalue_distance": 0.01793365986800319,
+              "relative_candidate_margin": 0.4129187983597759,
+              "condition_number": 35.20018739318587,
+              "right_eigenpair_residual": 4.581949699038092e-16,
+              "left_eigenpair_residual": 2.9631058363182167e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -646.6010478411866,
+              "imag_per_s": 909.0690270179479,
+              "frequency_hz": 144.68282926164616
+            },
+            "tracking": {
+              "status": "pending",
+              "reason": "eigenvalue-distance-above-threshold",
+              "right_mac": 0.9708136089359447,
+              "left_mac": 0.8703364267615846,
+              "combined_mac": 0.9192031589658668,
+              "normalized_eigenvalue_distance": 1.0002969806288102,
+              "relative_candidate_margin": 0.25823827099451124,
+              "condition_number": 4.5311975420799095,
+              "right_eigenpair_residual": 8.282089932899442e-16,
+              "left_eigenpair_residual": 7.240951209080064e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.25,
+          "spectral_abscissa_per_s": -3.4178718915961515,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -3.4178718915961515,
+              "imag_per_s": 8.026302807013744,
+              "frequency_hz": 1.2774257664885922
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999753054995115,
+              "left_mac": 0.9999964573648629,
+              "combined_mac": 0.9999858813762612,
+              "normalized_eigenvalue_distance": 0.000433651900298478,
+              "relative_candidate_margin": 0.4676111318222533,
+              "condition_number": 21.462436196831657,
+              "right_eigenpair_residual": 1.0239999881948177e-15,
+              "left_eigenpair_residual": 2.1769925712703838e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -18.550004628401027,
+              "imag_per_s": 49.59269735270785,
+              "frequency_hz": 7.892922924943807
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.999772676577397,
+              "left_mac": 0.9999636136758964,
+              "combined_mac": 0.9998681405689238,
+              "normalized_eigenvalue_distance": 0.018939129224396545,
+              "relative_candidate_margin": 0.4155619542427261,
+              "condition_number": 35.506597163011776,
+              "right_eigenpair_residual": 6.54853784847511e-16,
+              "left_eigenpair_residual": 1.9371103889285105e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -443.97165781931994,
+              "imag_per_s": 600.2193059257099,
+              "frequency_hz": 95.52786947726328
+            },
+            "tracking": {
+              "status": "pending",
+              "reason": "eigenvalue-distance-above-threshold",
+              "right_mac": 0.9965061375693427,
+              "left_mac": 0.9792960982248621,
+              "combined_mac": 0.9878636405793995,
+              "normalized_eigenvalue_distance": 0.3384860313780815,
+              "relative_candidate_margin": 0.37839974216793504,
+              "condition_number": 4.5311975420799095,
+              "right_eigenpair_residual": 8.282089932899442e-16,
+              "left_eigenpair_residual": 1.1977816835165033e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.5,
+          "spectral_abscissa_per_s": -3.4140899667807734,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -3.4140899667807734,
+              "imag_per_s": 8.026365404596403,
+              "frequency_hz": 1.277435729203298
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999753175636215,
+              "left_mac": 0.999996493260196,
+              "combined_mac": 0.9999859053558566,
+              "normalized_eigenvalue_distance": 0.000414555982129888,
+              "relative_candidate_margin": 0.4669338126319375,
+              "condition_number": 21.457956331871806,
+              "right_eigenpair_residual": 8.805974688478455e-16,
+              "left_eigenpair_residual": 2.1769925712703838e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -17.61093937804077,
+              "imag_per_s": 49.945060245033794,
+              "frequency_hz": 7.9490032210196375
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9997639252632857,
+              "left_mac": 0.9999596686412989,
+              "combined_mac": 0.9998617921621966,
+              "normalized_eigenvalue_distance": 0.01997541509288494,
+              "relative_candidate_margin": 0.41840143275483777,
+              "condition_number": 35.768569017698354,
+              "right_eigenpair_residual": 6.54853784847511e-16,
+              "left_eigenpair_residual": 3.40687274890785e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -341.3023124365649,
+              "imag_per_s": 441.62844698466597,
+              "frequency_hz": 70.28735034760663
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9984645143585885,
+              "left_mac": 0.9894903394157423,
+              "combined_mac": 0.9939672988621175,
+              "normalized_eigenvalue_distance": 0.25473183729721544,
+              "relative_candidate_margin": 0.3605800083473667,
+              "condition_number": 5.51279436535167,
+              "right_eigenpair_residual": 8.282089932899442e-16,
+              "left_eigenpair_residual": 1.156874468765168e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 0.75,
+          "spectral_abscissa_per_s": -3.4104897467629023,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -3.4104897467629023,
+              "imag_per_s": 8.026696634300643,
+              "frequency_hz": 1.2774884460480267
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9999753240360989,
+              "left_mac": 0.9999965262186216,
+              "combined_mac": 0.9999859250711679,
+              "normalized_eigenvalue_distance": 0.00039821021691034767,
+              "relative_candidate_margin": 0.46630799055376226,
+              "condition_number": 21.457119460454525,
+              "right_eigenpair_residual": 1.048693839184096e-15,
+              "left_eigenpair_residual": 1.9741478298904994e-17
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -16.59768563459805,
+              "imag_per_s": 50.24610256674154,
+              "frequency_hz": 7.996915594599287
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9997564853504171,
+              "left_mac": 0.9999553607522383,
+              "combined_mac": 0.9998559181066871,
+              "normalized_eigenvalue_distance": 0.02102045585387831,
+              "relative_candidate_margin": 0.4214501804571317,
+              "condition_number": 35.9640673003531,
+              "right_eigenpair_residual": 4.831972564675216e-16,
+              "left_eigenpair_residual": 3.40687274890785e-17
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -280.6496561930925,
+              "imag_per_s": 345.7651998330271,
+              "frequency_hz": 55.03024070258325
+            },
+            "tracking": {
+              "status": "matched",
+              "reason": "accepted",
+              "right_mac": 0.9990271097398862,
+              "left_mac": 0.9941378851540752,
+              "combined_mac": 0.9965794991311022,
+              "normalized_eigenvalue_distance": 0.20325286222723468,
+              "relative_candidate_margin": 0.3467264468753928,
+              "condition_number": 6.58240861783211,
+              "right_eigenpair_residual": 6.794206352047448e-16,
+              "left_eigenpair_residual": 1.156874468765168e-15
+            }
+          }
+        },
+        {
+          "line_dynamics_fraction": 1.0,
+          "spectral_abscissa_per_s": -3.4070695001170654,
+          "stable_by_eigenvalues": true,
+          "low_frequency_mode": {
+            "pole": {
+              "real_per_s": -3.4070695001170654,
+              "imag_per_s": 8.027297110597715,
+              "frequency_hz": 1.2775840148189153
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "intermediate_frequency_mode": {
+            "pole": {
+              "real_per_s": -15.512465220115503,
+              "imag_per_s": 50.47970723064612,
+              "frequency_hz": 8.03409493158902
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          },
+          "wide_frequency_mode": {
+            "pole": {
+              "real_per_s": -240.91381516225755,
+              "imag_per_s": 281.74815621268897,
+              "frequency_hz": 44.841611768276955
+            },
+            "tracking": {
+              "status": "anchor",
+              "reason": "dynamic-line-anchor"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hypothesis_tests": {
+    "h1_dynamic_reassembly_passed": true,
+    "h2_baseline_dynamic_low_mode_moves_right": {
+      "result": "supported-in-bounded-study",
+      "dynamic_minus_static_real_per_s": 0.010862691731040819
+    },
+    "h3_low_mode_shift_magnitude_increases_with_reactance": {
+      "result": "not-supported-in-bounded-study",
+      "absolute_real_shifts_per_s": [
+        0.058053285118260356,
+        0.039081853878048856,
+        0.002818412110347168,
+        0.010862691731040819,
+        0.014767931743670637
+      ]
+    }
+  },
+  "scope": {
+    "team_average_dq_smib_only": true,
+    "same_device_states_and_operating_point_within_each_case": true,
+    "intermediate_alpha_values_are_physical_parameters": false,
+    "sienna_or_chatterjee_geng_case_reproduced": false,
+    "general_hopf_margin_claimed": false,
+    "all_low_frequency_modes_resolved": true,
+    "all_intermediate_frequency_modes_resolved": true,
+    "all_wide_frequency_modes_resolved": false,
+    "intermediate_frequency_branch_is_posthoc_diagnostic": true,
+    "statement": "The audit isolates external-line electromagnetic dynamics in the team average-dq SMIB model. Classification differences, if any, remain bounded to the declared cases."
+  }
+}
