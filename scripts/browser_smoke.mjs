@@ -400,6 +400,24 @@ try {
       throw new Error(`Sienna-team common PLL boundary is missing ${evidence}.`)
     }
   }
+  const modulationSummary = await page.getByTestId('sienna-team-modulation-delay-summary').innerText()
+  for (const evidence of ['局部 dq 惯性环节方程门\n通过', '物理坐标换元误差 / s⁻¹', '错误混同反例 / s⁻¹\n381.5', 'Padé 阶次敏感性\n通过']) {
+    if (!modulationSummary.includes(evidence)) {
+      throw new Error(`Sienna-team modulation-delay summary is missing ${evidence}: ${modulationSummary}`)
+    }
+  }
+  const delayTable = await page.getByTestId('sienna-team-delay-realization-table').innerText()
+  for (const evidence of ['低频同步支路', '2.220', '宽频内环—LCL 支路', '95.577', '0.8573', '3.4217°']) {
+    if (!delayTable.includes(evidence)) {
+      throw new Error(`Sienna-team delay-realization table is missing ${evidence}: ${delayTable}`)
+    }
+  }
+  const delayBoundary = await page.getByTestId('sienna-team-delay-realization-boundary').innerText()
+  for (const evidence of ['局部 dq 分量的一阶惯性环节', '物理固定坐标系中的一阶惯性环节', '单位幅值的纯时延', '没有把 Padé 附加极点解释为物理模态', '不能把它直接写成“PWM 纯时延”']) {
+    if (!delayBoundary.includes(evidence)) {
+      throw new Error(`Sienna-team delay-realization boundary is missing ${evidence}.`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
   for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '功率测量位置不同', '13状态中间算例', '约 3.4 Hz 低频支路', '结构差异而非参数误差', '14状态中间算例', '低频支路在 Tm=0.025～0.05 s 之间过零', '不是整机稳定裕度', '18状态共同 PLL 算例', 'PCC 低频支路发生实轴过渡', '模态待定', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {

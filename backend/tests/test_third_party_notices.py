@@ -6,6 +6,7 @@ import unittest
 from scripts.generate_third_party_notices import (
     _copy_license_files,
     _node_components,
+    _python_control_research_source_component,
     _sienna_research_source_component,
 )
 
@@ -84,6 +85,27 @@ class ThirdPartyNoticeTests(unittest.TestCase):
                 component["license_files"][0]["packaged_path"],
                 "licenses/research-source/powersimulationsdynamics-test08/"
                 "01-PowerSimulationsDynamics-LICENSE",
+            )
+
+    def test_python_control_adaptation_has_fixed_source_and_license(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "python-control-LICENSE"
+            source.write_text("BSD 3-Clause License", encoding="utf-8")
+
+            component = _python_control_research_source_component(
+                source, root / "package"
+            )
+
+            self.assertEqual(component["declared_license"], "BSD-3-Clause")
+            self.assertIn(
+                "17d8b0ddc290b592a69a664a1b33c8973a0a9da7",
+                component["version"],
+            )
+            self.assertEqual(
+                component["license_files"][0]["packaged_path"],
+                "licenses/research-source/python-control-pade/"
+                "01-python-control-LICENSE",
             )
 
 

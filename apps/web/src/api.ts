@@ -1552,6 +1552,99 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_modulation_delay: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      state_count: number
+      modulation_time_constant_levels_s: number[]
+      team_declared_modulation_time_constant_s: number
+    }
+    points: Array<{
+      modulation_time_constant_s: number
+      spectral_abscissa_per_s: number
+      stable_by_eigenvalues: boolean
+      low_frequency_mode: { pole: SiennaDelayPole; tracking: SiennaDelayTracking }
+      wide_frequency_mode: { pole: SiennaDelayPole; tracking: SiennaDelayTracking }
+      state_matrix_max_abs_difference_per_s: number
+    }>
+    endpoint_normalized_displacement_from_0p1ms: {
+      low_frequency_mode: number
+      wide_frequency_mode: number
+    }
+    hypothesis_test: {
+      result: string
+      all_named_modes_resolved: boolean
+    }
+    scope: {
+      local_dq_first_order_lag_compared: boolean
+      physical_pwm_or_transport_delay_compared: boolean
+      whole_system_hopf_margin_claimed: boolean
+      statement: string
+    }
+  }
+  physical_modulation_lag: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    maximum_state_matrix_difference_per_s: number
+    maximum_off_equilibrium_rhs_difference_inf: number
+    minimum_local_dq_vs_physical_matrix_difference_per_s: number
+    points: Array<{
+      modulation_time_constant_s: number
+      spectral_abscissa_per_s: number
+      stable_by_eigenvalues: boolean
+      local_dq_vs_physical_matrix_difference_per_s: number
+    }>
+    scope: {
+      physical_frame_first_order_lag_compared: boolean
+      exact_transport_delay_compared: boolean
+      pade_delay_approximation_compared: boolean
+      statement: string
+    }
+  }
+  delay_approximation: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      delay_s: number
+      pade_orders: number[]
+      audit_frequency_range_hz: number[]
+    }
+    named_frequency_comparison: Record<'low_frequency_mode' | 'wide_frequency_mode', {
+      frequency_hz: number
+      dimensionless_omega_delay: number
+      exact_transport_delay: {
+        magnitude: number
+        phase_deg: number
+        magnitude_error: number
+        phase_error_deg_against_exact: number
+      }
+      local_dq_first_order_lag: {
+        magnitude: number
+        phase_deg: number
+        magnitude_error: number
+        phase_error_deg_against_exact: number
+      }
+      pade: Record<string, {
+        magnitude: number
+        phase_deg: number
+        magnitude_error: number
+        phase_error_deg_against_exact: number
+      }>
+    }>
+    band_summary: {
+      maximum_phase_error_deg_against_exact_by_order: Record<string, number>
+      maximum_magnitude_error_by_order: Record<string, number>
+      all_pade_poles_left_half_plane: boolean
+      phase_error_decreases_through_order_three: boolean
+    }
+    scope: {
+      frequency_response_only: boolean
+      closed_loop_poles_with_exact_delay_compared: boolean
+      pade_poles_reported_as_physical_modes: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1567,6 +1660,9 @@ export type SiennaTest08AuditResult = {
     team_common_outer_loop_power_ports_compared: boolean
     team_common_active_power_measurement_delay_compared: boolean
     team_common_pll_measurement_position_compared: boolean
+    team_common_local_dq_modulation_lag_compared: boolean
+    physical_frame_modulation_lag_compared: boolean
+    delay_realization_frequency_responses_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

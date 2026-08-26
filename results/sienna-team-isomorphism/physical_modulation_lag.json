@@ -1,0 +1,89 @@
+{
+  "schema_version": "gfm-sienna-team-physical-modulation-lag/1.0",
+  "status": "passed",
+  "model_contract": {
+    "state_count": 16,
+    "modulation_time_constant_levels_s": [
+      0.0001,
+      0.00025,
+      0.0005,
+      0.001,
+      0.002,
+      0.005
+    ],
+    "team_declared_modulation_time_constant_s": 0.001,
+    "team_local_equation": "d(v_mod,dq)/dt=(v_cmd,dq-v_mod,dq)/T_mod - omega_base*frequency_pu*J*v_mod,dq",
+    "source_global_equation": "d(v_mod,global)/dt=(R(theta)*v_cmd,dq-v_mod,global)/T_mod - omega_base*system_frequency_pu*J*v_mod,global"
+  },
+  "verification_gates": {
+    "equivalent_realization_difference_max_per_s": 1e-05,
+    "non_equivalent_local_dq_difference_min_per_s": 1.0
+  },
+  "maximum_state_matrix_difference_per_s": 1.4866473065922037e-06,
+  "maximum_off_equilibrium_rhs_difference_inf": 8.602007994795713e-13,
+  "minimum_local_dq_vs_physical_matrix_difference_per_s": 381.4986113760965,
+  "points": [
+    {
+      "modulation_time_constant_s": 0.0001,
+      "equilibrium_residual_inf": 7.709388682997087e-13,
+      "off_equilibrium_rhs_difference_inf": 8.602007994795713e-13,
+      "state_matrix_max_abs_difference_per_s": 1.4866473065922037e-06,
+      "local_dq_vs_physical_matrix_difference_per_s": 381.4986113760965,
+      "spectral_abscissa_per_s": 206.56918156503144,
+      "stable_by_eigenvalues": false
+    },
+    {
+      "modulation_time_constant_s": 0.00025,
+      "equilibrium_residual_inf": 2.5224267119483557e-13,
+      "off_equilibrium_rhs_difference_inf": 1.9120816041606759e-13,
+      "state_matrix_max_abs_difference_per_s": 4.629327108318648e-07,
+      "local_dq_vs_physical_matrix_difference_per_s": 381.4986114892838,
+      "spectral_abscissa_per_s": 215.1112042011095,
+      "stable_by_eigenvalues": false
+    },
+    {
+      "modulation_time_constant_s": 0.0005,
+      "equilibrium_residual_inf": 3.268496584496461e-13,
+      "off_equilibrium_rhs_difference_inf": 2.69340105774063e-13,
+      "state_matrix_max_abs_difference_per_s": 3.335491297021141e-07,
+      "local_dq_vs_physical_matrix_difference_per_s": 381.49861148911725,
+      "spectral_abscissa_per_s": 226.04807624692617,
+      "stable_by_eigenvalues": false
+    },
+    {
+      "modulation_time_constant_s": 0.001,
+      "equilibrium_residual_inf": 2.7711166694643907e-13,
+      "off_equilibrium_rhs_difference_inf": 1.9165224962591765e-13,
+      "state_matrix_max_abs_difference_per_s": 3.2197518945009673e-07,
+      "local_dq_vs_physical_matrix_difference_per_s": 381.49861146061227,
+      "spectral_abscissa_per_s": 238.21425280240777,
+      "stable_by_eigenvalues": false
+    },
+    {
+      "modulation_time_constant_s": 0.002,
+      "equilibrium_residual_inf": 4.014566457044566e-13,
+      "off_equilibrium_rhs_difference_inf": 1.8660073486387319e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3273020501614073e-07,
+      "local_dq_vs_physical_matrix_difference_per_s": 381.49861147478146,
+      "spectral_abscissa_per_s": 242.62133908065317,
+      "stable_by_eigenvalues": false
+    },
+    {
+      "modulation_time_constant_s": 0.005,
+      "equilibrium_residual_inf": 2.984279490192421e-13,
+      "off_equilibrium_rhs_difference_inf": 2.7622348852673895e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3473458322975296e-07,
+      "local_dq_vs_physical_matrix_difference_per_s": 381.4986115060204,
+      "spectral_abscissa_per_s": 223.16195801784372,
+      "stable_by_eigenvalues": false
+    }
+  ],
+  "scope": {
+    "physical_frame_first_order_lag_compared": true,
+    "local_dq_lag_used_as_non_equivalent_countermodel": true,
+    "exact_transport_delay_compared": false,
+    "pade_delay_approximation_compared": false,
+    "switching_or_pwm_waveform_modeled": false,
+    "statement": "The audit establishes coordinate-equivalent realizations of one physical-frame first-order lag and rejects silent substitution by a component-wise local-dq lag."
+  }
+}

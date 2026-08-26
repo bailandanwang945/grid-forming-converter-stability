@@ -1,0 +1,157 @@
+{
+  "schema_version": "gfm-delay-approximation-audit/1.0",
+  "status": "passed",
+  "model_contract": {
+    "delay_s": 0.001,
+    "pade_orders": [
+      1,
+      2,
+      3
+    ],
+    "audit_frequency_range_hz": [
+      0.0,
+      200.0
+    ],
+    "audit_frequency_point_count": 2001,
+    "named_frequencies_source": "M3.3c1 local-dq first-order modulation scan at T_mod=1 ms"
+  },
+  "pade_coefficients_descending_s": {
+    "1": {
+      "numerator": [
+        -1.0,
+        2000.0
+      ],
+      "denominator": [
+        1.0,
+        2000.0
+      ]
+    },
+    "2": {
+      "numerator": [
+        1.0,
+        -6000.0,
+        12000000.0
+      ],
+      "denominator": [
+        1.0,
+        6000.0,
+        12000000.0
+      ]
+    },
+    "3": {
+      "numerator": [
+        -1.0,
+        12000.0,
+        -60000000.0,
+        120000000000.0
+      ],
+      "denominator": [
+        1.0,
+        12000.0,
+        60000000.0,
+        120000000000.0
+      ]
+    }
+  },
+  "named_frequency_comparison": {
+    "low_frequency_mode": {
+      "frequency_hz": 2.2204800583180764,
+      "dimensionless_omega_delay": 0.013951687677309409,
+      "exact_transport_delay": {
+        "magnitude": 1.0,
+        "phase_deg": -0.7993728209945075,
+        "magnitude_error": 0.0,
+        "phase_error_deg_against_exact": 0.0
+      },
+      "local_dq_first_order_lag": {
+        "magnitude": 0.9999026894113464,
+        "phase_deg": -0.7993209611873667,
+        "magnitude_error": -9.731058865358744e-05,
+        "phase_error_deg_against_exact": 5.185980714077324e-05
+      },
+      "pade": {
+        "1": {
+          "magnitude": 1.0,
+          "phase_deg": -0.799359854907157,
+          "magnitude_error": 0.0,
+          "phase_error_deg_against_exact": 1.2966087350611645e-05
+        },
+        "2": {
+          "magnitude": 1.0,
+          "phase_deg": -0.7993728209524427,
+          "magnitude_error": 0.0,
+          "phase_error_deg_against_exact": 4.206480431421816e-11
+        },
+        "3": {
+          "magnitude": 1.0,
+          "phase_deg": -0.7993728209945073,
+          "magnitude_error": 0.0,
+          "phase_error_deg_against_exact": 9.938266061417937e-17
+        }
+      }
+    },
+    "wide_frequency_mode": {
+      "frequency_hz": 95.57691129915798,
+      "dimensionless_omega_delay": 0.600527444780476,
+      "exact_transport_delay": {
+        "magnitude": 0.9999999999999999,
+        "phase_deg": -34.407688067696874,
+        "magnitude_error": -1.1102230246251565e-16,
+        "phase_error_deg_against_exact": 0.0
+      },
+      "local_dq_first_order_lag": {
+        "magnitude": 0.8572933723219788,
+        "phase_deg": -30.985972214283567,
+        "magnitude_error": -0.14270662767802123,
+        "phase_error_deg_against_exact": 3.4217158534133034
+      },
+      "pade": {
+        "1": {
+          "magnitude": 1.0,
+          "phase_deg": -33.42621155596722,
+          "magnitude_error": 0.0,
+          "phase_error_deg_against_exact": 0.981476511729652
+        },
+        "2": {
+          "magnitude": 1.0000000000000002,
+          "phase_deg": -34.401606219501645,
+          "magnitude_error": 2.220446049250313e-16,
+          "phase_error_deg_against_exact": 0.006081848195236339
+        },
+        "3": {
+          "magnitude": 1.0,
+          "phase_deg": -34.40767228110908,
+          "magnitude_error": 0.0,
+          "phase_error_deg_against_exact": 1.578658779271905e-05
+        }
+      }
+    }
+  },
+  "band_summary": {
+    "maximum_phase_error_deg_against_exact_by_order": {
+      "1": 7.7161847293158905,
+      "2": 0.22615756808545873,
+      "3": 0.002643596897516611
+    },
+    "maximum_magnitude_error_by_order": {
+      "1": 2.220446049250313e-16,
+      "2": 2.220446049250313e-16,
+      "3": 2.220446049250313e-16
+    },
+    "all_pade_poles_left_half_plane": true,
+    "phase_error_decreases_through_order_three": true
+  },
+  "scope": {
+    "frequency_response_only": true,
+    "closed_loop_poles_with_exact_delay_compared": false,
+    "pade_poles_reported_as_physical_modes": false,
+    "switching_waveforms_compared": false,
+    "statement": "This audit verifies delay-realization frequency responses; it does not turn an infinite-dimensional transport delay into a claimed physical finite-state mode set."
+  },
+  "provenance": {
+    "algorithm": "python-control control.delay.pade, adapted square case",
+    "version": "0.10.2",
+    "commit": "17d8b0ddc290b592a69a664a1b33c8973a0a9da7",
+    "license": "BSD-3-Clause"
+  }
+}

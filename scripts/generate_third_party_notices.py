@@ -261,6 +261,36 @@ def _sienna_research_source_component(
     }
 
 
+def _python_control_research_source_component(
+    python_control_license: Path, output_root: Path
+) -> dict[str, Any]:
+    if not python_control_license.is_file():
+        raise RuntimeError(
+            "python-control source license is missing: "
+            f"{python_control_license}"
+        )
+    destination = (
+        output_root
+        / "licenses"
+        / "research-source"
+        / "python-control-pade"
+    )
+    copied = _copy_license_files(
+        [("LICENSE", python_control_license)], destination, output_root
+    )
+    return {
+        "ecosystem": "research-source",
+        "name": "python-control Padé-delay coefficient recurrence",
+        "version": "0.10.2 / 17d8b0ddc290b592a69a664a1b33c8973a0a9da7",
+        "declared_license": "BSD-3-Clause",
+        "license_files": copied,
+        "note": (
+            "The package contains a narrowly adapted square-order coefficient "
+            "recurrence and project-local tests, not the python-control package."
+        ),
+    }
+
+
 def _write_notices(components: list[dict[str, Any]], output_root: Path) -> None:
     grouped: dict[str, list[dict[str, Any]]] = {}
     for component in components:
@@ -308,6 +338,7 @@ def main() -> int:
     parser.add_argument("--frontend-root", type=Path, required=True)
     parser.add_argument("--author-license", type=Path, required=True)
     parser.add_argument("--sienna-license", type=Path, required=True)
+    parser.add_argument("--python-control-license", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     args = parser.parse_args()
     output_root = args.output_root.resolve()
@@ -317,6 +348,9 @@ def main() -> int:
         *_runtime_components(output_root),
         _cifelli_research_source_component(args.author_license.resolve(), output_root),
         _sienna_research_source_component(args.sienna_license.resolve(), output_root),
+        _python_control_research_source_component(
+            args.python_control_license.resolve(), output_root
+        ),
     ]
     _write_notices(components, output_root)
     payload = {
@@ -326,7 +360,8 @@ def main() -> int:
             "web": "non-development package-lock entries installed for the production bundle",
             "research_source": (
                 "fixed upstream licenses for the Cifelli-Anta Fig. 8 fixtures and "
-                "the PowerSimulationsDynamics.jl Test 08 transcription"
+                "the PowerSimulationsDynamics.jl Test 08 transcription, plus the "
+                "adapted python-control Padé recurrence"
             ),
         },
         "component_count": len(components),

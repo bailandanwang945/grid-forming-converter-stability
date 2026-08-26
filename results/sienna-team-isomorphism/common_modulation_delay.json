@@ -1,0 +1,400 @@
+{
+  "schema_version": "gfm-sienna-team-common-modulation-delay/1.0",
+  "status": "passed",
+  "verification_summary": {
+    "equation_and_counterexample_status": "passed",
+    "named_mode_tracking_status": "resolved"
+  },
+  "model_contract": {
+    "state_count": 16,
+    "base_state_count": 14,
+    "team_state_labels": [
+      "angle_rad",
+      "frequency_pu",
+      "measured_active_power_pu",
+      "measured_reactive_power_pu",
+      "voltage_integral_output_d_pu",
+      "voltage_integral_output_q_pu",
+      "current_integral_output_d_pu",
+      "current_integral_output_q_pu",
+      "converter_current_d_pu",
+      "converter_current_q_pu",
+      "capacitor_voltage_d_pu",
+      "capacitor_voltage_q_pu",
+      "grid_current_d_pu",
+      "grid_current_q_pu",
+      "modulation_voltage_d_pu_local_dq",
+      "modulation_voltage_q_pu_local_dq"
+    ],
+    "source_state_labels": [
+      "theta_outer_rad",
+      "omega_outer_pu",
+      "measured_active_power_pu",
+      "measured_reactive_power_pu",
+      "voltage_error_integral_d",
+      "voltage_error_integral_q",
+      "current_error_integral_d",
+      "current_error_integral_q",
+      "converter_current_real_pu",
+      "converter_current_imag_pu",
+      "capacitor_voltage_real_pu",
+      "capacitor_voltage_imag_pu",
+      "grid_current_real_pu",
+      "grid_current_imag_pu",
+      "modulation_voltage_d_pu_local_control_dq",
+      "modulation_voltage_q_pu_local_control_dq"
+    ],
+    "power_measurement_port": "pcc",
+    "active_power_time_constant_s": 0.1,
+    "modulation_time_constant_levels_s": [
+      0.0001,
+      0.00025,
+      0.0005,
+      0.001,
+      0.002,
+      0.005
+    ],
+    "team_declared_modulation_time_constant_s": 0.001,
+    "pcc_voltage_global_pu": [
+      1.0,
+      0.0
+    ],
+    "modulation_equation": "T_mod * d(v_mod,dq)/dt = v_command,dq - v_mod,dq",
+    "modulation_state_frame": "converter-local control dq",
+    "source_lcl_input_mapping": "v_mod,global = R(theta) * v_mod,dq"
+  },
+  "verification_gates": {
+    "equilibrium_residual_inf_max": 1e-08,
+    "rhs_matrix_and_structural_block_difference_max_per_s": 1e-05,
+    "bypass_counterexample_difference_min_per_s": 1.0
+  },
+  "ideal_fourteen_state_limit": {
+    "equilibrium_state_count": 14,
+    "spectral_abscissa_per_s": 200.0329168572161,
+    "low_frequency_mode": {
+      "real_per_s": 2.0885257284484755,
+      "imag_per_s": 13.951940499328497,
+      "frequency_hz": 2.2205202961921366
+    },
+    "wide_frequency_mode": {
+      "real_per_s": 200.0329168572161,
+      "imag_per_s": 701.0839227929117,
+      "frequency_hz": 111.58097183474861
+    },
+    "force_matched_to_sixteen_state_spectrum": false
+  },
+  "points": [
+    {
+      "modulation_time_constant_s": 0.0001,
+      "dimensionless_ideal_wide_mode_delay": 0.07010839227929118,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "equilibrium_rhs_difference_inf": 2.0780885136468912e-13,
+      "off_equilibrium_rhs_difference_inf": 1.7236212457305555e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3154483830209387e-07,
+      "modulation_self_block_max_abs_error_per_s": 6.318368832580745e-07,
+      "modulation_to_lcl_input_block_max_abs_error_per_s": 2.9791135602863505e-07,
+      "spectral_abscissa_per_s": 215.1882589993425,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.088521042218736,
+          "imag_per_s": 13.951915219046686,
+          "frequency_hz": 2.220516272710324
+        },
+        "tracking": {
+          "status": "anchor",
+          "reason": "nearest-fourteen-state-ideal-limit-mode"
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 215.1882589993425,
+          "imag_per_s": 694.1969715445512,
+          "frequency_hz": 110.48487950073913
+        },
+        "tracking": {
+          "status": "anchor",
+          "reason": "nearest-fourteen-state-ideal-limit-mode"
+        }
+      }
+    },
+    {
+      "modulation_time_constant_s": 0.00025,
+      "dimensionless_ideal_wide_mode_delay": 0.17527098069822794,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "equilibrium_rhs_difference_inf": 2.0780885136468912e-13,
+      "off_equilibrium_rhs_difference_inf": 1.7236212457305555e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3154483830209387e-07,
+      "modulation_self_block_max_abs_error_per_s": 2.527344804548193e-07,
+      "modulation_to_lcl_input_block_max_abs_error_per_s": 2.9791135602863505e-07,
+      "spectral_abscissa_per_s": 234.90208256603916,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.088514013201909,
+          "imag_per_s": 13.9518772978241,
+          "frequency_hz": 2.220510237360301
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999999840127781,
+          "left_mac": 0.9999999999987335,
+          "combined_mac": 0.9999999920057557,
+          "normalized_eigenvalue_distance": 2.7338311597341904e-06,
+          "relative_candidate_margin": 0.34853689181572456,
+          "condition_number": 34.11955309006973,
+          "right_eigenpair_residual": 2.393043852564329e-15,
+          "left_eigenpair_residual": 3.850370478665104e-18
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 234.90208256603916,
+          "imag_per_s": 680.3904129693778,
+          "frequency_hz": 108.2874974564125
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9996364576186727,
+          "left_mac": 0.9958672013464801,
+          "combined_mac": 0.9977500495678348,
+          "normalized_eigenvalue_distance": 0.03311537628516514,
+          "relative_candidate_margin": 0.6975640313350563,
+          "condition_number": 3.7148193177648334,
+          "right_eigenpair_residual": 7.32727818154853e-16,
+          "left_eigenpair_residual": 2.510849128590203e-15
+        }
+      }
+    },
+    {
+      "modulation_time_constant_s": 0.0005,
+      "dimensionless_ideal_wide_mode_delay": 0.3505419613964559,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "equilibrium_rhs_difference_inf": 2.0780885136468912e-13,
+      "off_equilibrium_rhs_difference_inf": 1.7236212457305555e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3154483830209387e-07,
+      "modulation_self_block_max_abs_error_per_s": 1.2636724022740964e-07,
+      "modulation_to_lcl_input_block_max_abs_error_per_s": 2.9791135602863505e-07,
+      "spectral_abscissa_per_s": 258.3919401719886,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.0885022990485416,
+          "imag_per_s": 13.951814093652798,
+          "frequency_hz": 2.2205001781040146
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999999555867523,
+          "left_mac": 0.9999999999964799,
+          "combined_mac": 0.9999999777916159,
+          "normalized_eigenvalue_distance": 4.556535127351612e-06,
+          "relative_candidate_margin": 0.3485366658226954,
+          "condition_number": 34.11923707354061,
+          "right_eigenpair_residual": 2.393043852564329e-15,
+          "left_eigenpair_residual": 6.847747832218732e-18
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 258.3919401719886,
+          "imag_per_s": 652.959246223348,
+          "frequency_hz": 103.92169167400384
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.999166061532613,
+          "left_mac": 0.9903193033715537,
+          "combined_mac": 0.9947328475573108,
+          "normalized_eigenvalue_distance": 0.050172774033588885,
+          "relative_candidate_margin": 0.6528758510052871,
+          "condition_number": 3.5791469188940486,
+          "right_eigenpair_residual": 7.32727818154853e-16,
+          "left_eigenpair_residual": 2.510849128590203e-15
+        }
+      }
+    },
+    {
+      "modulation_time_constant_s": 0.001,
+      "dimensionless_ideal_wide_mode_delay": 0.7010839227929118,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "equilibrium_rhs_difference_inf": 2.0780885136468912e-13,
+      "off_equilibrium_rhs_difference_inf": 1.7236212457305555e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3154483830209387e-07,
+      "modulation_self_block_max_abs_error_per_s": 6.318362011370482e-08,
+      "modulation_to_lcl_input_block_max_abs_error_per_s": 2.9791135602863505e-07,
+      "spectral_abscissa_per_s": 279.2557471657848,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.088478874022634,
+          "imag_per_s": 13.951687677309408,
+          "frequency_hz": 2.2204800583180764
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999998223148304,
+          "left_mac": 0.9999999999859188,
+          "combined_mac": 0.9999999111503707,
+          "normalized_eigenvalue_distance": 9.11362702170341e-06,
+          "relative_candidate_margin": 0.34853607343596044,
+          "condition_number": 34.11871156308271,
+          "right_eigenpair_residual": 2.084053406295799e-15,
+          "left_eigenpair_residual": 8.010273148745003e-18
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 279.2557471657848,
+          "imag_per_s": 600.527444780476,
+          "frequency_hz": 95.57691129915798
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.99783580877023,
+          "left_mac": 0.9744101245219714,
+          "combined_mac": 0.9860534035620393,
+          "normalized_eigenvalue_distance": 0.08035927572887584,
+          "relative_candidate_margin": 0.6780177682632901,
+          "condition_number": 3.3464354513922925,
+          "right_eigenpair_residual": 5.779755945281769e-16,
+          "left_eigenpair_residual": 1.6678504219675698e-15
+        }
+      }
+    },
+    {
+      "modulation_time_constant_s": 0.002,
+      "dimensionless_ideal_wide_mode_delay": 1.4021678455858235,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "equilibrium_rhs_difference_inf": 2.0780885136468912e-13,
+      "off_equilibrium_rhs_difference_inf": 1.7236212457305555e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3154483830209387e-07,
+      "modulation_self_block_max_abs_error_per_s": 3.159181005685241e-08,
+      "modulation_to_lcl_input_block_max_abs_error_per_s": 2.9791135602863505e-07,
+      "spectral_abscissa_per_s": 280.7241465901011,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.0884320370973777,
+          "imag_per_s": 13.951434812619523,
+          "frequency_hz": 2.2204398136527477
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999992890027791,
+          "left_mac": 0.9999999999436602,
+          "combined_mac": 0.9999996444731565,
+          "normalized_eigenvalue_distance": 1.8229481178940986e-05,
+          "relative_candidate_margin": 0.34853528751563884,
+          "condition_number": 34.117664981996704,
+          "right_eigenpair_residual": 1.9642259792391305e-15,
+          "left_eigenpair_residual": 8.010273148745003e-18
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 280.7241465901011,
+          "imag_per_s": 527.9818404883523,
+          "frequency_hz": 84.03091977647787
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9958649300521032,
+          "left_mac": 0.9537996284801096,
+          "combined_mac": 0.9746053561827301,
+          "normalized_eigenvalue_distance": 0.10956133801695071,
+          "relative_candidate_margin": 0.7355410672744024,
+          "condition_number": 3.035771566348652,
+          "right_eigenpair_residual": 5.779755945281769e-16,
+          "left_eigenpair_residual": 1.6678504219675698e-15
+        }
+      }
+    },
+    {
+      "modulation_time_constant_s": 0.005,
+      "dimensionless_ideal_wide_mode_delay": 3.5054196139645586,
+      "equilibrium_residual_inf": 2.4868995751603507e-13,
+      "equilibrium_rhs_difference_inf": 2.0780885136468912e-13,
+      "off_equilibrium_rhs_difference_inf": 1.7236212457305555e-13,
+      "state_matrix_max_abs_difference_per_s": 3.3154483830209387e-07,
+      "modulation_self_block_max_abs_error_per_s": 1.2636746760108508e-08,
+      "modulation_to_lcl_input_block_max_abs_error_per_s": 2.9791135602863505e-07,
+      "spectral_abscissa_per_s": 245.83528354068653,
+      "stable_by_eigenvalues": false,
+      "low_frequency_mode": {
+        "pole": {
+          "real_per_s": 2.088291631427051,
+          "imag_per_s": 13.950675962533145,
+          "frequency_hz": 2.220319038910435
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9999935949279004,
+          "left_mac": 0.9999999994925778,
+          "combined_mac": 0.9999967972051118,
+          "normalized_eigenvalue_distance": 5.470592879322567e-05,
+          "relative_candidate_margin": 0.3485326648590247,
+          "condition_number": 34.115589584870534,
+          "right_eigenpair_residual": 2.6859346319978492e-15,
+          "left_eigenpair_residual": 4.003831678438371e-18
+        }
+      },
+      "wide_frequency_mode": {
+        "pole": {
+          "real_per_s": 245.83528354068653,
+          "imag_per_s": 429.48540174177816,
+          "frequency_hz": 68.35472467301251
+        },
+        "tracking": {
+          "status": "matched",
+          "reason": "accepted",
+          "right_mac": 0.9881907775020808,
+          "left_mac": 0.9078178945979802,
+          "combined_mac": 0.9471521900376307,
+          "normalized_eigenvalue_distance": 0.17474550617004989,
+          "relative_candidate_margin": 0.6549579555831616,
+          "condition_number": 3.1269635739981494,
+          "right_eigenpair_residual": 5.621511412041051e-16,
+          "left_eigenpair_residual": 2.1388750048617098e-15
+        }
+      }
+    }
+  ],
+  "endpoint_normalized_displacement_from_0p1ms": {
+    "low_frequency_mode": 8.93371314312923e-05,
+    "wide_frequency_mode": 0.36665589179216496
+  },
+  "counterexample": {
+    "change": "the transformed source retains the lag states but feeds the algebraic current-controller voltage command directly to the LCL",
+    "modulation_time_constant_s": 0.001,
+    "state_matrix_max_abs_difference_per_s": 5984.734005262123,
+    "gate_rejected_mismatch": true
+  },
+  "hypothesis_test": {
+    "hypothesis": "the local-dq first-order modulation lag moves the named wide LCL-inner-loop branch more than the low synchronization branch",
+    "all_named_modes_resolved": true,
+    "result": "supported-in-bounded-scan"
+  },
+  "scope": {
+    "source_baselines_modified": false,
+    "team_original_model_modified": false,
+    "common_intermediate_case_only": true,
+    "local_dq_first_order_lag_compared": true,
+    "physical_pwm_or_transport_delay_compared": false,
+    "pade_delay_approximation_compared": false,
+    "pll_or_frequency_estimator_compared": false,
+    "external_network_dynamics_compared": false,
+    "whole_system_hopf_margin_claimed": false,
+    "paper_sufficient_condition_evaluated": false,
+    "statement": "The scan isolates a local-control-dq first-order voltage lag inside a fixed-PCC common intermediate model. It is not a PWM transport delay, and the already-right-half-plane wide branch precludes a whole-system Hopf-margin claim."
+  }
+}

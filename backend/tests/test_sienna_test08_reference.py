@@ -213,6 +213,12 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertTrue(
             scope["team_common_pll_measurement_position_compared"]
         )
+        self.assertEqual(payload["common_modulation_delay"]["status"], "passed")
+        self.assertEqual(payload["physical_modulation_lag"]["status"], "passed")
+        self.assertEqual(payload["delay_approximation"]["status"], "passed")
+        self.assertTrue(scope["team_common_local_dq_modulation_lag_compared"])
+        self.assertTrue(scope["physical_frame_modulation_lag_compared"])
+        self.assertTrue(scope["delay_realization_frequency_responses_compared"])
 
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()
@@ -300,6 +306,9 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
             "passed",
         )
         self.assertEqual(payload["common_pll_measurement"]["status"], "passed")
+        self.assertEqual(payload["common_modulation_delay"]["status"], "passed")
+        self.assertEqual(payload["physical_modulation_lag"]["status"], "passed")
+        self.assertEqual(payload["delay_approximation"]["status"], "passed")
         self.assertFalse(payload["scope"]["julia_runtime_executed_on_this_machine"])
 
 
