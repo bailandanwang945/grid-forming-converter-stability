@@ -1702,6 +1702,29 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  third_party_run_readiness: {
+    schema_version: string
+    status: 'ready' | 'not-ready'
+    comparison_target: string
+    state_count_pair: {
+      sienna_test08: number
+      team_average_dq: number
+    }
+    prerequisites: Record<string, boolean>
+    blocking_conditions: string[]
+    decisions: {
+      source_only_julia_baseline_may_be_run: boolean
+      root_by_root_cross_model_eigenvalue_comparison_ready: boolean
+      julia_runtime_installation_required_by_this_gate: boolean
+    }
+    scope: {
+      runtime_environment_evaluated: boolean
+      julia_executed: boolean
+      pscad_executed: boolean
+      team_model_validated: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean

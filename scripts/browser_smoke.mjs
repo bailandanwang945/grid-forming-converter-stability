@@ -436,6 +436,18 @@ try {
       throw new Error(`Average-dq external-line boundary is missing ${evidence}.`)
     }
   }
+  const runReadinessSummary = await page.getByTestId('sienna-test08-run-readiness-summary').innerText()
+  for (const evidence of ['上游固定基线\n可独立复跑', '原始整机逐根比较\n未就绪', '状态维数\n19 / 16', '未闭合研究门\n5']) {
+    if (!runReadinessSummary.includes(evidence)) {
+      throw new Error(`Sienna Test 08 run-readiness summary is missing ${evidence}: ${runReadinessSummary}`)
+    }
+  }
+  const runReadinessBoundary = await page.getByTestId('sienna-test08-run-readiness-boundary').innerText()
+  for (const evidence of ['复跑上游固定基线', '验证团队模型', '原始完整内环', '外部网络方程', '不具备逐根特征值比较的科学前提', '没有检测或安装 Julia']) {
+    if (!runReadinessBoundary.includes(evidence)) {
+      throw new Error(`Sienna Test 08 run-readiness boundary is missing ${evidence}.`)
+    }
+  }
   const siennaBoundary = await page.getByTestId('sienna-test08-audit-boundary').innerText()
   for (const evidence of ['六状态 LCL 层', 'η=Kᵢξ', '原始完整内环仍未同构', 'Rfif 电阻压降前馈', '10状态中间算例', '两状态有源阻尼', '仅缺有源阻尼即可改变分类', '不受支持', '不是对有源阻尼一般作用的否定', '约 100 Hz 命名支路', 'X2 是 LCL 网侧滤波电抗', '不构成唯一机理', '功率测量位置不同', '13状态中间算例', '约 3.4 Hz 低频支路', '结构差异而非参数误差', '14状态中间算例', '低频支路在 Tm=0.025～0.05 s 之间过零', '不是整机稳定裕度', '18状态共同 PLL 算例', 'PCC 低频支路发生实轴过渡', '模态待定', '仍不能逐根比较16状态与19状态整机特征值', '没有运行 Julia 或 PSCAD', '论文稳定性充分条件']) {
     if (!siennaBoundary.includes(evidence)) {

@@ -1000,6 +1000,13 @@ export default function AverageDQWorkbench() {
             </table>
           </div>
           <p className="scope-note" data-testid="average-dq-external-line-boundary">本对照在团队平均值 dq 单机无穷大母线模型中保持设备16状态、加载工作点和线路工频阻抗不变，只改变外部线路电磁暂态的保留程度；中间 α 值仅用于模态连续追踪，不是实际线路参数。X=0.2 p.u. 时静态线路为稳定、动态 RL 线路为失稳，决定谱横坐标的是约 6.89 Hz 的中频振荡支路；该支路是在全谱分类差异出现后增加的事后诊断量，不进入预注册 H2/H3。X=0.5 p.u. 的内环—LCL 支路靠近静态端时触发特征值距离门，保留为模态待定。结果不是 Sienna 或 Chatterjee—Geng 算例复现，也不证明静态线路一般会高估 Hopf 稳定裕度。</p>
+          <div className="panel evidence-strip" data-testid="sienna-test08-run-readiness-summary">
+            <div><small>上游固定基线</small><b>{siennaAudit.third_party_run_readiness.decisions.source_only_julia_baseline_may_be_run ? '可独立复跑' : '尚不可复跑'}</b></div>
+            <div><small>原始整机逐根比较</small><b>{siennaAudit.third_party_run_readiness.decisions.root_by_root_cross_model_eigenvalue_comparison_ready ? '已就绪' : '未就绪'}</b></div>
+            <div><small>状态维数</small><b>{siennaAudit.third_party_run_readiness.state_count_pair.sienna_test08} / {siennaAudit.third_party_run_readiness.state_count_pair.team_average_dq}</b></div>
+            <div><small>未闭合研究门</small><b>{siennaAudit.third_party_run_readiness.blocking_conditions.length}</b></div>
+          </div>
+          <p className="scope-note" data-testid="sienna-test08-run-readiness-boundary">M3.4 就绪性审计区分“复跑上游固定基线”与“验证团队模型”两件事。现阶段可以在隔离环境复跑 Sienna Test 08，以确认其固定19状态基线；但原始完整内环、功率测量端口、加载整机工作点、外部网络方程和状态维数仍未同时闭合，故16状态团队模型与19状态 Test 08 尚不具备逐根特征值比较的科学前提。本审计没有检测或安装 Julia，也没有运行 PSCAD。</p>
           <div className="table-scroll">
             <table>
               <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>

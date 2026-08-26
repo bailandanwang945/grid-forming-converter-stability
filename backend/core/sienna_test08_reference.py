@@ -54,6 +54,9 @@ from backend.core.sienna_team_lcl_isomorphism import (
     CommonLCLParameters,
     sienna_team_common_lcl_audit,
 )
+from backend.core.sienna_test08_run_readiness import (
+    assess_sienna_test08_run_readiness,
+)
 
 
 STATE_LABELS = (
@@ -566,6 +569,39 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         (complex(value) for value in FROZEN_EIGENVALUES_PER_S),
         key=lambda value: (value.real, value.imag),
     )
+    source_transcription_verified = bool(
+        audit.initial_residual_inf < 1.0e-8
+        and audit.terminal_voltage_error < 1.0e-10
+        and audit.matched_eigenvalue_l2_error_per_s < 1.0e-3
+    )
+    run_readiness = assess_sienna_test08_run_readiness(
+        source_transcription_verified=source_transcription_verified,
+        common_lcl_equations_isomorphic=bool(
+            common_lcl_audit["scope"]["common_lcl_equations_isomorphic"]
+        ),
+        pi_states_isomorphic_after_scaling=bool(
+            inner_control_mapping["scope"][
+                "pi_states_isomorphic_after_scaling"
+            ]
+        ),
+        complete_inner_controls_isomorphic=bool(
+            inner_control_mapping["scope"][
+                "test08_and_team_complete_inner_controls_isomorphic"
+            ]
+        ),
+        original_power_measurement_ports_identical=bool(
+            common_outer_loop["scope"][
+                "power_measurement_port_originally_identical"
+            ]
+        ),
+        loaded_full_model_operating_points_aligned=False,
+        external_network_equations_isomorphic=False,
+        full_state_dimensions_equal=bool(
+            common_lcl_audit["scope"]["full_state_dimensions_equal"]
+        ),
+        source_state_count=len(STATE_LABELS),
+        team_state_count=16,
+    )
 
     def _complex_rows(values: list[complex]) -> list[dict[str, float]]:
         return [
@@ -578,13 +614,11 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/2.0",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/2.1",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
-            audit.initial_residual_inf < 1.0e-8
-            and audit.terminal_voltage_error < 1.0e-10
-            and audit.matched_eigenvalue_l2_error_per_s < 1.0e-3
+            source_transcription_verified
             and common_lcl_audit["status"] == "passed"
             and inner_control_mapping["pi_state_mapping"]["status"] == "passed"
             and common_inner_loop["status"] == "passed"
@@ -671,8 +705,11 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         "physical_modulation_lag": physical_modulation_lag,
         "delay_approximation": delay_approximation,
         "external_line_dynamics": external_line_dynamics,
+        "third_party_run_readiness": run_readiness,
         "scope": {
-            "source_equation_transcription_verified": True,
+            "source_equation_transcription_verified": (
+                source_transcription_verified
+            ),
             "julia_runtime_executed_on_this_machine": False,
             "pscad_rerun": False,
             "upstream_pscad_trace_present_in_fixed_source": True,

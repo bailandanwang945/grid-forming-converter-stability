@@ -217,6 +217,17 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertEqual(payload["physical_modulation_lag"]["status"], "passed")
         self.assertEqual(payload["delay_approximation"]["status"], "passed")
         self.assertEqual(payload["external_line_dynamics"]["status"], "passed")
+        readiness = payload["third_party_run_readiness"]
+        self.assertEqual(readiness["status"], "not-ready")
+        self.assertTrue(
+            readiness["decisions"]["source_only_julia_baseline_may_be_run"]
+        )
+        self.assertFalse(
+            readiness["decisions"][
+                "root_by_root_cross_model_eigenvalue_comparison_ready"
+            ]
+        )
+        self.assertEqual(len(readiness["blocking_conditions"]), 5)
         self.assertTrue(scope["team_common_local_dq_modulation_lag_compared"])
         self.assertTrue(scope["physical_frame_modulation_lag_compared"])
         self.assertTrue(scope["delay_realization_frequency_responses_compared"])
