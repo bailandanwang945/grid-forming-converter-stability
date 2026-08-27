@@ -898,3 +898,9 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 保留原状态方程、求解器、容差、8秒时域、0.01秒采样和诊断事件门，只为内核增加可选进度回调；测试和正式实验入口逐项输出六次求解的开始、结束、结果类型和函数评价次数。新增一项回归检查12条开始/结束消息，Python测试总数增至270。
 - 非线性阶跃定向 `7/7` 在107.503秒内通过；随后Python全量 `270/270` 在387.985秒内通过。Ruff和Python语法检查、前端生产构建、开发启动器 `FULLSTACK_LAUNCHER_SMOKE_OK` 及真实浏览器 `BROWSER_E2E_SMOKE_OK` 均通过。
 - 本轮未改MATLAB代码，也未重复运行MATLAB；最近的128项记录仍属于冻结候选。Windows `v0.5.0-rc1` 仍对应 `6ca0b75`，没有重建或改变ZIP哈希。详细测试记录见 `results/test-reports/2026-08-27-v0.5-270-python-progress.md`。
+
+## 2026-08-27：平均值 dq 研究验证任务聚焦改造
+
+- 复核最新1600 px截图后确认原页面已无叠压，但“研究验证”仍同时保留临时模型参数栏和六张同权任务卡。固定研究任务实际使用冻结锚点，继续显示参数栏容易造成参数作用域误读，并显著推迟主结果出现位置。
+- 依据 Simulink Property Inspector 的上下文属性关系、App Designer 自动重排以及 AutoFigure-Edit 的单工作流焦点，研究验证视图现在收起无关参数检查器，六项任务仅展开当前选中项；任务状态、运行、导出、结果焦点和结论边界保持原计算契约。
+- 前端生产构建通过；Vite只保留既有主包大于500 kB提示。真实 Chromium 全流程两次通过并输出 `BROWSER_E2E_SMOKE_OK`；新增900 px定量门确认无横向溢出、任务导航重排为两列，1600 px截图确认研究结果提前进入主画布。本轮未修改模型、数值内核、MATLAB或发布包。

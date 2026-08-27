@@ -1170,6 +1170,61 @@ body {
 .average-dq-workbench[data-view='studies'] .workspace > .provenance-card,
 .average-dq-workbench[data-view='studies'] .workspace > .empty-state { display: none; }
 
+/* Fixed studies use frozen anchors, so the editable model inspector is not part of this context. */
+.average-dq-workbench[data-view='studies'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.average-dq-workbench[data-view='studies'] > .controls { display: none; }
+
+.study-overview {
+  min-height: 70px;
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: linear-gradient(110deg, #f7fafb, #eef6f5);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+.study-overview small,
+.study-overview b { display: block; }
+.study-overview small { color: #86929e; font-size: 8px; font-weight: 700; letter-spacing: .12em; }
+.study-overview b { margin-top: 3px; color: var(--text); font-size: 13px; }
+.study-overview p { margin: 4px 0 0; color: var(--text-soft); font-size: 10px; line-height: 1.5; }
+.study-overview > span {
+  flex: 0 0 auto;
+  padding: 8px 11px;
+  color: #52616d;
+  background: rgba(255,255,255,.8);
+  border: 1px solid #d7e3e2;
+  border-radius: 9px;
+  font-size: 10px;
+}
+.study-overview > span strong { color: #0b7f7a; font-size: 15px; }
+
+.average-dq-workbench[data-view='studies'] .study-launcher {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+.average-dq-workbench[data-view='studies'] .study-task {
+  min-height: 84px;
+  padding: 14px;
+}
+.average-dq-workbench[data-view='studies'] .study-task:not(.selected) h3 {
+  margin: 12px 0 0;
+  font-size: 12px;
+}
+.average-dq-workbench[data-view='studies'] .study-task:not(.selected) p,
+.average-dq-workbench[data-view='studies'] .study-task:not(.selected) .study-task-actions {
+  display: none;
+}
+.average-dq-workbench[data-view='studies'] .study-task:not(.selected):hover {
+  border-color: #a9c9c6;
+  transform: translateY(-1px);
+}
+.average-dq-workbench[data-view='studies'] .study-task.selected { min-height: 176px; }
+
 .study-task { transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
 .study-task.selected {
   border-color: rgba(11, 127, 122, .48);
@@ -1293,6 +1348,10 @@ body {
   .product-sidebar .workspace-tabs button.active { box-shadow: inset 0 -2px 0 var(--accent); }
 }
 
+@media (max-width: 1000px) {
+  .average-dq-workbench[data-view='studies'] .study-launcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 720px) {
   .product-sidebar { align-items: stretch; flex-direction: column; }
   .product-brand { min-width: 0; padding: 0 0 9px; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
@@ -1303,6 +1362,11 @@ body {
   .workspace-header > p, .workspace-header .research-tag { display: none; }
   .workbench-viewbar { align-items: stretch; flex-direction: column; }
   .view-switch button { flex: 1; }
+}
+
+@media (max-width: 620px) {
+  .study-overview { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .average-dq-workbench[data-view='studies'] .study-launcher { grid-template-columns: minmax(0, 1fr); }
 }
 /* Lazy workspace boundary: keeps first load small without showing an empty canvas. */
 .workspace-loading {

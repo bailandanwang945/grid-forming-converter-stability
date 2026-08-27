@@ -563,6 +563,14 @@ export default function AverageDQWorkbench() {
           <button role="tab" aria-selected={workspaceView === 'studies'} className={workspaceView === 'studies' ? 'active' : ''} onClick={() => setWorkspaceView('studies')}>研究验证</button>
         </div>
       </div>
+      <div className="study-overview research-navigation">
+        <div>
+          <small>FIXED STUDY PIPELINE</small>
+          <b>选择一项验证任务</b>
+          <p>当前仅展开一项任务的说明与操作；各任务使用冻结锚点，不读取左侧临时模型参数。</p>
+        </div>
+        <span><strong>{completedStudyCount}</strong> / {studyIds.length} 已完成</span>
+      </div>
       <div className="study-launcher" aria-label="固定研究任务">
         <article className={studyCardClass('hierarchy', 'hierarchy-task')}>
           <button type="button" className="study-task-heading study-task-select" data-testid="study-select-hierarchy" aria-pressed={activeStudy === 'hierarchy'} onClick={() => setActiveStudy('hierarchy')}><span>01</span><small>MODEL HIERARCHY</small><em data-testid="study-status-hierarchy">{studyStatusText('hierarchy')}</em></button>

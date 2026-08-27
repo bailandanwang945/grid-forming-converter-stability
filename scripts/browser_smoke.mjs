@@ -209,7 +209,28 @@ try {
     throw new Error('Average-dq hierarchy task did not start in the not-run state.')
   }
   await page.getByTestId('study-result-empty').waitFor({ timeout: 15000 })
+  if (await page.locator('.average-dq-workbench > .controls').isVisible()) {
+    throw new Error('Average-dq editable parameters remain visible in the fixed-study context.')
+  }
+  if (await page.locator('.study-task-actions:visible').count() !== 1) {
+    throw new Error('Average-dq study launcher does not keep exactly one task action panel in focus.')
+  }
+  await page.setViewportSize({ width: 900, height: 997 })
+  const studyLayout = await page.evaluate(() => {
+    const launcher = document.querySelector('.study-launcher')
+    return {
+      viewportWidth: document.documentElement.clientWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      launcherColumns: launcher ? getComputedStyle(launcher).gridTemplateColumns.split(' ').length : 0,
+    }
+  })
+  if (studyLayout.documentWidth > studyLayout.viewportWidth + 1 || studyLayout.launcherColumns !== 2) {
+    throw new Error(`Average-dq fixed-study layout does not reflow at 900 px: ${JSON.stringify(studyLayout)}`)
+  }
+  await page.screenshot({ path: resolve('tmp/browser-smoke-average-dq-studies-responsive.png'), fullPage: true })
+  await page.setViewportSize({ width: 1600, height: 1100 })
 
+  await page.getByTestId('study-select-ablation').click()
   const ablationScope = page.getByTestId('average-dq-ablation-fixed-scope')
   await ablationScope.waitFor({ timeout: 15000 })
   const ablationScopeText = await ablationScope.innerText()
@@ -243,6 +264,7 @@ try {
     throw new Error('Average-dq ablation JSON export is still disabled after calculation.')
   }
 
+  await page.getByTestId('study-select-boundary').click()
   await page.getByTestId('average-dq-boundary-run').click()
   await page.getByTestId('average-dq-boundary-results').waitFor({ timeout: 45000 })
   const boundarySummaryText = await page.getByTestId('average-dq-boundary-summary').innerText()
@@ -265,6 +287,7 @@ try {
   }
   console.log('[browser] Average-dq ablation and boundary workflow passed.')
 
+  await page.getByTestId('study-select-port').click()
   await page.getByTestId('average-dq-port-identification-run').click()
   await page.getByTestId('average-dq-port-identification-results').waitFor({ timeout: 45000 })
   const portIdentificationSummary = await page.getByTestId('average-dq-port-identification-summary').innerText()
@@ -308,6 +331,7 @@ try {
   if (await page.getByTestId('mathworks-external-evidence-results').count() !== 0) {
     throw new Error('MathWorks evidence was unexpectedly loaded before its task was run.')
   }
+  await page.getByTestId('study-select-sienna').click()
   await page.getByTestId('sienna-test08-audit-run').click()
   await page.getByTestId('sienna-test08-audit-results').waitFor({ timeout: 30000 })
   const siennaSummary = await page.getByTestId('sienna-test08-audit-summary').innerText()
@@ -462,6 +486,7 @@ try {
   }
   console.log('[browser] Independent Sienna source audit passed.')
 
+  await page.getByTestId('study-select-external').click()
   await page.getByTestId('mathworks-external-evidence-load').click()
   await page.getByTestId('mathworks-external-evidence-results').waitFor({ timeout: 15000 })
   const externalSummary = await page.getByTestId('mathworks-external-evidence-summary').innerText()
@@ -555,6 +580,7 @@ try {
   await averageReport.close()
 
   await studiesTab.click()
+  await page.getByTestId('study-select-hierarchy').click()
   await page.getByRole('button', { name: /运行42点扫描/ }).click()
   await page.getByText('16状态—三状态 D–X 层级对照').waitFor({ timeout: 30000 })
   const hierarchyText = await page.locator('body').innerText()
