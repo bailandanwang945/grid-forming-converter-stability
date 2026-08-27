@@ -153,7 +153,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 路径仅为示例，应改为本机实际 MATLAB 安装目录。没有 MATLAB 时可使用 `-SkipMatlab`；验收结果会明确记为 `SKIP`，不会误报为通过。详细规则见 [`docs/software/VERIFICATION.md`](docs/software/VERIFICATION.md)。
 
-开发过程与遗留问题见 [`notes/PROJECT_LOG.md`](notes/PROJECT_LOG.md)，算法说明见 [`docs/specs/algorithms/`](docs/specs/algorithms/)，研究方法和阶段性结论见 [`docs/research/`](docs/research/)。
+开发过程与遗留问题见 [`notes/PROJECT_LOG.md`](notes/PROJECT_LOG.md)，算法说明见 [`docs/specs/algorithms/`](docs/specs/algorithms/)，研究方法和阶段性结论见 [`docs/research/`](docs/research/)。原始项目目标逐项完成情况、证据上限与剩余人工验收门见 [`docs/software/PROJECT_COMPLETION_AUDIT.md`](docs/software/PROJECT_COMPLETION_AUDIT.md)。
 
 ## 已知边界与下一阶段
 
