@@ -1,0 +1,58 @@
+{
+  "schema_version": "gfm-sienna-team-common-static-network/1.0",
+  "status": "passed",
+  "model_contract": {
+    "state_count": 13,
+    "network_state_count": 0,
+    "power_ports": [
+      "filter_capacitor",
+      "pcc"
+    ],
+    "network_realization": "static algebraic two-bus network"
+  },
+  "verification_gates": {
+    "equilibrium_residual_inf_max": 1e-08,
+    "rhs_and_matrix_difference_max_per_s": 1e-05,
+    "static_network_effect_min_per_s": 0.001
+  },
+  "verification_summary": {
+    "maximum_equilibrium_residual_inf": 1.0409451078885468e-12,
+    "maximum_off_equilibrium_rhs_difference_inf": 1.8474111129762605e-13,
+    "maximum_state_matrix_difference_per_s": 7.585340426885523e-07,
+    "minimum_static_network_effect_per_s": 3.887720918527293
+  },
+  "variants": {
+    "filter_capacitor": {
+      "equilibrium_residual_inf": 2.0605739337042905e-13,
+      "off_equilibrium_rhs_difference_inf": 1.8474111129762605e-13,
+      "state_matrix_max_abs_difference_per_s": 3.766842482377797e-07,
+      "static_network_effect_max_abs_per_s": 3.887720918527293,
+      "pcc_voltage_pu": [
+        0.9999994707586406,
+        0.0010313084369410754
+      ],
+      "spectral_abscissa_per_s": 195.7907480289661,
+      "stable_by_eigenvalues": false
+    },
+    "pcc": {
+      "equilibrium_residual_inf": 1.0409451078885468e-12,
+      "off_equilibrium_rhs_difference_inf": 1.4210854715202004e-13,
+      "state_matrix_max_abs_difference_per_s": 7.585340426885523e-07,
+      "static_network_effect_max_abs_per_s": 3.8877209362908616,
+      "pcc_voltage_pu": [
+        1.0000335206131128,
+        0.0010364650720512884
+      ],
+      "spectral_abscissa_per_s": 200.62937220846678,
+      "stable_by_eigenvalues": false
+    }
+  },
+  "scope": {
+    "common_loaded_operating_points_aligned": true,
+    "common_static_network_coupling_included": true,
+    "source_or_team_original_full_model_replaced": false,
+    "original_dynamic_line_isomorphism_claimed": false,
+    "original_full_model_eigenvalues_comparable": false,
+    "statement": "The audit closes two thirteen-state common intermediate models through the verified algebraic two-bus network. It does not replace the team's dynamic RL line or align all states of either original full model."
+  }
+}

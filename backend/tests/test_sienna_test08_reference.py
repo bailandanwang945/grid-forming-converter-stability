@@ -218,6 +218,7 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertEqual(payload["delay_approximation"]["status"], "passed")
         self.assertEqual(payload["external_line_dynamics"]["status"], "passed")
         self.assertEqual(payload["static_network_mapping"]["status"], "passed")
+        self.assertEqual(payload["common_static_network"]["status"], "passed")
         readiness = payload["third_party_run_readiness"]
         self.assertEqual(readiness["status"], "not-ready")
         self.assertTrue(
@@ -234,6 +235,9 @@ class SiennaTest08ReferenceTest(unittest.TestCase):
         self.assertTrue(scope["delay_realization_frequency_responses_compared"])
         self.assertTrue(scope["team_static_and_dynamic_external_line_compared"])
         self.assertTrue(scope["team_common_static_network_layer_compared"])
+        self.assertTrue(
+            scope["team_common_loaded_static_network_case_compared"]
+        )
 
     def test_common_lcl_equivalence_is_invariant_to_alignment_angle(self) -> None:
         source = SiennaTest08Parameters()

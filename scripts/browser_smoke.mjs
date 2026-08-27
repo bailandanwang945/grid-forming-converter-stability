@@ -437,13 +437,13 @@ try {
     }
   }
   const runReadinessSummary = await page.getByTestId('sienna-test08-run-readiness-summary').innerText()
-  for (const evidence of ['上游固定基线\n可独立复跑', '原始整机逐根比较\n未就绪', '状态维数\n19 / 16', '未闭合研究门\n5', '静态网络中间层\n方程门通过']) {
+  for (const evidence of ['上游固定基线\n可独立复跑', '原始整机逐根比较\n未就绪', '状态维数\n19 / 16', '未闭合研究门\n5', '静态网络中间层\n方程门通过', '加载静态网络中间算例\n方程门通过', '双路径矩阵差 / s⁻¹\n7.59e-7']) {
     if (!runReadinessSummary.includes(evidence)) {
       throw new Error(`Sienna Test 08 run-readiness summary is missing ${evidence}: ${runReadinessSummary}`)
     }
   }
   const runReadinessBoundary = await page.getByTestId('sienna-test08-run-readiness-boundary').innerText()
-  for (const evidence of ['复跑上游固定基线', '验证团队模型', '系统基值到设备基值换算', '零状态静态两母线网络', '不能替代原始外部网络同构', '原始完整内环', '外部网络方程', '不具备逐根特征值比较的科学前提', '没有检测或安装 Julia']) {
+  for (const evidence of ['复跑上游固定基线', '验证团队模型', '系统基值到设备基值换算', '零状态静态两母线网络', '13状态加载中间算例', '存在右半平面特征根', '不作为稳定参照', '不能替代原始外部网络同构', '原始完整内环', '外部网络方程', '不具备逐根特征值比较的科学前提', '没有检测或安装 Julia']) {
     if (!runReadinessBoundary.includes(evidence)) {
       throw new Error(`Sienna Test 08 run-readiness boundary is missing ${evidence}.`)
     }

@@ -1006,8 +1006,10 @@ export default function AverageDQWorkbench() {
             <div><small>状态维数</small><b>{siennaAudit.third_party_run_readiness.state_count_pair.sienna_test08} / {siennaAudit.third_party_run_readiness.state_count_pair.team_average_dq}</b></div>
             <div><small>未闭合研究门</small><b>{siennaAudit.third_party_run_readiness.blocking_conditions.length}</b></div>
             <div><small>静态网络中间层</small><b>{siennaAudit.static_network_mapping.status === 'passed' ? '方程门通过' : '方程门失败'}</b></div>
+            <div><small>加载静态网络中间算例</small><b>{siennaAudit.common_static_network.status === 'passed' ? '方程门通过' : '方程门失败'}</b></div>
+            <div><small>双路径矩阵差 / s⁻¹</small><b>{siennaAudit.common_static_network.verification_summary.maximum_state_matrix_difference_per_s.toExponential(2)}</b></div>
           </div>
-          <p className="scope-note" data-testid="sienna-test08-run-readiness-boundary">M3.4 就绪性审计区分“复跑上游固定基线”与“验证团队模型”两件事。现阶段可以在隔离环境复跑 Sienna Test 08，以确认其固定19状态基线。经系统基值到设备基值换算并反转端口电流正方向后，双方共有的零状态静态两母线网络电压—电流映射已经通过方程门；但团队原始模型采用动态 RL 线路，该中间层等价不能替代原始外部网络同构。原始完整内环、功率测量端口、加载整机工作点、外部网络方程和状态维数仍未同时闭合，故16状态团队模型与19状态 Test 08 尚不具备逐根特征值比较的科学前提。本审计没有检测或安装 Julia，也没有运行 PSCAD。</p>
+          <p className="scope-note" data-testid="sienna-test08-run-readiness-boundary">M3.4 就绪性审计区分“复跑上游固定基线”与“验证团队模型”两件事。现阶段可以在隔离环境复跑 Sienna Test 08，以确认其固定19状态基线。经系统基值到设备基值换算并反转端口电流正方向后，双方共有的零状态静态两母线网络电压—电流映射已经通过方程门；在此基础上，两种共同功率测量端口的13状态加载中间算例也已重新求解平衡点并通过双路径状态矩阵核验。它们均存在右半平面特征根，只用于方程核验，不作为稳定参照。团队原始模型采用动态 RL 线路，上述中间层等价不能替代原始外部网络同构。原始完整内环、功率测量端口、加载整机工作点、外部网络方程和状态维数仍未同时闭合，故16状态团队模型与19状态 Test 08 尚不具备逐根特征值比较的科学前提。本审计没有检测或安装 Julia，也没有运行 PSCAD。</p>
           <div className="table-scroll">
             <table>
               <thead><tr><th>最右侧计算极点实部 / s⁻¹</th><th>虚部 / s⁻¹</th><th>频率 / Hz</th></tr></thead>

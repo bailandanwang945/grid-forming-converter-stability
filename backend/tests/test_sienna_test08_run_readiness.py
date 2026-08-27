@@ -14,6 +14,7 @@ class SiennaTest08RunReadinessTest(unittest.TestCase):
             "common_lcl_equations_isomorphic": True,
             "pi_states_isomorphic_after_scaling": True,
             "common_static_network_equations_isomorphic": True,
+            "common_loaded_operating_points_aligned": True,
             "complete_inner_controls_isomorphic": False,
             "original_power_measurement_ports_identical": False,
             "loaded_full_model_operating_points_aligned": False,

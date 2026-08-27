@@ -1750,6 +1750,39 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  common_static_network: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      state_count: number
+      network_state_count: number
+      power_ports: string[]
+      network_realization: string
+    }
+    verification_summary: {
+      maximum_equilibrium_residual_inf: number
+      maximum_off_equilibrium_rhs_difference_inf: number
+      maximum_state_matrix_difference_per_s: number
+      minimum_static_network_effect_per_s: number
+    }
+    variants: Record<string, {
+      equilibrium_residual_inf: number
+      off_equilibrium_rhs_difference_inf: number
+      state_matrix_max_abs_difference_per_s: number
+      static_network_effect_max_abs_per_s: number
+      pcc_voltage_pu: number[]
+      spectral_abscissa_per_s: number
+      stable_by_eigenvalues: boolean
+    }>
+    scope: {
+      common_loaded_operating_points_aligned: boolean
+      common_static_network_coupling_included: boolean
+      source_or_team_original_full_model_replaced: boolean
+      original_dynamic_line_isomorphism_claimed: boolean
+      original_full_model_eigenvalues_comparable: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1770,6 +1803,7 @@ export type SiennaTest08AuditResult = {
     delay_realization_frequency_responses_compared: boolean
     team_static_and_dynamic_external_line_compared: boolean
     team_common_static_network_layer_compared: boolean
+    team_common_loaded_static_network_case_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string
