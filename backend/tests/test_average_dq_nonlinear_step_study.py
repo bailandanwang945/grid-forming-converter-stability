@@ -20,12 +20,30 @@ from backend.core.average_dq_nonlinear_step_study import (
 class AverageDQNonlinearStepStudyTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.result = run_aligned_three_point_nonlinear_step_study()
+        cls.progress_messages: list[str] = []
+
+        def record_progress(message: str) -> None:
+            cls.progress_messages.append(message)
+            print(f"[GFM Nonlinear Step] {message}", flush=True)
+
+        cls.result = run_aligned_three_point_nonlinear_step_study(
+            progress=record_progress
+        )
         cls.points = {
             point["damping_mathworks_pu_per_hz"]: point
             for point in cls.result["points"]
         }
         cls.client = TestClient(app)
+
+    def test_expensive_recomputation_reports_each_solver_boundary(self) -> None:
+        self.assertEqual(len(self.progress_messages), 12)
+        self.assertEqual(
+            sum(message.startswith("start ") for message in self.progress_messages), 6
+        )
+        self.assertEqual(
+            sum(message.startswith("done ") for message in self.progress_messages), 6
+        )
+        self.assertIn("damping=1.056 method=LSODA", "\n".join(self.progress_messages))
 
     def test_contract_freezes_three_aligned_coordinates_and_two_solvers(self) -> None:
         contract = self.result["contract"]

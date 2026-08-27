@@ -275,8 +275,15 @@ def _simulate_solver(
     }
 
 
-def run_aligned_three_point_nonlinear_step_study() -> dict[str, object]:
-    """Run the frozen three-point study with two independent stiff solvers."""
+def run_aligned_three_point_nonlinear_step_study(
+    progress: Callable[[str], None] | None = None,
+) -> dict[str, object]:
+    """Run the frozen three-point study with two independent stiff solvers.
+
+    The optional callback reports deterministic start/completion boundaries for
+    each expensive solve.  It does not change the equations, solver options or
+    returned evidence.
+    """
 
     points = []
     for damping_mw, external_outcome in zip(
@@ -290,10 +297,17 @@ def run_aligned_three_point_nonlinear_step_study() -> dict[str, object]:
         post_model = build_aligned_team_case(
             FIXED_SCR, damping_mw, POST_STEP_ACTIVE_POWER_PU
         )
-        solver_results = [
-            _simulate_solver(pre_model, post_model, method)
-            for method in SOLVER_METHODS
-        ]
+        solver_results = []
+        for method in SOLVER_METHODS:
+            if progress is not None:
+                progress(f"start damping={damping_mw:g} method={method}")
+            solver_result = _simulate_solver(pre_model, post_model, method)
+            solver_results.append(solver_result)
+            if progress is not None:
+                progress(
+                    f"done damping={damping_mw:g} method={method} "
+                    f"outcome={solver_result['outcome']} nfev={solver_result['nfev']}"
+                )
         solver_outcomes = [result["outcome"] for result in solver_results]
         solver_events = [result["event_name"] for result in solver_results]
         state_arrays = [

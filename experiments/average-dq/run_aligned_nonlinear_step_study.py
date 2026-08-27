@@ -11,7 +11,7 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -28,8 +28,10 @@ CSV_FILENAME = "aligned_three_point_nonlinear_step_solver_summary.csv"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "results" / "average-dq-nonlinear-step"
 
 
-def build_payload() -> dict[str, Any]:
-    payload = run_aligned_three_point_nonlinear_step_study()
+def build_payload(
+    progress: Callable[[str], None] | None = None,
+) -> dict[str, Any]:
+    payload = run_aligned_three_point_nonlinear_step_study(progress=progress)
     return {
         **payload,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -164,8 +166,11 @@ def _atomic_write(path: Path, text: str) -> None:
             temporary_path.unlink()
 
 
-def run_experiment(output_dir: Path) -> tuple[Path, Path]:
-    payload = build_payload()
+def run_experiment(
+    output_dir: Path,
+    progress: Callable[[str], None] | None = None,
+) -> tuple[Path, Path]:
+    payload = build_payload(progress=progress)
     json_path = output_dir / JSON_FILENAME
     csv_path = output_dir / CSV_FILENAME
     _atomic_write(
@@ -194,7 +199,12 @@ def main(argv: list[str] | None = None) -> int:
         help=f"输出目录（默认：{DEFAULT_OUTPUT_DIR}）",
     )
     args = parser.parse_args(argv)
-    json_path, csv_path = run_experiment(args.output_dir.resolve())
+    json_path, csv_path = run_experiment(
+        args.output_dir.resolve(),
+        progress=lambda message: print(
+            f"[GFM Nonlinear Step] {message}", flush=True
+        ),
+    )
     print("AVERAGE_DQ_ALIGNED_NONLINEAR_STEP_STUDY_OK")
     print(f"JSON: {json_path}")
     print(f"CSV:  {csv_path}")
