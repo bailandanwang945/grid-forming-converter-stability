@@ -31,7 +31,7 @@ $env:MATLAB_ROOT = "D:\matlab"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 ```
 
-`D:\matlab` 仅为示例，应替换为本机实际安装目录。当前仓库中可追溯的最新 MATLAB 记录为 128 Passed、0 Failed、0 Incomplete；Python 当前测试集为 142 项。两者验证不同实现，不应相加或互相替代。
+`D:\matlab` 仅为示例，应替换为本机实际安装目录。2026-08-27 对分支 `research/nontrivial-core` 的统一验收记录为：Python 263项通过，MATLAB 128项通过且0失败、0未完成；前端生产构建、开发态启动器和真实浏览器端到端流程同时通过，汇总 `PASS=5、FAIL=0、SKIP=0`、`VERIFY_ALL_OK`。Python与MATLAB验证不同实现，不应相加或互相替代。
 
 成功标记分为：
 

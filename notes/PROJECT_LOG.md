@@ -876,4 +876,4 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 最终从干净提交 `6ca0b757bda1972284a7282118a12e18bfe1d6a4` 重建 `v0.5.0-rc1`。包目录总大小 `164,670,923` 字节；ZIP大小 `71,728,417` 字节，SHA-256 为 `40c3248ac8acfb208d1119ba9bc9b7ce2043a3691a30962a8b9799e22c329e1a`；清单约束1024个文件，包目录含清单共1025个文件，`workingTreeDirty=false`。
 - 第三方清单通过：64个组件，其中Python 50项、前端生产依赖9项；`npm audit --omit=dev --json` 报告生产依赖0项漏洞。构建日志中的1项中等、2项高危告警来自开发依赖，没有进入生产依赖结论。
 - 正式输出目录的ZIP与构建目录哈希一致。整包非交互验收重新核对清单、原始ZIP、运行时证据与端口释放，得到 `GFM_CROSS_MACHINE_FUNCTIONAL_OK`；由于本机安装Python、Node.js、MATLAB且未断网，按设计得到 `GFM_M5_QUALIFICATION_INCOMPLETE`。项目侧导入工具因机器资格不足返回 `GFM_CROSS_MACHINE_EVIDENCE_REJECTED`，这不否定本机功能通过，也不能代替真正异机验收。
-- 定向发布、许可与项目侧复核共15项测试通过；Ruff、PowerShell语法检查、前端生产构建和源码真实冒烟通过。M5仍需另一台无开发环境Windows电脑断网运行，并完成人工浏览器、导出和退出检查；项目自身代码许可证与公开分发决定仍待团队确认。
+- 定向发布、许可与项目侧复核共15项测试通过；Ruff、PowerShell语法检查、前端生产构建和源码真实冒烟通过。随后对最新分支执行统一验收：Python `263/263`、前端生产构建、开发态启动器、真实浏览器端到端流程及MATLAB `128/128` 全部通过，汇总 `PASS=5、FAIL=0、SKIP=0`、`VERIFY_ALL_OK`。Vite仍提示主代码包大于500 kB，作为后续性能优化项，不影响本轮功能验收。M5仍需另一台无开发环境Windows电脑断网运行，并完成人工浏览器、导出和退出检查；项目自身代码许可证与公开分发决定仍待团队确认。
