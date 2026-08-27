@@ -10,7 +10,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 脚本依次执行：
 
-1. Python `unittest` 全套测试，当前可发现测试集为 269 项；
+1. Python `unittest` 全套测试，当前测试集为270项；
 2. React/TypeScript 前端生产构建；
 3. 开发态一键启动器冒烟测试；
 4. 使用本机现有 Chrome 或 Edge 的浏览器端到端流程；
@@ -31,7 +31,7 @@ $env:MATLAB_ROOT = "D:\matlab"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 ```
 
-`D:\matlab` 仅为示例，应替换为本机实际安装目录。2026-08-27 对分支 `research/nontrivial-core` 的冻结候选统一验收记录为：Python 263项通过，MATLAB 128项通过且0失败、0未完成；前端生产构建、开发态启动器和真实浏览器端到端流程同时通过，汇总 `PASS=5、FAIL=0、SKIP=0`、`VERIFY_ALL_OK`。此后新增6项论文基线完整性测试并已定向通过，故当前可发现测试数为269；完整合并回归的一次运行在既有耗时数值用例连续60秒没有新输出后被终止，不记为新的全量通过。Python与MATLAB验证不同实现，不应相加或互相替代。
+`D:\matlab` 仅为示例，应替换为本机实际安装目录。2026-08-27，冻结候选统一验收记录为：Python 263项、MATLAB 128项、前端生产构建、开发态启动器和真实浏览器端到端流程全部通过，汇总 `PASS=5、FAIL=0、SKIP=0`、`VERIFY_ALL_OK`。随后当前分支加入6项论文基线完整性测试和1项长计算进度测试，Python全量 `270/270` 在387.985秒内通过；同一变更后的前端生产构建、启动器与真实浏览器流程也分别通过。MATLAB代码未变，本轮没有重复运行，故128项仍明确属于冻结候选记录。Python与MATLAB验证不同实现，不应相加或互相替代。
 
 成功标记分为：
 
@@ -53,7 +53,7 @@ python .\scripts\verify_reference_baselines.py
 python .\scripts\verify_reference_baselines.py --strict-local-archive
 ```
 
-2026-08-27 严格模式实际核验：v1 共26个清单文件、v2共28个清单文件、核心论文 PDF、作者 `v1.0.0 / ef67c7a…` 仓库及发布许可快照全部通过，输出 `GFM_REFERENCE_BASELINE_OK`。与该验证器对应的6项反例和正常路径测试均通过。
+2026-08-27 严格模式实际核验：v1 共26个清单文件、v2共28个清单文件、核心论文 PDF、作者 `v1.0.0 / ef67c7a…` 仓库及发布许可快照全部通过，输出 `GFM_REFERENCE_BASELINE_OK`。与该验证器对应的6项反例和正常路径测试已纳入当前270项全量通过记录。
 
 ## Windows 发布验收
 
