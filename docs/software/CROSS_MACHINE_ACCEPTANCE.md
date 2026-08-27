@@ -40,6 +40,8 @@
 - `GFM_M5_QUALIFICATION_INCOMPLETE`：功能链通过，但断网、无开发环境或 64 位条件至少一项没有得到足够证据。
 - `GFM_CROSS_MACHINE_FUNCTIONAL_FAILED`：包校验、启动、数值基线、报告或端口释放至少一项失败。
 
+在安装了开发环境或未断网的本机上，可以得到 `GFM_CROSS_MACHINE_FUNCTIONAL_OK`，用于确认包级功能；同时必然得到 `GFM_M5_QUALIFICATION_INCOMPLETE`。这类证据交给项目侧导入工具时会因环境资格不足而返回 `GFM_CROSS_MACHINE_EVIDENCE_REJECTED`，属于预期结果，不能据此修改资格字段或降低验收门。
+
 异机自动验收仍不能替代人工打开网页、点击四个工作区、实际导出数据/HTML 并确认浏览器和安全软件行为。自动证据通过后，队友还应完成一次人工操作并保存截图。
 
 ## 项目侧回收与复核
