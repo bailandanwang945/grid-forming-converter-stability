@@ -227,10 +227,11 @@ if (-not $SkipSmokeTest) {
     if (
         $SmokeEvidence.schema_version -ne "gfm-runtime-acceptance/1.7" -or
         $SmokeEvidence.status -ne "passed" -or
-        $SmokeEvidence.checks.fig8_sensitivity.nine_point_uncovered_count -ne 0 -or
-        $SmokeEvidence.checks.fig8_sensitivity.nine_point_missed_full_uncovered_count -ne 75 -or
-        $SmokeEvidence.checks.fig8_sensitivity.maximum_tolerance_mismatch_count -ne 0 -or
-        $SmokeEvidence.checks.fig8_sensitivity.maximum_scale_mismatch_count -ne 0 -or
+        $SmokeEvidence.checks.fig8_sensitivity.baseline_reconstruction_exact -ne $true -or
+        $SmokeEvidence.checks.fig8_sensitivity.common_scale_invariant_on_tested_range -ne $true -or
+        $SmokeEvidence.checks.fig8_sensitivity.stable_case_remains_covered_in_all_tested_settings -ne $true -or
+        $SmokeEvidence.checks.fig8_sensitivity.nine_point_detects_uncovered_region -ne $false -or
+        $SmokeEvidence.checks.fig8_sensitivity.nine_point_unobserved_full_grid_uncovered_points -ne 75 -or
         $SmokeEvidence.checks.fig8_sensitivity.report -ne "passed" -or
         $SmokeEvidence.checks.reduced_order.stability -ne "stable" -or
         $SmokeEvidence.checks.reduced_order.report -ne "passed" -or
