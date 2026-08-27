@@ -18,7 +18,7 @@
 
 | 原始目标要求 | 权威证据 | 当前状态 | 审计结论 |
 |---|---|---|---|
-| 保留论文基线 | `references/papers/`、`references/source/arxiv-2510.20544v1/`、`references/source/arxiv-2510.20544v2/`、`references/SOURCES.md` | 已完成 | v1/v2、官方 TeX、来源、版本和哈希可追溯；v2 为当前理论与算例基线 |
+| 保留论文基线 | `references/papers/`、`references/source/arxiv-2510.20544v1/`、`references/source/arxiv-2510.20544v2/`、`references/SOURCES.md`、`scripts/verify_reference_baselines.py` | 已完成 | v1/v2、官方 TeX、来源、版本和哈希可追溯；严格离线核验实际比较了54个清单文件、核心 PDF、作者固定提交及许可快照；v2 为当前理论与算例基线 |
 | 保留作者代码基线 | `references/SOURCES.md`、本地 `external/cifelli-small-gain-phase`、发布许可快照 | 已固定并可重新取得 | 固定 tag `v1.0.0`、commit `ef67c7a…`；完整作者仓库不进入 Git 或发布包，便携软件使用跟踪夹具和独立实现 |
 | 模型与接口规范 | `docs/specs/model-and-port-conventions.md`、`docs/specs/models/average-dq-gfm-v1-proposal.md`、`models/README.md` | 已完成首版 | 坐标、基值、功率方向、端口、模型层级和适用范围已冻结；后续结构改变必须另立版本 |
 | 正式分析内核 | `backend/core/fig8_kernel.py`、`reduced_order_model.py`、`average_dq_model.py` | 已完成 | 三条内核均由API实际调用，不是前端演示公式；Fig. 8仍明确属于有限网格评价 |
@@ -72,7 +72,7 @@ GFM_CROSS_MACHINE_RELEASE_ACCEPTED
 
 ### 3. 人工决策与行政材料
 
-- 团队决定项目自身代码采用何种许可证，以及是否公开发布候选包；
+- 团队依据 [`PROJECT_LICENSE_DECISION.md`](PROJECT_LICENSE_DECISION.md) 决定项目自身代码采用何种许可证，以及是否公开发布候选包；
 - 取得适用于本项目批次的学院结项通知、模板、命名规则和截止时间；
 - 指导教师审阅研究范围、主要结论、已知差异和演示口径；
 - 团队完成人工讲解演练、签字和系统提交。

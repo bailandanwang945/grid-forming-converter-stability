@@ -10,7 +10,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 脚本依次执行：
 
-1. Python `unittest` 全套测试，当前测试集为 142 项；
+1. Python `unittest` 全套测试，当前可发现测试集为 269 项；
 2. React/TypeScript 前端生产构建；
 3. 开发态一键启动器冒烟测试；
 4. 使用本机现有 Chrome 或 Edge 的浏览器端到端流程；
@@ -31,13 +31,29 @@ $env:MATLAB_ROOT = "D:\matlab"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 ```
 
-`D:\matlab` 仅为示例，应替换为本机实际安装目录。2026-08-27 对分支 `research/nontrivial-core` 的统一验收记录为：Python 263项通过，MATLAB 128项通过且0失败、0未完成；前端生产构建、开发态启动器和真实浏览器端到端流程同时通过，汇总 `PASS=5、FAIL=0、SKIP=0`、`VERIFY_ALL_OK`。Python与MATLAB验证不同实现，不应相加或互相替代。
+`D:\matlab` 仅为示例，应替换为本机实际安装目录。2026-08-27 对分支 `research/nontrivial-core` 的冻结候选统一验收记录为：Python 263项通过，MATLAB 128项通过且0失败、0未完成；前端生产构建、开发态启动器和真实浏览器端到端流程同时通过，汇总 `PASS=5、FAIL=0、SKIP=0`、`VERIFY_ALL_OK`。此后新增6项论文基线完整性测试并已定向通过，故当前可发现测试数为269；完整合并回归的一次运行在既有耗时数值用例连续60秒没有新输出后被终止，不记为新的全量通过。Python与MATLAB验证不同实现，不应相加或互相替代。
 
 成功标记分为：
 
 - `VERIFY_ALL_OK`：所有执行阶段通过，且没有跳过项；
 - `VERIFY_ALL_OK_WITH_SKIPS`：必选阶段通过，但 MATLAB 等可选阶段被明确跳过；
 - `VERIFY_ALL_FAILED`：至少一个必选或已执行阶段失败。
+
+## 论文与作者代码基线完整性
+
+不启动 MATLAB、前后端或网络时，可运行：
+
+```powershell
+python .\scripts\verify_reference_baselines.py
+```
+
+该命令逐项比较 arXiv v1/v2 源码快照、归档包和固定作者许可快照的可信 SHA-256；清单格式错误、缺失、内容变化、未登记文件和路径越界均返回非零状态。默认模式允许干净克隆缺少被 Git 忽略的核心论文 PDF 与完整作者仓库，并明确报告其缺失。研究归档机使用以下严格模式：
+
+```powershell
+python .\scripts\verify_reference_baselines.py --strict-local-archive
+```
+
+2026-08-27 严格模式实际核验：v1 共26个清单文件、v2共28个清单文件、核心论文 PDF、作者 `v1.0.0 / ef67c7a…` 仓库及发布许可快照全部通过，输出 `GFM_REFERENCE_BASELINE_OK`。与该验证器对应的6项反例和正常路径测试均通过。
 
 ## Windows 发布验收
 

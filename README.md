@@ -153,6 +153,14 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 路径仅为示例，应改为本机实际 MATLAB 安装目录。没有 MATLAB 时可使用 `-SkipMatlab`；验收结果会明确记为 `SKIP`，不会误报为通过。详细规则见 [`docs/software/VERIFICATION.md`](docs/software/VERIFICATION.md)。
 
+论文与作者代码基线的离线完整性可单独核验：
+
+```powershell
+python .\scripts\verify_reference_baselines.py --strict-local-archive
+```
+
+普通干净克隆不含被忽略的论文 PDF 和完整作者仓库，应去掉 `--strict-local-archive`；两种模式都会逐项比较可信 SHA-256，而不是只打印当前哈希。
+
 开发过程与遗留问题见 [`notes/PROJECT_LOG.md`](notes/PROJECT_LOG.md)，算法说明见 [`docs/specs/algorithms/`](docs/specs/algorithms/)，研究方法和阶段性结论见 [`docs/research/`](docs/research/)。原始项目目标逐项完成情况、证据上限与剩余人工验收门见 [`docs/software/PROJECT_COMPLETION_AUDIT.md`](docs/software/PROJECT_COMPLETION_AUDIT.md)。
 
 ## 已知边界与下一阶段
@@ -165,4 +173,4 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 
 ## 许可证
 
-项目自身代码的许可证尚待团队确定。论文、作者代码及其他第三方材料分别受其原始版权和许可证约束；公开仓库、对外发布包或再分发第三方材料之前，必须完成许可证与分发边界复核。
+项目自身代码的许可证尚待团队确定。论文、作者代码及其他第三方材料分别受其原始版权和许可证约束；公开仓库、对外发布包或再分发第三方材料之前，必须完成许可证与分发边界复核。备选方案、推荐口径和确认后的自动执行步骤见 [`docs/software/PROJECT_LICENSE_DECISION.md`](docs/software/PROJECT_LICENSE_DECISION.md)。
