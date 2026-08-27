@@ -146,9 +146,16 @@ Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\verify_this_pc.ps1") `
 
 Write-Step "Generating third-party notices from the packaged executable..."
 $ThirdPartyGenerator = Join-Path $ProjectRoot "scripts\generate_third_party_notices.py"
-$AuthorLicense = Join-Path $ProjectRoot "external\cifelli-small-gain-phase\LICENSE"
+$AuthorLicense = Join-Path $ProjectRoot "packaging\research-licenses\Cifelli-Anta-author-code-v1.0.0-LICENSE.txt"
 $SiennaLicense = Join-Path $ProjectRoot "packaging\research-licenses\PowerSimulationsDynamics-v0.16.2-LICENSE.txt"
 $PythonControlLicense = Join-Path $ProjectRoot "packaging\research-licenses\python-control-0.10.2-LICENSE.txt"
+$ExpectedAuthorLicenseSha256 = "0F8DEBA5D0BE7DC0177BA107408B2D848FB3CA23CE4C625FE48B048B25BF2BF4"
+if (
+    -not (Test-Path -LiteralPath $AuthorLicense -PathType Leaf) -or
+    (Get-FileHash -LiteralPath $AuthorLicense -Algorithm SHA256).Hash -ne $ExpectedAuthorLicenseSha256
+) {
+    throw "The tracked Cifelli-Anta author-code license snapshot is missing or has changed."
+}
 Invoke-Native python @(
     $ThirdPartyGenerator,
     "--executable", (Join-Path $PackagePath "GFM-Stability-Platform.exe"),

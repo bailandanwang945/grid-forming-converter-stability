@@ -13,6 +13,7 @@
 - 官方 arXiv v2 TeX 源码快照：`references/source/arxiv-2510.20544v2/`。入口为 `source/main_final.tex`；原始下载包位于 `archive/arxiv-2510.20544v2-source.tar.gz`，SHA-256：`F1F8DA4256370D255BD3D85B0EFD81832A8941FBA8B7629210AC652C525D3D1E`。v2 是当前理论与算例实现基线，v1 保留用于追溯原始 PDF 和早期结果。
 - 作者代码：https://github.com/diegoCifelli/Decentralized-Small-Gain-and-Phase-Stability-Conditions-for-GFM-Converters
 - 本地上游基线：tag `v1.0.0`，commit `ef67c7a4ac84e4e1142e95b072d241db89eb64ba`。
+- Windows 发布流程使用的作者代码 MIT 许可证快照位于 `packaging/research-licenses/Cifelli-Anta-author-code-v1.0.0-LICENSE.txt`，SHA-256 为 `0F8DEBA5D0BE7DC0177BA107408B2D848FB3CA23CE4C625FE48B048B25BF2BF4`；其文字内容与上述固定上游提交中的 `LICENSE` 一致，仅换行编码不同。构建脚本会核对该快照哈希，使干净提交构建不依赖未纳入版本控制的本地作者仓库。
 - 依赖：https://github.com/Future-Power-Networks/Simplus-Grid-Tool
 
 ## 注意
