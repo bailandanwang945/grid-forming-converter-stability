@@ -100,8 +100,9 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
-        errors.append("运行时证据版本不是受支持的 1.2、1.3、1.4、1.5 或 1.6")
+        errors.append("运行时证据版本不是受支持的 1.2 至 1.7")
     if package.get("version") != expected_version:
         errors.append("软件版本与指定候选包不一致")
     if package.get("commit") != expected_commit:
@@ -195,6 +196,11 @@ def review_cross_machine_evidence(
         )
         else {}
     )
+    sienna_layered_audit = (
+        runtime_checks.get("sienna_test08_layered_audit")
+        if isinstance(runtime_checks.get("sienna_test08_layered_audit"), dict)
+        else {}
+    )
     if runtime.get("status") != "passed" or runtime_checks.get("health") != "passed":
         errors.append("运行时健康检查未通过")
     if frontend.get("index") != "passed" or frontend.get("local_asset_count", 0) < 2:
@@ -211,6 +217,7 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
         if (
             fig8_sensitivity.get("baseline_reconstruction_exact") is not True
@@ -266,6 +273,7 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
         if (
             port_identification.get("preset_id")
@@ -306,6 +314,7 @@ def review_cross_machine_evidence(
     if runtime_schema in (
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
         roots = mathworks_team_comparison.get(
             "team_local_eigenvalue_boundaries_pu_per_hz", []
@@ -343,9 +352,19 @@ def review_cross_machine_evidence(
             is not False
             or mathworks_team_comparison.get("same_classifier") is not False
             or mathworks_team_comparison.get("nonlinear_team_step_completed")
-            is not (runtime_schema == "gfm-runtime-acceptance/1.6")
+            is not (
+                runtime_schema
+                in (
+                    "gfm-runtime-acceptance/1.6",
+                    "gfm-runtime-acceptance/1.7",
+                )
+            )
             or (
-                runtime_schema == "gfm-runtime-acceptance/1.6"
+                runtime_schema
+                in (
+                    "gfm-runtime-acceptance/1.6",
+                    "gfm-runtime-acceptance/1.7",
+                )
                 and mathworks_team_comparison.get("nonlinear_team_step_study_id")
                 != "average-dq-aligned-three-point-nonlinear-step-v1"
             )
@@ -364,7 +383,10 @@ def review_cross_machine_evidence(
     ):
         warnings.append("旧版运行时证据未包含 MathWorks—团队模型八点对照")
 
-    if runtime_schema == "gfm-runtime-acceptance/1.6":
+    if runtime_schema in (
+        "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
+    ):
         if (
             aligned_nonlinear_step.get("study_id")
             != "average-dq-aligned-three-point-nonlinear-step-v1"
@@ -397,6 +419,48 @@ def review_cross_machine_evidence(
         "gfm-runtime-acceptance/1.5",
     ):
         warnings.append("旧版运行时证据未包含团队平均值 dq 三点非线性阶跃")
+
+    if runtime_schema == "gfm-runtime-acceptance/1.7":
+        if (
+            sienna_layered_audit.get("audit_schema_version")
+            != "gfm-sienna-test08-source-transcription-audit/2.3"
+            or sienna_layered_audit.get("source_state_count") != 19
+            or sienna_layered_audit.get("source_transcription_verified")
+            is not True
+            or sienna_layered_audit.get("julia_runtime_executed") is not False
+            or sienna_layered_audit.get("cross_model_comparison_status")
+            != "not-ready"
+            or sienna_layered_audit.get("blocking_condition_count") != 5
+            or sienna_layered_audit.get(
+                "static_network_reactance_pu_device_base"
+            )
+            != 0.0020625
+            or sienna_layered_audit.get("static_network_mapping_passed")
+            is not True
+            or sienna_layered_audit.get("loaded_common_state_count") != 13
+            or sienna_layered_audit.get(
+                "loaded_common_matrix_difference_per_s", 1.0
+            )
+            > 1.0e-5
+            or sienna_layered_audit.get(
+                "loaded_common_operating_points_aligned"
+            )
+            is not True
+            or sienna_layered_audit.get(
+                "original_full_model_eigenvalues_comparable"
+            )
+            is not False
+            or sienna_layered_audit.get("modulation_delay_audit_passed")
+            is not True
+            or sienna_layered_audit.get(
+                "external_line_dynamics_audit_passed"
+            )
+            is not True
+            or sienna_layered_audit.get("team_model_validated") is not False
+        ):
+            errors.append("Sienna Test 08 分层方程审计证据不符合冻结边界")
+    else:
+        warnings.append("旧版运行时证据未包含 Sienna Test 08 分层方程审计")
 
     for required_file in ("acceptance-summary.txt", "runtime-console.log"):
         if not (directory / required_file).is_file():

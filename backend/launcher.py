@@ -590,6 +590,100 @@ def _verify_average_dq_aligned_nonlinear_step(url: str) -> dict[str, object]:
     }
 
 
+def _verify_sienna_test08_audit(url: str) -> dict[str, object]:
+    with urllib.request.urlopen(
+        f"{url}/api/reference/sienna-test08/audit",
+        timeout=60.0,
+    ) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    readiness = payload.get("third_party_run_readiness", {})
+    decisions = readiness.get("decisions", {})
+    static_mapping = payload.get("static_network_mapping", {})
+    static_contract = static_mapping.get("model_contract", {})
+    static_scope = static_mapping.get("scope", {})
+    loaded = payload.get("common_static_network", {})
+    loaded_contract = loaded.get("model_contract", {})
+    loaded_summary = loaded.get("verification_summary", {})
+    loaded_scope = loaded.get("scope", {})
+    scope = payload.get("scope", {})
+    if (
+        response.status != 200
+        or payload.get("schema_version")
+        != "gfm-sienna-test08-source-transcription-audit/2.3"
+        or payload.get("status") != "passed"
+        or payload.get("model_contract", {}).get("state_count") != 19
+        or readiness.get("status") != "not-ready"
+        or decisions.get("source_only_julia_baseline_may_be_run") is not True
+        or decisions.get("root_by_root_cross_model_eigenvalue_comparison_ready")
+        is not False
+        or len(readiness.get("blocking_conditions", [])) != 5
+        or static_mapping.get("status") != "passed"
+        or static_contract.get("converted_reactance_pu_device_base")
+        != 0.0020625
+        or static_mapping.get("maximum_voltage_difference_abs_pu", 1.0)
+        > 1.0e-12
+        or static_scope.get(
+            "original_team_dynamic_line_isomorphic_to_source_network"
+        )
+        is not False
+        or loaded.get("status") != "passed"
+        or loaded_contract.get("state_count") != 13
+        or loaded_summary.get("maximum_equilibrium_residual_inf", 1.0)
+        > 1.0e-8
+        or loaded_summary.get("maximum_state_matrix_difference_per_s", 1.0)
+        > 1.0e-5
+        or loaded_summary.get("minimum_static_network_effect_per_s", 0.0)
+        < 1.0e-3
+        or loaded_scope.get("original_full_model_eigenvalues_comparable")
+        is not False
+        or payload.get("common_modulation_delay", {}).get("status") != "passed"
+        or payload.get("physical_modulation_lag", {}).get("status") != "passed"
+        or payload.get("delay_approximation", {}).get("status") != "passed"
+        or payload.get("external_line_dynamics", {}).get("status") != "passed"
+        or scope.get("source_equation_transcription_verified") is not True
+        or scope.get("julia_runtime_executed_on_this_machine") is not False
+        or scope.get("team_16_state_model_validated_by_this_audit") is not False
+    ):
+        raise RuntimeError(
+            "Packaged Sienna Test 08 layered-audit verification failed."
+        )
+
+    return {
+        "audit_schema_version": payload["schema_version"],
+        "source_state_count": payload["model_contract"]["state_count"],
+        "source_transcription_verified": scope[
+            "source_equation_transcription_verified"
+        ],
+        "julia_runtime_executed": scope[
+            "julia_runtime_executed_on_this_machine"
+        ],
+        "cross_model_comparison_status": readiness["status"],
+        "blocking_condition_count": len(readiness["blocking_conditions"]),
+        "static_network_reactance_pu_device_base": static_contract[
+            "converted_reactance_pu_device_base"
+        ],
+        "static_network_mapping_passed": static_mapping["status"] == "passed",
+        "loaded_common_state_count": loaded_contract["state_count"],
+        "loaded_common_matrix_difference_per_s": loaded_summary[
+            "maximum_state_matrix_difference_per_s"
+        ],
+        "loaded_common_operating_points_aligned": loaded_scope[
+            "common_loaded_operating_points_aligned"
+        ],
+        "original_full_model_eigenvalues_comparable": loaded_scope[
+            "original_full_model_eigenvalues_comparable"
+        ],
+        "modulation_delay_audit_passed": (
+            payload["common_modulation_delay"]["status"] == "passed"
+        ),
+        "external_line_dynamics_audit_passed": (
+            payload["external_line_dynamics"]["status"] == "passed"
+        ),
+        "team_model_validated": scope["team_16_state_model_validated_by_this_audit"],
+    }
+
+
 def _write_runtime_evidence(path: str, payload: dict[str, object]) -> None:
     evidence_path = Path(path).expanduser().resolve()
     evidence_path.parent.mkdir(parents=True, exist_ok=True)
@@ -633,7 +727,7 @@ def run(
 
     build_label = _build_label()
     evidence: dict[str, object] = {
-        "schema_version": "gfm-runtime-acceptance/1.6",
+        "schema_version": "gfm-runtime-acceptance/1.7",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "build_label": build_label,
         "platform": platform.platform(),
@@ -661,6 +755,7 @@ def run(
             "average_dq_aligned_nonlinear_step": (
                 _verify_average_dq_aligned_nonlinear_step(url)
             ),
+            "sienna_test08_layered_audit": _verify_sienna_test08_audit(url),
         }
         evidence["status"] = "passed"
         if evidence_file:

@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "0.4.0-rc2",
+    [string]$Version = "0.5.0-rc1",
     [switch]$SkipSmokeTest,
     [switch]$AllowDirtyWorktree
 )
@@ -218,6 +218,7 @@ if (-not $SkipSmokeTest) {
     )
     $SmokeEvidence = Get-Content -LiteralPath $PackagedSmokeEvidence -Raw -Encoding UTF8 | ConvertFrom-Json
     if (
+        $SmokeEvidence.schema_version -ne "gfm-runtime-acceptance/1.7" -or
         $SmokeEvidence.status -ne "passed" -or
         $SmokeEvidence.checks.fig8_sensitivity.nine_point_uncovered_count -ne 0 -or
         $SmokeEvidence.checks.fig8_sensitivity.nine_point_missed_full_uncovered_count -ne 75 -or
@@ -233,7 +234,21 @@ if (-not $SkipSmokeTest) {
         $SmokeEvidence.checks.average_dq.hierarchy_scan_point_count -ne 42 -or
         $SmokeEvidence.checks.average_dq.hierarchy_scan_agreement_count -ne 39 -or
         $SmokeEvidence.checks.average_dq.hierarchy_scan_disagreement_count -ne 3 -or
-        $SmokeEvidence.checks.average_dq.report -ne "passed"
+        $SmokeEvidence.checks.average_dq.report -ne "passed" -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.audit_schema_version -ne "gfm-sienna-test08-source-transcription-audit/2.3" -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.source_state_count -ne 19 -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.source_transcription_verified -ne $true -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.julia_runtime_executed -ne $false -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.cross_model_comparison_status -ne "not-ready" -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.blocking_condition_count -ne 5 -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.static_network_mapping_passed -ne $true -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.loaded_common_state_count -ne 13 -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.loaded_common_matrix_difference_per_s -ge 1.0e-5 -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.loaded_common_operating_points_aligned -ne $true -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.original_full_model_eigenvalues_comparable -ne $false -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.modulation_delay_audit_passed -ne $true -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.external_line_dynamics_audit_passed -ne $true -or
+        $SmokeEvidence.checks.sienna_test08_layered_audit.team_model_validated -ne $false
     ) {
         throw "Packaged runtime evidence verification failed."
     }

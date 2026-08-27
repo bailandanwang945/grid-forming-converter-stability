@@ -263,6 +263,54 @@ def acceptance_app() -> FastAPI:
             },
         }
 
+    @app.get("/api/reference/sienna-test08/audit")
+    def sienna_test08_audit() -> dict:
+        return {
+            "schema_version": "gfm-sienna-test08-source-transcription-audit/2.3",
+            "status": "passed",
+            "model_contract": {"state_count": 19},
+            "third_party_run_readiness": {
+                "status": "not-ready",
+                "blocking_conditions": ["gap"] * 5,
+                "decisions": {
+                    "source_only_julia_baseline_may_be_run": True,
+                    "root_by_root_cross_model_eigenvalue_comparison_ready": False,
+                },
+            },
+            "static_network_mapping": {
+                "status": "passed",
+                "model_contract": {
+                    "converted_reactance_pu_device_base": 0.0020625,
+                },
+                "maximum_voltage_difference_abs_pu": 0.0,
+                "scope": {
+                    "original_team_dynamic_line_isomorphic_to_source_network": False,
+                },
+            },
+            "common_static_network": {
+                "status": "passed",
+                "model_contract": {"state_count": 13},
+                "verification_summary": {
+                    "maximum_equilibrium_residual_inf": 1.0e-12,
+                    "maximum_state_matrix_difference_per_s": 7.0e-7,
+                    "minimum_static_network_effect_per_s": 3.8,
+                },
+                "scope": {
+                    "common_loaded_operating_points_aligned": True,
+                    "original_full_model_eigenvalues_comparable": False,
+                },
+            },
+            "common_modulation_delay": {"status": "passed"},
+            "physical_modulation_lag": {"status": "passed"},
+            "delay_approximation": {"status": "passed"},
+            "external_line_dynamics": {"status": "passed"},
+            "scope": {
+                "source_equation_transcription_verified": True,
+                "julia_runtime_executed_on_this_machine": False,
+                "team_16_state_model_validated_by_this_audit": False,
+            },
+        }
+
     return app
 
 
@@ -308,7 +356,7 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertEqual(evidence["status"], "passed")
             self.assertEqual(
                 evidence["schema_version"],
-                "gfm-runtime-acceptance/1.6",
+                "gfm-runtime-acceptance/1.7",
             )
             self.assertEqual(
                 evidence["checks"]["fig8"]["uncovered_points"],
@@ -344,6 +392,23 @@ class ReleaseLauncherTest(unittest.TestCase):
             self.assertFalse(
                 evidence["checks"]["mathworks_team_comparison"][
                     "quantitative_transition_reproduced"
+                ]
+            )
+            self.assertEqual(
+                evidence["checks"]["sienna_test08_layered_audit"][
+                    "cross_model_comparison_status"
+                ],
+                "not-ready",
+            )
+            self.assertEqual(
+                evidence["checks"]["sienna_test08_layered_audit"][
+                    "blocking_condition_count"
+                ],
+                5,
+            )
+            self.assertFalse(
+                evidence["checks"]["sienna_test08_layered_audit"][
+                    "original_full_model_eigenvalues_comparable"
                 ]
             )
             self.assertEqual(

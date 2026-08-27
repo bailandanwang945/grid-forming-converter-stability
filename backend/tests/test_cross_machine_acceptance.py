@@ -100,6 +100,7 @@ def _write_valid_evidence(
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
         runtime["checks"]["fig8_sensitivity"] = {
             "baseline_reconstruction_exact": True,
@@ -113,6 +114,7 @@ def _write_valid_evidence(
         "gfm-runtime-acceptance/1.4",
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
         runtime["checks"]["average_dq_port_identification"] = {
             "preset_id": "average-dq-smib-verification",
@@ -132,6 +134,7 @@ def _write_valid_evidence(
     if runtime_schema in (
         "gfm-runtime-acceptance/1.5",
         "gfm-runtime-acceptance/1.6",
+        "gfm-runtime-acceptance/1.7",
     ):
         runtime["checks"]["mathworks_team_comparison"] = {
             "run_id": "mathworks-team-aligned-eight-point-comparison-v1",
@@ -159,12 +162,19 @@ def _write_valid_evidence(
             "same_full_physical_model": False,
             "same_classifier": False,
             "nonlinear_team_step_completed": (
-                runtime_schema == "gfm-runtime-acceptance/1.6"
+                runtime_schema
+                in (
+                    "gfm-runtime-acceptance/1.6",
+                    "gfm-runtime-acceptance/1.7",
+                )
             ),
             "paper_sufficient_condition_evaluated": False,
             "physical_hardware_validation": False,
         }
-        if runtime_schema == "gfm-runtime-acceptance/1.6":
+        if runtime_schema in (
+            "gfm-runtime-acceptance/1.6",
+            "gfm-runtime-acceptance/1.7",
+        ):
             runtime["checks"]["mathworks_team_comparison"][
                 "nonlinear_team_step_study_id"
             ] = "average-dq-aligned-three-point-nonlinear-step-v1"
@@ -184,6 +194,26 @@ def _write_valid_evidence(
                 "emt_validation": False,
                 "hardware_validation": False,
             }
+    if runtime_schema == "gfm-runtime-acceptance/1.7":
+        runtime["checks"]["sienna_test08_layered_audit"] = {
+            "audit_schema_version": (
+                "gfm-sienna-test08-source-transcription-audit/2.3"
+            ),
+            "source_state_count": 19,
+            "source_transcription_verified": True,
+            "julia_runtime_executed": False,
+            "cross_model_comparison_status": "not-ready",
+            "blocking_condition_count": 5,
+            "static_network_reactance_pu_device_base": 0.0020625,
+            "static_network_mapping_passed": True,
+            "loaded_common_state_count": 13,
+            "loaded_common_matrix_difference_per_s": 7.0e-7,
+            "loaded_common_operating_points_aligned": True,
+            "original_full_model_eigenvalues_comparable": False,
+            "modulation_delay_audit_passed": True,
+            "external_line_dynamics_audit_passed": True,
+            "team_model_validated": False,
+        }
     (directory / "cross-machine-acceptance.json").write_text(json.dumps(acceptance))
     (directory / "runtime-evidence.json").write_text(json.dumps(runtime))
     (directory / "acceptance-summary.txt").write_text("passed")
@@ -324,6 +354,28 @@ class CrossMachineAcceptanceTest(unittest.TestCase):
             )
         self.assertFalse(review.automated_evidence_passed)
         self.assertIn("三点非线性阶跃", " ".join(review.errors))
+
+    def test_runtime_1p7_requires_sienna_layered_audit_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            _write_valid_evidence(
+                directory,
+                runtime_schema="gfm-runtime-acceptance/1.7",
+            )
+            runtime_path = directory / "runtime-evidence.json"
+            runtime = json.loads(runtime_path.read_text())
+            runtime["checks"]["sienna_test08_layered_audit"][
+                "cross_model_comparison_status"
+            ] = "ready"
+            runtime_path.write_text(json.dumps(runtime))
+            review = review_cross_machine_evidence(
+                directory,
+                expected_version=VERSION,
+                expected_commit=COMMIT,
+                expected_zip_sha256=ZIP_HASH,
+            )
+        self.assertFalse(review.automated_evidence_passed)
+        self.assertIn("Sienna Test 08", " ".join(review.errors))
 
 
 if __name__ == "__main__":
