@@ -19,6 +19,7 @@ def assess_sienna_test08_run_readiness(
     source_transcription_verified: bool,
     common_lcl_equations_isomorphic: bool,
     pi_states_isomorphic_after_scaling: bool,
+    common_static_network_equations_isomorphic: bool,
     complete_inner_controls_isomorphic: bool,
     original_power_measurement_ports_identical: bool,
     loaded_full_model_operating_points_aligned: bool,
@@ -34,6 +35,9 @@ def assess_sienna_test08_run_readiness(
         "common_lcl_equations_isomorphic": common_lcl_equations_isomorphic,
         "pi_states_isomorphic_after_scaling": (
             pi_states_isomorphic_after_scaling
+        ),
+        "common_static_network_equations_isomorphic": (
+            common_static_network_equations_isomorphic
         ),
         "complete_inner_controls_isomorphic": (
             complete_inner_controls_isomorphic

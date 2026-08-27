@@ -1725,6 +1725,31 @@ export type SiennaTest08AuditResult = {
       statement: string
     }
   }
+  static_network_mapping: {
+    schema_version: string
+    status: 'passed' | 'failed'
+    model_contract: {
+      network_state_count: number
+      source_current_direction: string
+      team_current_direction: string
+      system_base_power_mva: number
+      device_base_power_mva: number
+      source_reactance_pu_system_base: number
+      converted_reactance_pu_device_base: number
+      infinite_bus_voltage: number[]
+    }
+    maximum_voltage_difference_abs_pu: number
+    counterexamples: {
+      base_conversion_omitted_difference_abs_pu: number
+      current_direction_inversion_omitted_difference_abs_pu: number
+    }
+    scope: {
+      common_static_network_equations_isomorphic: boolean
+      original_team_dynamic_line_isomorphic_to_source_network: boolean
+      full_model_eigenvalues_comparable_from_this_gate: boolean
+      statement: string
+    }
+  }
   scope: {
     source_equation_transcription_verified: boolean
     julia_runtime_executed_on_this_machine: boolean
@@ -1744,6 +1769,7 @@ export type SiennaTest08AuditResult = {
     physical_frame_modulation_lag_compared: boolean
     delay_realization_frequency_responses_compared: boolean
     team_static_and_dynamic_external_line_compared: boolean
+    team_common_static_network_layer_compared: boolean
     mathworks_model_evaluated: boolean
     paper_sufficient_condition_evaluated: boolean
     statement: string

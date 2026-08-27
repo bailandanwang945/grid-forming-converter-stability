@@ -57,6 +57,9 @@ from backend.core.sienna_team_lcl_isomorphism import (
 from backend.core.sienna_test08_run_readiness import (
     assess_sienna_test08_run_readiness,
 )
+from backend.core.sienna_team_static_network_mapping import (
+    run_static_network_mapping_audit,
+)
 
 
 STATE_LABELS = (
@@ -561,6 +564,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
     physical_modulation_lag = run_physical_modulation_frame_audit()
     delay_approximation = run_delay_approximation_audit()
     external_line_dynamics = run_external_line_dynamics_audit()
+    static_network_mapping = run_static_network_mapping_audit()
     computed = sorted(
         (complex(value) for value in audit.eigenvalues_per_s),
         key=lambda value: (value.real, value.imag),
@@ -582,6 +586,11 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         pi_states_isomorphic_after_scaling=bool(
             inner_control_mapping["scope"][
                 "pi_states_isomorphic_after_scaling"
+            ]
+        ),
+        common_static_network_equations_isomorphic=bool(
+            static_network_mapping["scope"][
+                "common_static_network_equations_isomorphic"
             ]
         ),
         complete_inner_controls_isomorphic=bool(
@@ -614,7 +623,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         ]
 
     return {
-        "schema_version": "gfm-sienna-test08-source-transcription-audit/2.1",
+        "schema_version": "gfm-sienna-test08-source-transcription-audit/2.2",
         "benchmark_id": "sienna-psid-test08-v0.16.2-python-transcription-v1",
         "status": "passed"
         if (
@@ -631,6 +640,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             and physical_modulation_lag["status"] == "passed"
             and delay_approximation["status"] == "passed"
             and external_line_dynamics["status"] == "passed"
+            and static_network_mapping["status"] == "passed"
         )
         else "failed",
         "source_contract": {
@@ -706,6 +716,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
         "delay_approximation": delay_approximation,
         "external_line_dynamics": external_line_dynamics,
         "third_party_run_readiness": run_readiness,
+        "static_network_mapping": static_network_mapping,
         "scope": {
             "source_equation_transcription_verified": (
                 source_transcription_verified
@@ -727,6 +738,7 @@ def sienna_test08_audit_payload() -> dict[str, object]:
             "physical_frame_modulation_lag_compared": True,
             "delay_realization_frequency_responses_compared": True,
             "team_static_and_dynamic_external_line_compared": True,
+            "team_common_static_network_layer_compared": True,
             "mathworks_model_evaluated": False,
             "paper_sufficient_condition_evaluated": False,
             "statement": (
