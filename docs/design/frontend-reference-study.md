@@ -16,6 +16,7 @@
 | quoFEM | NHERI SimCenter，[用户界面文档](https://nheri-simcenter.github.io/quoFEM-Documentation/common/user_manual/usage/desktop/usage.html) | 左侧任务选择、中央输入面板、运行与结果分离、后台状态可见 | 传统桌面控件外观和底部按钮条 |
 | Open MCT | NASA，[项目主页](https://nasa.github.io/openmct/) 与 [GitHub](https://github.com/nasa/openmct) | 以稳定导航承载多种数据视图；页面对象身份不随可视化类型变化 | 面向遥测的时间线与实时监控概念 |
 | OpenMDAO N2 | OpenMDAO，[官方文档](https://openmdao.org/newdocs/versions/latest/features/model_visualization/n2_basics/n2_basics.html) | 将模型结构可视化作为独立证据视图 | N2 矩阵交互不适合直接替代本项目网络拓扑与频域图表 |
+| Apache ECharts | Apache Software Foundation，[官方手册](https://echarts.apache.org/handbook/en/concepts/visual-map/) | `dataZoom`频段定位、`markArea`区间表达、`markPoint`关键模态、分段视觉映射、图表事件和本地导出 | 不照搬与稳定性语义无关的炫技动画、地图或装饰主题 |
 
 ## 已实施的信息架构
 
@@ -41,6 +42,14 @@
 2. 六项研究任务改为紧凑导航，只有当前选中项展开说明与运行、导出操作，其余任务保留名称和状态；
 3. 研究视图在宽屏使用三列任务导航、900 px 使用两列、620 px 以下使用单列；结果焦点导航继续保持，长结果滚动后仍可切换任务；
 4. 任务区明确显示“冻结锚点、不读取临时参数”，避免评审者把模型分析输入误认为固定对照实验的自变量。
+
+第四阶段从“项目模块导航”转向“真实用户任务导航”：
+
+1. 默认入口改为任务总览，面向稳定性核查人员、系统规划人员与变流器控制设计人员，说明“选择模型—计算核查—解释导出”的工作流；
+2. 四个工作区改称“判据核查、参数域评估、网络分析、设备与控制”，仍对应原有计算路径，不通过改名扩张能力；
+3. 每项任务同时显示当前模型层级，例如“作者 Fig. 8 固定算例”“冻结 D–SCR 参数网格”“小型低频网络”“单机16状态平均值 dq 模型”；
+4. 总览显式声明当前不是正式并网认证系统，尚不支持任意厂商黑箱阻抗或频率响应数据导入；
+5. 论文基线两张频率图采用 ECharts 官方分析交互：横轴缩放、视图恢复、高清导出、未覆盖频带和主导模态标记，两图共享交互组。所有标记均由本次后端结果生成。
 
 在1078 px浏览器视口下，产品导航折叠为顶部栏，参数栏和结果区仍保持双列；参数控件不越出左栏，页面无横向溢出。更窄屏幕继续退化为单列。
 

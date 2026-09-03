@@ -19,6 +19,27 @@ const page = await browser.newPage({ viewport: { width: 1600, height: 1100 }, de
 try {
   await page.goto(baseUrl, { waitUntil: 'networkidle' })
 
+  await page.getByTestId('workspace-overview').waitFor({ timeout: 15000 })
+  const overviewText = await page.getByTestId('workspace-overview').innerText()
+  for (const evidence of ['稳定性核查', '系统规划', '变流器控制设计', '不是正式并网认证系统']) {
+    if (!overviewText.includes(evidence)) throw new Error(`Task-oriented workspace overview is missing ${evidence}.`)
+  }
+  await page.screenshot({ path: resolve('tmp/browser-smoke-overview.png'), fullPage: true })
+  for (const width of [900, 620]) {
+    await page.setViewportSize({ width, height: 997 })
+    const overviewLayout = await page.evaluate(() => ({
+      viewportWidth: document.documentElement.clientWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      workflowColumns: getComputedStyle(document.querySelector('.workflow-grid')).gridTemplateColumns.split(' ').length,
+    }))
+    const expectedColumns = width <= 620 ? 1 : 2
+    if (overviewLayout.documentWidth > overviewLayout.viewportWidth + 1 || overviewLayout.workflowColumns !== expectedColumns) {
+      throw new Error(`Task-oriented overview does not reflow at ${width} px: ${JSON.stringify(overviewLayout)}`)
+    }
+  }
+  await page.setViewportSize({ width: 1600, height: 1100 })
+  await page.getByRole('button', { name: /进入判据核查/ }).click()
+
   await page.locator('select').first().selectOption('fig8_D_0p05')
   await page.getByRole('button', { name: /运行稳定性分析/ }).click()
   await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
@@ -60,9 +81,10 @@ try {
     throw new Error('Fig. 8 sensitivity report is missing the continuous-frequency boundary.')
   }
   await sensitivityReport.close()
+  await page.screenshot({ path: resolve('tmp/browser-smoke-fig8-echarts.png'), fullPage: true })
   console.log('[browser] Fig. 8 baseline and sampled sensitivity passed.')
 
-  await page.getByRole('button', { name: '同域对照' }).click()
+  await page.getByRole('button', { name: '参数域评估' }).click()
   await page.getByText('D–SCR 参数域分类图').waitFor({ timeout: 15000 })
   const comparisonText = await page.locator('body').innerText()
   for (const evidence of ['45 点', '96 点', '35 点', '不是系统失稳']) {
@@ -82,7 +104,7 @@ try {
   await page.screenshot({ path: resolve('tmp/browser-smoke-comparison.png'), fullPage: true })
   console.log('[browser] Same-domain comparison passed.')
 
-  await page.getByRole('button', { name: '低频模型' }).click()
+  await page.getByRole('button', { name: '网络分析' }).click()
   await page.getByText('可编辑网络与控制参数').waitFor({ timeout: 15000 })
   const referenceBus = page.getByLabel('参考母线')
   if (await referenceBus.inputValue() !== 'bus-grid' || await referenceBus.locator('option').count() !== 1) {
@@ -158,7 +180,7 @@ try {
   await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
   console.log('[browser] Reduced-order workflow passed.')
 
-  await page.getByRole('button', { name: '平均值 dq' }).click()
+  await page.getByRole('button', { name: '设备与控制' }).click()
   await page.getByText('16 状态平均值 dq 模型').waitFor({ timeout: 15000 })
 
   await page.setViewportSize({ width: 1078, height: 997 })

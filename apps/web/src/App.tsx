@@ -2,9 +2,13 @@ import { lazy, Suspense, useMemo, useState } from 'react'
 import * as echarts from 'echarts/core'
 import { LineChart, ScatterChart } from 'echarts/charts'
 import {
+  DataZoomComponent,
   GridComponent,
   LegendComponent,
+  MarkAreaComponent,
   MarkLineComponent,
+  MarkPointComponent,
+  ToolboxComponent,
   TooltipComponent,
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
@@ -23,6 +27,7 @@ import {
 import { AnalysisResult, Fig8ScenarioId, runAnalysis } from './api'
 import EChart from './EChart'
 import Fig8SensitivityPanel from './Fig8SensitivityPanel'
+import WorkspaceOverview, { AnalysisWorkspace } from './WorkspaceOverview'
 
 const ReducedOrderWorkbench = lazy(() => import('./ReducedOrderWorkbench'))
 const ParameterDomainComparison = lazy(() => import('./ParameterDomainComparison'))
@@ -31,9 +36,13 @@ const AverageDQWorkbench = lazy(() => import('./AverageDQWorkbench'))
 echarts.use([
   LineChart,
   ScatterChart,
+  DataZoomComponent,
   GridComponent,
   LegendComponent,
+  MarkAreaComponent,
   MarkLineComponent,
+  MarkPointComponent,
+  ToolboxComponent,
   TooltipComponent,
   CanvasRenderer,
 ])
@@ -50,8 +59,29 @@ const markZero = {
   data: [{ yAxis: 0, name: '判定边界' }],
 }
 
+function contiguousBands(frequencies: number[], coverage: string[], target: string) {
+  const bands: Array<[number, number]> = []
+  let start: number | null = null
+  frequencies.forEach((frequency, index) => {
+    if (coverage[index] === target && start === null) start = frequency
+    const closes = start !== null && (coverage[index] !== target || index === frequencies.length - 1)
+    if (closes) {
+      const endIndex = coverage[index] === target ? index : Math.max(0, index - 1)
+      bands.push([start as number, frequencies[endIndex]])
+      start = null
+    }
+  })
+  return bands
+}
+
+function nearestFrequencyIndex(frequencies: number[], target: number) {
+  return frequencies.reduce((best, value, index) => (
+    Math.abs(value - target) < Math.abs(frequencies[best] - target) ? index : best
+  ), 0)
+}
+
 function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'paper' | 'comparison' | 'model' | 'average-dq'>('paper')
+  const [workspaceMode, setWorkspaceMode] = useState<'overview' | AnalysisWorkspace>('overview')
   const [scenarioId, setScenarioId] = useState<Fig8ScenarioId>('fig8_D_0p5')
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [running, setRunning] = useState(false)
@@ -59,23 +89,34 @@ function App() {
   const selectedScenario = scenarios.find(value => value.id === scenarioId) ?? scenarios[1]
   const stable = result?.summary.closed_loop_reference === 'stable'
   const workspaces = [
-    { id: 'paper' as const, icon: BookOpenCheck, label: '论文复现', description: 'Fig. 8 固定算例' },
-    { id: 'comparison' as const, icon: Grid3X3, label: '同域对照', description: '充分判据与闭环参考' },
-    { id: 'model' as const, icon: Network, label: '低频模型', description: '可编辑网络与降阶分析' },
-    { id: 'average-dq' as const, icon: Activity, label: '平均值 dq', description: '16 状态模型与研究验证' },
+    { id: 'overview' as const, icon: Gauge, label: '任务总览', description: '选择用户角色与分析任务' },
+    { id: 'paper' as const, icon: BookOpenCheck, label: '判据核查', description: '论文基线与频段覆盖' },
+    { id: 'comparison' as const, icon: Grid3X3, label: '参数域评估', description: '充分判据与闭环参考' },
+    { id: 'model' as const, icon: Network, label: '网络分析', description: '可编辑网络与低频模态' },
+    { id: 'average-dq' as const, icon: Activity, label: '设备与控制', description: '16 状态模型与研究验证' },
   ]
   const activeWorkspace = workspaces.find(workspace => workspace.id === workspaceMode) ?? workspaces[0]
 
   const gainChart = useMemo(() => {
     if (!result) return {}
     const scan = result.frequency_scan
+    const uncoveredBands = contiguousBands(scan.frequencies_hz, scan.coverage, 'uncovered')
+    const dominantIndex = nearestFrequencyIndex(scan.frequencies_hz, result.summary.reproduced_dominant_oscillation_hz)
     const uncovered = scan.frequencies_hz
       .map((frequency, index) => scan.coverage[index] === 'uncovered' ? [frequency, 0] : null)
       .filter(Boolean)
     return {
       animationDuration: 450,
-      grid: { left: 64, right: 24, top: 38, bottom: 52 },
-      tooltip: { trigger: 'axis' },
+      grid: { left: 64, right: 24, top: 42, bottom: 76 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross', snap: true } },
+      toolbox: {
+        top: 0, right: 8,
+        feature: { dataZoom: { yAxisIndex: 'none' }, restore: {}, saveAsImage: { name: 'Fig8-小增益条件裕度', pixelRatio: 2 } },
+      },
+      dataZoom: [
+        { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
+        { type: 'slider', xAxisIndex: 0, filterMode: 'none', bottom: 12, height: 16, showDetail: false },
+      ],
       xAxis: { type: 'log', name: '频率 / Hz', nameLocation: 'middle', nameGap: 32 },
       yAxis: { type: 'value', name: '增益裕度' },
       series: [
@@ -84,6 +125,18 @@ function App() {
           lineStyle: { width: 2.2, color: '#58736f' },
           data: scan.frequencies_hz.map((frequency, index) => [frequency, scan.gain_margin[index]]),
           markLine: markZero,
+          markArea: {
+            silent: true,
+            label: { show: false },
+            itemStyle: { color: 'rgba(173, 86, 62, .09)' },
+            data: uncoveredBands.map(([start, end]) => [{ xAxis: start }, { xAxis: end }]),
+          },
+          markPoint: {
+            symbol: 'pin', symbolSize: 38,
+            itemStyle: { color: '#ad563e' },
+            label: { formatter: '主导模态', fontSize: 9 },
+            data: [{ coord: [scan.frequencies_hz[dominantIndex], scan.gain_margin[dominantIndex]] }],
+          },
         },
         {
           name: '增益与相位均未覆盖', type: 'scatter', symbolSize: 5,
@@ -98,8 +151,16 @@ function App() {
     const scan = result.frequency_scan
     return {
       animationDuration: 450,
-      grid: { left: 64, right: 24, top: 38, bottom: 52 },
-      tooltip: { trigger: 'axis' },
+      grid: { left: 64, right: 24, top: 42, bottom: 76 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross', snap: true } },
+      toolbox: {
+        top: 0, right: 8,
+        feature: { dataZoom: { yAxisIndex: 'none' }, restore: {}, saveAsImage: { name: 'Fig8-严格扇形相位裕度', pixelRatio: 2 } },
+      },
+      dataZoom: [
+        { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
+        { type: 'slider', xAxisIndex: 0, filterMode: 'none', bottom: 12, height: 16, showDetail: false },
+      ],
       legend: { top: 4, right: 8, textStyle: { fontSize: 10 } },
       xAxis: { type: 'log', name: '频率 / Hz', nameLocation: 'middle', nameGap: 32 },
       yAxis: { type: 'value', name: '相位裕度 / rad' },
@@ -169,7 +230,7 @@ function App() {
         <p>{activeWorkspace.description}</p>
         <span className="research-tag">结果均附模型边界</span>
       </header>
-      {workspaceMode === 'average-dq' || workspaceMode === 'model' || workspaceMode === 'comparison' ? <Suspense fallback={
+      {workspaceMode === 'overview' ? <WorkspaceOverview onNavigate={setWorkspaceMode}/> : workspaceMode === 'average-dq' || workspaceMode === 'model' || workspaceMode === 'comparison' ? <Suspense fallback={
         <div className="workspace-loading" role="status" aria-live="polite">
           <Activity size={20}/><span>正在载入{activeWorkspace.label}工作区…</span>
         </div>
@@ -242,8 +303,8 @@ function App() {
           </div>
 
           <div className="chart-grid">
-            <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>小增益条件裕度</span><em>正值表示该频点由小增益条件覆盖</em></div><EChart option={gainChart} style={{height: 320}}/></div>
-            <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>严格扇形相位裕度</span><em>空段表示相位不可用或数值待定</em></div><EChart option={phaseChart} style={{height: 320}}/></div>
+            <div className="panel chart-card"><div className="panel-title"><Gauge size={18}/><span>小增益条件裕度</span><em>阴影为两条件均未覆盖频带 · 滚轮缩放</em></div><EChart group="fig8-frequency-analysis" option={gainChart} style={{height: 340}}/></div>
+            <div className="panel chart-card"><div className="panel-title"><Activity size={18}/><span>严格扇形相位裕度</span><em>空段表示相位不可用或数值待定 · 与左图联动</em></div><EChart group="fig8-frequency-analysis" option={phaseChart} style={{height: 340}}/></div>
           </div>
 
           <div className="panel provenance-card">
