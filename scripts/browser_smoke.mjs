@@ -21,7 +21,7 @@ try {
 
   await page.getByTestId('workspace-overview').waitFor({ timeout: 15000 })
   const overviewText = await page.getByTestId('workspace-overview').innerText()
-  for (const evidence of ['稳定性核查', '系统规划', '变流器控制设计', '不是正式并网认证系统']) {
+  for (const evidence of ['稳定性核查', '系统规划', '控制设计', '本软件用于研究与教学，不作并网认证']) {
     if (!overviewText.includes(evidence)) throw new Error(`Task-oriented workspace overview is missing ${evidence}.`)
   }
   await page.screenshot({ path: resolve('tmp/browser-smoke-overview.png'), fullPage: true })
@@ -38,13 +38,13 @@ try {
     }
   }
   await page.setViewportSize({ width: 1600, height: 1100 })
-  await page.getByRole('button', { name: /进入判据核查/ }).click()
+  await page.getByRole('button', { name: /开始核查/ }).click()
 
   await page.locator('select').first().selectOption('fig8_D_0p05')
   await page.getByRole('button', { name: /运行稳定性分析/ }).click()
   await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
   const fig8Text = await page.locator('body').innerText()
-  for (const evidence of ['0.578', '1.2', '75 个未覆盖点']) {
+  for (const evidence of ['0.578', '1.2', '75 个频点未覆盖']) {
     if (!fig8Text.includes(evidence)) throw new Error(`Fig. 8 page is missing ${evidence}.`)
   }
 
@@ -164,7 +164,7 @@ try {
   }
 
   const reportPromise = page.waitForEvent('popup')
-  await page.getByRole('button', { name: /生成打印式报告/ }).click()
+  await page.getByRole('button', { name: /生成分析报告/ }).click()
   const reportPage = await reportPromise
   await reportPage.waitForFunction(() => document.body?.innerText.includes('不是完整 dq'), null, { timeout: 30000 })
   const reportText = await reportPage.locator('body').innerText()

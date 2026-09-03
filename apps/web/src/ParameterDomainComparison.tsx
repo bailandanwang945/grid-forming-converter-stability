@@ -184,7 +184,7 @@ export default function ParameterDomainComparison() {
       </div>}
 
       <div className="panel provenance-card">
-        <div className="panel-title"><BookOpenCheck size={18}/><span>证据来源与表述边界</span></div>
+        <div className="panel-title"><BookOpenCheck size={18}/><span>数据来源与适用范围</span></div>
         <p>{result.provenance.claim_boundary_zh} {result.provenance.interpretation_zh} {result.provenance.closed_loop_boundary_zh}</p>
         <dl>
           <div><dt>参数点 / 每点频率样本</dt><dd>{result.summary.parameterPointCount} / {result.summary.frequencyPointCountPerParameterPoint}</dd></div>

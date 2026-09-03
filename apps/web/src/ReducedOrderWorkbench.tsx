@@ -593,7 +593,7 @@ export default function ReducedOrderWorkbench() {
       <input ref={importRef} className="hidden-input" type="file" accept="application/json,.json" onChange={importCase}/>
       {result && <button className="secondary-button" onClick={() => downloadJson(`${result.run_id}.json`, result)}><Download size={16}/>导出分析结果</button>}
       {result && <button className="secondary-button" onClick={exportCsv}><Download size={16}/>导出极点与响应 CSV</button>}
-      {result && <button className="secondary-button" onClick={openPrintableReport}><FileUp size={16}/>生成打印式报告</button>}
+      {result && <button className="secondary-button" onClick={openPrintableReport}><FileUp size={16}/>生成分析报告</button>}
       {error && <p className="error">{error}</p>}
       <p className="scope-note">模型采用平坦电压工作点的 1/X 同步刚度，接地无限大母线并对无动态母线作 Kron 消元；暂不包含无功—电压耦合、内环、限幅与电磁暂态。</p>
     </aside>
@@ -713,7 +713,7 @@ export default function ReducedOrderWorkbench() {
             <p className="scan-boundary">{scanResult.model_scope.line_reactance_interpretation} {scanResult.model_scope.statement}</p>
           </> : <div className="scan-empty">设置阻尼和目标线路电抗范围后，可生成稳定、临界与失稳分区。这里的 X 是选定线路的标幺电抗，不自动改称短路比 SCR。</div>}
         </div>
-        <div className="panel provenance-card"><div className="panel-title"><ShieldAlert size={18}/><span>模型适用范围与交叉核对</span></div><p>{result.model_scope.statement}</p><div className="assumption-grid">{result.model_scope.assumptions.map(item => <span key={item}>{item}</span>)}</div></div>
+        <div className="panel provenance-card"><div className="panel-title"><ShieldAlert size={18}/><span>模型假设与适用范围</span></div><p>{result.model_scope.statement}</p><div className="assumption-grid">{result.model_scope.assumptions.map(item => <span key={item}>{item}</span>)}</div></div>
       </> : <div className="panel empty-state"><Network size={34}/><h2>编辑网络后运行分析</h2><p>后端先校验实体 ID、连接关系、额定电压、控制参数与接地条件，再构造同步刚度、状态矩阵、闭环极点和线性自由响应。</p></div>}
       </section>
     </section>

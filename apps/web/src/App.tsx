@@ -89,11 +89,11 @@ function App() {
   const selectedScenario = scenarios.find(value => value.id === scenarioId) ?? scenarios[1]
   const stable = result?.summary.closed_loop_reference === 'stable'
   const workspaces = [
-    { id: 'overview' as const, icon: Gauge, label: '任务总览', description: '选择用户角色与分析任务' },
-    { id: 'paper' as const, icon: BookOpenCheck, label: '判据核查', description: '论文基线与频段覆盖' },
-    { id: 'comparison' as const, icon: Grid3X3, label: '参数域评估', description: '充分判据与闭环参考' },
+    { id: 'overview' as const, icon: Gauge, label: '任务总览', description: '选择分析任务' },
+    { id: 'paper' as const, icon: BookOpenCheck, label: '判据核查', description: '复算论文图 8' },
+    { id: 'comparison' as const, icon: Grid3X3, label: '参数域评估', description: '比较判据与特征根' },
     { id: 'model' as const, icon: Network, label: '网络分析', description: '可编辑网络与低频模态' },
-    { id: 'average-dq' as const, icon: Activity, label: '设备与控制', description: '16 状态模型与研究验证' },
+    { id: 'average-dq' as const, icon: Activity, label: '设备与控制', description: '平均值 dq 模型' },
   ]
   const activeWorkspace = workspaces.find(workspace => workspace.id === workspaceMode) ?? workspaces[0]
 
@@ -228,7 +228,7 @@ function App() {
       <header className="workspace-header">
         <div><small>GFM STABILITY / WORKSPACE</small><h2>{activeWorkspace.label}</h2></div>
         <p>{activeWorkspace.description}</p>
-        <span className="research-tag">结果均附模型边界</span>
+        <span className="research-tag">本地计算</span>
       </header>
       {workspaceMode === 'overview' ? <WorkspaceOverview onNavigate={setWorkspaceMode}/> : workspaceMode === 'average-dq' || workspaceMode === 'model' || workspaceMode === 'comparison' ? <Suspense fallback={
         <div className="workspace-loading" role="status" aria-live="polite">
@@ -246,7 +246,7 @@ function App() {
         </label>
         <div className="case-description">
           <span>唯一变化参数</span><strong>VSM 阻尼 D = {selectedScenario.damping.toFixed(2)}</strong>
-          <p>两组响应均来自同一作者 Fig. 8 工作簿的固定夹具，不在端点之间插值。</p>
+          <p>两个工况均采用作者公开的图 8 数据；中间阻尼值不作插值。</p>
         </div>
         <div className="parameter-grid">
           <div><small>频率范围</small><strong>0.001–10⁴ Hz</strong></div>
@@ -256,14 +256,14 @@ function App() {
           <Play size={17} fill="currentColor"/>{running ? '正在重算 1000 个频点…' : '运行稳定性分析'}
         </button>
         <button className="secondary-button" onClick={exportJson} disabled={!result}>
-          <Download size={16}/>导出可追溯 JSON
+          <Download size={16}/>导出 JSON
         </button>
         <button className="secondary-button" onClick={openPrintableReport} disabled={!result}>
-          <BookOpenCheck size={16}/>生成打印式分析报告
+          <BookOpenCheck size={16}/>生成分析报告
         </button>
         {error && <p className="error">{error}：请确认后端已启动。</p>}
         <p className="scope-note">
-          当前结果由 Python 便携内核从作者频响夹具重新计算。有限频率网格不等同于论文全频定理；判据未覆盖也不等于系统必然失稳。
+          计算采用作者公开的频率响应数据。有限频率采样不能代替连续频域定理；判据未覆盖也不能据此判定系统失稳。
         </p>
       </aside>
 
@@ -283,16 +283,16 @@ function App() {
           <div className="metrics four">
             <article className={stable ? 'metric good' : 'metric bad'}>
               {stable ? <CircleCheck/> : <ShieldAlert/>}
-              <div><small>闭环特征根参考</small><strong>{stable ? '参考稳定' : '参考失稳'}</strong><p>实部 {result.summary.dominant_pole_hz.real.toFixed(6)} Hz</p></div>
+              <div><small>闭环特征根</small><strong>{stable ? '参考稳定' : '参考失稳'}</strong><p>主导极点实部 {result.summary.dominant_pole_hz.real.toFixed(6)} Hz</p></div>
             </article>
             <article className={result.summary.uncovered_points ? 'metric warn' : 'metric good'}>
-              <Gauge/><div><small>有限网格充分判据</small><strong>{result.summary.uncovered_points ? `${result.summary.uncovered_points} 个未覆盖点` : '1000 点均有条件覆盖'}</strong><p>定理状态：未由采样接口评价</p></div>
+              <Gauge/><div><small>充分判据（有限采样）</small><strong>{result.summary.uncovered_points ? `${result.summary.uncovered_points} 个频点未覆盖` : '全部采样点均被覆盖'}</strong><p>不代表连续频域定理已成立</p></div>
             </article>
             <article className="metric neutral">
-              <Activity/><div><small>工作簿主导振荡模态</small><strong>{result.summary.reproduced_dominant_oscillation_hz.toFixed(6)} Hz</strong><p>由闭环极点虚部得到</p></div>
+              <Activity/><div><small>公开数据复算结果</small><strong>{result.summary.reproduced_dominant_oscillation_hz.toFixed(6)} Hz</strong><p>由主导极点的虚部计算</p></div>
             </article>
             <article className="metric warn">
-              <BookOpenCheck/><div><small>论文正文报告</small><strong>{result.summary.paper_reported_oscillation_hz.toFixed(1)} Hz</strong><p>与工作簿结果的差异尚未闭合</p></div>
+              <BookOpenCheck/><div><small>论文正文数值</small><strong>{result.summary.paper_reported_oscillation_hz.toFixed(1)} Hz</strong><p>与公开数据的差异尚待核实</p></div>
             </article>
           </div>
 
@@ -308,16 +308,16 @@ function App() {
           </div>
 
           <div className="panel provenance-card">
-            <div className="panel-title"><BookOpenCheck size={18}/><span>结果来源与解释边界</span></div>
+            <div className="panel-title"><BookOpenCheck size={18}/><span>数据来源与适用范围</span></div>
             <p>{result.provenance.interpretation}</p>
             <dl>
               <div><dt>作者代码</dt><dd>{result.provenance.author_tag} · {result.provenance.author_commit.slice(0, 10)}</dd></div>
-              <div><dt>固定夹具</dt><dd>{result.provenance.fixture_id}</dd></div>
+              <div><dt>基准数据</dt><dd>{result.provenance.fixture_id}</dd></div>
               <div><dt>计算方法</dt><dd>{result.provenance.python_method}</dd></div>
               <div><dt>原工作簿 SHA-256</dt><dd>{result.provenance.source_workbook_sha256.slice(0, 16)}…</dd></div>
             </dl>
           </div>
-        </> : <div className="panel empty-state"><Activity size={34}/><h2>选择工况并运行分析</h2><p>平台将从固定复矩阵夹具重新计算 1000 个频率点，而不是读取预制结论或绘制人工曲线。</p></div>}
+        </> : <div className="panel empty-state"><Activity size={34}/><h2>选择工况并运行分析</h2><p>软件将根据作者公开的复矩阵数据，重新计算 1000 个频点。</p></div>}
         <Fig8SensitivityPanel/>
       </section>
       </main>}

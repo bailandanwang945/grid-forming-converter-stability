@@ -74,11 +74,11 @@ export default function Fig8SensitivityPanel() {
       <div className="inline-actions">
         <button data-testid="fig8-sensitivity-run" onClick={run} disabled={running}>{running ? '正在重算…' : '运行固定敏感性实验'}</button>
         <button data-testid="fig8-sensitivity-export" onClick={() => result && saveJson(result)} disabled={!result}><Download size={14}/>导出 JSON</button>
-        <button data-testid="fig8-sensitivity-report" onClick={() => window.open('/api/reports/fig8-sensitivity', '_blank', 'noopener,noreferrer')} disabled={!result}><BookOpenCheck size={14}/>打印式报告</button>
+        <button data-testid="fig8-sensitivity-report" onClick={() => window.open('/api/reports/fig8-sensitivity', '_blank', 'noopener,noreferrer')} disabled={!result}><BookOpenCheck size={14}/>分析报告</button>
       </div>
     </div>
     {!result ? <div className="sensitivity-intro">
-      <Activity size={28}/><p>用同一作者1000点夹具构造多个子网格，并改变判定容差与共同矩阵表示尺度。实验允许出现漏检，用于回答“有限网格结果对数值设置有多敏感”。</p>
+      <Activity size={28}/><p>从作者公开的 1000 个频点中抽取不同密度的子网格，并改变判定容差和矩阵尺度，以检验有限采样结果的敏感性。</p>
     </div> : <>
       <div className="panel evidence-strip" data-testid="fig8-sensitivity-summary">
         <div><small>9点子网格</small><b>{ninePoint?.detects_uncovered_region ? '检出未覆盖带' : '漏检未覆盖带'}</b></div>
