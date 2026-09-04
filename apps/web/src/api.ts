@@ -234,6 +234,7 @@ export type ACLine = {
   reactance_pu: number
   shunt_susceptance_pu?: number
   thermal_limit_pu?: number | null
+  in_service?: boolean
 }
 
 export type GridFormingConverter = {
@@ -461,6 +462,64 @@ export async function runReducedOrderScan(input: {
       ? detail.detail.map((item: { msg?: string }) => item.msg ?? String(item)).join('；')
       : detail?.detail
     throw new Error(message ?? `参数扫描服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
+export type ReducedOrderLineOutageCase = {
+  line_id: string
+  line_name: string
+  outcome: 'analyzed' | 'islanding'
+  disconnected_bus_ids: string[]
+  stability: 'stable' | 'marginal' | 'unstable' | null
+  dominant_real_per_s: number | null
+  dominant_real_hz: number | null
+  oscillation_frequency_hz: number | null
+  spectral_abscissa_shift_per_s: number | null
+  stability_changed: boolean | null
+}
+
+export type ReducedOrderContingencyResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  input_topology: NetworkTopology
+  study: {
+    topology_id: string
+    base_stability: 'stable' | 'marginal' | 'unstable'
+    base_dominant_real_per_s: number
+    counts: {
+      total: number
+      analyzed: number
+      islanding: number
+      stable: number
+      marginal: number
+      unstable: number
+      stability_changed: number
+    }
+    cases: ReducedOrderLineOutageCase[]
+  }
+  model_scope: {
+    claim_level: string
+    statement: string
+    outage_semantics: string
+    islanding_semantics: string
+  }
+  provenance: Record<string, unknown>
+}
+
+export async function runReducedOrderContingency(topology: NetworkTopology): Promise<ReducedOrderContingencyResult> {
+  const response = await fetch('/api/reduced-order/n-minus-one', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topology }),
+  })
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    const message = Array.isArray(detail?.detail)
+      ? detail.detail.map((item: { msg?: string }) => item.msg ?? String(item)).join('；')
+      : detail?.detail
+    throw new Error(message ?? `N−1 支路校核服务返回 ${response.status}`)
   }
   return response.json()
 }

@@ -69,6 +69,26 @@ class ReducedOrderScanTest(unittest.TestCase):
                 **common,
             )
 
+    def test_out_of_service_line_cannot_be_scan_target(self) -> None:
+        case = self.topology.model_dump(mode="python")
+        case["lines"].append(
+            {
+                **case["lines"][0],
+                "id": "line-open",
+                "name": "停运并联线路",
+                "in_service": False,
+            }
+        )
+        topology = type(self.topology).model_validate(case)
+
+        with self.assertRaisesRegex(ReducedOrderScanError, "已停运"):
+            scan_damping_reactance(
+                topology,
+                target_vsm_id="gfm-1",
+                target_line_id="line-open",
+                damping_values_pu=[0.2],
+                reactance_values_pu=[0.2],
+            )
     def test_grid_size_limit_is_enforced_before_point_solves(self) -> None:
         damping = [0.01 * (index + 1) for index in range(51)]
         reactance = [0.01 * (index + 1) for index in range(50)]

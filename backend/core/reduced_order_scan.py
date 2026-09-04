@@ -153,6 +153,10 @@ def scan_damping_reactance(
         raise ReducedOrderScanError(f"目标线路 {target_line_id!r} 不存在。")
     vsm_index = vsm_indices[0]
     line_index = line_indices[0]
+    if not baseline.lines[line_index].in_service:
+        raise ReducedOrderScanError(
+            f"目标线路 {target_line_id!r} 已停运，不能作为 D–X 扫描对象。"
+        )
 
     rows: list[tuple[DampingReactanceScanPoint, ...]] = []
     for damping in damping_axis:

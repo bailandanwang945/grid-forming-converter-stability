@@ -78,6 +78,7 @@ class ACLine(DomainModel):
     reactance_pu: float = Field(gt=0.0, le=100.0)
     shunt_susceptance_pu: float = Field(default=0.0, ge=-100.0, le=100.0)
     thermal_limit_pu: float | None = Field(default=None, gt=0.0, le=1000.0)
+    in_service: bool = True
 
     @model_validator(mode="after")
     def reject_self_loop(self) -> "ACLine":
@@ -283,6 +284,8 @@ class NetworkTopology(DomainModel):
 
         adjacency = {bus_id: set() for bus_id in buses_by_id}
         for line in self.lines:
+            if not line.in_service:
+                continue
             adjacency[line.from_bus_id].add(line.to_bus_id)
             adjacency[line.to_bus_id].add(line.from_bus_id)
 
@@ -298,7 +301,7 @@ class NetworkTopology(DomainModel):
         disconnected = sorted(set(buses_by_id) - visited)
         if disconnected:
             raise ValueError(
-                f"网络拓扑不连通；相对于参考节点 {self.reference_bus_id!r} "
+                f"网络拓扑不连通（仅计入投运线路）；相对于参考节点 {self.reference_bus_id!r} "
                 "不可达的节点为："
                 + "、".join(disconnected)
                 + "。"

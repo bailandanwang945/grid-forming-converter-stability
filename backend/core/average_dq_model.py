@@ -741,6 +741,8 @@ def _validate_case(
     converter = topology.grid_forming_converters[0]
     line = topology.lines[0]
     infinite_bus = topology.infinite_buses[0]
+    if not line.in_service:
+        raise AverageDQModelError("平均值 dq v1 要求唯一外部串联 RL 线路处于投运状态。")
     if converter.control_mode is not GFMControlMode.VIRTUAL_SYNCHRONOUS_MACHINE:
         raise AverageDQModelError("平均值 dq v1 仅支持 VSM 有功—频率外环。")
     if converter.id != parameters.converter_id:

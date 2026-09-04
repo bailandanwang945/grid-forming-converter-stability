@@ -151,6 +151,35 @@ try {
   if (!(await page.getByRole('button', { name: '至少保留一个无限大母线', exact: true }).isDisabled())) {
     throw new Error('The last infinite bus must not be removable from the reduced-order editor.')
   }
+  const lineDetails = page.locator('.model-editor details').filter({ hasText: '线路参数' })
+  await lineDetails.locator('summary').click()
+  const lineServiceSelect = lineDetails.getByLabel(/线路 .* 运行状态/).first()
+  await lineServiceSelect.selectOption('off')
+  const openLineSummary = await page.getByTestId('topology-summary').innerText()
+  if (!openLineSummary.includes('2 个连通分量') || !openLineSummary.includes('0/1 条线路投运')) {
+    throw new Error(`Out-of-service line was not reflected in operational connectivity: ${openLineSummary}`)
+  }
+  if (!(await page.locator('.react-flow__edge.out-of-service-edge').first().isVisible())) {
+    throw new Error('Out-of-service line is not distinguished on the graphical canvas.')
+  }
+  await lineServiceSelect.selectOption('on')
+  const restoredLineSummary = await page.getByTestId('topology-summary').innerText()
+  if (!restoredLineSummary.includes('结构校核通过') || !restoredLineSummary.includes('1/1 条线路投运')) {
+    throw new Error(`Restored line did not recover operational connectivity: ${restoredLineSummary}`)
+  }
+  await lineDetails.locator('summary').click()
+  await page.getByTestId('reduced-n-minus-one-run').click()
+  await page.getByTestId('reduced-n-minus-one-summary').waitFor({ timeout: 30000 })
+  const outageSummary = await page.getByTestId('reduced-n-minus-one-summary').innerText()
+  if (!outageSummary.includes('停运工况 1') || !outageSummary.includes('形成孤岛 1')) {
+    throw new Error(`Radial N-1 summary is incomplete: ${outageSummary}`)
+  }
+  const contingencyPanelText = await page.getByTestId('reduced-n-minus-one-panel').innerText()
+  for (const evidence of ['不作模态求解', '不是交流潮流 N−1 安全校核']) {
+    if (!contingencyPanelText.includes(evidence)) {
+      throw new Error(`N-1 scope or islanding semantics are missing ${evidence}.`)
+    }
+  }
   await page.locator('.power-node.gfm').click()
   await page.getByTestId('graph-inspector').getByLabel('阻尼 D / p.u.').fill('0.05')
   await page.getByRole('button', { name: /验证拓扑并分析/ }).click()

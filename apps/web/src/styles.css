@@ -188,7 +188,8 @@ select, input { padding: 10px; min-width: 0; color: #27343e; background: #f9fbfc
 .editable-table { padding: 6px 11px 10px; display: grid; gap: 6px; }
 .edit-row { display: grid; align-items: end; gap: 7px; }
 .edit-row.bus-row { grid-template-columns: 1fr 1.5fr 1fr 32px; }
-.edit-row.line-row, .edit-row.gfm-row { grid-template-columns: 1fr 1fr 1fr .75fr .75fr 32px; }
+.edit-row.line-row { grid-template-columns: .72fr 1fr 1fr 1fr .75fr .75fr 32px; }
+.edit-row.gfm-row { grid-template-columns: 1fr 1fr 1fr .75fr .75fr 32px; }
 .edit-row.system-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .edit-row.grid-row { grid-template-columns: repeat(4, minmax(0, 1fr)) 32px; }
 .edit-row label { display: flex; flex-direction: column; gap: 4px; color: #75828c; font-size: 9px; }
@@ -1426,6 +1427,8 @@ body {
 .network-graph-canvas .react-flow__edge-text { fill: #475461; font-size: 9px; }
 .network-graph-canvas .react-flow__edge-textbg { fill: #fff; fill-opacity: .92; }
 .network-graph-canvas .attachment-edge .react-flow__edge-path { stroke: #aeb8c1; stroke-dasharray: 3 3; }
+.network-graph-canvas .out-of-service-edge .react-flow__edge-path { stroke: #b6bec6; stroke-dasharray: 7 5; }
+.network-graph-canvas .out-of-service-edge .react-flow__edge-text { fill: #8d98a3; }
 .network-graph-canvas .react-flow__controls,
 .network-graph-canvas .react-flow__minimap { border: 1px solid #dce2e7; box-shadow: 0 2px 9px rgba(28, 39, 49, .08); }
 .network-graph-canvas .react-flow__controls-button { border-bottom-color: #e4e8ec; }
@@ -1479,6 +1482,43 @@ body {
 .graph-fields label { display: grid; gap: 4px; color: #74808b; font-size: 8px; }
 .graph-fields input, .graph-fields select { width: 100%; min-width: 0; height: 31px; padding: 5px 7px; color: #35414c; background: #fbfcfd; border: 1px solid #dce2e7; border-radius: 6px; font-size: 9px; }
 .graph-field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.graph-fields .graph-checkbox { padding: 8px 9px; display: flex; align-items: center; gap: 7px; color: #4f5c67; background: #f4f7f8; border-radius: 6px; }
+.graph-fields .graph-checkbox input { width: 14px; height: 14px; margin: 0; accent-color: #169b9b; }
+
+.contingency-panel {
+  margin-top: 14px;
+  padding: 16px;
+  background: #fbfcfd;
+  border: 1px solid var(--border, #dce2e7);
+  border-radius: 10px;
+}
+.contingency-actions { margin: 13px 0 11px; display: flex; gap: 7px; }
+.contingency-actions button {
+  padding: 8px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  background: #176e64;
+  border: 1px solid #176e64;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+.contingency-actions button:disabled { cursor: not-allowed; opacity: .5; }
+.contingency-actions .outline-button { color: #176e64; background: #fff; }
+.contingency-summary { padding: 9px 12px; display: flex; flex-wrap: wrap; gap: 8px; background: #f1f4f6; border-radius: 8px; }
+.contingency-summary span { padding-right: 10px; color: #667681; border-right: 1px solid #dbe3e6; font-size: 10px; }
+.contingency-summary span:last-child { border: 0; }
+.contingency-summary .stable-count b { color: #177a69; }
+.contingency-summary .unstable-count b { color: #bd3e3e; }
+.contingency-table-wrap { margin-top: 11px; overflow-x: auto; }
+.contingency-table { min-width: 720px; }
+.contingency-table th, .contingency-table td { padding: 8px 9px; border-bottom: 1px solid #e2e7ea; text-align: left; }
+.contingency-table td b, .contingency-table td small { display: block; }
+.contingency-table td small { margin-top: 2px; color: #8a949e; font-size: 8px; }
+.contingency-empty { margin: 10px 0 0; color: #73808b; font-size: 10px; line-height: 1.65; }
 
 @media (max-width: 1100px) {
   .app-shell { display: block; }
@@ -1494,6 +1534,8 @@ body {
   .average-dq-workbench[data-view='studies'] .study-launcher { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .overview-hero { grid-template-columns: minmax(0, 1fr); }
   .workflow-sequence { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .edit-row.line-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .edit-row.line-row .icon-button { align-self: end; }
 }
 
 @media (max-width: 720px) {

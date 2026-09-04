@@ -101,6 +101,29 @@ class NetworkTopologyTest(unittest.TestCase):
             ].active_power_measurement_time_constant_s,
             0.1,
         )
+        self.assertTrue(restored.lines[0].in_service)
+
+    def test_open_line_is_excluded_from_operational_connectivity(self) -> None:
+        case = valid_two_bus_case()
+        case["lines"][0]["in_service"] = False
+
+        message = self.validation_message(case)
+
+        self.assertIn("仅计入投运线路", message)
+        self.assertIn("bus-gfm", message)
+
+    def test_open_parallel_line_preserves_connected_operational_graph(self) -> None:
+        case = valid_two_bus_case()
+        open_parallel = deepcopy(case["lines"][0])
+        open_parallel["id"] = "line-open"
+        open_parallel["name"] = "停运并联线路"
+        open_parallel["in_service"] = False
+        case["lines"].append(open_parallel)
+
+        topology = NetworkTopology.model_validate(case)
+
+        self.assertEqual(len(topology.lines), 2)
+        self.assertFalse(topology.lines[1].in_service)
 
     def test_rejects_duplicate_ids_across_entity_types(self) -> None:
         case = valid_two_bus_case()

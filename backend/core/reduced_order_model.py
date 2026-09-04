@@ -35,7 +35,7 @@ from backend.domain.network_models import GFMControlMode, NetworkTopology
 
 
 MODEL_ASSUMPTIONS = (
-    "线路有功同步刚度按平坦电压工作点的 1/X 标幺值构造。",
+    "仅投运线路进入计算；其有功同步刚度按平坦电压工作点的 1/X 标幺值构造。",
     "无限大母线的增量相角固定为零；无动态母线通过 Kron 消元约去。",
     "频率状态采用标幺频率偏差 Δω_pu，且 δ̇=ω_bΔω_pu；M、D、T_p 分别采用秒、"
     "标幺和秒的契约量纲。",
@@ -163,6 +163,8 @@ def _kron_reduced_stiffness(
     laplacian = np.zeros((len(bus_ids), len(bus_ids)), dtype=np.float64)
 
     for line in topology.lines:
+        if not line.in_service:
+            continue
         from_index = bus_index[line.from_bus_id]
         to_index = bus_index[line.to_bus_id]
         susceptance = 1.0 / line.reactance_pu

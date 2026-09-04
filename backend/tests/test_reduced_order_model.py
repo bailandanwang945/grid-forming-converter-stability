@@ -158,6 +158,27 @@ def critical_damping() -> float:
 
 
 class ReducedOrderModelTest(unittest.TestCase):
+    def test_out_of_service_parallel_line_does_not_enter_stiffness(self) -> None:
+        case = single_machine_topology(0.8).model_dump(mode="python")
+        case["lines"].append(
+            {
+                **case["lines"][0],
+                "id": "line-open",
+                "name": "停运并联线路",
+                "reactance_pu": 0.01,
+                "in_service": False,
+            }
+        )
+
+        model = build_reduced_order_model(NetworkTopology.model_validate(case))
+
+        np.testing.assert_allclose(
+            model.synchronous_stiffness_matrix,
+            [[SYNCHRONOUS_STIFFNESS]],
+            rtol=0.0,
+            atol=1.0e-12,
+        )
+
     def test_kron_reduction_matches_two_series_reactances(self) -> None:
         topology = single_machine_topology(
             0.8,

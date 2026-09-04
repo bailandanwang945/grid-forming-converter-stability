@@ -119,7 +119,7 @@ export function summarizeTopology(topology: NetworkTopology): TopologySummary {
     .map(line => line.id)
   const adjacency = new Map(topology.buses.map(bus => [bus.id, new Set<string>()]))
   topology.lines.forEach(line => {
-    if (!busIds.has(line.from_bus_id) || !busIds.has(line.to_bus_id) || line.from_bus_id === line.to_bus_id) return
+    if (line.in_service === false || !busIds.has(line.from_bus_id) || !busIds.has(line.to_bus_id) || line.from_bus_id === line.to_bus_id) return
     adjacency.get(line.from_bus_id)?.add(line.to_bus_id)
     adjacency.get(line.to_bus_id)?.add(line.from_bus_id)
   })
@@ -139,7 +139,7 @@ export function summarizeTopology(topology: NetworkTopology): TopologySummary {
     }
   })
   const isolatedBusIds = topology.buses.filter(bus => (adjacency.get(bus.id)?.size ?? 0) === 0).map(bus => bus.id)
-  const validLineCount = topology.lines.length - invalidLineIds.length
+  const validLineCount = topology.lines.filter(line => line.in_service !== false && !invalidLineIds.includes(line.id)).length
   const cycleRank = Math.max(0, validLineCount - topology.buses.length + componentCount)
   const devicesUseExistingBuses = [
     ...topology.grid_forming_converters.map(item => item.bus_id),
@@ -227,10 +227,11 @@ export default function NetworkGraphEditor({
       id: `line:${line.id}`,
       source: busNodeId(line.from_bus_id),
       target: busNodeId(line.to_bus_id),
-      label: `${line.name}  X=${line.reactance_pu} p.u.`,
+      label: `${line.in_service === false ? '停运 · ' : ''}${line.name}  X=${line.reactance_pu} p.u.`,
       type: 'smoothstep',
       data: { kind: 'line', entityId: line.id },
       selected: selectedElement === `line:${line.id}`,
+      className: line.in_service === false ? 'out-of-service-edge' : undefined,
     }))
     const attachmentEdges: Edge[] = [
       ...topology.grid_forming_converters.map(gfm => ({
@@ -276,6 +277,7 @@ export default function NetworkGraphEditor({
       resistance_pu: 0.01,
       reactance_pu: 0.2,
       shunt_susceptance_pu: 0,
+      in_service: true,
     }
     next.lines.push(line)
     onTopologyChange(next)
@@ -294,7 +296,7 @@ export default function NetworkGraphEditor({
     onMessage(`已删除 ${removedLineIds.length} 条线路。`)
   }
 
-  function updateSelected(patch: Record<string, string | number>) {
+  function updateSelected(patch: Record<string, string | number | boolean>) {
     if (!selectedEntity?.value) return
     const next = clone(topology)
     const collection = selectedEntity.kind === 'bus' ? next.buses
@@ -318,7 +320,7 @@ export default function NetworkGraphEditor({
       <div className="graph-checks" data-testid="topology-summary">
         <span className={summary.ready ? 'passed' : 'failed'}>{summary.ready ? '结构校核通过' : `${summary.componentCount} 个连通分量`}</span>
         <span>{summary.cycleRank} 个独立环路</span>
-        <span>{topology.lines.length} 条线路</span>
+        <span>{topology.lines.filter(line => line.in_service !== false).length}/{topology.lines.length} 条线路投运</span>
       </div>
     </header>
     <div className="network-graph-stage">
@@ -364,6 +366,7 @@ export default function NetworkGraphEditor({
           <label>R / p.u.<input type="number" min="0" step="0.01" value={selectedEntity.value.resistance_pu} onChange={event => updateSelected({ resistance_pu: numberValue(event.target.value, selectedEntity.value!.resistance_pu) })}/></label>
           <label>X / p.u.<input type="number" min="0.0001" step="0.01" value={selectedEntity.value.reactance_pu} onChange={event => updateSelected({ reactance_pu: numberValue(event.target.value, selectedEntity.value!.reactance_pu) })}/></label>
         </div>
+        <label className="graph-checkbox"><input type="checkbox" checked={selectedEntity.value.in_service !== false} onChange={event => updateSelected({ in_service: event.target.checked })}/><span>线路投入运行</span></label>
       </div>}
       {selectedEntity?.kind === 'gfm' && selectedEntity.value && <div className="graph-fields">
         <small>构网型变流器 · {selectedEntity.value.id}</small>

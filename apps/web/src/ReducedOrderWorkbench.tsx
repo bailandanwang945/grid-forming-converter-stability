@@ -24,12 +24,14 @@ import {
   GridFormingConverter,
   NetworkTopology,
   ReducedOrderAnalysisResult,
+  ReducedOrderContingencyResult,
   ReducedOrderPreset,
   ReducedOrderPresetId,
   ReducedOrderScanResult,
   getReducedOrderReportHtml,
   getReducedOrderPresets,
   runReducedOrderAnalysis,
+  runReducedOrderContingency,
   runReducedOrderScan,
 } from './api'
 import EChart from './EChart'
@@ -141,6 +143,8 @@ export default function ReducedOrderWorkbench() {
   const [running, setRunning] = useState(false)
   const [scanResult, setScanResult] = useState<ReducedOrderScanResult | null>(null)
   const [scanning, setScanning] = useState(false)
+  const [contingencyResult, setContingencyResult] = useState<ReducedOrderContingencyResult | null>(null)
+  const [contingencyRunning, setContingencyRunning] = useState(false)
   const [scanDMin, setScanDMin] = useState(0.05)
   const [scanDMax, setScanDMax] = useState(70)
   const [scanXMin, setScanXMin] = useState(0.08)
@@ -170,8 +174,8 @@ export default function ReducedOrderWorkbench() {
     if (!topology.grid_forming_converters.some(item => item.id === scanTargetVsmId)) {
       setScanTargetVsmId(topology.grid_forming_converters[0]?.id ?? '')
     }
-    if (!topology.lines.some(item => item.id === scanTargetLineId)) {
-      setScanTargetLineId(topology.lines[0]?.id ?? '')
+    if (!topology.lines.some(item => item.id === scanTargetLineId && item.in_service !== false)) {
+      setScanTargetLineId(topology.lines.find(item => item.in_service !== false)?.id ?? '')
     }
   }, [topology, scanTargetVsmId, scanTargetLineId])
 
@@ -186,6 +190,7 @@ export default function ReducedOrderWorkbench() {
     setCustomized(false)
     setResult(null)
     setScanResult(null)
+    setContingencyResult(null)
     setModelView('editor')
     setError('')
     setEditorMessage('')
@@ -215,6 +220,7 @@ export default function ReducedOrderWorkbench() {
     setCustomized(true)
     setResult(null)
     setScanResult(null)
+    setContingencyResult(null)
     setModelView('editor')
     setError('')
     if (message) setEditorMessage(message)
@@ -226,6 +232,7 @@ export default function ReducedOrderWorkbench() {
     setCustomized(true)
     setResult(null)
     setScanResult(null)
+    setContingencyResult(null)
     setModelView('editor')
     setError('')
   }
@@ -367,6 +374,7 @@ export default function ReducedOrderWorkbench() {
       resistance_pu: 0.01,
       reactance_pu: 0.2,
       shunt_susceptance_pu: 0,
+      in_service: true,
     }))
   }
 
@@ -516,6 +524,7 @@ export default function ReducedOrderWorkbench() {
       setCustomized(true)
       setResult(null)
       setScanResult(null)
+      setContingencyResult(null)
       setModelView('editor')
       setError('')
       setEditorMessage('案例已载入；电气拓扑与图形版面已分别恢复。')
@@ -561,8 +570,8 @@ export default function ReducedOrderWorkbench() {
     if (!topology) return
     const targetVsm = topology.grid_forming_converters.find(item => item.id === scanTargetVsmId)
     const targetLine = topology.lines.find(item => item.id === scanTargetLineId)
-    if (!targetVsm || !targetLine) {
-      setError('D–X 扫描至少需要一台 VSM 和一条交流线路。')
+    if (!targetVsm || !targetLine || targetLine.in_service === false) {
+      setError('D–X 扫描至少需要一台 VSM 和一条投运交流线路。')
       return
     }
     const count = Math.max(2, Math.min(50, Math.round(scanAxisCount)))
@@ -580,6 +589,19 @@ export default function ReducedOrderWorkbench() {
       setError(reason instanceof Error ? reason.message : '参数扫描失败')
     } finally {
       setScanning(false)
+    }
+  }
+
+  async function runContingencyStudy() {
+    if (!topology) return
+    setContingencyRunning(true)
+    setError('')
+    try {
+      setContingencyResult(await runReducedOrderContingency(topology))
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'N−1 支路停运重算失败')
+    } finally {
+      setContingencyRunning(false)
     }
   }
 
@@ -724,7 +746,7 @@ export default function ReducedOrderWorkbench() {
       <div className="panel model-editor" hidden={modelView !== 'editor'}>
         <div className="panel-title"><Network size={18}/><span>网络建模与拓扑校核</span><em>电气模型与图形版面分离</em></div>
         <div className="editor-toolbar">
-          <div><b>{topology.name}</b><small>{topology.buses.length} 母线 · {topology.lines.length} 线路 · {topology.grid_forming_converters.length} 台 VSM</small></div>
+          <div><b>{topology.name}</b><small>{topology.buses.length} 母线 · {topology.lines.filter(line => line.in_service !== false).length}/{topology.lines.length} 线路投运 · {topology.grid_forming_converters.length} 台 VSM</small></div>
           <div className="inline-actions">
             <button onClick={addBus}><Plus size={14}/>母线</button><button onClick={addLine}><Plus size={14}/>线路</button><button onClick={addGfm}><Plus size={14}/>VSM</button><button onClick={addInfiniteBus}><Plus size={14}/>等值电源</button>
             <span className="toolbar-separator"/>
@@ -769,6 +791,7 @@ export default function ReducedOrderWorkbench() {
 
         <details><summary>线路参数 <small>{topology.lines.length} 条支路</small></summary><div className="editable-table">
           {topology.lines.map((line, index) => <div className="edit-row line-row" key={`${line.id}-${index}`}>
+            <label>状态<select aria-label={`线路 ${line.id} 运行状态`} value={line.in_service === false ? 'off' : 'on'} onChange={event => updateLine(index, { in_service: event.target.value === 'on' })}><option value="on">投运</option><option value="off">停运</option></select></label>
             <label>ID<input value={line.id} onChange={event => updateLine(index, { id: event.target.value })}/></label>
             <label>首端<select value={line.from_bus_id} onChange={event => updateLine(index, { from_bus_id: event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
             <label>末端<select value={line.to_bus_id} onChange={event => updateLine(index, { to_bus_id: event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
@@ -777,6 +800,32 @@ export default function ReducedOrderWorkbench() {
             <button className="icon-button" onClick={() => changeTopology(draft => draft.lines.splice(index, 1))}><Trash2 size={15}/></button>
           </div>)}
         </div></details>
+
+        <section className="contingency-panel" data-testid="reduced-n-minus-one-panel">
+          <div className="panel-title"><ShieldAlert size={18}/><span>N−1 支路停运重算</span><em>逐条停运当前投运线路，并重新建立低频状态矩阵</em></div>
+          <div className="contingency-actions">
+            <button data-testid="reduced-n-minus-one-run" onClick={runContingencyStudy} disabled={contingencyRunning || topology.lines.every(line => line.in_service === false)}>{contingencyRunning ? '逐项重算中…' : '开始逐线停运分析'}</button>
+            {contingencyResult && <button className="outline-button" onClick={() => downloadJson(`${contingencyResult.run_id}.json`, contingencyResult)}><Download size={14}/>导出 JSON</button>}
+          </div>
+          {contingencyResult ? <>
+            <div className="contingency-summary" data-testid="reduced-n-minus-one-summary">
+              <span>停运工况 <b>{contingencyResult.study.counts.total}</b></span>
+              <span>完成模态重算 <b>{contingencyResult.study.counts.analyzed}</b></span>
+              <span className={contingencyResult.study.counts.islanding ? 'unstable-count' : 'stable-count'}>形成孤岛 <b>{contingencyResult.study.counts.islanding}</b></span>
+              <span>稳定性分类改变 <b>{contingencyResult.study.counts.stability_changed}</b></span>
+            </div>
+            <div className="contingency-table-wrap"><table className="contingency-table"><thead><tr><th>停运线路</th><th>结构结果</th><th>闭环分类</th><th>谱横坐标变化 / s⁻¹</th><th>主导振荡频率 / Hz</th></tr></thead><tbody>
+              {contingencyResult.study.cases.map(item => <tr key={item.line_id}>
+                <td><b>{item.line_name}</b><small>{item.line_id}</small></td>
+                <td>{item.outcome === 'islanding' ? `形成孤岛：${item.disconnected_bus_ids.join('、')}` : '网络保持连通'}</td>
+                <td>{item.stability ? stabilityText[item.stability] : '不作模态求解'}</td>
+                <td>{item.spectral_abscissa_shift_per_s === null ? '—' : item.spectral_abscissa_shift_per_s.toExponential(4)}</td>
+                <td>{item.oscillation_frequency_hz === null ? '—' : item.oscillation_frequency_hz.toFixed(5)}</td>
+              </tr>)}
+            </tbody></table></div>
+            <p className="scan-boundary">{contingencyResult.model_scope.statement}</p>
+          </> : <p className="contingency-empty">用于识别桥接线路、孤岛风险，以及连通停运工况下闭环主导模态的变化。其结论不等同于交流潮流、热稳定、电压偏差或大扰动安全校核。</p>}
+        </section>
 
         <details><summary>VSM 控制参数 <small>{topology.grid_forming_converters.length} 台设备</small></summary><div className="editable-table">
           {topology.grid_forming_converters.map((gfm, index) => <div className="edit-row gfm-row" key={`${gfm.id}-${index}`}>
@@ -811,7 +860,7 @@ export default function ReducedOrderWorkbench() {
           <div className="panel-title"><Network size={18}/><span>D–X 参数平面</span><em>逐点重建状态矩阵，不做显示层插值</em></div>
           <div className="scan-toolbar">
             <label>目标 VSM<select value={scanTargetVsmId} onChange={event => setScanTargetVsmId(event.target.value)}>{topology.grid_forming_converters.map(gfm => <option key={gfm.id}>{gfm.id}</option>)}</select></label>
-            <label>目标线路<select value={scanTargetLineId} onChange={event => setScanTargetLineId(event.target.value)}>{topology.lines.map(line => <option key={line.id}>{line.id}</option>)}</select></label>
+            <label>目标线路<select value={scanTargetLineId} onChange={event => setScanTargetLineId(event.target.value)}>{topology.lines.filter(line => line.in_service !== false).map(line => <option key={line.id}>{line.id}</option>)}</select></label>
             <label>D 最小<input type="number" min="0.0001" step="0.05" value={scanDMin} onChange={event => setScanDMin(numeric(event.target.value, 0.05))}/></label>
             <label>D 最大<input type="number" min="0.0001" step="1" value={scanDMax} onChange={event => setScanDMax(numeric(event.target.value, 70))}/></label>
             <label>X 最小 / pu<input type="number" min="0.0001" step="0.02" value={scanXMin} onChange={event => setScanXMin(numeric(event.target.value, 0.08))}/></label>

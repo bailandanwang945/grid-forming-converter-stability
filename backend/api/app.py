@@ -62,6 +62,10 @@ from backend.core.reduced_order_model import (
     ReducedOrderModelError,
     build_reduced_order_model,
 )
+from backend.core.reduced_order_contingency import (
+    ReducedOrderContingencyError,
+    evaluate_line_outages,
+)
 from backend.core.reduced_order_presets import (
     available_reduced_order_presets,
     get_reduced_order_preset,
@@ -168,6 +172,14 @@ class ReducedOrderScanRequest(BaseModel):
                 f"D–X 扫描网格共 {point_count} 个点，超过上限 {MAX_SCAN_POINTS}。"
             )
         return self
+
+
+class ReducedOrderContingencyRequest(BaseModel):
+    """Request an exhaustive single outage of each in-service AC line."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    topology: NetworkTopology
 
 
 class AverageDQAnalysisRequest(BaseModel):
@@ -375,6 +387,7 @@ def _reduced_order_payload(request: ReducedOrderAnalysisRequest) -> dict:
             "entity_counts": {
                 "buses": len(topology.buses),
                 "lines": len(topology.lines),
+                "in_service_lines": sum(line.in_service for line in topology.lines),
                 "grid_forming_converters": len(
                     topology.grid_forming_converters
                 ),
@@ -427,7 +440,7 @@ def _reduced_order_payload(request: ReducedOrderAnalysisRequest) -> dict:
             "used_input_fields": [
                 "base_values.frequency_hz",
                 "buses[].id",
-                "lines[].from_bus_id/to_bus_id/reactance_pu",
+                "lines[].from_bus_id/to_bus_id/reactance_pu/in_service",
                 "grid_forming_converters[].id/bus_id/control_mode/virtual_inertia_s/damping_coefficient_pu/active_power_measurement_time_constant_s",
                 "infinite_buses[].bus_id",
                 "reference_bus_id",
@@ -493,6 +506,38 @@ def _reduced_order_scan_payload(request: ReducedOrderScanRequest) -> dict:
             "point_solver": "backend.core.reduced_order_model.build_reduced_order_model",
             "topology_contract": "backend.domain.network_models.NetworkTopology/1.0",
             "grid_is_explicit_not_interpolated": True,
+            "input_topology_mutated": False,
+            "separated_from_fig8_fixture": True,
+        },
+    }
+
+
+def _reduced_order_contingency_payload(
+    request: ReducedOrderContingencyRequest,
+) -> dict:
+    study = evaluate_line_outages(request.topology)
+    return {
+        "run_id": f"reduced-order-n-minus-one-{request.topology.id}",
+        "status": "completed",
+        "analysis_mode": "low-frequency-reduced-order-single-line-outage",
+        "input_topology": request.topology.model_dump(mode="json"),
+        "study": study.as_dict(),
+        "model_scope": {
+            "claim_level": "low-frequency-reduced-order-model-only",
+            "statement": (
+                "每次只移除一条投运交流线路；形成孤岛的工况只报告结构失效，"
+                "其余工况重新组装同步刚度和闭环状态矩阵。结果不是交流潮流 N−1 安全校核，"
+                "不评价热稳、过载、电压越限、故障暂态或论文小增益—小相位充分条件。"
+            ),
+            "outage_semantics": "remove-one-in-service-line-and-rebuild",
+            "islanding_semantics": "reported-without-modal-solve",
+        },
+        "provenance": {
+            "implementation": (
+                "backend.core.reduced_order_contingency.evaluate_line_outages"
+            ),
+            "point_solver": "backend.core.reduced_order_model.build_reduced_order_model",
+            "topology_contract": "backend.domain.network_models.NetworkTopology/1.0",
             "input_topology_mutated": False,
             "separated_from_fig8_fixture": True,
         },
@@ -1122,6 +1167,16 @@ def run_reduced_order_scan(request: ReducedOrderScanRequest) -> dict:
     try:
         return _reduced_order_scan_payload(request)
     except (ReducedOrderScanError, ReducedOrderModelError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@app.post("/api/reduced-order/n-minus-one")
+def run_reduced_order_contingency(
+    request: ReducedOrderContingencyRequest,
+) -> dict:
+    try:
+        return _reduced_order_contingency_payload(request)
+    except (ReducedOrderContingencyError, ReducedOrderModelError) as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
 
 
