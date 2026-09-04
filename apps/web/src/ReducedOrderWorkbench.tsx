@@ -21,6 +21,7 @@ import {
 import {
   ACLine,
   Bus,
+  DQNetworkCompileResult,
   GridFormingConverter,
   NetworkTopology,
   ReducedOrderAnalysisResult,
@@ -28,6 +29,7 @@ import {
   ReducedOrderPreset,
   ReducedOrderPresetId,
   ReducedOrderScanResult,
+  compileDQNetwork,
   getReducedOrderReportHtml,
   getReducedOrderPresets,
   runReducedOrderAnalysis,
@@ -112,6 +114,10 @@ function linspace(start: number, end: number, count: number) {
   return Array.from({ length: count }, (_, index) => start + (end - start) * index / (count - 1))
 }
 
+function logspace(startExponent: number, endExponent: number, count: number) {
+  return linspace(startExponent, endExponent, count).map(value => 10 ** value)
+}
+
 function nextEntityId(prefix: string, ids: string[]) {
   const occupied = new Set(ids)
   let index = 1
@@ -145,6 +151,8 @@ export default function ReducedOrderWorkbench() {
   const [scanning, setScanning] = useState(false)
   const [contingencyResult, setContingencyResult] = useState<ReducedOrderContingencyResult | null>(null)
   const [contingencyRunning, setContingencyRunning] = useState(false)
+  const [dqNetworkResult, setDqNetworkResult] = useState<DQNetworkCompileResult | null>(null)
+  const [dqNetworkRunning, setDqNetworkRunning] = useState(false)
   const [scanDMin, setScanDMin] = useState(0.05)
   const [scanDMax, setScanDMax] = useState(70)
   const [scanXMin, setScanXMin] = useState(0.08)
@@ -191,6 +199,7 @@ export default function ReducedOrderWorkbench() {
     setResult(null)
     setScanResult(null)
     setContingencyResult(null)
+    setDqNetworkResult(null)
     setModelView('editor')
     setError('')
     setEditorMessage('')
@@ -221,6 +230,7 @@ export default function ReducedOrderWorkbench() {
     setResult(null)
     setScanResult(null)
     setContingencyResult(null)
+    setDqNetworkResult(null)
     setModelView('editor')
     setError('')
     if (message) setEditorMessage(message)
@@ -233,6 +243,7 @@ export default function ReducedOrderWorkbench() {
     setResult(null)
     setScanResult(null)
     setContingencyResult(null)
+    setDqNetworkResult(null)
     setModelView('editor')
     setError('')
   }
@@ -525,6 +536,7 @@ export default function ReducedOrderWorkbench() {
       setResult(null)
       setScanResult(null)
       setContingencyResult(null)
+      setDqNetworkResult(null)
       setModelView('editor')
       setError('')
       setEditorMessage('案例已载入；电气拓扑与图形版面已分别恢复。')
@@ -602,6 +614,19 @@ export default function ReducedOrderWorkbench() {
       setError(reason instanceof Error ? reason.message : 'N−1 支路停运重算失败')
     } finally {
       setContingencyRunning(false)
+    }
+  }
+
+  async function runDQNetworkCompilation() {
+    if (!topology) return
+    setDqNetworkRunning(true)
+    setError('')
+    try {
+      setDqNetworkResult(await compileDQNetwork(topology, logspace(-2, 3, 80)))
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'dq 网络编译失败')
+    } finally {
+      setDqNetworkRunning(false)
     }
   }
 
@@ -692,6 +717,23 @@ export default function ReducedOrderWorkbench() {
       series: [{ type: 'heatmap', data, emphasis: { itemStyle: { borderColor: '#29312f', borderWidth: 1 } } }],
     }
   }, [scanResult])
+
+  const dqNetworkChart = useMemo(() => {
+    if (!dqNetworkResult) return {}
+    const network = dqNetworkResult.network
+    return {
+      animationDuration: 350,
+      grid: { left: 58, right: 22, top: 38, bottom: 52 },
+      tooltip: { trigger: 'axis' },
+      legend: { top: 4, data: ['最大奇异值', '最小奇异值'] },
+      xAxis: { type: 'log', name: '频率 / Hz', nameLocation: 'middle', nameGap: 34, min: 0.01, max: 1000 },
+      yAxis: { type: 'log', name: '端口导纳奇异值' },
+      series: [
+        { name: '最大奇异值', type: 'line', showSymbol: false, data: network.frequencies_hz.map((frequency, index) => [frequency, network.singular_values.maximum[index]]), lineStyle: { color: '#657481', width: 1.8 } },
+        { name: '最小奇异值', type: 'line', showSymbol: false, data: network.frequencies_hz.map((frequency, index) => [frequency, network.singular_values.minimum[index]]), lineStyle: { color: '#169b9b', width: 2.1 } },
+      ],
+    }
+  }, [dqNetworkResult])
 
   const statusClass = result?.result.stability === 'stable'
     ? 'good'
@@ -825,6 +867,24 @@ export default function ReducedOrderWorkbench() {
             </tbody></table></div>
             <p className="scan-boundary">{contingencyResult.model_scope.statement}</p>
           </> : <p className="contingency-empty">用于识别桥接线路、孤岛风险，以及连通停运工况下闭环主导模态的变化。其结论不等同于交流潮流、热稳定、电压偏差或大扰动安全校核。</p>}
+        </section>
+
+        <section className="contingency-panel dq-network-panel" data-testid="dq-network-panel">
+          <div className="panel-title"><Network size={18}/><span>网络 dq 端口编译</span><em>支路分块装配、无限大母线接地与 Kron 约简</em></div>
+          <div className="contingency-actions">
+            <button data-testid="dq-network-run" onClick={runDQNetworkCompilation} disabled={dqNetworkRunning}>{dqNetworkRunning ? '网络编译中…' : '生成端口导纳'}</button>
+            {dqNetworkResult && <button className="outline-button" onClick={() => downloadJson(`${dqNetworkResult.run_id}.json`, dqNetworkResult)}><Download size={14}/>导出 JSON</button>}
+          </div>
+          {dqNetworkResult ? <>
+            <div className="contingency-summary" data-testid="dq-network-summary">
+              <span>频率样点 <b>{dqNetworkResult.network.frequencies_hz.length}</b></span>
+              <span>端口母线 <b>{dqNetworkResult.network.port_bus_order.join('、')}</b></span>
+              <span>接地母线 <b>{dqNetworkResult.network.grounded_bus_ids.join('、')}</b></span>
+              <span>消去内部母线 <b>{dqNetworkResult.network.eliminated_bus_ids.length}</b></span>
+            </div>
+            <EChart option={dqNetworkChart} style={{height: 300}}/>
+            <p className="scan-boundary">{dqNetworkResult.model_scope.statement}</p>
+          </> : <p className="contingency-empty">将当前投运线路按统一的全局同步 dq 坐标逐支路装配，并把无源内部母线约简为构网型变流器端口导纳。该步骤只编译无源网络，不与变流器闭环结论混同。</p>}
         </section>
 
         <details><summary>VSM 控制参数 <small>{topology.grid_forming_converters.length} 台设备</small></summary><div className="editable-table">

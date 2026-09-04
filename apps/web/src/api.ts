@@ -524,6 +524,51 @@ export async function runReducedOrderContingency(topology: NetworkTopology): Pro
   return response.json()
 }
 
+export type DQNetworkCompileResult = {
+  run_id: string
+  status: 'completed'
+  analysis_mode: string
+  network: {
+    frequencies_hz: number[]
+    bus_order: string[]
+    port_bus_order: string[]
+    grounded_bus_ids: string[]
+    eliminated_bus_ids: string[]
+    active_line_ids: string[]
+    full_nodal_shape: number[]
+    port_admittance: Array<Array<Array<{ real: number; imag: number }>>>
+    singular_values: { maximum: number[]; minimum: number[] }
+    eliminated_block_condition_numbers: number[]
+  }
+  model_scope: {
+    claim_level: string
+    statement: string
+    port_current_direction: string
+    dq_component_order: string[]
+    negative_shunt_susceptance_supported: boolean
+  }
+  provenance: Record<string, unknown>
+}
+
+export async function compileDQNetwork(
+  topology: NetworkTopology,
+  frequencies_hz: number[],
+): Promise<DQNetworkCompileResult> {
+  const response = await fetch('/api/network/dq-admittance', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topology, frequencies_hz }),
+  })
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null)
+    const message = Array.isArray(detail?.detail)
+      ? detail.detail.map((item: { msg?: string }) => item.msg ?? String(item)).join('；')
+      : detail?.detail
+    throw new Error(message ?? `dq 网络编译服务返回 ${response.status}`)
+  }
+  return response.json()
+}
+
 export type AverageDQParameters = {
   schema_version: '1.0'
   id: string

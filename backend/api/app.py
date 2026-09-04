@@ -75,6 +75,10 @@ from backend.core.reduced_order_scan import (
     ReducedOrderScanError,
     scan_damping_reactance,
 )
+from backend.core.dq_network_compiler import (
+    DQNetworkCompilerError,
+    compile_network_to_gfm_ports,
+)
 from backend.core.reporting import (
     render_average_dq_port_identification_report,
     render_average_dq_report,
@@ -180,6 +184,16 @@ class ReducedOrderContingencyRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     topology: NetworkTopology
+
+
+class DQNetworkCompileRequest(BaseModel):
+    """Compile a bounded frequency grid into the network dq port admittance."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    topology: NetworkTopology
+    frequencies_hz: list[float] = Field(min_length=1, max_length=1000)
+    kron_condition_limit: float = Field(default=1.0e12, gt=1.0, le=1.0e16)
 
 
 class AverageDQAnalysisRequest(BaseModel):
@@ -538,6 +552,60 @@ def _reduced_order_contingency_payload(
             ),
             "point_solver": "backend.core.reduced_order_model.build_reduced_order_model",
             "topology_contract": "backend.domain.network_models.NetworkTopology/1.0",
+            "input_topology_mutated": False,
+            "separated_from_fig8_fixture": True,
+        },
+    }
+
+
+def _dq_network_compile_payload(request: DQNetworkCompileRequest) -> dict:
+    compiled = compile_network_to_gfm_ports(
+        request.topology,
+        request.frequencies_hz,
+        condition_limit=request.kron_condition_limit,
+    )
+    singular_values = np.asarray(
+        [np.linalg.svd(matrix, compute_uv=False) for matrix in compiled.port_admittance]
+    )
+    return {
+        "run_id": f"dq-network-compile-{request.topology.id}",
+        "status": "completed",
+        "analysis_mode": "sampled-global-synchronous-dq-network-admittance",
+        "network": {
+            "frequencies_hz": compiled.frequencies_hz.tolist(),
+            "bus_order": list(compiled.bus_ids),
+            "port_bus_order": list(compiled.port_bus_ids),
+            "grounded_bus_ids": list(compiled.grounded_bus_ids),
+            "eliminated_bus_ids": list(compiled.eliminated_bus_ids),
+            "active_line_ids": list(compiled.active_line_ids),
+            "full_nodal_shape": list(compiled.nodal_admittance.shape),
+            "port_admittance": [
+                _complex_matrix_payload(matrix)
+                for matrix in compiled.port_admittance
+            ],
+            "singular_values": {
+                "maximum": singular_values[:, 0].tolist(),
+                "minimum": singular_values[:, -1].tolist(),
+            },
+            "eliminated_block_condition_numbers": (
+                compiled.eliminated_block_condition_numbers.tolist()
+            ),
+        },
+        "model_scope": {
+            "claim_level": "sampled-passive-network-frequency-response-only",
+            "statement": (
+                "仅将投运的正序串联 RL 线路及非负 π 型并联电纳装配为全局同步 dq 网络，"
+                "无限大母线作为小信号地，内部无源母线经数值条件门约束的 Kron 约简消去。"
+                "结果尚未叠加变流器导纳，不评价闭环稳定性或论文充分条件，也不求解潮流。"
+            ),
+            "port_current_direction": "positive-current-injected-from-port-into-network",
+            "dq_component_order": ["d", "q"],
+            "negative_shunt_susceptance_supported": False,
+        },
+        "provenance": {
+            "implementation": "backend.core.dq_network_compiler.compile_network_to_gfm_ports",
+            "topology_contract": "backend.domain.network_models.NetworkTopology/1.0",
+            "kron_operation": "Yrr-Yre*solve(Yee,Yer)",
             "input_topology_mutated": False,
             "separated_from_fig8_fixture": True,
         },
@@ -1177,6 +1245,14 @@ def run_reduced_order_contingency(
     try:
         return _reduced_order_contingency_payload(request)
     except (ReducedOrderContingencyError, ReducedOrderModelError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@app.post("/api/network/dq-admittance")
+def compile_dq_network(request: DQNetworkCompileRequest) -> dict:
+    try:
+        return _dq_network_compile_payload(request)
+    except DQNetworkCompilerError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
 
 

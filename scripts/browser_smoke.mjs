@@ -180,6 +180,20 @@ try {
       throw new Error(`N-1 scope or islanding semantics are missing ${evidence}.`)
     }
   }
+  await page.getByTestId('dq-network-run').click()
+  await page.getByTestId('dq-network-summary').waitFor({ timeout: 30000 })
+  const dqNetworkSummary = await page.getByTestId('dq-network-summary').innerText()
+  for (const evidence of ['频率样点 80', '端口母线 bus-gfm', '接地母线 bus-grid']) {
+    if (!dqNetworkSummary.includes(evidence)) {
+      throw new Error(`dq network compilation summary is missing ${evidence}.`)
+    }
+  }
+  const dqNetworkPanelText = await page.getByTestId('dq-network-panel').innerText()
+  for (const evidence of ['支路分块装配', '不评价闭环稳定性', '不求解潮流']) {
+    if (!dqNetworkPanelText.includes(evidence)) {
+      throw new Error(`dq network compilation panel is missing ${evidence}.`)
+    }
+  }
   await page.locator('.power-node.gfm').click()
   await page.getByTestId('graph-inspector').getByLabel('阻尼 D / p.u.').fill('0.05')
   await page.getByRole('button', { name: /验证拓扑并分析/ }).click()
