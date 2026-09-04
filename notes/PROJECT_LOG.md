@@ -952,3 +952,12 @@ After author root: external/simplus-grid-tool/+SimplusGT/+Class/GridFormingVSI.m
 - 新增 `/api/network/dq-admittance`，返回频率轴、母线及端口顺序、接地与消去母线、投运线路、端口复导纳、奇异值和条件数。网页新增“网络 dq 端口编译”，以80个对数频率点展示端口导纳最大、最小奇异值，并保留“不评价闭环稳定性、不求解潮流”的范围声明。
 - 新增10项编译器及接口测试；与线路投退、网络契约相关的定向31项测试全部通过，Ruff、前端生产构建和完整 Chromium 回归通过，后者输出 `BROWSER_E2E_SMOKE_OK`。详细规格见 `docs/specs/algorithms/dq-network-compiler.md`，核验记录见 `results/test-reports/2026-09-04-v0.5-dq-network-compiler.md`。
 - 作者多机代码已核对：其 `kron_reduction_dq.m` 同样按完整 dq 母线对分块并取 Schur 补，`dec_conditions_multibus.m` 则在消去空母线和无限大母线后才把网络导纳送入整形判据。本轮只完成这一链条中的无源网络编译；尚缺多变流器工作点、各设备端口导纳和论文七项定理前提，故不宣称已将论文判据推广到任意编辑拓扑。
+
+## 2026-09-04：多设备分散式增益—相位判据的有限网格筛查核心
+
+- 新增 `sampled_decentralized_screening`，输入为已经完成回路整形的多台变流器 `2×2` 全局同步 dq 端口导纳和对应 `2n×2n` 网络导纳。程序逐频点计算 `max_i σmax(J_Ci)` 与 `σmin(J_net)`，并同时检查每台设备相对网络逆的上下相位裕量以及所有设备相位区间的总跨度裕量。
+- 相位算法沿用经 Fig. 8 核验的严格扇形数值域分类和显式种子—最近邻分支展开；论文允许的准扇形情形尚未全部实现，故当前方法明确标为保守子集。网络逆病态、数值域边界和分支中断均保留为数值待定；所有返回继续固定 `theorem_status=not-evaluated-by-sampled-api`。
+- 两组 Fig. 8 固定算例的增益、相位、覆盖状态、裕量与计数逐频点一致。新增两设备反例：设备相位分别为 `+0.75π` 与 `−0.75π` 时，各自满足网络上下界，但合并跨度为 `1.5π`，第三项相位约束能独立拒绝该点；交换设备顺序不改变聚合结果。
+- 最初选择的对角反例只使数值域经过原点，正确分类应为边界待定而非非扇形；改用数值域包含原点于内部的非正规矩阵后，非扇形负对照成立。系统 Python 缺少 `pytest`，因此首次入口未执行测试，随后使用项目既有 `unittest` 完成新增 `6/6`，并与 Fig. 8 内核联合回归 `11/11`，后者耗时 `10.648 s`；Ruff 通过。
+- 本轮只补齐多设备判据的代数核心，未将未整形网络频响冒充论文输入。当前贯通缺口是多设备交流工作点、设备端口导纳、局部—全局坐标、`E/C/F/W` 整形和七项定理前提；后续还需在同一工作点上与闭环特征根或时域响应交叉验证。
+- 详细规范与证据分别见 `docs/specs/algorithms/sampled-decentralized-screening.md` 和 `results/test-reports/2026-09-04-v0.5-sampled-decentralized-screening.md`。本轮未修改论文、作者代码、前端或发布包。
