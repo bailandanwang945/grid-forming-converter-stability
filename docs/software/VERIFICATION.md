@@ -16,7 +16,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify_all.ps1
 4. 使用本机现有 Chrome 或 Edge 的浏览器端到端流程；
 5. 若能找到 MATLAB，则运行 `experiments/run_unit_tests.m`。
 
-浏览器端到端流程覆盖 Fig. 8 失稳工况的 75 个未覆盖点、独立模型参数修改、案例导出—导入—重算、441 点 D–X 参数扫描、平均值 dq 模型研究任务，以及三频点端口辨识的 JSON/HTML 导出。它验证软件链路实际可操作，不替代对模型物理有效性的确认。
+浏览器端到端流程覆盖 Fig. 8 失稳工况的 75 个未覆盖点、图形网络建模、撤销/重做、图元参数修改、拓扑与版面分离保存、案例导出—导入—重算、441 点 D–X 参数扫描、平均值 dq 模型研究任务，以及三频点端口辨识的 JSON/HTML 导出。它验证软件链路实际可操作，不替代对模型物理有效性的确认。
 
 首次运行如缺少项目依赖，脚本会根据 `backend/requirements-dev.txt` 和前端锁文件安装依赖。若只允许检查现有环境，使用：
 

@@ -5,7 +5,6 @@ import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, Vi
 import { CanvasRenderer } from 'echarts/renderers'
 import {
   Activity,
-  Box,
   CircleCheck,
   Download,
   FileUp,
@@ -16,6 +15,8 @@ import {
   Save,
   ShieldAlert,
   Trash2,
+  Undo2,
+  Redo2,
 } from 'lucide-react'
 import {
   ACLine,
@@ -32,6 +33,7 @@ import {
   runReducedOrderScan,
 } from './api'
 import EChart from './EChart'
+import NetworkGraphEditor, { DiagramLayout, emptyDiagramLayout, parseDiagramLayout } from './NetworkGraphEditor'
 
 echarts.use([
   LineChart,
@@ -47,6 +49,13 @@ echarts.use([
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value))
 const stabilityText = { stable: '稳定', marginal: '临界', unstable: '失稳' }
+
+type EditorSnapshot = {
+  topology: NetworkTopology
+  layout: DiagramLayout
+}
+
+const sameSnapshot = (left: EditorSnapshot, right: EditorSnapshot) => JSON.stringify(left) === JSON.stringify(right)
 
 function downloadText(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type })
@@ -122,6 +131,7 @@ export default function ReducedOrderWorkbench() {
   const [presets, setPresets] = useState<ReducedOrderPreset[]>([])
   const [selectedPreset, setSelectedPreset] = useState<ReducedOrderPresetId>('reduced-smib-stable')
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
+  const [diagramLayout, setDiagramLayout] = useState<DiagramLayout>(emptyDiagramLayout())
   const [modelView, setModelView] = useState<'editor' | 'results'>('editor')
   const [customized, setCustomized] = useState(false)
   const [result, setResult] = useState<ReducedOrderAnalysisResult | null>(null)
@@ -139,7 +149,11 @@ export default function ReducedOrderWorkbench() {
   const [scanTargetVsmId, setScanTargetVsmId] = useState('')
   const [scanTargetLineId, setScanTargetLineId] = useState('')
   const [error, setError] = useState('')
+  const [editorMessage, setEditorMessage] = useState('')
   const importRef = useRef<HTMLInputElement>(null)
+  const undoStack = useRef<EditorSnapshot[]>([])
+  const redoStack = useRef<EditorSnapshot[]>([])
+  const [, setHistoryRevision] = useState(0)
 
   useEffect(() => {
     getReducedOrderPresets()
@@ -165,27 +179,113 @@ export default function ReducedOrderWorkbench() {
     setSelectedPreset(id)
     const preset = presets.find(item => item.id === id)
     if (preset) setTopology(clone(preset.topology))
+    setDiagramLayout(emptyDiagramLayout())
+    undoStack.current = []
+    redoStack.current = []
+    setHistoryRevision(value => value + 1)
     setCustomized(false)
+    setResult(null)
+    setScanResult(null)
+    setModelView('editor')
+    setError('')
+    setEditorMessage('')
+  }
+
+  function checkpoint() {
+    if (!topology) return
+    const snapshot = clone({ topology, layout: diagramLayout })
+    const previous = undoStack.current[undoStack.current.length - 1]
+    if (!previous || !sameSnapshot(previous, snapshot)) {
+      undoStack.current = [...undoStack.current.slice(-49), snapshot]
+    }
+    redoStack.current = []
+    setHistoryRevision(value => value + 1)
+  }
+
+  function prepareCustomTopology(value: NetworkTopology) {
+    const draft = clone(value)
+    draft.id = `custom-${draft.id.replace(/^custom-/, '')}`.slice(0, 64)
+    draft.name = draft.name.replace(/（自定义）$/, '') + '（自定义）'
+    return draft
+  }
+
+  function commitTopology(value: NetworkTopology, message = '') {
+    checkpoint()
+    setTopology(prepareCustomTopology(value))
+    setCustomized(true)
+    setResult(null)
+    setScanResult(null)
+    setModelView('editor')
+    setError('')
+    if (message) setEditorMessage(message)
+  }
+
+  function restoreSnapshot(snapshot: EditorSnapshot) {
+    setTopology(clone(snapshot.topology))
+    setDiagramLayout(clone(snapshot.layout))
+    setCustomized(true)
     setResult(null)
     setScanResult(null)
     setModelView('editor')
     setError('')
   }
 
+  function undoEditorChange() {
+    if (!topology || undoStack.current.length === 0) return
+    const current = clone({ topology, layout: diagramLayout })
+    while (undoStack.current.length && sameSnapshot(undoStack.current[undoStack.current.length - 1], current)) {
+      undoStack.current = undoStack.current.slice(0, -1)
+    }
+    if (undoStack.current.length === 0) {
+      setHistoryRevision(value => value + 1)
+      return
+    }
+    const previous = undoStack.current[undoStack.current.length - 1]
+    undoStack.current = undoStack.current.slice(0, -1)
+    redoStack.current = [...redoStack.current.slice(-49), current]
+    restoreSnapshot(previous)
+    setEditorMessage('已撤销上一步编辑。')
+    setHistoryRevision(value => value + 1)
+  }
+
+  function redoEditorChange() {
+    if (!topology || redoStack.current.length === 0) return
+    const current = clone({ topology, layout: diagramLayout })
+    while (redoStack.current.length && sameSnapshot(redoStack.current[redoStack.current.length - 1], current)) {
+      redoStack.current = redoStack.current.slice(0, -1)
+    }
+    if (redoStack.current.length === 0) {
+      setHistoryRevision(value => value + 1)
+      return
+    }
+    const next = redoStack.current[redoStack.current.length - 1]
+    redoStack.current = redoStack.current.slice(0, -1)
+    undoStack.current = [...undoStack.current.slice(-49), current]
+    restoreSnapshot(next)
+    setEditorMessage('已重做上一步编辑。')
+    setHistoryRevision(value => value + 1)
+  }
+
   function changeTopology(mutator: (draft: NetworkTopology) => void) {
     if (!topology) return
     const draft = clone(topology)
     mutator(draft)
-    draft.id = `custom-${draft.id.replace(/^custom-/, '')}`.slice(0, 64)
-    draft.name = draft.name.replace(/（自定义）$/, '') + '（自定义）'
-    setTopology(draft)
-    setCustomized(true)
-    setResult(null)
-    setScanResult(null)
-    setModelView('editor')
+    commitTopology(draft)
+  }
+
+  function renameLayoutNode(kind: 'bus' | 'gfm' | 'grid', oldId: string, newId: string | undefined) {
+    if (!newId || oldId === newId) return
+    setDiagramLayout(current => {
+      const oldKey = `${kind}:${oldId}`
+      if (!current.node_positions[oldKey]) return current
+      const nextPositions = { ...current.node_positions, [`${kind}:${newId}`]: current.node_positions[oldKey] }
+      delete nextPositions[oldKey]
+      return { ...current, node_positions: nextPositions }
+    })
   }
 
   function updateBus(index: number, patch: Partial<Bus>) {
+    const oldLayoutId = topology?.buses[index]?.id
     changeTopology(draft => {
       const oldId = draft.buses[index].id
       Object.assign(draft.buses[index], patch)
@@ -201,6 +301,7 @@ export default function ReducedOrderWorkbench() {
         if (draft.reference_bus_id === oldId) draft.reference_bus_id = newId
       }
     })
+    if (oldLayoutId) renameLayoutNode('bus', oldLayoutId, patch.id)
   }
 
   function updateLine(index: number, patch: Partial<ACLine>) {
@@ -208,10 +309,13 @@ export default function ReducedOrderWorkbench() {
   }
 
   function updateGfm(index: number, patch: Partial<GridFormingConverter>) {
+    const oldLayoutId = topology?.grid_forming_converters[index]?.id
     changeTopology(draft => Object.assign(draft.grid_forming_converters[index], patch))
+    if (oldLayoutId) renameLayoutNode('gfm', oldLayoutId, patch.id)
   }
 
   function updateInfiniteBus(index: number, patch: Partial<NetworkTopology['infinite_buses'][number]>) {
+    const oldLayoutId = topology?.infinite_buses[index]?.id
     changeTopology(draft => {
       const oldBusId = draft.infinite_buses[index].bus_id
       Object.assign(draft.infinite_buses[index], patch)
@@ -220,6 +324,7 @@ export default function ReducedOrderWorkbench() {
         draft.reference_bus_id = newBusId
       }
     })
+    if (oldLayoutId) renameLayoutNode('grid', oldLayoutId, patch.id)
   }
 
   function addBus() {
@@ -385,8 +490,12 @@ export default function ReducedOrderWorkbench() {
     try {
       const parsed = JSON.parse(await file.text()) as Record<string, unknown>
       let importedTopology: NetworkTopology
-      if (parsed.schema_version === 'gfm-reduced-order-case/1.0') {
+      let importedLayout = emptyDiagramLayout()
+      if (parsed.schema_version === 'gfm-reduced-order-case/1.0' || parsed.schema_version === 'gfm-reduced-order-case/1.1') {
         importedTopology = parsed.topology as NetworkTopology
+        if (parsed.schema_version === 'gfm-reduced-order-case/1.1' && parsed.diagram_layout) {
+          importedLayout = parseDiagramLayout(parsed.diagram_layout)
+        }
         const settings = parsed.simulation_settings as Record<string, number> | undefined
         if (settings) {
           setSimulationTime(settings.simulation_time_s ?? 20)
@@ -400,11 +509,16 @@ export default function ReducedOrderWorkbench() {
       }
       if (!importedTopology?.buses || !importedTopology?.lines) throw new Error('案例缺少网络拓扑字段。')
       setTopology(importedTopology)
+      setDiagramLayout(importedLayout)
+      undoStack.current = []
+      redoStack.current = []
+      setHistoryRevision(value => value + 1)
       setCustomized(true)
       setResult(null)
       setScanResult(null)
       setModelView('editor')
       setError('')
+      setEditorMessage('案例已载入；电气拓扑与图形版面已分别恢复。')
     } catch (reason) {
       setError(reason instanceof Error ? `案例文件无法读取：${reason.message}` : '案例文件无法读取')
     } finally {
@@ -415,9 +529,10 @@ export default function ReducedOrderWorkbench() {
   function exportCase() {
     if (!topology) return
     downloadJson(`${topology.id}.gfm-case.json`, {
-      schema_version: 'gfm-reduced-order-case/1.0',
+      schema_version: 'gfm-reduced-order-case/1.1',
       analysis_mode: 'low-frequency-angle-frequency-active-power-reduced-order',
       topology,
+      diagram_layout: diagramLayout,
       simulation_settings: {
         simulation_time_s: simulationTime,
         time_step_s: timeStep,
@@ -600,28 +715,32 @@ export default function ReducedOrderWorkbench() {
 
     <section className="workspace">
       <div className="model-viewbar">
-        <div><small>REDUCED-ORDER WORKBENCH</small><b>{modelView === 'editor' ? '网络与控制编辑' : '分析结果'}</b></div>
+        <div><small>REDUCED-ORDER WORKBENCH</small><b>{modelView === 'editor' ? '网络建模与拓扑校核' : '分析结果'}</b></div>
         <div className="view-switch" role="tablist" aria-label="低频模型工作视图">
           <button data-testid="reduced-view-editor" role="tab" aria-selected={modelView === 'editor'} className={modelView === 'editor' ? 'active' : ''} onClick={() => setModelView('editor')}>模型编辑</button>
           <button data-testid="reduced-view-results" role="tab" aria-selected={modelView === 'results'} className={modelView === 'results' ? 'active' : ''} disabled={!result} onClick={() => setModelView('results')}>分析结果</button>
         </div>
       </div>
       <div className="panel model-editor" hidden={modelView !== 'editor'}>
-        <div className="panel-title"><Box size={18}/><span>可编辑网络与控制参数</span><em>NetworkTopology/1.0</em></div>
+        <div className="panel-title"><Network size={18}/><span>网络建模与拓扑校核</span><em>电气模型与图形版面分离</em></div>
         <div className="editor-toolbar">
           <div><b>{topology.name}</b><small>{topology.buses.length} 母线 · {topology.lines.length} 线路 · {topology.grid_forming_converters.length} 台 VSM</small></div>
-          <div className="inline-actions"><button onClick={addBus}><Plus size={14}/>母线</button><button onClick={addLine}><Plus size={14}/>线路</button><button onClick={addGfm}><Plus size={14}/>VSM</button><button onClick={addInfiniteBus}><Plus size={14}/>电网</button></div>
+          <div className="inline-actions">
+            <button onClick={addBus}><Plus size={14}/>母线</button><button onClick={addLine}><Plus size={14}/>线路</button><button onClick={addGfm}><Plus size={14}/>VSM</button><button onClick={addInfiniteBus}><Plus size={14}/>等值电源</button>
+            <span className="toolbar-separator"/>
+            <button data-testid="network-undo" title="撤销" disabled={undoStack.current.length === 0} onClick={undoEditorChange}><Undo2 size={14}/>撤销</button>
+            <button data-testid="network-redo" title="重做" disabled={redoStack.current.length === 0} onClick={redoEditorChange}><Redo2 size={14}/>重做</button>
+          </div>
         </div>
-        <div className="network-map">
-          {topology.buses.map(bus => {
-            const gfm = topology.grid_forming_converters.find(item => item.bus_id === bus.id)
-            const grid = topology.infinite_buses.find(item => item.bus_id === bus.id)
-            return <div className={`network-bus ${gfm ? 'has-gfm' : ''} ${grid ? 'has-grid' : ''}`} key={bus.id}>
-              <span>{gfm ? 'GFM' : grid ? '∞' : 'BUS'}</span><b>{bus.name}</b><small>{bus.id}</small>
-            </div>
-          })}
-          <div className="network-lines">{topology.lines.map(line => <span key={line.id}>{line.from_bus_id} — X={line.reactance_pu} — {line.to_bus_id}</span>)}</div>
-        </div>
+        <NetworkGraphEditor
+          topology={topology}
+          layout={diagramLayout}
+          onLayoutChange={setDiagramLayout}
+          onLayoutCheckpoint={checkpoint}
+          onTopologyChange={next => commitTopology(next)}
+          onMessage={setEditorMessage}
+        />
+        {editorMessage && <p className="editor-message" role="status">{editorMessage}</p>}
 
         <details open><summary>系统基值与参考条件</summary><div className="editable-table">
           <div className="edit-row system-row">

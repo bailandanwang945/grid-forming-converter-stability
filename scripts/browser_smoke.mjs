@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { chromium } from '../apps/web/node_modules/playwright-core/index.mjs'
 
@@ -104,8 +104,46 @@ try {
   await page.screenshot({ path: resolve('tmp/browser-smoke-comparison.png'), fullPage: true })
   console.log('[browser] Same-domain comparison passed.')
 
-  await page.getByRole('button', { name: '网络分析' }).click()
-  await page.getByText('可编辑网络与控制参数').waitFor({ timeout: 15000 })
+  await page.getByRole('button', { name: '网络建模' }).click()
+  await page.getByText('网络建模与拓扑校核', { exact: true }).first().waitFor({ timeout: 15000 })
+  await page.getByTestId('network-graph-editor').waitFor({ timeout: 15000 })
+  const initialBusNodeCount = await page.locator('.power-node.bus').count()
+  await page.locator('.react-flow__edge[data-id^="line:"]').first().waitFor({ timeout: 5000 })
+  const initialLineEdgeCount = await page.locator('.react-flow__edge[data-id^="line:"]').count()
+  const sourceBusHandle = page.locator('.react-flow__node').filter({ hasText: 'bus-gfm' }).locator('.react-flow__handle-right')
+  const targetBusHandle = page.locator('.react-flow__node').filter({ hasText: 'bus-grid' }).locator('.react-flow__handle-left')
+  await sourceBusHandle.dragTo(targetBusHandle, { force: true, timeout: 5000 })
+  await page.waitForFunction(
+    expected => document.querySelectorAll('.react-flow__edge[data-id^="line:"]').length === expected,
+    initialLineEdgeCount + 1,
+    { timeout: 5000 },
+  )
+  await page.getByTestId('network-undo').click()
+  await page.waitForFunction(
+    expected => document.querySelectorAll('.react-flow__edge[data-id^="line:"]').length === expected,
+    initialLineEdgeCount,
+    { timeout: 5000 },
+  )
+  await page.getByRole('button', { name: '母线', exact: true }).click()
+  if (await page.locator('.power-node.bus').count() !== initialBusNodeCount + 1) {
+    throw new Error('Graph editor did not add a bus to the electrical topology.')
+  }
+  await page.getByTestId('network-undo').click()
+  await page.waitForFunction(
+    expected => document.querySelectorAll('.power-node.bus').length === expected,
+    initialBusNodeCount,
+    { timeout: 5000 },
+  )
+  await page.getByTestId('network-redo').click()
+  await page.getByTestId('network-undo').click()
+  const firstGraphNode = page.locator('.react-flow__node').first()
+  const firstGraphNodeBox = await firstGraphNode.boundingBox()
+  if (!firstGraphNodeBox) throw new Error('Graph editor did not render draggable nodes.')
+  await page.mouse.move(firstGraphNodeBox.x + 30, firstGraphNodeBox.y + 24)
+  await page.mouse.down()
+  await page.mouse.move(firstGraphNodeBox.x + 75, firstGraphNodeBox.y + 55, { steps: 5 })
+  await page.mouse.up()
+  await page.screenshot({ path: resolve('tmp/browser-smoke-network-model.png'), fullPage: true })
   const referenceBus = page.getByLabel('参考母线')
   if (await referenceBus.inputValue() !== 'bus-grid' || await referenceBus.locator('option').count() !== 1) {
     throw new Error('Reference bus selector must contain only grounded infinite-bus nodes.')
@@ -113,8 +151,8 @@ try {
   if (!(await page.getByRole('button', { name: '至少保留一个无限大母线', exact: true }).isDisabled())) {
     throw new Error('The last infinite bus must not be removable from the reduced-order editor.')
   }
-  await page.locator('.model-editor details').filter({ hasText: 'VSM 控制参数' }).locator('summary').click()
-  await page.getByLabel('阻尼 D / pu').first().fill('0.05')
+  await page.locator('.power-node.gfm').click()
+  await page.getByTestId('graph-inspector').getByLabel('阻尼 D / p.u.').fill('0.05')
   await page.getByRole('button', { name: /验证拓扑并分析/ }).click()
   await page.locator('.metrics .metric').first().waitFor({ timeout: 30000 })
   if (await page.getByTestId('reduced-view-results').getAttribute('aria-selected') !== 'true') {
@@ -130,6 +168,17 @@ try {
   if (!download.suggestedFilename().endsWith('.gfm-case.json') || !savedCasePath) {
     throw new Error('Versioned case export failed.')
   }
+  const savedCase = JSON.parse(readFileSync(savedCasePath, 'utf8'))
+  if (savedCase.schema_version !== 'gfm-reduced-order-case/1.1'
+      || savedCase.diagram_layout?.schema_version !== 'gfm-network-diagram-layout/1.0'
+      || Object.keys(savedCase.diagram_layout?.node_positions ?? {}).length === 0) {
+    throw new Error('Case export did not preserve the separate graphical layout contract.')
+  }
+  const invalidLayoutCasePath = resolve('tmp/browser-smoke-invalid-layout.gfm-case.json')
+  const invalidLayoutCase = structuredClone(savedCase)
+  const firstLayoutKey = Object.keys(invalidLayoutCase.diagram_layout.node_positions)[0]
+  invalidLayoutCase.diagram_layout.node_positions[firstLayoutKey].x = 'not-a-number'
+  writeFileSync(invalidLayoutCasePath, JSON.stringify(invalidLayoutCase), 'utf8')
   await page.getByTestId('reduced-view-editor').click()
   await page.locator('.model-editor details').filter({ hasText: '线路参数' }).locator('summary').click()
   await page.getByLabel('末端').first().selectOption('bus-gfm')
@@ -140,8 +189,13 @@ try {
   }
   await page.locator('select').first().selectOption('reduced-smib-stable')
   await page.waitForTimeout(150)
+  await page.locator('input.hidden-input').setInputFiles(invalidLayoutCasePath)
+  await page.locator('.error').waitFor({ timeout: 15000 })
+  if (!(await page.locator('.error').innerText()).includes('坐标必须是有限数值')) {
+    throw new Error('Invalid diagram coordinates were not rejected with an understandable error.')
+  }
   await page.locator('input.hidden-input').setInputFiles(savedCasePath)
-  const dampingInput = page.getByLabel('阻尼 D / pu').first()
+  const dampingInput = page.locator('.model-editor details').filter({ hasText: 'VSM 控制参数' }).getByLabel('阻尼 D / pu').first()
   let restoredDamping = Number(await dampingInput.inputValue())
   for (let attempt = 0; attempt < 30 && restoredDamping !== 0.05; attempt += 1) {
     await page.waitForTimeout(100)

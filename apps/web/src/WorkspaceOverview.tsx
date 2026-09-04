@@ -37,11 +37,11 @@ const workflows = [
   {
     id: 'model' as const,
     number: '03',
-    role: '网络分析',
-    title: '编辑网络并分析低频模态',
-    description: '设置母线、线路与 VSM 参数，考察阻尼和网络强度对低频动态的影响。',
+    role: '网络建模',
+    title: '建立网络模型并分析低频模态',
+    description: '连接母线、线路、构网型变流器与等值电源，校核拓扑后考察阻尼和网络强度对低频动态的影响。',
     scope: '模型：小型低频网络',
-    action: '编辑网络',
+    action: '开始建模',
     icon: Network,
   },
   {

@@ -92,7 +92,7 @@ function App() {
     { id: 'overview' as const, icon: Gauge, label: '任务总览', description: '选择分析任务' },
     { id: 'paper' as const, icon: BookOpenCheck, label: '判据核查', description: '复算论文图 8' },
     { id: 'comparison' as const, icon: Grid3X3, label: '参数域评估', description: '比较判据与特征根' },
-    { id: 'model' as const, icon: Network, label: '网络分析', description: '可编辑网络与低频模态' },
+    { id: 'model' as const, icon: Network, label: '网络建模', description: '拓扑校核与低频模态' },
     { id: 'average-dq' as const, icon: Activity, label: '设备与控制', description: '平均值 dq 模型' },
   ]
   const activeWorkspace = workspaces.find(workspace => workspace.id === workspaceMode) ?? workspaces[0]
