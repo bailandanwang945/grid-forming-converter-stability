@@ -873,6 +873,18 @@ select:focus, input:focus { background: #ffffff; border-color: rgba(15, 111, 111
 .result-toolbar .inline-actions button:not(:disabled):hover { background: var(--blue-gray); }
 .result-toolbar .inline-actions button:disabled { opacity: .35; cursor: not-allowed; }
 
+/* Case comparison reuses the workbench palette and only adjusts dense content. */
+.average-dq-workbench .result-toolbar { flex-wrap: wrap; }
+.average-dq-workbench .result-toolbar .inline-actions { flex-wrap: wrap; }
+.average-dq-comparison .panel-title { justify-content: space-between; }
+.average-dq-comparison th, .average-dq-comparison td {
+  padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--hairline);
+  overflow-wrap: anywhere; vertical-align: top;
+}
+.average-dq-comparison table { min-width: 460px; }
+.average-dq-comparison .table-scroll { min-width: 0; max-width: 100%; margin-top: 12px; overflow-x: auto; }
+.average-dq-workbench[data-view='studies'] [data-testid='average-dq-baseline-notice'] { display: none; }
+
 button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible {
   outline: 2px solid var(--blue-gray);
   outline-offset: 2px;

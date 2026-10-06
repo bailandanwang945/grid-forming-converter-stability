@@ -24,6 +24,7 @@ import {
   DQNetworkCompileResult,
   GridFormingConverter,
   NetworkTopology,
+  ReducedOrderAnalysisInput,
   ReducedOrderAnalysisResult,
   ReducedOrderContingencyResult,
   ReducedOrderPreset,
@@ -38,6 +39,7 @@ import {
 } from './api'
 import EChart from './EChart'
 import NetworkGraphEditor, { DiagramLayout, emptyDiagramLayout, parseDiagramLayout } from './NetworkGraphEditor'
+import { parseNetworkTopology } from './averageDQCase'
 
 echarts.use([
   LineChart,
@@ -60,6 +62,31 @@ type EditorSnapshot = {
 }
 
 const sameSnapshot = (left: EditorSnapshot, right: EditorSnapshot) => JSON.stringify(left) === JSON.stringify(right)
+
+type SimulationSettings = Pick<ReducedOrderAnalysisInput, 'simulation_time_s' | 'time_step_s' | 'initial_angle_perturbation_rad'>
+
+function parseSimulationSettings(value: unknown, current: SimulationSettings): SimulationSettings {
+  if (value === undefined) return clone(current)
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) throw new Error('仿真设置必须是对象。')
+  const settings = value as Record<string, unknown>
+  const defaults: SimulationSettings = { simulation_time_s: 20, time_step_s: 0.02, initial_angle_perturbation_rad: 0.001 }
+  for (const key of Object.keys(settings)) {
+    if (!Object.prototype.hasOwnProperty.call(defaults, key)) throw new Error(`不支持的仿真设置：${key}。`)
+  }
+  const result = { ...defaults }
+  for (const key of Object.keys(defaults) as (keyof SimulationSettings)[]) {
+    if (Object.prototype.hasOwnProperty.call(settings, key)) {
+      const number = settings[key]
+      if (typeof number !== 'number' || !Number.isFinite(number)) throw new Error(`仿真设置 ${key} 必须是有限数值。`)
+      result[key] = number
+    }
+  }
+  if (result.simulation_time_s <= 0 || result.simulation_time_s > 300) throw new Error('仿真时长必须大于0且不超过300秒。')
+  if (result.time_step_s < 0.001 || result.time_step_s > 1) throw new Error('仿真步长必须在0.001～1秒范围内。')
+  if (Math.abs(result.initial_angle_perturbation_rad) > 0.1) throw new Error('初始相角扰动必须在±0.1 rad范围内。')
+  if (Math.ceil(result.simulation_time_s / result.time_step_s) + 1 > 5001) throw new Error('时域响应采样点数超过上限5001。')
+  return result
+}
 
 function downloadText(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type })
@@ -143,6 +170,7 @@ export default function ReducedOrderWorkbench() {
   const [modelView, setModelView] = useState<'editor' | 'results'>('editor')
   const [customized, setCustomized] = useState(false)
   const [result, setResult] = useState<ReducedOrderAnalysisResult | null>(null)
+  const [completedInput, setCompletedInput] = useState<ReducedOrderAnalysisInput | null>(null)
   const [simulationTime, setSimulationTime] = useState(20)
   const [timeStep, setTimeStep] = useState(0.02)
   const [initialAngleMrad, setInitialAngleMrad] = useState(1)
@@ -153,6 +181,7 @@ export default function ReducedOrderWorkbench() {
   const [contingencyRunning, setContingencyRunning] = useState(false)
   const [dqNetworkResult, setDqNetworkResult] = useState<DQNetworkCompileResult | null>(null)
   const [dqNetworkRunning, setDqNetworkRunning] = useState(false)
+  const [reportRunning, setReportRunning] = useState(false)
   const [scanDMin, setScanDMin] = useState(0.05)
   const [scanDMax, setScanDMax] = useState(70)
   const [scanXMin, setScanXMin] = useState(0.08)
@@ -166,26 +195,88 @@ export default function ReducedOrderWorkbench() {
   const undoStack = useRef<EditorSnapshot[]>([])
   const redoStack = useRef<EditorSnapshot[]>([])
   const [, setHistoryRevision] = useState(0)
+  const mounted = useRef(true)
+  const presetRequest = useRef(0)
+  const importRequest = useRef(0)
+  const layoutRevision = useRef(0)
+  const analysisRevision = useRef(0)
+  const modelRevision = useRef(0)
+  const scanRevision = useRef(0)
+  const analysisRequest = useRef(0)
+  const scanRequest = useRef(0)
+  const contingencyRequest = useRef(0)
+  const dqNetworkRequest = useRef(0)
+  const reportRequest = useRef(0)
+  const analysisBusy = useRef(false)
+  const scanBusy = useRef(false)
+  const contingencyBusy = useRef(false)
+  const dqNetworkBusy = useRef(false)
+  const reportBusy = useRef(false)
 
   useEffect(() => {
+    mounted.current = true
+    const request = ++presetRequest.current
     getReducedOrderPresets()
       .then(payload => {
+        if (!mounted.current || request !== presetRequest.current) return
         setPresets(payload.presets)
         const initial = payload.presets.find(item => item.id === selectedPreset) ?? payload.presets[0]
         if (initial) setTopology(clone(initial.topology))
       })
-      .catch(reason => setError(reason instanceof Error ? reason.message : '无法读取预设'))
+      .catch(reason => {
+        if (mounted.current && request === presetRequest.current) setError(reason instanceof Error ? reason.message : '无法读取预设')
+      })
+    return () => {
+      mounted.current = false
+      presetRequest.current += 1
+      importRequest.current += 1
+      analysisRequest.current += 1
+      scanRequest.current += 1
+      contingencyRequest.current += 1
+      dqNetworkRequest.current += 1
+      reportRequest.current += 1
+    }
   }, [])
 
   useEffect(() => {
     if (!topology) return
     if (!topology.grid_forming_converters.some(item => item.id === scanTargetVsmId)) {
       setScanTargetVsmId(topology.grid_forming_converters[0]?.id ?? '')
+      invalidateScan()
     }
     if (!topology.lines.some(item => item.id === scanTargetLineId && item.in_service !== false)) {
       setScanTargetLineId(topology.lines.find(item => item.in_service !== false)?.id ?? '')
+      invalidateScan()
     }
   }, [topology, scanTargetVsmId, scanTargetLineId])
+
+  function invalidateAnalysis() {
+    analysisRevision.current += 1
+    reportRequest.current += 1
+    setResult(null)
+    setCompletedInput(null)
+    setModelView('editor')
+    setError('')
+  }
+
+  function invalidateScan() {
+    scanRevision.current += 1
+    setScanResult(null)
+    setError('')
+  }
+
+  function invalidateModel() {
+    modelRevision.current += 1
+    invalidateAnalysis()
+    invalidateScan()
+    setContingencyResult(null)
+    setDqNetworkResult(null)
+  }
+
+  function updateDiagramLayout(layout: DiagramLayout) {
+    layoutRevision.current += 1
+    setDiagramLayout(layout)
+  }
 
   function choosePreset(id: ReducedOrderPresetId) {
     setSelectedPreset(id)
@@ -196,12 +287,7 @@ export default function ReducedOrderWorkbench() {
     redoStack.current = []
     setHistoryRevision(value => value + 1)
     setCustomized(false)
-    setResult(null)
-    setScanResult(null)
-    setContingencyResult(null)
-    setDqNetworkResult(null)
-    setModelView('editor')
-    setError('')
+    invalidateModel()
     setEditorMessage('')
   }
 
@@ -227,25 +313,18 @@ export default function ReducedOrderWorkbench() {
     checkpoint()
     setTopology(prepareCustomTopology(value))
     setCustomized(true)
-    setResult(null)
-    setScanResult(null)
-    setContingencyResult(null)
-    setDqNetworkResult(null)
-    setModelView('editor')
-    setError('')
+    invalidateModel()
     if (message) setEditorMessage(message)
   }
 
   function restoreSnapshot(snapshot: EditorSnapshot) {
+    const modelChanged = JSON.stringify(snapshot.topology) !== JSON.stringify(topology)
     setTopology(clone(snapshot.topology))
-    setDiagramLayout(clone(snapshot.layout))
-    setCustomized(true)
-    setResult(null)
-    setScanResult(null)
-    setContingencyResult(null)
-    setDqNetworkResult(null)
-    setModelView('editor')
-    setError('')
+    updateDiagramLayout(clone(snapshot.layout))
+    if (modelChanged) {
+      setCustomized(true)
+      invalidateModel()
+    }
   }
 
   function undoEditorChange() {
@@ -454,28 +533,33 @@ export default function ReducedOrderWorkbench() {
   }
 
   async function analyze() {
-    if (!topology) return
+    if (!topology || analysisBusy.current) return
+    const snapshot = clone(requestPayload())
+    const revision = analysisRevision.current
+    const request = ++analysisRequest.current
+    analysisBusy.current = true
+    reportRequest.current += 1
     setRunning(true)
     setError('')
+    setResult(null)
+    setCompletedInput(null)
     try {
-      const common = {
-        simulation_time_s: simulationTime,
-        time_step_s: timeStep,
-        initial_angle_perturbation_rad: initialAngleMrad / 1000,
-      }
-      const nextResult = await runReducedOrderAnalysis(customized
-        ? { ...common, topology }
-        : { ...common, preset_id: selectedPreset })
+      const nextResult = await runReducedOrderAnalysis(snapshot)
+      if (!mounted.current || request !== analysisRequest.current || revision !== analysisRevision.current) return
       setResult(nextResult)
+      setCompletedInput(snapshot)
       setModelView('results')
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : '分析失败')
+      if (mounted.current && request === analysisRequest.current && revision === analysisRevision.current) {
+        setError(reason instanceof Error ? reason.message : '分析失败')
+      }
     } finally {
-      setRunning(false)
+      analysisBusy.current = false
+      if (mounted.current && request === analysisRequest.current) setRunning(false)
     }
   }
 
-  function requestPayload() {
+  function requestPayload(): ReducedOrderAnalysisInput {
     if (!topology) throw new Error('拓扑尚未加载。')
     const common = {
       simulation_time_s: simulationTime,
@@ -486,10 +570,21 @@ export default function ReducedOrderWorkbench() {
   }
 
   async function openPrintableReport() {
+    if (!completedInput || !result || reportBusy.current) return
+    const snapshot = clone(completedInput)
+    const revision = analysisRevision.current
+    const analysis = analysisRequest.current
+    const request = ++reportRequest.current
+    reportBusy.current = true
+    setReportRunning(true)
     setError('')
     const reportWindow = window.open('', '_blank')
     try {
-      const html = await getReducedOrderReportHtml(requestPayload())
+      const html = await getReducedOrderReportHtml(snapshot)
+      if (!mounted.current || request !== reportRequest.current || analysis !== analysisRequest.current || revision !== analysisRevision.current) {
+        reportWindow?.close()
+        return
+      }
       const blobUrl = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }))
       if (reportWindow) {
         reportWindow.location.href = blobUrl
@@ -499,49 +594,64 @@ export default function ReducedOrderWorkbench() {
       window.setTimeout(() => URL.revokeObjectURL(blobUrl), 60000)
     } catch (reason) {
       reportWindow?.close()
-      setError(reason instanceof Error ? reason.message : '报告生成失败')
+      if (mounted.current && request === reportRequest.current && analysis === analysisRequest.current && revision === analysisRevision.current) {
+        setError(reason instanceof Error ? reason.message : '报告生成失败')
+      }
+    } finally {
+      reportBusy.current = false
+      if (mounted.current) setReportRunning(false)
     }
   }
 
   async function importCase(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
+    const request = ++importRequest.current
+    const revision = analysisRevision.current
+    const layout = layoutRevision.current
     try {
-      const parsed = JSON.parse(await file.text()) as Record<string, unknown>
+      const text = await file.text()
+      if (!mounted.current || request !== importRequest.current) return
+      if (revision !== analysisRevision.current || layout !== layoutRevision.current) {
+        setEditorMessage('案例读取期间输入已修改，未覆盖当前编辑；请重新导入。')
+        return
+      }
+      const parsed = JSON.parse(text) as Record<string, unknown>
       let importedTopology: NetworkTopology
       let importedLayout = emptyDiagramLayout()
+      const currentSettings = {
+        simulation_time_s: simulationTime,
+        time_step_s: timeStep,
+        initial_angle_perturbation_rad: initialAngleMrad / 1000,
+      }
+      let importedSettings = currentSettings
       if (parsed.schema_version === 'gfm-reduced-order-case/1.0' || parsed.schema_version === 'gfm-reduced-order-case/1.1') {
-        importedTopology = parsed.topology as NetworkTopology
-        if (parsed.schema_version === 'gfm-reduced-order-case/1.1' && parsed.diagram_layout) {
+        importedTopology = parseNetworkTopology(parsed.topology)
+        if (parsed.schema_version === 'gfm-reduced-order-case/1.1' && parsed.diagram_layout !== undefined) {
           importedLayout = parseDiagramLayout(parsed.diagram_layout)
         }
-        const settings = parsed.simulation_settings as Record<string, number> | undefined
-        if (settings) {
-          setSimulationTime(settings.simulation_time_s ?? 20)
-          setTimeStep(settings.time_step_s ?? 0.02)
-          setInitialAngleMrad((settings.initial_angle_perturbation_rad ?? 0.001) * 1000)
-        }
+        importedSettings = parseSimulationSettings(parsed.simulation_settings, currentSettings)
       } else if (parsed.schema_version === '1.0') {
-        importedTopology = parsed as NetworkTopology
+        importedTopology = parseNetworkTopology(parsed)
       } else {
         throw new Error(`不支持的案例版本：${String(parsed.schema_version ?? '缺失')}`)
       }
-      if (!importedTopology?.buses || !importedTopology?.lines) throw new Error('案例缺少网络拓扑字段。')
+      // All fields are accepted before committing any part of the imported case.
       setTopology(importedTopology)
-      setDiagramLayout(importedLayout)
+      updateDiagramLayout(importedLayout)
+      setSimulationTime(importedSettings.simulation_time_s)
+      setTimeStep(importedSettings.time_step_s)
+      setInitialAngleMrad(importedSettings.initial_angle_perturbation_rad * 1000)
       undoStack.current = []
       redoStack.current = []
       setHistoryRevision(value => value + 1)
       setCustomized(true)
-      setResult(null)
-      setScanResult(null)
-      setContingencyResult(null)
-      setDqNetworkResult(null)
-      setModelView('editor')
-      setError('')
+      invalidateModel()
       setEditorMessage('案例已载入；电气拓扑与图形版面已分别恢复。')
     } catch (reason) {
-      setError(reason instanceof Error ? `案例文件无法读取：${reason.message}` : '案例文件无法读取')
+      if (mounted.current && request === importRequest.current && revision === analysisRevision.current && layout === layoutRevision.current) {
+        setError(reason instanceof Error ? `案例文件无法读取：${reason.message}` : '案例文件无法读取')
+      }
     } finally {
       event.target.value = ''
     }
@@ -579,7 +689,7 @@ export default function ReducedOrderWorkbench() {
   }
 
   async function runParameterScan() {
-    if (!topology) return
+    if (!topology || scanBusy.current) return
     const targetVsm = topology.grid_forming_converters.find(item => item.id === scanTargetVsmId)
     const targetLine = topology.lines.find(item => item.id === scanTargetLineId)
     if (!targetVsm || !targetLine || targetLine.in_service === false) {
@@ -587,46 +697,73 @@ export default function ReducedOrderWorkbench() {
       return
     }
     const count = Math.max(2, Math.min(50, Math.round(scanAxisCount)))
+    const snapshot = clone({
+      topology,
+      target_vsm_id: targetVsm.id,
+      target_line_id: targetLine.id,
+      damping_values_pu: linspace(scanDMin, scanDMax, count),
+      reactance_values_pu: linspace(scanXMin, scanXMax, count),
+    })
+    const revision = scanRevision.current
+    const request = ++scanRequest.current
+    scanBusy.current = true
     setScanning(true)
+    setScanResult(null)
     setError('')
     try {
-      setScanResult(await runReducedOrderScan({
-        topology,
-        target_vsm_id: targetVsm.id,
-        target_line_id: targetLine.id,
-        damping_values_pu: linspace(scanDMin, scanDMax, count),
-        reactance_values_pu: linspace(scanXMin, scanXMax, count),
-      }))
+      const nextResult = await runReducedOrderScan(snapshot)
+      if (mounted.current && request === scanRequest.current && revision === scanRevision.current) setScanResult(nextResult)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : '参数扫描失败')
+      if (mounted.current && request === scanRequest.current && revision === scanRevision.current) {
+        setError(reason instanceof Error ? reason.message : '参数扫描失败')
+      }
     } finally {
-      setScanning(false)
+      scanBusy.current = false
+      if (mounted.current && request === scanRequest.current) setScanning(false)
     }
   }
 
   async function runContingencyStudy() {
-    if (!topology) return
+    if (!topology || contingencyBusy.current) return
+    const snapshot = clone(topology)
+    const revision = modelRevision.current
+    const request = ++contingencyRequest.current
+    contingencyBusy.current = true
     setContingencyRunning(true)
+    setContingencyResult(null)
     setError('')
     try {
-      setContingencyResult(await runReducedOrderContingency(topology))
+      const nextResult = await runReducedOrderContingency(snapshot)
+      if (mounted.current && request === contingencyRequest.current && revision === modelRevision.current) setContingencyResult(nextResult)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'N−1 支路停运重算失败')
+      if (mounted.current && request === contingencyRequest.current && revision === modelRevision.current) {
+        setError(reason instanceof Error ? reason.message : 'N−1 支路停运重算失败')
+      }
     } finally {
-      setContingencyRunning(false)
+      contingencyBusy.current = false
+      if (mounted.current && request === contingencyRequest.current) setContingencyRunning(false)
     }
   }
 
   async function runDQNetworkCompilation() {
-    if (!topology) return
+    if (!topology || dqNetworkBusy.current) return
+    const snapshot = clone(topology)
+    const revision = modelRevision.current
+    const request = ++dqNetworkRequest.current
+    dqNetworkBusy.current = true
     setDqNetworkRunning(true)
+    setDqNetworkResult(null)
     setError('')
     try {
-      setDqNetworkResult(await compileDQNetwork(topology, logspace(-2, 3, 80)))
+      const nextResult = await compileDQNetwork(snapshot, logspace(-2, 3, 80))
+      if (mounted.current && request === dqNetworkRequest.current && revision === modelRevision.current) setDqNetworkResult(nextResult)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'dq 网络编译失败')
+      if (mounted.current && request === dqNetworkRequest.current && revision === modelRevision.current) {
+        setError(reason instanceof Error ? reason.message : 'dq 网络编译失败')
+      }
     } finally {
-      setDqNetworkRunning(false)
+      dqNetworkBusy.current = false
+      if (mounted.current && request === dqNetworkRequest.current) setDqNetworkRunning(false)
     }
   }
 
@@ -760,9 +897,9 @@ export default function ReducedOrderWorkbench() {
         <p>本页不调用论文 Fig. 8 夹具；所有结论仅适用于下方声明的低频降阶模型。</p>
       </div>
       <div className="compact-fields three">
-        <label>时长 / s<input aria-label="低频模型仿真时长" type="number" min="0.1" max="300" step="1" value={simulationTime} onChange={event => { setSimulationTime(numeric(event.target.value, 20)); setResult(null); setModelView('editor') }}/></label>
-        <label>步长 / s<input aria-label="低频模型仿真步长" type="number" min="0.001" max="1" step="0.01" value={timeStep} onChange={event => { setTimeStep(numeric(event.target.value, 0.02)); setResult(null); setModelView('editor') }}/></label>
-        <label>扰动 / mrad<input aria-label="低频模型初始相角扰动" type="number" min="-100" max="100" step="0.5" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(numeric(event.target.value, 1)); setResult(null); setModelView('editor') }}/></label>
+        <label>时长 / s<input aria-label="低频模型仿真时长" type="number" min="0.1" max="300" step="1" value={simulationTime} onChange={event => { setSimulationTime(numeric(event.target.value, 20)); invalidateAnalysis() }}/></label>
+        <label>步长 / s<input aria-label="低频模型仿真步长" type="number" min="0.001" max="1" step="0.01" value={timeStep} onChange={event => { setTimeStep(numeric(event.target.value, 0.02)); invalidateAnalysis() }}/></label>
+        <label>扰动 / mrad<input aria-label="低频模型初始相角扰动" type="number" min="-100" max="100" step="0.5" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(numeric(event.target.value, 1)); invalidateAnalysis() }}/></label>
       </div>
       <button onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在建立状态空间…' : '验证拓扑并分析'}</button>
       <div className="button-row">
@@ -772,7 +909,7 @@ export default function ReducedOrderWorkbench() {
       <input ref={importRef} className="hidden-input" type="file" accept="application/json,.json" onChange={importCase}/>
       {result && <button className="secondary-button" onClick={() => downloadJson(`${result.run_id}.json`, result)}><Download size={16}/>导出分析结果</button>}
       {result && <button className="secondary-button" onClick={exportCsv}><Download size={16}/>导出极点与响应 CSV</button>}
-      {result && <button className="secondary-button" onClick={openPrintableReport}><FileUp size={16}/>生成分析报告</button>}
+      {result && completedInput && <button className="secondary-button" onClick={openPrintableReport} disabled={reportRunning}><FileUp size={16}/>生成分析报告</button>}
       {error && <p className="error">{error}</p>}
       <p className="scope-note">模型采用平坦电压工作点的 1/X 同步刚度，接地无限大母线并对无动态母线作 Kron 消元；暂不包含无功—电压耦合、内环、限幅与电磁暂态。</p>
     </aside>
@@ -799,7 +936,7 @@ export default function ReducedOrderWorkbench() {
         <NetworkGraphEditor
           topology={topology}
           layout={diagramLayout}
-          onLayoutChange={setDiagramLayout}
+          onLayoutChange={updateDiagramLayout}
           onLayoutCheckpoint={checkpoint}
           onTopologyChange={next => commitTopology(next)}
           onMessage={setEditorMessage}
@@ -919,13 +1056,13 @@ export default function ReducedOrderWorkbench() {
         <div className="panel scan-panel">
           <div className="panel-title"><Network size={18}/><span>D–X 参数平面</span><em>逐点重建状态矩阵，不做显示层插值</em></div>
           <div className="scan-toolbar">
-            <label>目标 VSM<select value={scanTargetVsmId} onChange={event => setScanTargetVsmId(event.target.value)}>{topology.grid_forming_converters.map(gfm => <option key={gfm.id}>{gfm.id}</option>)}</select></label>
-            <label>目标线路<select value={scanTargetLineId} onChange={event => setScanTargetLineId(event.target.value)}>{topology.lines.filter(line => line.in_service !== false).map(line => <option key={line.id}>{line.id}</option>)}</select></label>
-            <label>D 最小<input type="number" min="0.0001" step="0.05" value={scanDMin} onChange={event => setScanDMin(numeric(event.target.value, 0.05))}/></label>
-            <label>D 最大<input type="number" min="0.0001" step="1" value={scanDMax} onChange={event => setScanDMax(numeric(event.target.value, 70))}/></label>
-            <label>X 最小 / pu<input type="number" min="0.0001" step="0.02" value={scanXMin} onChange={event => setScanXMin(numeric(event.target.value, 0.08))}/></label>
-            <label>X 最大 / pu<input type="number" min="0.0001" step="0.02" value={scanXMax} onChange={event => setScanXMax(numeric(event.target.value, 0.6))}/></label>
-            <label>每轴点数<input type="number" min="2" max="50" step="1" value={scanAxisCount} onChange={event => setScanAxisCount(numeric(event.target.value, 21))}/></label>
+            <label>目标 VSM<select value={scanTargetVsmId} onChange={event => { setScanTargetVsmId(event.target.value); invalidateScan() }}>{topology.grid_forming_converters.map(gfm => <option key={gfm.id}>{gfm.id}</option>)}</select></label>
+            <label>目标线路<select value={scanTargetLineId} onChange={event => { setScanTargetLineId(event.target.value); invalidateScan() }}>{topology.lines.filter(line => line.in_service !== false).map(line => <option key={line.id}>{line.id}</option>)}</select></label>
+            <label>D 最小<input type="number" min="0.0001" step="0.05" value={scanDMin} onChange={event => { setScanDMin(numeric(event.target.value, 0.05)); invalidateScan() }}/></label>
+            <label>D 最大<input type="number" min="0.0001" step="1" value={scanDMax} onChange={event => { setScanDMax(numeric(event.target.value, 70)); invalidateScan() }}/></label>
+            <label>X 最小 / pu<input type="number" min="0.0001" step="0.02" value={scanXMin} onChange={event => { setScanXMin(numeric(event.target.value, 0.08)); invalidateScan() }}/></label>
+            <label>X 最大 / pu<input type="number" min="0.0001" step="0.02" value={scanXMax} onChange={event => { setScanXMax(numeric(event.target.value, 0.6)); invalidateScan() }}/></label>
+            <label>每轴点数<input type="number" min="2" max="50" step="1" value={scanAxisCount} onChange={event => { setScanAxisCount(numeric(event.target.value, 21)); invalidateScan() }}/></label>
             <button onClick={runParameterScan} disabled={scanning}>{scanning ? '扫描中…' : '重算参数平面'}</button>
             {scanResult && <button className="outline-button" onClick={exportScanCsv}><Download size={14}/>导出 CSV</button>}
           </div>

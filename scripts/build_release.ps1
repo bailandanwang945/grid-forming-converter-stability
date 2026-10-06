@@ -139,6 +139,8 @@ if (-not (Test-Path (Join-Path $BuiltApp "GFM-Stability-Platform.exe"))) {
 Copy-Item -LiteralPath $BuiltApp -Destination $PackagePath -Recurse
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\WINDOWS_RELEASE_README.txt") `
     -Destination (Join-Path $PackagePath "README.txt")
+Copy-Item -LiteralPath (Join-Path $ProjectRoot "docs\software\CASE_WORKFLOW.md") `
+    -Destination (Join-Path $PackagePath "CASE_WORKFLOW.md")
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\VERIFY_THIS_PC.cmd") `
     -Destination (Join-Path $PackagePath "VERIFY_THIS_PC.cmd")
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "packaging\verify_this_pc.ps1") `

@@ -167,6 +167,20 @@ Invoke-Stage "Frontend production build" {
     Assert-NativeSuccess $Npm.Source @("run", "build") $FrontendRoot
 }
 
+Invoke-Stage "Case files and workbench input-result ownership" {
+    $Node = Get-Command node.exe -ErrorAction SilentlyContinue
+    if ($null -eq $Node) { throw "Node.js was not found." }
+    foreach ($ScriptName in @(
+        "test_average_dq_case_format.mjs",
+        "test_average_dq_comparison.mjs",
+        "test_average_dq_request_consistency.mjs",
+        "test_average_dq_case_workflow.mjs",
+        "test_reduced_order_request_consistency.mjs"
+    )) {
+        Assert-NativeSuccess $Node.Source @((Join-Path $PSScriptRoot $ScriptName)) $ProjectRoot
+    }
+}
+
 Invoke-Stage "Launcher smoke test" {
     $WindowsPowerShell = Get-Command powershell.exe -ErrorAction SilentlyContinue
     if ($null -eq $WindowsPowerShell) {

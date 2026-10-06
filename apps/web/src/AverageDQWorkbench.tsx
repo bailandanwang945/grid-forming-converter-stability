@@ -1,13 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import * as echarts from 'echarts/core'
 import { HeatmapChart, LineChart, ScatterChart } from 'echarts/charts'
 import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
-import { Activity, BookOpenCheck, CircleCheck, Download, Gauge, Play, ShieldAlert, SlidersHorizontal } from 'lucide-react'
+import { Activity, BookOpenCheck, CircleCheck, Download, FileUp, Gauge, Play, Save, ShieldAlert, SlidersHorizontal } from 'lucide-react'
 import {
   AverageDQAblationResult,
   AverageDQAlignedStepResult,
   AverageDQBoundaryResult,
+  AverageDQAnalysisInput,
   AverageDQParameters,
   AverageDQPortIdentificationResult,
   AverageDQResult,
@@ -30,6 +31,8 @@ import {
   runAverageDQScan,
 } from './api'
 import EChart from './EChart'
+import { CompleteAverageDQAnalysisInput, makeAverageDQCase, parseAverageDQCase } from './averageDQCase'
+import { describeCaseInputChanges, formatCaseInputValue } from './averageDQComparison'
 
 echarts.use([HeatmapChart, LineChart, ScatterChart, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent, CanvasRenderer])
 
@@ -98,6 +101,22 @@ function formatStepOutcome(outcome: string) {
 }
 
 type ResearchStudyId = 'hierarchy' | 'ablation' | 'boundary' | 'port' | 'external' | 'sienna'
+type CompletedCase = { input: CompleteAverageDQAnalysisInput; result: AverageDQResult }
+
+function checkWorkbenchCase(input: CompleteAverageDQAnalysisInput) {
+  const { topology, parameters } = input
+  if (topology.buses.length !== 2 || topology.grid_forming_converters.length !== 1
+      || topology.lines.length !== 1 || topology.infinite_buses.length !== 1 || topology.loads.length !== 0
+      || topology.grid_forming_converters[0].control_mode !== 'virtual_synchronous_machine'
+      || topology.lines[0].in_service === false) {
+    throw new Error('当前工作区不支持该案例：平均值模型仅支持两母线、单台 VSM、单条投运 RL 线路及一个无穷大母线，且不含负荷。')
+  }
+  const converter = topology.grid_forming_converters[0]
+  if (converter.id !== parameters.converter_id || converter.parameter_set_id !== parameters.id
+      || topology.frame_convention_id !== parameters.frame_convention_id) {
+    throw new Error('案例中的设备标识、参数组或坐标约定不一致，未导入。')
+  }
+}
 
 export default function AverageDQWorkbench() {
   const [workspaceView, setWorkspaceView] = useState<'analysis' | 'studies'>('analysis')
@@ -105,6 +124,20 @@ export default function AverageDQWorkbench() {
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
   const [parameters, setParameters] = useState<AverageDQParameters | null>(null)
   const [result, setResult] = useState<AverageDQResult | null>(null)
+  const [completedInput, setCompletedInput] = useState<AverageDQAnalysisInput | null>(null)
+  const [baseline, setBaseline] = useState<CompletedCase | null>(null)
+  const [caseNotice, setCaseNotice] = useState('')
+  const caseImportRequest = useRef(0)
+  const caseImportRef = useRef<HTMLInputElement>(null)
+  const presetRequest = useRef(0)
+  const [inputModified, setInputModified] = useState(false)
+  const analysisRevision = useRef(0)
+  const modelRevision = useRef(0)
+  const analysisRequest = useRef(0)
+  const scanRequest = useRef(0)
+  const analysisBusy = useRef(false)
+  const scanBusy = useRef(false)
+  const mounted = useRef(true)
   const [scanResult, setScanResult] = useState<AverageDQScanResult | null>(null)
   const [ablationResult, setAblationResult] = useState<AverageDQAblationResult | null>(null)
   const [boundaryResult, setBoundaryResult] = useState<AverageDQBoundaryResult | null>(null)
@@ -123,15 +156,31 @@ export default function AverageDQWorkbench() {
   const [error, setError] = useState('')
   const [simulationTime, setSimulationTime] = useState(2)
   const [timeStep, setTimeStep] = useState(0.002)
-  const [initialAngleMrad, setInitialAngleMrad] = useState(0.1)
+  const [initialAngleRad, setInitialAngleRad] = useState(0.0001)
+  const [frequencyValues, setFrequencyValues] = useState(logarithmicFrequencies)
 
   useEffect(() => {
+    mounted.current = true
+    const request = ++presetRequest.current
+    const revision = analysisRevision.current
     getAverageDQPreset()
       .then(preset => {
+        if (!mounted.current || request !== presetRequest.current || revision !== analysisRevision.current) return
         setTopology(clone(preset.topology))
         setParameters(clone(preset.parameters))
       })
-      .catch(reason => setError(reason instanceof Error ? reason.message : '无法读取平均值模型预设'))
+      .catch(reason => {
+        if (mounted.current && request === presetRequest.current && revision === analysisRevision.current) {
+          setError(reason instanceof Error ? reason.message : '无法读取平均值模型预设')
+        }
+      })
+    return () => {
+      mounted.current = false
+      presetRequest.current += 1
+      analysisRequest.current += 1
+      scanRequest.current += 1
+      caseImportRequest.current += 1
+    }
   }, [])
 
   const analysisInput = useMemo(() => topology && parameters ? {
@@ -139,9 +188,12 @@ export default function AverageDQWorkbench() {
     parameters,
     simulation_time_s: simulationTime,
     time_step_s: timeStep,
-    initial_angle_perturbation_rad: initialAngleMrad / 1000,
-    frequency_values_hz: logarithmicFrequencies(),
-  } : null, [topology, parameters, simulationTime, timeStep, initialAngleMrad])
+    initial_angle_perturbation_rad: initialAngleRad,
+    frequency_values_hz: frequencyValues,
+  } : null, [topology, parameters, simulationTime, timeStep, initialAngleRad, frequencyValues])
+
+  const inputChanges = useMemo(() => baseline && completedInput
+    ? describeCaseInputChanges(baseline.input, completedInput) : [], [baseline, completedInput])
 
   const poleChart = useMemo(() => result ? {
     animationDuration: 350,
@@ -321,13 +373,87 @@ export default function AverageDQWorkbench() {
     }
   }, [boundaryResult])
 
+  function invalidateAnalysis(modelChanged = false) {
+    analysisRevision.current += 1
+    setResult(null)
+    setCompletedInput(null)
+    setInputModified(true)
+    setError('')
+    if (modelChanged) {
+      modelRevision.current += 1
+      setScanResult(null)
+    }
+  }
+
+  function saveCase() {
+    if (!analysisInput) return
+    try {
+      download('average-dq-case.json', JSON.stringify(makeAverageDQCase(analysisInput), null, 2))
+      setCaseNotice('已生成完整案例文件，包含模型参数、仿真设置和导纳频率网格；不包含计算结果。')
+      setError('')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : '案例文件生成失败')
+    }
+  }
+
+  async function importCase(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    const request = ++caseImportRequest.current
+    const revision = analysisRevision.current
+    setCaseNotice('')
+    try {
+      if (file.size > 2 * 1024 * 1024) throw new Error('案例文件超过 2 MiB，未导入。')
+      const parsed = parseAverageDQCase(JSON.parse(await file.text()))
+      checkWorkbenchCase(parsed.input)
+      if (!mounted.current || request !== caseImportRequest.current) return
+      if (revision !== analysisRevision.current) {
+        setCaseNotice('读取文件期间参数已变化，本次导入取消；如需导入，请重新选择文件。')
+        return
+      }
+      const input = parsed.input
+      setTopology(clone(input.topology))
+      setParameters(clone(input.parameters))
+      setSimulationTime(input.simulation_time_s)
+      setTimeStep(input.time_step_s)
+      setInitialAngleRad(input.initial_angle_perturbation_rad)
+      setFrequencyValues(clone(input.frequency_values_hz))
+      invalidateAnalysis(true)
+      setCaseNotice(parsed.legacy
+        ? '已导入旧版模型文件：缺少仿真设置，已采用原默认值（2 s、0.002 s、0.1 mrad、31 个导纳频点）。请检查后重新运行。'
+        : '已导入完整案例。参数与仿真设置已恢复，请重新运行；导入文件不作为计算结果。')
+    } catch (reason) {
+      if (mounted.current && request === caseImportRequest.current && revision === analysisRevision.current) {
+        setError(reason instanceof Error ? `导入失败：${reason.message}` : '案例导入失败，当前参数未改变。')
+      }
+    }
+  }
+
+  function saveBaseline() {
+    if (!result || !completedInput) return
+    try {
+      setBaseline(clone({ input: makeAverageDQCase(completedInput).input, result }))
+      setCaseNotice('已将本次成功计算设为基准。修改参数并重新运行后，可比较两次计算。')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : '基准方案保存失败')
+    }
+  }
+
+  function exportComparison() {
+    if (!baseline || !result || !completedInput) return
+    download('average-dq-comparison.json', JSON.stringify({
+      schema_version: 'AverageDQComparison/1.0', baseline,
+      candidate: { input: clone(completedInput), result: clone(result) }, changes: inputChanges,
+    }, null, 2))
+  }
+
   function updateConverter(field: string, value: number) {
     if (!topology) return
     const next = clone(topology)
     ;(next.grid_forming_converters[0] as unknown as Record<string, number>)[field] = value
     setTopology(next)
-    setResult(null)
-    setScanResult(null)
+    invalidateAnalysis(true)
   }
 
   function updateLine(field: 'resistance_pu' | 'reactance_pu', value: number) {
@@ -335,46 +461,66 @@ export default function AverageDQWorkbench() {
     const next = clone(topology)
     next.lines[0][field] = value
     setTopology(next)
-    setResult(null)
-    setScanResult(null)
+    invalidateAnalysis(true)
   }
 
   function updateParameter(field: keyof AverageDQParameters, value: number) {
     if (!parameters) return
     setParameters({ ...parameters, [field]: value })
-    setResult(null)
-    setScanResult(null)
+    invalidateAnalysis(true)
   }
 
   async function analyze() {
-    if (!analysisInput) return
+    if (!analysisInput || analysisBusy.current) return
+    const snapshot = clone(analysisInput)
+    const revision = analysisRevision.current
+    const request = ++analysisRequest.current
+    analysisBusy.current = true
     setRunning(true)
     setError('')
+    setResult(null)
+    setCompletedInput(null)
+    setInputModified(false)
     try {
-      setResult(await runAverageDQAnalysis(analysisInput))
+      const nextResult = await runAverageDQAnalysis(snapshot)
+      if (!mounted.current || request !== analysisRequest.current || revision !== analysisRevision.current) return
+      setResult(nextResult)
+      setCompletedInput(snapshot)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : '平均值 dq 分析失败')
+      if (mounted.current && request === analysisRequest.current && revision === analysisRevision.current) {
+        setError(reason instanceof Error ? reason.message : '平均值 dq 分析失败')
+      }
     } finally {
-      setRunning(false)
+      analysisBusy.current = false
+      if (mounted.current && request === analysisRequest.current) setRunning(false)
     }
   }
 
   async function scanModelHierarchy() {
-    if (!topology || !parameters) return
+    if (!topology || !parameters || scanBusy.current) return
+    const snapshot = clone({
+      topology,
+      parameters,
+      damping_values_pu: [10, 20, 30, 40, 50, 60, 80],
+      reactance_values_pu: [0.1, 0.2, 0.3, 0.5, 0.8, 1.2],
+    })
+    const revision = modelRevision.current
+    const request = ++scanRequest.current
+    scanBusy.current = true
     setActiveStudy('hierarchy')
     setScanRunning(true)
+    setScanResult(null)
     setError('')
     try {
-      setScanResult(await runAverageDQScan({
-        topology,
-        parameters,
-        damping_values_pu: [10, 20, 30, 40, 50, 60, 80],
-        reactance_values_pu: [0.1, 0.2, 0.3, 0.5, 0.8, 1.2],
-      }))
+      const nextResult = await runAverageDQScan(snapshot)
+      if (mounted.current && request === scanRequest.current && revision === modelRevision.current) setScanResult(nextResult)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : '平均值 dq 模型层级扫描失败')
+      if (mounted.current && request === scanRequest.current && revision === modelRevision.current) {
+        setError(reason instanceof Error ? reason.message : '平均值 dq 模型层级扫描失败')
+      }
     } finally {
-      setScanRunning(false)
+      scanBusy.current = false
+      if (mounted.current && request === scanRequest.current) setScanRunning(false)
     }
   }
 
@@ -466,10 +612,12 @@ export default function AverageDQWorkbench() {
   }
 
   async function openReport() {
-    if (!analysisInput) return
+    if (!result || !completedInput) return
+    const snapshot = clone(completedInput)
+    const revision = analysisRevision.current
     const reportWindow = window.open('', '_blank')
     try {
-      const html = await getAverageDQReportHtml(analysisInput)
+      const html = await getAverageDQReportHtml(snapshot)
       if (reportWindow) {
         reportWindow.document.open()
         reportWindow.document.write(html)
@@ -477,7 +625,9 @@ export default function AverageDQWorkbench() {
       } else download('average-dq-analysis-report.html', html, 'text/html')
     } catch (reason) {
       reportWindow?.close()
-      setError(reason instanceof Error ? reason.message : '报告生成失败')
+      if (mounted.current && revision === analysisRevision.current) {
+        setError(reason instanceof Error ? reason.message : '报告生成失败')
+      }
     }
   }
 
@@ -519,7 +669,7 @@ export default function AverageDQWorkbench() {
   return <main className="average-dq-workbench" data-view={workspaceView}>
     <aside className="panel controls">
       <div className="panel-title"><SlidersHorizontal size={18}/><span>平均值 dq 参数</span></div>
-      <p className="scope-note">首版固定为单台 VSM、LCL 滤波器、单条外部 RL 线路和无限大母线。这里修改的是实际计算参数，不是显示层滑杆。</p>
+      <p className="scope-note">当前模型包含单台虚拟同步机（VSM）、LCL 滤波器、单条外部 RL 线路和无穷大母线。这里修改的是实际计算参数。</p>
       <div className="parameter-sections">
         <details open>
           <summary><span>运行点与成形控制</span><small>4 项</small></summary>
@@ -542,16 +692,22 @@ export default function AverageDQWorkbench() {
           </div>
         </details>
         <details>
-          <summary><span>仿真设置</span><small>2 项</small></summary>
+          <summary><span>仿真设置</span><small>3 项</small></summary>
           <div className="parameter-grid">
-            <label>仿真时长 <span>/ s</span><input aria-label="仿真时长" type="number" step="0.2" value={simulationTime} onChange={event => { setSimulationTime(Number(event.target.value)); setResult(null) }}/></label>
-            <label>初始相角 <span>/ mrad</span><input aria-label="初始相角扰动" type="number" step="0.05" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(Number(event.target.value)); setResult(null) }}/></label>
+            <label>仿真时长 <span>/ s</span><input aria-label="仿真时长" type="number" step="0.2" value={simulationTime} onChange={event => { setSimulationTime(Number(event.target.value)); invalidateAnalysis() }}/></label>
+            <label>输出采样间隔 <span>/ s</span><input aria-label="输出采样间隔" type="number" min="0.0001" max="0.1" step="0.001" value={timeStep} onChange={event => { setTimeStep(Number(event.target.value)); invalidateAnalysis() }}/></label>
+            <label>初始相角 <span>/ mrad</span><input aria-label="初始相角扰动" type="number" step="0.05" value={initialAngleRad * 1000} onChange={event => { setInitialAngleRad(Number(event.target.value) / 1000); invalidateAnalysis() }}/></label>
           </div>
+          <p className="scope-note">导纳频率网格：{frequencyValues.length} 点，{frequencyValues[0]} 至 {frequencyValues[frequencyValues.length - 1]} Hz。导入与保存会保留完整网格。</p>
         </details>
       </div>
       <button className="primary-analysis-button" onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在求工作点并积分…' : '运行平均值 dq 分析'}</button>
-      <button className="quiet-button" onClick={() => download('average-dq-case.json', JSON.stringify({ topology, parameters }, null, 2))}><Download size={15}/>保存当前模型参数</button>
-      <p className="scope-note">参数变化会清空旧分析结果。固定研究任务使用各自冻结的锚点，不受这里的临时编辑影响。</p>
+      <button className="quiet-button" data-testid="average-dq-case-save" onClick={saveCase}><Save size={15}/>保存完整案例</button>
+      <button className="quiet-button" onClick={() => caseImportRef.current?.click()}><FileUp size={15}/>导入案例</button>
+      <input ref={caseImportRef} data-testid="average-dq-case-import" type="file" accept=".json,application/json" hidden onChange={importCase}/>
+      {caseNotice && <p className="scope-note" role="status" data-testid="average-dq-case-notice">{caseNotice}</p>}
+      <p className="scope-note">参数变化会使旧结果失效。层级扫描使用当前模型，其余研究任务使用各自冻结的锚点。</p>
+      {inputModified && <p className="scope-note" role="status" data-testid="average-dq-input-modified">{running ? '参数已修改；当前请求的结果不会用于新参数。请求结束后请重新运行。' : '参数已修改，请重新运行分析。'}</p>}
       {error && <p className="error">{error}</p>}
     </aside>
 
@@ -567,7 +723,7 @@ export default function AverageDQWorkbench() {
         <div>
           <small>FIXED STUDY PIPELINE</small>
           <b>选择一项验证任务</b>
-          <p>当前仅展开一项任务的说明与操作；各任务使用冻结锚点，不读取左侧临时模型参数。</p>
+          <p>层级扫描使用当前模型参数和预设扫描网格；其余任务使用冻结锚点。选择任务不会触发计算。</p>
         </div>
         <span><strong>{completedStudyCount}</strong> / {studyIds.length} 已完成</span>
       </div>
@@ -645,10 +801,32 @@ export default function AverageDQWorkbench() {
       <div className="result-toolbar">
         <div><small>LIVE ANALYSIS</small><b>{result ? '当前结果可追溯' : '等待运行模型'}</b></div>
         <div className="inline-actions">
-          <button disabled={!result} onClick={() => result && download(`${result.run_id}.json`, JSON.stringify(result, null, 2))}><Download size={15}/>结果 JSON</button>
-          <button disabled={!result} onClick={openReport}><BookOpenCheck size={15}/>分析报告</button>
+          <button disabled={!result || !completedInput} title="导出本次计算返回值与完整输入" onClick={() => result && completedInput && download(`${result.run_id}.json`, JSON.stringify({ ...result, analysis_input: completedInput }, null, 2))}><Download size={15}/>结果 JSON</button>
+          <button data-testid="average-dq-save-baseline" disabled={!result || !completedInput} onClick={saveBaseline}><Save size={15}/>设为基准</button>
+          {baseline && <button data-testid="average-dq-clear-baseline" onClick={() => setBaseline(null)}>清除基准</button>}
+          <button disabled={!result || !completedInput} title="按本次成功计算的输入重新生成 HTML 报告" onClick={openReport}><BookOpenCheck size={15}/>分析报告</button>
         </div>
       </div>
+
+      {baseline && <p className="scope-note" data-testid="average-dq-baseline-notice">已保留基准计算：{baseline.result.run_id}。基准仅保存在当前工作区，离开页面前请导出需要的对比记录。</p>}
+      {baseline && result && completedInput && <section className="panel provenance-card average-dq-comparison" data-testid="average-dq-comparison">
+        <div className="panel-title"><Gauge size={18}/><span>基准与当前方案对照</span><div className="inline-actions"><button data-testid="average-dq-comparison-export" onClick={exportComparison}><Download size={15}/>导出对比记录</button></div></div>
+        <div className="table-scroll"><table>
+          <thead><tr><th>指标</th><th>基准方案</th><th>当前方案</th></tr></thead>
+          <tbody>
+            <tr><td>计算标识</td><td data-testid="average-dq-comparison-baseline">{baseline.result.run_id}</td><td data-testid="average-dq-comparison-candidate">{result.run_id}</td></tr>
+            <tr><td>闭环特征值参考判断</td><td>{baseline.result.result.stability === 'stable' ? '稳定' : baseline.result.result.stability === 'marginal' ? '临界' : '失稳'}</td><td>{result.result.stability === 'stable' ? '稳定' : result.result.stability === 'marginal' ? '临界' : '失稳'}</td></tr>
+            <tr><td>最右特征值实部 / Hz</td><td>{baseline.result.result.dominant_mode.real_hz.toFixed(6)}</td><td>{result.result.dominant_mode.real_hz.toFixed(6)}</td></tr>
+            <tr><td>主导振荡频率 / Hz</td><td>{baseline.result.result.dominant_mode.oscillation_frequency_hz.toFixed(6)}</td><td>{result.result.dominant_mode.oscillation_frequency_hz.toFixed(6)}</td></tr>
+          </tbody>
+        </table></div>
+        <p>{inputChanges.length ? `两次输入共有 ${inputChanges.length} 项不同。下表列出前 40 项，导出文件保留全部差异与两次完整计算。` : '两次计算的输入相同，可用于检查重复计算的一致性。'}</p>
+        {inputChanges.length > 0 && <div className="table-scroll"><table data-testid="average-dq-comparison-changes">
+          <thead><tr><th>参数或设置</th><th>基准值</th><th>当前值</th></tr></thead>
+          <tbody>{inputChanges.slice(0, 40).map(change => <tr key={change.field}><td>{change.label}</td><td>{formatCaseInputValue(change.before)}</td><td>{formatCaseInputValue(change.after)}</td></tr>)}</tbody>
+        </table></div>}
+        <p>此处比较同一平均值模型的两次计算，不代表控制方法优劣，也不将参数变化称为研究创新。</p>
+      </section>}
 
       <div className="panel topology-card">
         <div className="panel-title"><Activity size={18}/><span>16 状态平均值 dq 模型</span><em>团队自建校核模型，不是论文 Fig. 8</em></div>
