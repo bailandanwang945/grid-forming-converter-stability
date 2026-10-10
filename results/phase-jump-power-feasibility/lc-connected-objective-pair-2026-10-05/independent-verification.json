@@ -1,0 +1,3851 @@
+{
+  "status": "verified",
+  "result_sha256": "9d734f13620c0a39c447a0a01132e1e07db168f622ac54b5cd667f12a0d54512",
+  "verification_source_sha256": "71cddcc550657b762fa03380d8dff440560706c5d2e562b932f125d0b9a472ee",
+  "source_hash_comparisons": 45,
+  "strategies": [
+    {
+      "hard_power": false,
+      "selected_step": 0,
+      "candidates": [
+        {
+          "step": 0,
+          "coordinate_error": 2.220446049250313e-16,
+          "audit": {
+            "numerically_feasible": true,
+            "power_floor_pass": true,
+            "physical_audit": {
+              "strategy_constraints_pass": true,
+              "inverter_current_pass": true,
+              "actual_voltage_peak_pu": 1.1850016160192463,
+              "hardware_summary": {
+                "hypothetical_hardware": {
+                  "Cf_pu": 0.02,
+                  "X1_pu": 0.1,
+                  "R1_pu": 0.01,
+                  "Rf_pu": 0.0
+                },
+                "full_horizon_extrema": {
+                  "i2": {
+                    "peak_pu": 1.2974744120396515,
+                    "peak_time_s": 0.0008156526323670684
+                  },
+                  "vc": {
+                    "peak_pu": 1.035115120582206,
+                    "peak_time_s": 0.058574934495717046
+                  },
+                  "i1": {
+                    "peak_pu": 1.295930710019815,
+                    "peak_time_s": 0.0008670064760824774
+                  },
+                  "vi": {
+                    "peak_pu": 1.1850016160192463,
+                    "peak_time_s": 9.292156007984338e-05
+                  }
+                },
+                "endpoint_check": {
+                  "start_i1": [
+                    0.6838723276910756,
+                    0.9870459587809858
+                  ],
+                  "frozen_segment_i1": [
+                    0.6838723276911144,
+                    0.987045958781053
+                  ],
+                  "start_i1_error_pu": 7.754301829774326e-14,
+                  "end_i1": [
+                    0.935530998318399,
+                    0.3477127161698271
+                  ],
+                  "steady_i1": [
+                    0.935530998318399,
+                    0.34771271616982713
+                  ],
+                  "end_i1_error_pu": 5.551115123125783e-17,
+                  "maximum_internal_i1_jump_pu": 2.482534153247273e-16
+                },
+                "equation_residuals_pu_per_s": {
+                  "RL": 1.7053025658242404e-13,
+                  "capacitor": 1.8474111129762605e-12,
+                  "inverter_inductor": 1.2491674361569949e-12
+                },
+                "representation_errors_pu": {
+                  "i2": 7.771561172376096e-16,
+                  "vc": 1.687538997430238e-14,
+                  "i1": 8.348877145181177e-14,
+                  "vi": 2.3315793740152913e-12
+                },
+                "dense_check": {
+                  "points": 3341,
+                  "peaks_pu": {
+                    "i2": 1.297474345752672,
+                    "vc": 1.0351151205641465,
+                    "i1": 1.2959305081552897,
+                    "vi": 1.1850013146330454
+                  }
+                },
+                "hardware_ratings_evaluated": false,
+                "scope": "Floating-point hypothetical LC demand reconstruction; not physical ratings, causality or control-bandwidth validation",
+                "i1_peak_pu": 1.295930710019815,
+                "i1_peak_time_s": 0.0008670064760824774,
+                "vi_peak_pu": 1.1850016160192463,
+                "vi_peak_time_s": 9.292156007984338e-05,
+                "inverter_current_peak_pu": 1.295930710019815,
+                "inverter_current_peak_at_s": 0.0008670064760824774,
+                "inverter_voltage_peak_pu": 1.1850016160192463,
+                "inverter_voltage_peak_at_s": 9.292156007984338e-05,
+                "maximum_representation_difference": 2.3315793740152913e-12,
+                "endpoint_inverter_current_errors": {
+                  "start": 7.754301829774326e-14,
+                  "end": 5.551115123125783e-17
+                },
+                "equation_residuals": {
+                  "RL": 1.7053025658242404e-13,
+                  "capacitor": 1.8474111129762605e-12,
+                  "inverter_inductor": 1.2491674361569949e-12
+                }
+              },
+              "polynomial_summary": {
+                "minimum_power_pu": 0.9999999862415105,
+                "minimum_power_at_s": 0.058712430898881604,
+                "current_peak_pu": 1.2974744120396515,
+                "current_peak_at_s": 0.0008156526323670684,
+                "voltage_peak_pu": 1.035115120582206,
+                "voltage_peak_at_s": 0.058574934495717046,
+                "maximum_representation_difference": 1.0687013985862918e-14,
+                "hypothetical_inverter_current_peak_pu": 1.295930710019815,
+                "hypothetical_inverter_voltage_peak_pu": 1.1850016160192463
+              },
+              "dense_check": {
+                "grid_count": 8006,
+                "current_peak_pu": 1.297474362303675,
+                "voltage_peak_pu": 1.0351151205812767,
+                "power_min_pu": 0.9999999862424317,
+                "current_pass": true,
+                "voltage_pass": true,
+                "power_pass": true
+              },
+              "independent_endpoints": {
+                "residuals": {
+                  "start_i": 1.1102230246251565e-16,
+                  "end_i": 0.0,
+                  "start_di": 8.16371241821629e-12,
+                  "end_di": 0.0,
+                  "start_ddi": 1.7256367310486413e-06,
+                  "end_ddi": 0.0,
+                  "start_v": 1.0500268446867465e-14,
+                  "end_v": 0.0,
+                  "start_dv": 2.1945369554389884e-09,
+                  "end_dv": 0.0
+                },
+                "passed": true,
+                "units": {
+                  "start_i": "p.u.",
+                  "end_i": "p.u.",
+                  "start_di": "p.u./s",
+                  "end_di": "p.u./s",
+                  "start_ddi": "p.u./s^2",
+                  "end_ddi": "p.u./s^2",
+                  "start_v": "p.u.",
+                  "end_v": "p.u.",
+                  "start_dv": "p.u./s",
+                  "end_dv": "p.u./s"
+                },
+                "checked_keys": [
+                  "start_i",
+                  "end_i",
+                  "start_v",
+                  "end_v",
+                  "start_dv",
+                  "end_dv"
+                ],
+                "scope": "Independent current, capacitor-voltage and voltage-derivative endpoint match; raw current derivatives retained with units"
+              },
+              "epigraph_pass": true,
+              "segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "minimum_power_pu": 1.0652637713871542,
+                  "maximum_power_pu": 1.0745978641807037,
+                  "minimum_power_at_s": 5e-05,
+                  "current_peak_pu": 1.213835581299125,
+                  "current_peak_at_s": 5e-05,
+                  "voltage_peak_pu": 1.0351151064554809,
+                  "voltage_peak_at_s": 0.0,
+                  "hypothetical_inverter_current_peak_pu": 1.201267678613156,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1785701162636568
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "minimum_power_pu": 1.0315434751596664,
+                  "maximum_power_pu": 1.065263771387154,
+                  "minimum_power_at_s": 0.0001,
+                  "current_peak_pu": 1.2261479634742734,
+                  "current_peak_at_s": 0.0001,
+                  "voltage_peak_pu": 1.018173580353309,
+                  "voltage_peak_at_s": 5e-05,
+                  "hypothetical_inverter_current_peak_pu": 1.1918877086018504,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1850016160192463
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "minimum_power_pu": 1.0023712806505507,
+                  "maximum_power_pu": 1.0315434751596666,
+                  "minimum_power_at_s": 0.0002,
+                  "current_peak_pu": 1.2457725396729837,
+                  "current_peak_at_s": 0.0002,
+                  "voltage_peak_pu": 1.0222571884112366,
+                  "voltage_peak_at_s": 0.0002,
+                  "hypothetical_inverter_current_peak_pu": 1.2357021820840755,
+                  "hypothetical_inverter_voltage_peak_pu": 1.177967198581469
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "minimum_power_pu": 1.0012537453824837,
+                  "maximum_power_pu": 1.004868594731658,
+                  "minimum_power_at_s": 0.00023459621277052096,
+                  "current_peak_pu": 1.2745172976384507,
+                  "current_peak_at_s": 0.0004,
+                  "voltage_peak_pu": 1.029345220657236,
+                  "voltage_peak_at_s": 0.00026367203012975715,
+                  "hypothetical_inverter_current_peak_pu": 1.268924223685221,
+                  "hypothetical_inverter_voltage_peak_pu": 1.045162819271523
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "minimum_power_pu": 1.0026971083468574,
+                  "maximum_power_pu": 1.0055474263665432,
+                  "minimum_power_at_s": 0.0006077905306875207,
+                  "current_peak_pu": 1.297445657153723,
+                  "current_peak_at_s": 0.0008,
+                  "voltage_peak_pu": 1.0225674714893944,
+                  "voltage_peak_at_s": 0.0006246210624617126,
+                  "hypothetical_inverter_current_peak_pu": 1.2954181372832898,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0432319605959368
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "minimum_power_pu": 1.0055474263665432,
+                  "maximum_power_pu": 1.023429142827584,
+                  "minimum_power_at_s": 0.0008,
+                  "current_peak_pu": 1.2974744120396515,
+                  "current_peak_at_s": 0.0008156526323670684,
+                  "voltage_peak_pu": 1.011759951681901,
+                  "voltage_peak_at_s": 0.0008,
+                  "hypothetical_inverter_current_peak_pu": 1.295930710019815,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9995607203720975
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "minimum_power_pu": 1.023429142827584,
+                  "maximum_power_pu": 1.0426527604121671,
+                  "minimum_power_at_s": 0.0015,
+                  "current_peak_pu": 1.2569498930407854,
+                  "current_peak_at_s": 0.0015,
+                  "voltage_peak_pu": 0.9365760571933301,
+                  "voltage_peak_at_s": 0.003,
+                  "hypothetical_inverter_current_peak_pu": 1.2637533715801075,
+                  "hypothetical_inverter_voltage_peak_pu": 0.962733529840601
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "minimum_power_pu": 1.0284885249675,
+                  "maximum_power_pu": 1.0428663026475369,
+                  "minimum_power_at_s": 0.004407083615083776,
+                  "current_peak_pu": 1.1510902290397038,
+                  "current_peak_at_s": 0.006,
+                  "voltage_peak_pu": 0.9523409519449801,
+                  "voltage_peak_at_s": 0.0037101959840637492,
+                  "hypothetical_inverter_current_peak_pu": 1.151977017725787,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9870745804630662
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "minimum_power_pu": 1.0257047245568265,
+                  "maximum_power_pu": 1.0533535310668303,
+                  "minimum_power_at_s": 0.01,
+                  "current_peak_pu": 1.153742915274867,
+                  "current_peak_at_s": 0.006638241542014493,
+                  "voltage_peak_pu": 0.9520877912816883,
+                  "voltage_peak_at_s": 0.01,
+                  "hypothetical_inverter_current_peak_pu": 1.1545879798895695,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9696694800554779
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "minimum_power_pu": 1.0153759617848583,
+                  "maximum_power_pu": 1.0419690044962857,
+                  "minimum_power_at_s": 0.011708172767184,
+                  "current_peak_pu": 1.1307682243530148,
+                  "current_peak_at_s": 0.015,
+                  "voltage_peak_pu": 0.9682753186916983,
+                  "voltage_peak_at_s": 0.013035604794079282,
+                  "hypothetical_inverter_current_peak_pu": 1.129906408342992,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9936713791214459
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "minimum_power_pu": 1.041969004496286,
+                  "maximum_power_pu": 1.0720601223200086,
+                  "minimum_power_at_s": 0.015,
+                  "current_peak_pu": 1.2202533060424825,
+                  "current_peak_at_s": 0.0207839128579952,
+                  "voltage_peak_pu": 0.9596547340831629,
+                  "voltage_peak_at_s": 0.015,
+                  "hypothetical_inverter_current_peak_pu": 1.220352551943865,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9860630506873581
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "minimum_power_pu": 1.0044522365757091,
+                  "maximum_power_pu": 1.0515917532906018,
+                  "minimum_power_at_s": 0.04,
+                  "current_peak_pu": 1.1800164570604088,
+                  "current_peak_at_s": 0.025,
+                  "voltage_peak_pu": 1.0236986718834669,
+                  "voltage_peak_at_s": 0.04,
+                  "hypothetical_inverter_current_peak_pu": 1.1805653893991752,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0484557128065952
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "minimum_power_pu": 0.9999999862415105,
+                  "maximum_power_pu": 1.0044522365757087,
+                  "minimum_power_at_s": 0.058712430898881604,
+                  "current_peak_pu": 1.0136039102117707,
+                  "current_peak_at_s": 0.04,
+                  "voltage_peak_pu": 1.035115120582206,
+                  "voltage_peak_at_s": 0.058574934495717046,
+                  "hypothetical_inverter_current_peak_pu": 1.0113073579634588,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0619748928670572
+                }
+              ],
+              "hardware_segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.213835581299125,
+                      "peak_time_s": 5e-05
+                    },
+                    "vc": {
+                      "peak_pu": 1.0351151064554809,
+                      "peak_time_s": 0.0
+                    },
+                    "i1": {
+                      "peak_pu": 1.201267678613156,
+                      "peak_time_s": 3.318377278111523e-06
+                    },
+                    "vi": {
+                      "peak_pu": 1.1785701162636568,
+                      "peak_time_s": 3.662231858517026e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.763878957454338e-14,
+                    "capacitor": 7.059937332158939e-13,
+                    "inverter_inductor": 1.2491674361569949e-12
+                  },
+                  "inverter_current_peak_pu": 1.201267678613156,
+                  "inverter_current_peak_at_s": 3.318377278111523e-06,
+                  "inverter_voltage_peak_pu": 1.1785701162636568,
+                  "inverter_voltage_peak_at_s": 3.662231858517026e-05
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2261479634742734,
+                      "peak_time_s": 0.0001
+                    },
+                    "vc": {
+                      "peak_pu": 1.018173580353309,
+                      "peak_time_s": 5e-05
+                    },
+                    "i1": {
+                      "peak_pu": 1.1918877086018504,
+                      "peak_time_s": 0.0001
+                    },
+                    "vi": {
+                      "peak_pu": 1.1850016160192463,
+                      "peak_time_s": 9.292156007984338e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.983302824892235e-14,
+                    "capacitor": 1.2208558816673154e-12,
+                    "inverter_inductor": 9.509910220417694e-13
+                  },
+                  "inverter_current_peak_pu": 1.1918877086018504,
+                  "inverter_current_peak_at_s": 0.0001,
+                  "inverter_voltage_peak_pu": 1.1850016160192463,
+                  "inverter_voltage_peak_at_s": 9.292156007984338e-05
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2457725396729837,
+                      "peak_time_s": 0.0002
+                    },
+                    "vc": {
+                      "peak_pu": 1.0222571884112366,
+                      "peak_time_s": 0.0002
+                    },
+                    "i1": {
+                      "peak_pu": 1.2357021820840755,
+                      "peak_time_s": 0.0002
+                    },
+                    "vi": {
+                      "peak_pu": 1.177967198581469,
+                      "peak_time_s": 0.0001
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.3011813848606835e-13,
+                    "capacitor": 1.2505552149377763e-12,
+                    "inverter_inductor": 4.417577414983498e-13
+                  },
+                  "inverter_current_peak_pu": 1.2357021820840755,
+                  "inverter_current_peak_at_s": 0.0002,
+                  "inverter_voltage_peak_pu": 1.177967198581469,
+                  "inverter_voltage_peak_at_s": 0.0001
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2745172976384507,
+                      "peak_time_s": 0.0004
+                    },
+                    "vc": {
+                      "peak_pu": 1.029345220657236,
+                      "peak_time_s": 0.00026367203012975715
+                    },
+                    "i1": {
+                      "peak_pu": 1.268924223685221,
+                      "peak_time_s": 0.0004
+                    },
+                    "vi": {
+                      "peak_pu": 1.045162819271523,
+                      "peak_time_s": 0.0003746933235125603
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.972200594645983e-14,
+                    "capacitor": 1.6484591469634324e-12,
+                    "inverter_inductor": 7.975842208907125e-13
+                  },
+                  "inverter_current_peak_pu": 1.268924223685221,
+                  "inverter_current_peak_at_s": 0.0004,
+                  "inverter_voltage_peak_pu": 1.045162819271523,
+                  "inverter_voltage_peak_at_s": 0.0003746933235125603
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.297445657153723,
+                      "peak_time_s": 0.0008
+                    },
+                    "vc": {
+                      "peak_pu": 1.0225674714893944,
+                      "peak_time_s": 0.0006246210624617126
+                    },
+                    "i1": {
+                      "peak_pu": 1.2954181372832898,
+                      "peak_time_s": 0.0008
+                    },
+                    "vi": {
+                      "peak_pu": 1.0432319605959368,
+                      "peak_time_s": 0.0004
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.88338275267597e-14,
+                    "capacitor": 5.889733145636455e-13,
+                    "inverter_inductor": 3.2929214910382143e-13
+                  },
+                  "inverter_current_peak_pu": 1.2954181372832898,
+                  "inverter_current_peak_at_s": 0.0008,
+                  "inverter_voltage_peak_pu": 1.0432319605959368,
+                  "inverter_voltage_peak_at_s": 0.0004
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2974744120396515,
+                      "peak_time_s": 0.0008156526323670684
+                    },
+                    "vc": {
+                      "peak_pu": 1.011759951681901,
+                      "peak_time_s": 0.0008
+                    },
+                    "i1": {
+                      "peak_pu": 1.295930710019815,
+                      "peak_time_s": 0.0008670064760824774
+                    },
+                    "vi": {
+                      "peak_pu": 0.9995607203720975,
+                      "peak_time_s": 0.0008
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 8.171241461241152e-14,
+                    "capacitor": 1.3642420526593924e-12,
+                    "inverter_inductor": 5.950527153707872e-14
+                  },
+                  "inverter_current_peak_pu": 1.295930710019815,
+                  "inverter_current_peak_at_s": 0.0008670064760824774,
+                  "inverter_voltage_peak_pu": 0.9995607203720975,
+                  "inverter_voltage_peak_at_s": 0.0008
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2569498930407854,
+                      "peak_time_s": 0.0015
+                    },
+                    "vc": {
+                      "peak_pu": 0.9365760571933301,
+                      "peak_time_s": 0.003
+                    },
+                    "i1": {
+                      "peak_pu": 1.2637533715801075,
+                      "peak_time_s": 0.0015
+                    },
+                    "vi": {
+                      "peak_pu": 0.962733529840601,
+                      "peak_time_s": 0.003
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.3877787807814457e-13,
+                    "capacitor": 1.4210854715202004e-12,
+                    "inverter_inductor": 3.517186542012496e-13
+                  },
+                  "inverter_current_peak_pu": 1.2637533715801075,
+                  "inverter_current_peak_at_s": 0.0015,
+                  "inverter_voltage_peak_pu": 0.962733529840601,
+                  "inverter_voltage_peak_at_s": 0.003
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.1510902290397038,
+                      "peak_time_s": 0.006
+                    },
+                    "vc": {
+                      "peak_pu": 0.9523409519449801,
+                      "peak_time_s": 0.0037101959840637492
+                    },
+                    "i1": {
+                      "peak_pu": 1.151977017725787,
+                      "peak_time_s": 0.006
+                    },
+                    "vi": {
+                      "peak_pu": 0.9870745804630662,
+                      "peak_time_s": 0.0036883729488368998
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.0835776720341528e-13,
+                    "capacitor": 6.552356816604785e-13,
+                    "inverter_inductor": 1.6342482922482304e-13
+                  },
+                  "inverter_current_peak_pu": 1.151977017725787,
+                  "inverter_current_peak_at_s": 0.006,
+                  "inverter_voltage_peak_pu": 0.9870745804630662,
+                  "inverter_voltage_peak_at_s": 0.0036883729488368998
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.153742915274867,
+                      "peak_time_s": 0.006638241542014493
+                    },
+                    "vc": {
+                      "peak_pu": 0.9520877912816883,
+                      "peak_time_s": 0.01
+                    },
+                    "i1": {
+                      "peak_pu": 1.1545879798895695,
+                      "peak_time_s": 0.0066107473270158364
+                    },
+                    "vi": {
+                      "peak_pu": 0.9696694800554779,
+                      "peak_time_s": 0.01
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.7053025658242404e-13,
+                    "capacitor": 9.094947017729282e-13,
+                    "inverter_inductor": 4.192202140984591e-13
+                  },
+                  "inverter_current_peak_pu": 1.1545879798895695,
+                  "inverter_current_peak_at_s": 0.0066107473270158364,
+                  "inverter_voltage_peak_pu": 0.9696694800554779,
+                  "inverter_voltage_peak_at_s": 0.01
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.1307682243530148,
+                      "peak_time_s": 0.015
+                    },
+                    "vc": {
+                      "peak_pu": 0.9682753186916983,
+                      "peak_time_s": 0.013035604794079282
+                    },
+                    "i1": {
+                      "peak_pu": 1.129906408342992,
+                      "peak_time_s": 0.015
+                    },
+                    "vi": {
+                      "peak_pu": 0.9936713791214459,
+                      "peak_time_s": 0.013315114128310606
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 8.014307469244087e-13,
+                    "inverter_inductor": 2.8421709430404007e-13
+                  },
+                  "inverter_current_peak_pu": 1.129906408342992,
+                  "inverter_current_peak_at_s": 0.015,
+                  "inverter_voltage_peak_pu": 0.9936713791214459,
+                  "inverter_voltage_peak_at_s": 0.013315114128310606
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2202533060424825,
+                      "peak_time_s": 0.0207839128579952
+                    },
+                    "vc": {
+                      "peak_pu": 0.9596547340831629,
+                      "peak_time_s": 0.015
+                    },
+                    "i1": {
+                      "peak_pu": 1.220352551943865,
+                      "peak_time_s": 0.020815396248299138
+                    },
+                    "vi": {
+                      "peak_pu": 0.9860630506873581,
+                      "peak_time_s": 0.015
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1369506159587252e-13,
+                    "capacitor": 1.8474111129762605e-12,
+                    "inverter_inductor": 2.8421709430404007e-13
+                  },
+                  "inverter_current_peak_pu": 1.220352551943865,
+                  "inverter_current_peak_at_s": 0.020815396248299138,
+                  "inverter_voltage_peak_pu": 0.9860630506873581,
+                  "inverter_voltage_peak_at_s": 0.015
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.1800164570604088,
+                      "peak_time_s": 0.025
+                    },
+                    "vc": {
+                      "peak_pu": 1.0236986718834669,
+                      "peak_time_s": 0.04
+                    },
+                    "i1": {
+                      "peak_pu": 1.1805653893991752,
+                      "peak_time_s": 0.025
+                    },
+                    "vi": {
+                      "peak_pu": 1.0484557128065952,
+                      "peak_time_s": 0.04
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1368683772161603e-13,
+                    "capacitor": 9.379164112033322e-13,
+                    "inverter_inductor": 2.3628791181151825e-13
+                  },
+                  "inverter_current_peak_pu": 1.1805653893991752,
+                  "inverter_current_peak_at_s": 0.025,
+                  "inverter_voltage_peak_pu": 1.0484557128065952,
+                  "inverter_voltage_peak_at_s": 0.04
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.0136039102117707,
+                      "peak_time_s": 0.04
+                    },
+                    "vc": {
+                      "peak_pu": 1.035115120582206,
+                      "peak_time_s": 0.058574934495717046
+                    },
+                    "i1": {
+                      "peak_pu": 1.0113073579634588,
+                      "peak_time_s": 0.04
+                    },
+                    "vi": {
+                      "peak_pu": 1.0619748928670572,
+                      "peak_time_s": 0.05780984231398636
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 4.263256414560601e-14,
+                    "capacitor": 2.5934809855243657e-13,
+                    "inverter_inductor": 4.920508445138694e-13
+                  },
+                  "inverter_current_peak_pu": 1.0113073579634588,
+                  "inverter_current_peak_at_s": 0.04,
+                  "inverter_voltage_peak_pu": 1.0619748928670572,
+                  "inverter_voltage_peak_at_s": 0.05780984231398636
+                }
+              ]
+            },
+            "input_endpoint_audit": {
+              "actual_inverter_inputs_pu": [
+                [
+                  0.5458949400508107,
+                  0.985405815074636
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "target_inverter_inputs_pu": [
+                [
+                  0.5458949400509348,
+                  0.9854058150723664
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "inverter_input_errors_pu": {
+                "start": 2.273014392987743e-12,
+                "end": 0.0
+              },
+              "i2_third_derivative_errors_pu_per_s3": {
+                "start": 0.1278762661362186,
+                "end": 7.204797454030837e-07
+              },
+              "input_endpoint_pass": true,
+              "scope": "Endpoint inverter input voltage continuity only; not derivative continuity or ratings validation"
+            },
+            "scope": "Own strategy constraints; missing power floor is not baseline failure"
+          }
+        },
+        {
+          "step": 1,
+          "coordinate_error": 4.440892098500626e-16,
+          "audit": {
+            "numerically_feasible": false,
+            "power_floor_pass": false,
+            "physical_audit": {
+              "strategy_constraints_pass": false,
+              "inverter_current_pass": false,
+              "actual_voltage_peak_pu": 1.1277794108079406,
+              "hardware_summary": {
+                "hypothetical_hardware": {
+                  "Cf_pu": 0.02,
+                  "X1_pu": 0.1,
+                  "R1_pu": 0.01,
+                  "Rf_pu": 0.0
+                },
+                "full_horizon_extrema": {
+                  "i2": {
+                    "peak_pu": 1.3000239934572368,
+                    "peak_time_s": 0.0009245777598816152
+                  },
+                  "vc": {
+                    "peak_pu": 1.0351151064554809,
+                    "peak_time_s": 0.0
+                  },
+                  "i1": {
+                    "peak_pu": 1.3000137618385508,
+                    "peak_time_s": 0.0011711822096617376
+                  },
+                  "vi": {
+                    "peak_pu": 1.1277794108079406,
+                    "peak_time_s": 9.06751153031796e-05
+                  }
+                },
+                "endpoint_check": {
+                  "start_i1": [
+                    0.6838723276910756,
+                    0.9870459587809858
+                  ],
+                  "frozen_segment_i1": [
+                    0.6838723276911144,
+                    0.987045958781053
+                  ],
+                  "start_i1_error_pu": 7.754301829774326e-14,
+                  "end_i1": [
+                    0.935530998318399,
+                    0.34771271616982713
+                  ],
+                  "steady_i1": [
+                    0.935530998318399,
+                    0.34771271616982713
+                  ],
+                  "end_i1_error_pu": 0.0,
+                  "maximum_internal_i1_jump_pu": 6.661338147750939e-16
+                },
+                "equation_residuals_pu_per_s": {
+                  "RL": 1.3446535551686623e-13,
+                  "capacitor": 2.518873998269555e-12,
+                  "inverter_inductor": 4.567842156536144e-13
+                },
+                "representation_errors_pu": {
+                  "i2": 8.881784197001252e-16,
+                  "vc": 1.6986412276764895e-14,
+                  "i1": 8.348877145181177e-14,
+                  "vi": 2.3324675524349914e-12
+                },
+                "dense_check": {
+                  "points": 3341,
+                  "peaks_pu": {
+                    "i2": 1.3000239374858322,
+                    "vc": 1.0351151064554707,
+                    "i1": 1.300013747401238,
+                    "vi": 1.1277791135795032
+                  }
+                },
+                "hardware_ratings_evaluated": false,
+                "scope": "Floating-point hypothetical LC demand reconstruction; not physical ratings, causality or control-bandwidth validation",
+                "i1_peak_pu": 1.3000137618385508,
+                "i1_peak_time_s": 0.0011711822096617376,
+                "vi_peak_pu": 1.1277794108079406,
+                "vi_peak_time_s": 9.06751153031796e-05,
+                "inverter_current_peak_pu": 1.3000137618385508,
+                "inverter_current_peak_at_s": 0.0011711822096617376,
+                "inverter_voltage_peak_pu": 1.1277794108079406,
+                "inverter_voltage_peak_at_s": 9.06751153031796e-05,
+                "maximum_representation_difference": 2.3324675524349914e-12,
+                "endpoint_inverter_current_errors": {
+                  "start": 7.754301829774326e-14,
+                  "end": 0.0
+                },
+                "equation_residuals": {
+                  "RL": 1.3446535551686623e-13,
+                  "capacitor": 2.518873998269555e-12,
+                  "inverter_inductor": 4.567842156536144e-13
+                }
+              },
+              "polynomial_summary": {
+                "minimum_power_pu": 0.7550140298076651,
+                "minimum_power_at_s": 0.0019230980067722813,
+                "current_peak_pu": 1.3000239934572368,
+                "current_peak_at_s": 0.0009245777598816152,
+                "voltage_peak_pu": 1.0351151064554809,
+                "voltage_peak_at_s": 0.0,
+                "maximum_representation_difference": 1.0687013985862918e-14,
+                "hypothetical_inverter_current_peak_pu": 1.3000137618385508,
+                "hypothetical_inverter_voltage_peak_pu": 1.1277794108079406
+              },
+              "dense_check": {
+                "grid_count": 8006,
+                "current_peak_pu": 1.3000239865598389,
+                "voltage_peak_pu": 1.0351151064554707,
+                "power_min_pu": 0.7550140367592998,
+                "current_pass": false,
+                "voltage_pass": true,
+                "power_pass": false
+              },
+              "independent_endpoints": {
+                "residuals": {
+                  "start_i": 1.1102230246251565e-16,
+                  "end_i": 0.0,
+                  "start_di": 8.16371241821629e-12,
+                  "end_di": 0.0,
+                  "start_ddi": 1.7256367310486413e-06,
+                  "end_ddi": 0.0,
+                  "start_v": 1.0500268446867465e-14,
+                  "end_v": 0.0,
+                  "start_dv": 2.1945369554389884e-09,
+                  "end_dv": 0.0
+                },
+                "passed": true,
+                "units": {
+                  "start_i": "p.u.",
+                  "end_i": "p.u.",
+                  "start_di": "p.u./s",
+                  "end_di": "p.u./s",
+                  "start_ddi": "p.u./s^2",
+                  "end_ddi": "p.u./s^2",
+                  "start_v": "p.u.",
+                  "end_v": "p.u.",
+                  "start_dv": "p.u./s",
+                  "end_dv": "p.u./s"
+                },
+                "checked_keys": [
+                  "start_i",
+                  "end_i",
+                  "start_v",
+                  "end_v",
+                  "start_dv",
+                  "end_dv"
+                ],
+                "scope": "Independent current, capacitor-voltage and voltage-derivative endpoint match; raw current derivatives retained with units"
+              },
+              "epigraph_pass": true,
+              "segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "minimum_power_pu": 1.0691907592063743,
+                  "maximum_power_pu": 1.0750142992496308,
+                  "minimum_power_at_s": 5e-05,
+                  "current_peak_pu": 1.2138924854882303,
+                  "current_peak_at_s": 5e-05,
+                  "voltage_peak_pu": 1.0351151064554809,
+                  "voltage_peak_at_s": 0.0,
+                  "hypothetical_inverter_current_peak_pu": 1.20143975020669,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1265104997089446
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "minimum_power_pu": 1.0440502728137917,
+                  "maximum_power_pu": 1.069190759206374,
+                  "minimum_power_at_s": 0.0001,
+                  "current_peak_pu": 1.2266892487250978,
+                  "current_peak_at_s": 0.0001,
+                  "voltage_peak_pu": 1.0197090585039092,
+                  "voltage_peak_at_s": 5e-05,
+                  "hypothetical_inverter_current_peak_pu": 1.1874363878190823,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1277794108079406
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "minimum_power_pu": 1.0018924535056626,
+                  "maximum_power_pu": 1.044050272813792,
+                  "minimum_power_at_s": 0.0002,
+                  "current_peak_pu": 1.248353373132706,
+                  "current_peak_at_s": 0.0002,
+                  "voltage_peak_pu": 0.9796545532370794,
+                  "voltage_peak_at_s": 0.0001,
+                  "hypothetical_inverter_current_peak_pu": 1.2168393473576042,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1174994993007148
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "minimum_power_pu": 0.9188115994231014,
+                  "maximum_power_pu": 1.0018924535056626,
+                  "minimum_power_at_s": 0.0004,
+                  "current_peak_pu": 1.278283215629625,
+                  "current_peak_at_s": 0.0004,
+                  "voltage_peak_pu": 0.9150312079542421,
+                  "voltage_peak_at_s": 0.0002,
+                  "hypothetical_inverter_current_peak_pu": 1.2544362962326143,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9784361645448948
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "minimum_power_pu": 0.8084205780309808,
+                  "maximum_power_pu": 0.9188115994231015,
+                  "minimum_power_at_s": 0.0008,
+                  "current_peak_pu": 1.2993062705554546,
+                  "current_peak_at_s": 0.0008,
+                  "voltage_peak_pu": 0.8044567099042708,
+                  "voltage_peak_at_s": 0.0004,
+                  "hypothetical_inverter_current_peak_pu": 1.2931758349371927,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8479129276917386
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "minimum_power_pu": 0.7591588069504366,
+                  "maximum_power_pu": 0.8084205780309808,
+                  "minimum_power_at_s": 0.0015,
+                  "current_peak_pu": 1.3000239934572368,
+                  "current_peak_at_s": 0.0009245777598816152,
+                  "voltage_peak_pu": 0.6810840790968308,
+                  "voltage_peak_at_s": 0.0008,
+                  "hypothetical_inverter_current_peak_pu": 1.3000137618385508,
+                  "hypothetical_inverter_voltage_peak_pu": 0.6842430873541567
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "minimum_power_pu": 0.7550140298076651,
+                  "maximum_power_pu": 0.768779609360117,
+                  "minimum_power_at_s": 0.0019230980067722813,
+                  "current_peak_pu": 1.2941901925536614,
+                  "current_peak_at_s": 0.0015,
+                  "voltage_peak_pu": 0.6793934735966464,
+                  "voltage_peak_at_s": 0.003,
+                  "hypothetical_inverter_current_peak_pu": 1.298000777088332,
+                  "hypothetical_inverter_voltage_peak_pu": 0.6555765242547603
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "minimum_power_pu": 0.7687796093601167,
+                  "maximum_power_pu": 0.8516388093769154,
+                  "minimum_power_at_s": 0.003,
+                  "current_peak_pu": 1.2939415274006612,
+                  "current_peak_at_s": 0.005913102905436687,
+                  "voltage_peak_pu": 0.7330423241205595,
+                  "voltage_peak_at_s": 0.006,
+                  "hypothetical_inverter_current_peak_pu": 1.2999295295884052,
+                  "hypothetical_inverter_voltage_peak_pu": 0.7137374688416694
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "minimum_power_pu": 0.8516388093769153,
+                  "maximum_power_pu": 0.9923477930583859,
+                  "minimum_power_at_s": 0.006,
+                  "current_peak_pu": 1.2955012877642464,
+                  "current_peak_at_s": 0.01,
+                  "voltage_peak_pu": 0.8128875723139332,
+                  "voltage_peak_at_s": 0.01,
+                  "hypothetical_inverter_current_peak_pu": 1.299916392598624,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8106392888424407
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "minimum_power_pu": 0.9923477930583859,
+                  "maximum_power_pu": 1.0936288492312969,
+                  "minimum_power_at_s": 0.01,
+                  "current_peak_pu": 1.2955663376356679,
+                  "current_peak_at_s": 0.01038313489626904,
+                  "voltage_peak_pu": 0.8825751845837638,
+                  "voltage_peak_at_s": 0.015,
+                  "hypothetical_inverter_current_peak_pu": 1.2995661218563628,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8953535566156506
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "minimum_power_pu": 1.0936288492312976,
+                  "maximum_power_pu": 1.1793462316189207,
+                  "minimum_power_at_s": 0.015,
+                  "current_peak_pu": 1.28518481699762,
+                  "current_peak_at_s": 0.015,
+                  "voltage_peak_pu": 0.9757117624037716,
+                  "voltage_peak_at_s": 0.025,
+                  "hypothetical_inverter_current_peak_pu": 1.286776115363769,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0042963989204843
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "minimum_power_pu": 1.062076085119568,
+                  "maximum_power_pu": 1.1800197890910138,
+                  "minimum_power_at_s": 0.04,
+                  "current_peak_pu": 1.2527842085551921,
+                  "current_peak_at_s": 0.025,
+                  "voltage_peak_pu": 1.0154424898369208,
+                  "voltage_peak_at_s": 0.04,
+                  "hypothetical_inverter_current_peak_pu": 1.2512640824236954,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0421410466746999
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "minimum_power_pu": 0.9999835346964934,
+                  "maximum_power_pu": 1.062076085119568,
+                  "minimum_power_at_s": 0.05730810419557008,
+                  "current_peak_pu": 1.0816668077285319,
+                  "current_peak_at_s": 0.04,
+                  "voltage_peak_pu": 1.035115106455465,
+                  "voltage_peak_at_s": 0.06,
+                  "hypothetical_inverter_current_peak_pu": 1.0789687987875227,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0619746885696872
+                }
+              ],
+              "hardware_segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2138924854882303,
+                      "peak_time_s": 5e-05
+                    },
+                    "vc": {
+                      "peak_pu": 1.0351151064554809,
+                      "peak_time_s": 0.0
+                    },
+                    "i1": {
+                      "peak_pu": 1.20143975020669,
+                      "peak_time_s": 4.590598215511766e-06
+                    },
+                    "vi": {
+                      "peak_pu": 1.1265104997089446,
+                      "peak_time_s": 0.0
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.089378133677936e-14,
+                    "capacitor": 3.979039320256561e-13,
+                    "inverter_inductor": 3.410605131648481e-13
+                  },
+                  "inverter_current_peak_pu": 1.20143975020669,
+                  "inverter_current_peak_at_s": 4.590598215511766e-06,
+                  "inverter_voltage_peak_pu": 1.1265104997089446,
+                  "inverter_voltage_peak_at_s": 0.0
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2266892487250978,
+                      "peak_time_s": 0.0001
+                    },
+                    "vc": {
+                      "peak_pu": 1.0197090585039092,
+                      "peak_time_s": 5e-05
+                    },
+                    "i1": {
+                      "peak_pu": 1.1874363878190823,
+                      "peak_time_s": 0.0001
+                    },
+                    "vi": {
+                      "peak_pu": 1.1277794108079406,
+                      "peak_time_s": 9.06751153031796e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.811930797738896e-14,
+                    "capacitor": 9.947598300641403e-13,
+                    "inverter_inductor": 2.409071206410651e-13
+                  },
+                  "inverter_current_peak_pu": 1.1874363878190823,
+                  "inverter_current_peak_at_s": 0.0001,
+                  "inverter_voltage_peak_pu": 1.1277794108079406,
+                  "inverter_voltage_peak_at_s": 9.06751153031796e-05
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.248353373132706,
+                      "peak_time_s": 0.0002
+                    },
+                    "vc": {
+                      "peak_pu": 0.9796545532370794,
+                      "peak_time_s": 0.0001
+                    },
+                    "i1": {
+                      "peak_pu": 1.2168393473576042,
+                      "peak_time_s": 0.0002
+                    },
+                    "vi": {
+                      "peak_pu": 1.1174994993007148,
+                      "peak_time_s": 0.0001
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.986790924117358e-14,
+                    "capacitor": 1.7097157023471254e-12,
+                    "inverter_inductor": 1.9895196601282805e-13
+                  },
+                  "inverter_current_peak_pu": 1.2168393473576042,
+                  "inverter_current_peak_at_s": 0.0002,
+                  "inverter_voltage_peak_pu": 1.1174994993007148,
+                  "inverter_voltage_peak_at_s": 0.0001
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.278283215629625,
+                      "peak_time_s": 0.0004
+                    },
+                    "vc": {
+                      "peak_pu": 0.9150312079542421,
+                      "peak_time_s": 0.0002
+                    },
+                    "i1": {
+                      "peak_pu": 1.2544362962326143,
+                      "peak_time_s": 0.0004
+                    },
+                    "vi": {
+                      "peak_pu": 0.9784361645448948,
+                      "peak_time_s": 0.0002
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.405292962696763e-14,
+                    "capacitor": 4.1733283495659634e-13,
+                    "inverter_inductor": 4.567842156536144e-13
+                  },
+                  "inverter_current_peak_pu": 1.2544362962326143,
+                  "inverter_current_peak_at_s": 0.0004,
+                  "inverter_voltage_peak_pu": 0.9784361645448948,
+                  "inverter_voltage_peak_at_s": 0.0002
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2993062705554546,
+                      "peak_time_s": 0.0008
+                    },
+                    "vc": {
+                      "peak_pu": 0.8044567099042708,
+                      "peak_time_s": 0.0004
+                    },
+                    "i1": {
+                      "peak_pu": 1.2931758349371927,
+                      "peak_time_s": 0.0008
+                    },
+                    "vi": {
+                      "peak_pu": 0.8479129276917386,
+                      "peak_time_s": 0.0004
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.3446535551686623e-13,
+                    "capacitor": 1.7337242752546445e-12,
+                    "inverter_inductor": 2.2458424009386135e-13
+                  },
+                  "inverter_current_peak_pu": 1.2931758349371927,
+                  "inverter_current_peak_at_s": 0.0008,
+                  "inverter_voltage_peak_pu": 0.8479129276917386,
+                  "inverter_voltage_peak_at_s": 0.0004
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.3000239934572368,
+                      "peak_time_s": 0.0009245777598816152
+                    },
+                    "vc": {
+                      "peak_pu": 0.6810840790968308,
+                      "peak_time_s": 0.0008
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000137618385508,
+                      "peak_time_s": 0.0011711822096617376
+                    },
+                    "vi": {
+                      "peak_pu": 0.6842430873541567,
+                      "peak_time_s": 0.0008
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 1.1927958620816526e-12,
+                    "inverter_inductor": 2.1238566461079245e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000137618385508,
+                  "inverter_current_peak_at_s": 0.0011711822096617376,
+                  "inverter_voltage_peak_pu": 0.6842430873541567,
+                  "inverter_voltage_peak_at_s": 0.0008
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2941901925536614,
+                      "peak_time_s": 0.0015
+                    },
+                    "vc": {
+                      "peak_pu": 0.6793934735966464,
+                      "peak_time_s": 0.003
+                    },
+                    "i1": {
+                      "peak_pu": 1.298000777088332,
+                      "peak_time_s": 0.0015
+                    },
+                    "vi": {
+                      "peak_pu": 0.6555765242547603,
+                      "peak_time_s": 0.003
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 8.335554468885675e-13,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.298000777088332,
+                  "inverter_current_peak_at_s": 0.0015,
+                  "inverter_voltage_peak_pu": 0.6555765242547603,
+                  "inverter_voltage_peak_at_s": 0.003
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2939415274006612,
+                      "peak_time_s": 0.005913102905436687
+                    },
+                    "vc": {
+                      "peak_pu": 0.7330423241205595,
+                      "peak_time_s": 0.006
+                    },
+                    "i1": {
+                      "peak_pu": 1.2999295295884052,
+                      "peak_time_s": 0.0058376628288277135
+                    },
+                    "vi": {
+                      "peak_pu": 0.7137374688416694,
+                      "peak_time_s": 0.006
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 2.842170943040401e-14,
+                    "capacitor": 1.8047785488306545e-12,
+                    "inverter_inductor": 1.3463175907419717e-13
+                  },
+                  "inverter_current_peak_pu": 1.2999295295884052,
+                  "inverter_current_peak_at_s": 0.0058376628288277135,
+                  "inverter_voltage_peak_pu": 0.7137374688416694,
+                  "inverter_voltage_peak_at_s": 0.006
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2955012877642464,
+                      "peak_time_s": 0.01
+                    },
+                    "vc": {
+                      "peak_pu": 0.8128875723139332,
+                      "peak_time_s": 0.01
+                    },
+                    "i1": {
+                      "peak_pu": 1.299916392598624,
+                      "peak_time_s": 0.006
+                    },
+                    "vi": {
+                      "peak_pu": 0.8106392888424407,
+                      "peak_time_s": 0.01
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.661338147750939e-14,
+                    "capacitor": 1.581978808293473e-12,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.299916392598624,
+                  "inverter_current_peak_at_s": 0.006,
+                  "inverter_voltage_peak_pu": 0.8106392888424407,
+                  "inverter_voltage_peak_at_s": 0.01
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2955663376356679,
+                      "peak_time_s": 0.01038313489626904
+                    },
+                    "vc": {
+                      "peak_pu": 0.8825751845837638,
+                      "peak_time_s": 0.015
+                    },
+                    "i1": {
+                      "peak_pu": 1.2995661218563628,
+                      "peak_time_s": 0.01
+                    },
+                    "vi": {
+                      "peak_pu": 0.8953535566156506,
+                      "peak_time_s": 0.015
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.2093104295729518e-13,
+                    "capacitor": 8.526512829121202e-13,
+                    "inverter_inductor": 2.324807013565078e-13
+                  },
+                  "inverter_current_peak_pu": 1.2995661218563628,
+                  "inverter_current_peak_at_s": 0.01,
+                  "inverter_voltage_peak_pu": 0.8953535566156506,
+                  "inverter_voltage_peak_at_s": 0.015
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.28518481699762,
+                      "peak_time_s": 0.015
+                    },
+                    "vc": {
+                      "peak_pu": 0.9757117624037716,
+                      "peak_time_s": 0.025
+                    },
+                    "i1": {
+                      "peak_pu": 1.286776115363769,
+                      "peak_time_s": 0.015
+                    },
+                    "vi": {
+                      "peak_pu": 1.0042963989204843,
+                      "peak_time_s": 0.025
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 2.518873998269555e-12,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.286776115363769,
+                  "inverter_current_peak_at_s": 0.015,
+                  "inverter_voltage_peak_pu": 1.0042963989204843,
+                  "inverter_voltage_peak_at_s": 0.025
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2527842085551921,
+                      "peak_time_s": 0.025
+                    },
+                    "vc": {
+                      "peak_pu": 1.0154424898369208,
+                      "peak_time_s": 0.04
+                    },
+                    "i1": {
+                      "peak_pu": 1.2512640824236954,
+                      "peak_time_s": 0.025
+                    },
+                    "vi": {
+                      "peak_pu": 1.0421410466746999,
+                      "peak_time_s": 0.04
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.039613253960852e-14,
+                    "capacitor": 1.6258105972610792e-12,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.2512640824236954,
+                  "inverter_current_peak_at_s": 0.025,
+                  "inverter_voltage_peak_pu": 1.0421410466746999,
+                  "inverter_voltage_peak_at_s": 0.04
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.0816668077285319,
+                      "peak_time_s": 0.04
+                    },
+                    "vc": {
+                      "peak_pu": 1.035115106455465,
+                      "peak_time_s": 0.06
+                    },
+                    "i1": {
+                      "peak_pu": 1.0789687987875227,
+                      "peak_time_s": 0.04
+                    },
+                    "vi": {
+                      "peak_pu": 1.0619746885696872,
+                      "peak_time_s": 0.06
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 2.842170943040401e-14,
+                    "capacitor": 2.7355895326763857e-13,
+                    "inverter_inductor": 2.8421709430404007e-13
+                  },
+                  "inverter_current_peak_pu": 1.0789687987875227,
+                  "inverter_current_peak_at_s": 0.04,
+                  "inverter_voltage_peak_pu": 1.0619746885696872,
+                  "inverter_voltage_peak_at_s": 0.06
+                }
+              ]
+            },
+            "input_endpoint_audit": {
+              "actual_inverter_inputs_pu": [
+                [
+                  0.5458949400508107,
+                  0.985405815074636
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "target_inverter_inputs_pu": [
+                [
+                  0.5458949400509348,
+                  0.9854058150723664
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "inverter_input_errors_pu": {
+                "start": 2.273014392987743e-12,
+                "end": 0.0
+              },
+              "i2_third_derivative_errors_pu_per_s3": {
+                "start": 0.1278762661362186,
+                "end": 7.227267202988946e-07
+              },
+              "input_endpoint_pass": true,
+              "scope": "Endpoint inverter input voltage continuity only; not derivative continuity or ratings validation"
+            },
+            "scope": "Own strategy constraints; missing power floor is not baseline failure"
+          }
+        },
+        {
+          "step": 2,
+          "coordinate_error": 2.220446049250313e-16,
+          "audit": {
+            "numerically_feasible": false,
+            "power_floor_pass": false,
+            "physical_audit": {
+              "strategy_constraints_pass": false,
+              "inverter_current_pass": false,
+              "actual_voltage_peak_pu": 1.12778090956897,
+              "hardware_summary": {
+                "hypothetical_hardware": {
+                  "Cf_pu": 0.02,
+                  "X1_pu": 0.1,
+                  "R1_pu": 0.01,
+                  "Rf_pu": 0.0
+                },
+                "full_horizon_extrema": {
+                  "i2": {
+                    "peak_pu": 1.3000000145650106,
+                    "peak_time_s": 0.000923969323932902
+                  },
+                  "vc": {
+                    "peak_pu": 1.0351151064554809,
+                    "peak_time_s": 0.0
+                  },
+                  "i1": {
+                    "peak_pu": 1.3000007362807517,
+                    "peak_time_s": 0.005874997991466846
+                  },
+                  "vi": {
+                    "peak_pu": 1.12778090956897,
+                    "peak_time_s": 9.067355699796177e-05
+                  }
+                },
+                "endpoint_check": {
+                  "start_i1": [
+                    0.6838723276910756,
+                    0.9870459587809858
+                  ],
+                  "frozen_segment_i1": [
+                    0.6838723276911144,
+                    0.987045958781053
+                  ],
+                  "start_i1_error_pu": 7.754301829774326e-14,
+                  "end_i1": [
+                    0.935530998318399,
+                    0.347712716169827
+                  ],
+                  "steady_i1": [
+                    0.935530998318399,
+                    0.34771271616982713
+                  ],
+                  "end_i1_error_pu": 1.1102230246251565e-16,
+                  "maximum_internal_i1_jump_pu": 3.1401849173675503e-16
+                },
+                "equation_residuals_pu_per_s": {
+                  "RL": 1.7053025658242404e-13,
+                  "capacitor": 3.0466740241763546e-12,
+                  "inverter_inductor": 5.684341886080801e-13
+                },
+                "representation_errors_pu": {
+                  "i2": 8.881784197001252e-16,
+                  "vc": 1.6986412276764895e-14,
+                  "i1": 8.337774914934926e-14,
+                  "vi": 2.3326895970399164e-12
+                },
+                "dense_check": {
+                  "points": 3341,
+                  "peaks_pu": {
+                    "i2": 1.2999999815386012,
+                    "vc": 1.0351151064554707,
+                    "i1": 1.3000007283694293,
+                    "vi": 1.1277806305651528
+                  }
+                },
+                "hardware_ratings_evaluated": false,
+                "scope": "Floating-point hypothetical LC demand reconstruction; not physical ratings, causality or control-bandwidth validation",
+                "i1_peak_pu": 1.3000007362807517,
+                "i1_peak_time_s": 0.005874997991466846,
+                "vi_peak_pu": 1.12778090956897,
+                "vi_peak_time_s": 9.067355699796177e-05,
+                "inverter_current_peak_pu": 1.3000007362807517,
+                "inverter_current_peak_at_s": 0.005874997991466846,
+                "inverter_voltage_peak_pu": 1.12778090956897,
+                "inverter_voltage_peak_at_s": 9.067355699796177e-05,
+                "maximum_representation_difference": 2.3326895970399164e-12,
+                "endpoint_inverter_current_errors": {
+                  "start": 7.754301829774326e-14,
+                  "end": 1.1102230246251565e-16
+                },
+                "equation_residuals": {
+                  "RL": 1.7053025658242404e-13,
+                  "capacitor": 3.0466740241763546e-12,
+                  "inverter_inductor": 5.684341886080801e-13
+                }
+              },
+              "polynomial_summary": {
+                "minimum_power_pu": 0.7552508846400303,
+                "minimum_power_at_s": 0.001922889479091315,
+                "current_peak_pu": 1.3000000145650106,
+                "current_peak_at_s": 0.000923969323932902,
+                "voltage_peak_pu": 1.0351151064554809,
+                "voltage_peak_at_s": 0.0,
+                "maximum_representation_difference": 1.0687013985862918e-14,
+                "hypothetical_inverter_current_peak_pu": 1.3000007362807517,
+                "hypothetical_inverter_voltage_peak_pu": 1.12778090956897
+              },
+              "dense_check": {
+                "grid_count": 8006,
+                "current_peak_pu": 1.2999999734494145,
+                "voltage_peak_pu": 1.0351151064554707,
+                "power_min_pu": 0.7552508875688619,
+                "current_pass": true,
+                "voltage_pass": true,
+                "power_pass": false
+              },
+              "independent_endpoints": {
+                "residuals": {
+                  "start_i": 1.1102230246251565e-16,
+                  "end_i": 0.0,
+                  "start_di": 8.16371241821629e-12,
+                  "end_di": 0.0,
+                  "start_ddi": 1.7256367310486413e-06,
+                  "end_ddi": 0.0,
+                  "start_v": 1.0500268446867465e-14,
+                  "end_v": 0.0,
+                  "start_dv": 2.1945369554389884e-09,
+                  "end_dv": 0.0
+                },
+                "passed": true,
+                "units": {
+                  "start_i": "p.u.",
+                  "end_i": "p.u.",
+                  "start_di": "p.u./s",
+                  "end_di": "p.u./s",
+                  "start_ddi": "p.u./s^2",
+                  "end_ddi": "p.u./s^2",
+                  "start_v": "p.u.",
+                  "end_v": "p.u.",
+                  "start_dv": "p.u./s",
+                  "end_dv": "p.u./s"
+                },
+                "checked_keys": [
+                  "start_i",
+                  "end_i",
+                  "start_v",
+                  "end_v",
+                  "start_dv",
+                  "end_dv"
+                ],
+                "scope": "Independent current, capacitor-voltage and voltage-derivative endpoint match; raw current derivatives retained with units"
+              },
+              "epigraph_pass": true,
+              "segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "minimum_power_pu": 1.0691933048118663,
+                  "maximum_power_pu": 1.0750146217714658,
+                  "minimum_power_at_s": 5e-05,
+                  "current_peak_pu": 1.213892518307402,
+                  "current_peak_at_s": 5e-05,
+                  "voltage_peak_pu": 1.0351151064554809,
+                  "voltage_peak_at_s": 0.0,
+                  "hypothetical_inverter_current_peak_pu": 1.2014398711372265,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1265104997089446
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "minimum_power_pu": 1.0440603323015483,
+                  "maximum_power_pu": 1.0691933048118663,
+                  "minimum_power_at_s": 0.0001,
+                  "current_peak_pu": 1.2266895545285685,
+                  "current_peak_at_s": 0.0001,
+                  "voltage_peak_pu": 1.019712302967198,
+                  "voltage_peak_at_s": 5e-05,
+                  "hypothetical_inverter_current_peak_pu": 1.18744572748576,
+                  "hypothetical_inverter_voltage_peak_pu": 1.12778090956897
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "minimum_power_pu": 1.0019103502894107,
+                  "maximum_power_pu": 1.0440603323015485,
+                  "minimum_power_at_s": 0.0002,
+                  "current_peak_pu": 1.2483548519184544,
+                  "current_peak_at_s": 0.0002,
+                  "voltage_peak_pu": 0.9796675965224019,
+                  "voltage_peak_at_s": 0.0001,
+                  "hypothetical_inverter_current_peak_pu": 1.2168398930497852,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1174985646331104
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "minimum_power_pu": 0.9188077111158895,
+                  "maximum_power_pu": 1.0019103502894104,
+                  "minimum_power_at_s": 0.0004,
+                  "current_peak_pu": 1.2782843497607401,
+                  "current_peak_at_s": 0.0004,
+                  "voltage_peak_pu": 0.9150554364262601,
+                  "voltage_peak_at_s": 0.0002,
+                  "hypothetical_inverter_current_peak_pu": 1.2544304206793098,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9784286891485161
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "minimum_power_pu": 0.8084308476333179,
+                  "maximum_power_pu": 0.9188077111158893,
+                  "minimum_power_at_s": 0.0008,
+                  "current_peak_pu": 1.2992888009011287,
+                  "current_peak_at_s": 0.0008,
+                  "voltage_peak_pu": 0.8044666507410814,
+                  "voltage_peak_at_s": 0.0004,
+                  "hypothetical_inverter_current_peak_pu": 1.2931749885126607,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8479043668190159
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "minimum_power_pu": 0.7593620334809218,
+                  "maximum_power_pu": 0.8084308476333181,
+                  "minimum_power_at_s": 0.0015,
+                  "current_peak_pu": 1.3000000145650106,
+                  "current_peak_at_s": 0.000923969323932902,
+                  "voltage_peak_pu": 0.6811535494413041,
+                  "voltage_peak_at_s": 0.0008,
+                  "hypothetical_inverter_current_peak_pu": 1.300000013854884,
+                  "hypothetical_inverter_voltage_peak_pu": 0.6842492187693668
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "minimum_power_pu": 0.7552508846400303,
+                  "maximum_power_pu": 0.7689631639209256,
+                  "minimum_power_at_s": 0.001922889479091315,
+                  "current_peak_pu": 1.2941575541841108,
+                  "current_peak_at_s": 0.0015,
+                  "voltage_peak_pu": 0.6794810478939783,
+                  "voltage_peak_at_s": 0.003,
+                  "hypothetical_inverter_current_peak_pu": 1.297976331906934,
+                  "hypothetical_inverter_voltage_peak_pu": 0.6556987778270488
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "minimum_power_pu": 0.7689631639209253,
+                  "maximum_power_pu": 0.851954785498291,
+                  "minimum_power_at_s": 0.003,
+                  "current_peak_pu": 1.294027967020712,
+                  "current_peak_at_s": 0.005997851327892519,
+                  "voltage_peak_pu": 0.7331228075856372,
+                  "voltage_peak_at_s": 0.006,
+                  "hypothetical_inverter_current_peak_pu": 1.3000007362807517,
+                  "hypothetical_inverter_voltage_peak_pu": 0.7138849085059799
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "minimum_power_pu": 0.8519547854982912,
+                  "maximum_power_pu": 0.9918129469724365,
+                  "minimum_power_at_s": 0.006,
+                  "current_peak_pu": 1.2959181403772033,
+                  "current_peak_at_s": 0.01,
+                  "voltage_peak_pu": 0.8124327318670437,
+                  "voltage_peak_at_s": 0.01,
+                  "hypothetical_inverter_current_peak_pu": 1.3000000085280583,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8101980490083258
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "minimum_power_pu": 0.9918129469724363,
+                  "maximum_power_pu": 1.0983080872660165,
+                  "minimum_power_at_s": 0.01,
+                  "current_peak_pu": 1.2961833171096093,
+                  "current_peak_at_s": 0.010823139189688715,
+                  "voltage_peak_pu": 0.8841804368863133,
+                  "voltage_peak_at_s": 0.015,
+                  "hypothetical_inverter_current_peak_pu": 1.3000000000439884,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8972632402052642
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "minimum_power_pu": 1.0983080872660165,
+                  "maximum_power_pu": 1.1739973081689685,
+                  "minimum_power_at_s": 0.015,
+                  "current_peak_pu": 1.2886243380571947,
+                  "current_peak_at_s": 0.015,
+                  "voltage_peak_pu": 0.9756025375008145,
+                  "voltage_peak_at_s": 0.025,
+                  "hypothetical_inverter_current_peak_pu": 1.290208032284459,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0037373994144647
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "minimum_power_pu": 1.055744713205716,
+                  "maximum_power_pu": 1.1739910851067192,
+                  "minimum_power_at_s": 0.04,
+                  "current_peak_pu": 1.2463291840749662,
+                  "current_peak_at_s": 0.025,
+                  "voltage_peak_pu": 1.0167021351380172,
+                  "voltage_peak_at_s": 0.04,
+                  "hypothetical_inverter_current_peak_pu": 1.2447758855239446,
+                  "hypothetical_inverter_voltage_peak_pu": 1.04325760711694
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "minimum_power_pu": 0.9999853240467366,
+                  "maximum_power_pu": 1.0557447132057158,
+                  "minimum_power_at_s": 0.05729968438161124,
+                  "current_peak_pu": 1.073849693596259,
+                  "current_peak_at_s": 0.04,
+                  "voltage_peak_pu": 1.035115106455465,
+                  "voltage_peak_at_s": 0.06,
+                  "hypothetical_inverter_current_peak_pu": 1.0711731640998414,
+                  "hypothetical_inverter_voltage_peak_pu": 1.061974688569687
+                }
+              ],
+              "hardware_segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.213892518307402,
+                      "peak_time_s": 5e-05
+                    },
+                    "vc": {
+                      "peak_pu": 1.0351151064554809,
+                      "peak_time_s": 0.0
+                    },
+                    "i1": {
+                      "peak_pu": 1.2014398711372265,
+                      "peak_time_s": 4.591506080727398e-06
+                    },
+                    "vi": {
+                      "peak_pu": 1.1265104997089446,
+                      "peak_time_s": 0.0
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.822404190725106e-14,
+                    "capacitor": 3.979039320256561e-13,
+                    "inverter_inductor": 3.410605131648481e-13
+                  },
+                  "inverter_current_peak_pu": 1.2014398711372265,
+                  "inverter_current_peak_at_s": 4.591506080727398e-06,
+                  "inverter_voltage_peak_pu": 1.1265104997089446,
+                  "inverter_voltage_peak_at_s": 0.0
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2266895545285685,
+                      "peak_time_s": 0.0001
+                    },
+                    "vc": {
+                      "peak_pu": 1.019712302967198,
+                      "peak_time_s": 5e-05
+                    },
+                    "i1": {
+                      "peak_pu": 1.18744572748576,
+                      "peak_time_s": 0.0001
+                    },
+                    "vi": {
+                      "peak_pu": 1.12778090956897,
+                      "peak_time_s": 9.067355699796177e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1555968973276188e-13,
+                    "capacitor": 6.164829625810381e-13,
+                    "inverter_inductor": 5.108968803568814e-13
+                  },
+                  "inverter_current_peak_pu": 1.18744572748576,
+                  "inverter_current_peak_at_s": 0.0001,
+                  "inverter_voltage_peak_pu": 1.12778090956897,
+                  "inverter_voltage_peak_at_s": 9.067355699796177e-05
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2483548519184544,
+                      "peak_time_s": 0.0002
+                    },
+                    "vc": {
+                      "peak_pu": 0.9796675965224019,
+                      "peak_time_s": 0.0001
+                    },
+                    "i1": {
+                      "peak_pu": 1.2168398930497852,
+                      "peak_time_s": 0.0002
+                    },
+                    "vi": {
+                      "peak_pu": 1.1174985646331104,
+                      "peak_time_s": 0.0001
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.144910968952644e-14,
+                    "capacitor": 5.704178449028596e-13,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.2168398930497852,
+                  "inverter_current_peak_at_s": 0.0002,
+                  "inverter_voltage_peak_pu": 1.1174985646331104,
+                  "inverter_voltage_peak_at_s": 0.0001
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2782843497607401,
+                      "peak_time_s": 0.0004
+                    },
+                    "vc": {
+                      "peak_pu": 0.9150554364262601,
+                      "peak_time_s": 0.0002
+                    },
+                    "i1": {
+                      "peak_pu": 1.2544304206793098,
+                      "peak_time_s": 0.0004
+                    },
+                    "vi": {
+                      "peak_pu": 0.9784286891485161,
+                      "peak_time_s": 0.0002
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.155598170603071e-15,
+                    "capacitor": 7.120953132710994e-13,
+                    "inverter_inductor": 2.9704017023846063e-13
+                  },
+                  "inverter_current_peak_pu": 1.2544304206793098,
+                  "inverter_current_peak_at_s": 0.0004,
+                  "inverter_voltage_peak_pu": 0.9784286891485161,
+                  "inverter_voltage_peak_at_s": 0.0002
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2992888009011287,
+                      "peak_time_s": 0.0008
+                    },
+                    "vc": {
+                      "peak_pu": 0.8044666507410814,
+                      "peak_time_s": 0.0004
+                    },
+                    "i1": {
+                      "peak_pu": 1.2931749885126607,
+                      "peak_time_s": 0.0008
+                    },
+                    "vi": {
+                      "peak_pu": 0.8479043668190159,
+                      "peak_time_s": 0.0004
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.7053025658242404e-13,
+                    "capacitor": 2.331444065584165e-12,
+                    "inverter_inductor": 2.1727758481304704e-13
+                  },
+                  "inverter_current_peak_pu": 1.2931749885126607,
+                  "inverter_current_peak_at_s": 0.0008,
+                  "inverter_voltage_peak_pu": 0.8479043668190159,
+                  "inverter_voltage_peak_at_s": 0.0004
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.3000000145650106,
+                      "peak_time_s": 0.000923969323932902
+                    },
+                    "vc": {
+                      "peak_pu": 0.6811535494413041,
+                      "peak_time_s": 0.0008
+                    },
+                    "i1": {
+                      "peak_pu": 1.300000013854884,
+                      "peak_time_s": 0.00117049774598357
+                    },
+                    "vi": {
+                      "peak_pu": 0.6842492187693668,
+                      "peak_time_s": 0.0008
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.855627177060342e-15,
+                    "capacitor": 3.0466740241763546e-12,
+                    "inverter_inductor": 2.1604940059205546e-13
+                  },
+                  "inverter_current_peak_pu": 1.300000013854884,
+                  "inverter_current_peak_at_s": 0.00117049774598357,
+                  "inverter_voltage_peak_pu": 0.6842492187693668,
+                  "inverter_voltage_peak_at_s": 0.0008
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2941575541841108,
+                      "peak_time_s": 0.0015
+                    },
+                    "vc": {
+                      "peak_pu": 0.6794810478939783,
+                      "peak_time_s": 0.003
+                    },
+                    "i1": {
+                      "peak_pu": 1.297976331906934,
+                      "peak_time_s": 0.0015
+                    },
+                    "vi": {
+                      "peak_pu": 0.6556987778270488,
+                      "peak_time_s": 0.003
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.726403274873455e-14,
+                    "capacitor": 1.1762100835864734e-12,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.297976331906934,
+                  "inverter_current_peak_at_s": 0.0015,
+                  "inverter_voltage_peak_pu": 0.6556987778270488,
+                  "inverter_voltage_peak_at_s": 0.003
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.294027967020712,
+                      "peak_time_s": 0.005997851327892519
+                    },
+                    "vc": {
+                      "peak_pu": 0.7331228075856372,
+                      "peak_time_s": 0.006
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000007362807517,
+                      "peak_time_s": 0.005874997991466846
+                    },
+                    "vi": {
+                      "peak_pu": 0.7138849085059799,
+                      "peak_time_s": 0.006
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 1.3073986337985843e-12,
+                    "inverter_inductor": 1.1368683772161603e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000007362807517,
+                  "inverter_current_peak_at_s": 0.005874997991466846,
+                  "inverter_voltage_peak_pu": 0.7138849085059799,
+                  "inverter_voltage_peak_at_s": 0.006
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2959181403772033,
+                      "peak_time_s": 0.01
+                    },
+                    "vc": {
+                      "peak_pu": 0.8124327318670437,
+                      "peak_time_s": 0.01
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000000085280583,
+                      "peak_time_s": 0.009994417462166998
+                    },
+                    "vi": {
+                      "peak_pu": 0.8101980490083258,
+                      "peak_time_s": 0.01
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.2462253451417382e-14,
+                    "capacitor": 1.3880008253863707e-12,
+                    "inverter_inductor": 1.8762769116165146e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000000085280583,
+                  "inverter_current_peak_at_s": 0.009994417462166998,
+                  "inverter_voltage_peak_pu": 0.8101980490083258,
+                  "inverter_voltage_peak_at_s": 0.01
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2961833171096093,
+                      "peak_time_s": 0.010823139189688715
+                    },
+                    "vc": {
+                      "peak_pu": 0.8841804368863133,
+                      "peak_time_s": 0.015
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000000000439884,
+                      "peak_time_s": 0.01
+                    },
+                    "vi": {
+                      "peak_pu": 0.8972632402052642,
+                      "peak_time_s": 0.015
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.42264019745653e-14,
+                    "capacitor": 1.7053025658242404e-13,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000000000439884,
+                  "inverter_current_peak_at_s": 0.01,
+                  "inverter_voltage_peak_pu": 0.8972632402052642,
+                  "inverter_voltage_peak_at_s": 0.015
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2886243380571947,
+                      "peak_time_s": 0.015
+                    },
+                    "vc": {
+                      "peak_pu": 0.9756025375008145,
+                      "peak_time_s": 0.025
+                    },
+                    "i1": {
+                      "peak_pu": 1.290208032284459,
+                      "peak_time_s": 0.015
+                    },
+                    "vi": {
+                      "peak_pu": 1.0037373994144647,
+                      "peak_time_s": 0.025
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1368683772161603e-13,
+                    "capacitor": 9.564328131631074e-13,
+                    "inverter_inductor": 4.867217739956686e-13
+                  },
+                  "inverter_current_peak_pu": 1.290208032284459,
+                  "inverter_current_peak_at_s": 0.015,
+                  "inverter_voltage_peak_pu": 1.0037373994144647,
+                  "inverter_voltage_peak_at_s": 0.025
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2463291840749662,
+                      "peak_time_s": 0.025
+                    },
+                    "vc": {
+                      "peak_pu": 1.0167021351380172,
+                      "peak_time_s": 0.04
+                    },
+                    "i1": {
+                      "peak_pu": 1.2447758855239446,
+                      "peak_time_s": 0.025
+                    },
+                    "vi": {
+                      "peak_pu": 1.04325760711694,
+                      "peak_time_s": 0.04
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 1.2964074258547953e-12,
+                    "inverter_inductor": 5.684341886080801e-13
+                  },
+                  "inverter_current_peak_pu": 1.2447758855239446,
+                  "inverter_current_peak_at_s": 0.025,
+                  "inverter_voltage_peak_pu": 1.04325760711694,
+                  "inverter_voltage_peak_at_s": 0.04
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.073849693596259,
+                      "peak_time_s": 0.04
+                    },
+                    "vc": {
+                      "peak_pu": 1.035115106455465,
+                      "peak_time_s": 0.06
+                    },
+                    "i1": {
+                      "peak_pu": 1.0711731640998414,
+                      "peak_time_s": 0.04
+                    },
+                    "vi": {
+                      "peak_pu": 1.061974688569687,
+                      "peak_time_s": 0.06
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 8.526512829121202e-14,
+                    "capacitor": 8.489506141838289e-13,
+                    "inverter_inductor": 4.60964599824365e-13
+                  },
+                  "inverter_current_peak_pu": 1.0711731640998414,
+                  "inverter_current_peak_at_s": 0.04,
+                  "inverter_voltage_peak_pu": 1.061974688569687,
+                  "inverter_voltage_peak_at_s": 0.06
+                }
+              ]
+            },
+            "input_endpoint_audit": {
+              "actual_inverter_inputs_pu": [
+                [
+                  0.5458949400508107,
+                  0.985405815074636
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "target_inverter_inputs_pu": [
+                [
+                  0.5458949400509348,
+                  0.9854058150723664
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "inverter_input_errors_pu": {
+                "start": 2.273014392987743e-12,
+                "end": 0.0
+              },
+              "i2_third_derivative_errors_pu_per_s3": {
+                "start": 0.1278762661362186,
+                "end": 7.227267202988946e-07
+              },
+              "input_endpoint_pass": true,
+              "scope": "Endpoint inverter input voltage continuity only; not derivative continuity or ratings validation"
+            },
+            "scope": "Own strategy constraints; missing power floor is not baseline failure"
+          }
+        },
+        {
+          "step": 3,
+          "coordinate_error": 2.220446049250313e-16,
+          "audit": {
+            "numerically_feasible": false,
+            "power_floor_pass": false,
+            "physical_audit": {
+              "strategy_constraints_pass": false,
+              "inverter_current_pass": false,
+              "actual_voltage_peak_pu": 1.1277920677377007,
+              "hardware_summary": {
+                "hypothetical_hardware": {
+                  "Cf_pu": 0.02,
+                  "X1_pu": 0.1,
+                  "R1_pu": 0.01,
+                  "Rf_pu": 0.0
+                },
+                "full_horizon_extrema": {
+                  "i2": {
+                    "peak_pu": 1.300000005640485,
+                    "peak_time_s": 0.0009241422989502361
+                  },
+                  "vc": {
+                    "peak_pu": 1.0351151064554809,
+                    "peak_time_s": 0.0
+                  },
+                  "i1": {
+                    "peak_pu": 1.3000002117157374,
+                    "peak_time_s": 0.009966389425660263
+                  },
+                  "vi": {
+                    "peak_pu": 1.1277920677377007,
+                    "peak_time_s": 9.06726366176042e-05
+                  }
+                },
+                "endpoint_check": {
+                  "start_i1": [
+                    0.6838723276910756,
+                    0.9870459587809858
+                  ],
+                  "frozen_segment_i1": [
+                    0.6838723276911144,
+                    0.987045958781053
+                  ],
+                  "start_i1_error_pu": 7.754301829774326e-14,
+                  "end_i1": [
+                    0.9355309983183989,
+                    0.3477127161698272
+                  ],
+                  "steady_i1": [
+                    0.935530998318399,
+                    0.34771271616982713
+                  ],
+                  "end_i1_error_pu": 1.2412670766236366e-16,
+                  "maximum_internal_i1_jump_pu": 4.965068306494546e-16
+                },
+                "equation_residuals_pu_per_s": {
+                  "RL": 1.2329026688462363e-13,
+                  "capacitor": 3.2218672174622043e-12,
+                  "inverter_inductor": 9.542627105174617e-13
+                },
+                "representation_errors_pu": {
+                  "i2": 1.1102230246251565e-15,
+                  "vc": 1.6986412276764895e-14,
+                  "i1": 8.359979375427429e-14,
+                  "vi": 2.3322455078300663e-12
+                },
+                "dense_check": {
+                  "points": 3341,
+                  "peaks_pu": {
+                    "i2": 1.299999959083759,
+                    "vc": 1.0351151064554707,
+                    "i1": 1.300000210228772,
+                    "vi": 1.1277917991612203
+                  }
+                },
+                "hardware_ratings_evaluated": false,
+                "scope": "Floating-point hypothetical LC demand reconstruction; not physical ratings, causality or control-bandwidth validation",
+                "i1_peak_pu": 1.3000002117157374,
+                "i1_peak_time_s": 0.009966389425660263,
+                "vi_peak_pu": 1.1277920677377007,
+                "vi_peak_time_s": 9.06726366176042e-05,
+                "inverter_current_peak_pu": 1.3000002117157374,
+                "inverter_current_peak_at_s": 0.009966389425660263,
+                "inverter_voltage_peak_pu": 1.1277920677377007,
+                "inverter_voltage_peak_at_s": 9.06726366176042e-05,
+                "maximum_representation_difference": 2.3322455078300663e-12,
+                "endpoint_inverter_current_errors": {
+                  "start": 7.754301829774326e-14,
+                  "end": 1.2412670766236366e-16
+                },
+                "equation_residuals": {
+                  "RL": 1.2329026688462363e-13,
+                  "capacitor": 3.2218672174622043e-12,
+                  "inverter_inductor": 9.542627105174617e-13
+                }
+              },
+              "polynomial_summary": {
+                "minimum_power_pu": 0.755222301307903,
+                "minimum_power_at_s": 0.0019238301377943864,
+                "current_peak_pu": 1.300000005640485,
+                "current_peak_at_s": 0.0009241422989502361,
+                "voltage_peak_pu": 1.0351151064554809,
+                "voltage_peak_at_s": 0.0,
+                "maximum_representation_difference": 1.0687013985862918e-14,
+                "hypothetical_inverter_current_peak_pu": 1.3000002117157374,
+                "hypothetical_inverter_voltage_peak_pu": 1.1277920677377007
+              },
+              "dense_check": {
+                "grid_count": 8006,
+                "current_peak_pu": 1.2999999771777995,
+                "voltage_peak_pu": 1.0351151064554707,
+                "power_min_pu": 0.7552223276957906,
+                "current_pass": true,
+                "voltage_pass": true,
+                "power_pass": false
+              },
+              "independent_endpoints": {
+                "residuals": {
+                  "start_i": 1.1102230246251565e-16,
+                  "end_i": 0.0,
+                  "start_di": 8.16371241821629e-12,
+                  "end_di": 0.0,
+                  "start_ddi": 1.7256367310486413e-06,
+                  "end_ddi": 0.0,
+                  "start_v": 1.0500268446867465e-14,
+                  "end_v": 0.0,
+                  "start_dv": 2.1945369554389884e-09,
+                  "end_dv": 0.0
+                },
+                "passed": true,
+                "units": {
+                  "start_i": "p.u.",
+                  "end_i": "p.u.",
+                  "start_di": "p.u./s",
+                  "end_di": "p.u./s",
+                  "start_ddi": "p.u./s^2",
+                  "end_ddi": "p.u./s^2",
+                  "start_v": "p.u.",
+                  "end_v": "p.u.",
+                  "start_dv": "p.u./s",
+                  "end_dv": "p.u./s"
+                },
+                "checked_keys": [
+                  "start_i",
+                  "end_i",
+                  "start_v",
+                  "end_v",
+                  "start_dv",
+                  "end_dv"
+                ],
+                "scope": "Independent current, capacitor-voltage and voltage-derivative endpoint match; raw current derivatives retained with units"
+              },
+              "epigraph_pass": true,
+              "segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "minimum_power_pu": 1.0691917318805948,
+                  "maximum_power_pu": 1.0750144093630751,
+                  "minimum_power_at_s": 5e-05,
+                  "current_peak_pu": 1.2138924971287302,
+                  "current_peak_at_s": 5e-05,
+                  "voltage_peak_pu": 1.0351151064554809,
+                  "voltage_peak_at_s": 0.0,
+                  "hypothetical_inverter_current_peak_pu": 1.201439787034398,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1265104997089446
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "minimum_power_pu": 1.0440554769729866,
+                  "maximum_power_pu": 1.0691917318805948,
+                  "minimum_power_at_s": 0.0001,
+                  "current_peak_pu": 1.2266893806874177,
+                  "current_peak_at_s": 0.0001,
+                  "voltage_peak_pu": 1.0197104345235035,
+                  "voltage_peak_at_s": 5e-05,
+                  "hypothetical_inverter_current_peak_pu": 1.1874429253497956,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1277920677377007
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "minimum_power_pu": 1.0019012167585195,
+                  "maximum_power_pu": 1.0440554769729866,
+                  "minimum_power_at_s": 0.0002,
+                  "current_peak_pu": 1.2483540876158705,
+                  "current_peak_at_s": 0.0002,
+                  "voltage_peak_pu": 0.9796619779046919,
+                  "voltage_peak_at_s": 0.0001,
+                  "hypothetical_inverter_current_peak_pu": 1.2168360221857375,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1175058016765422
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "minimum_power_pu": 0.9187935792621933,
+                  "maximum_power_pu": 1.001901216758519,
+                  "minimum_power_at_s": 0.0004,
+                  "current_peak_pu": 1.2782814929173323,
+                  "current_peak_at_s": 0.0004,
+                  "voltage_peak_pu": 0.9150453802799984,
+                  "voltage_peak_at_s": 0.0002,
+                  "hypothetical_inverter_current_peak_pu": 1.254430226861885,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9784131821221149
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "minimum_power_pu": 0.8084404886469195,
+                  "maximum_power_pu": 0.9187935792621933,
+                  "minimum_power_at_s": 0.0008,
+                  "current_peak_pu": 1.2992871152198593,
+                  "current_peak_at_s": 0.0008,
+                  "voltage_peak_pu": 0.8044524868533436,
+                  "voltage_peak_at_s": 0.0004,
+                  "hypothetical_inverter_current_peak_pu": 1.293174026521234,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8478972545692669
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "minimum_power_pu": 0.7593505005860376,
+                  "maximum_power_pu": 0.8084404886469196,
+                  "minimum_power_at_s": 0.0015,
+                  "current_peak_pu": 1.300000005640485,
+                  "current_peak_at_s": 0.0009241422989502361,
+                  "voltage_peak_pu": 0.6811637909970347,
+                  "voltage_peak_at_s": 0.0008,
+                  "hypothetical_inverter_current_peak_pu": 1.3000000015678081,
+                  "hypothetical_inverter_voltage_peak_pu": 0.6842606390977805
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "minimum_power_pu": 0.755222301307903,
+                  "maximum_power_pu": 0.7689103289033694,
+                  "minimum_power_at_s": 0.0019238301377943864,
+                  "current_peak_pu": 1.2941605234429137,
+                  "current_peak_at_s": 0.0015,
+                  "voltage_peak_pu": 0.6794467907841615,
+                  "voltage_peak_at_s": 0.003,
+                  "hypothetical_inverter_current_peak_pu": 1.2979768869206516,
+                  "hypothetical_inverter_voltage_peak_pu": 0.6556577410476432
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "minimum_power_pu": 0.7689103289033692,
+                  "maximum_power_pu": 0.8519415185744985,
+                  "minimum_power_at_s": 0.003,
+                  "current_peak_pu": 1.294029424508779,
+                  "current_peak_at_s": 0.006,
+                  "voltage_peak_pu": 0.73312738199346,
+                  "voltage_peak_at_s": 0.006,
+                  "hypothetical_inverter_current_peak_pu": 1.3000001833969903,
+                  "hypothetical_inverter_voltage_peak_pu": 0.713890844354397
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "minimum_power_pu": 0.8519415185744984,
+                  "maximum_power_pu": 0.9917965300532747,
+                  "minimum_power_at_s": 0.006,
+                  "current_peak_pu": 1.2959175842943258,
+                  "current_peak_at_s": 0.01,
+                  "voltage_peak_pu": 0.8124178344730925,
+                  "voltage_peak_at_s": 0.01,
+                  "hypothetical_inverter_current_peak_pu": 1.3000002117157374,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8101765806492826
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "minimum_power_pu": 0.9917965300532746,
+                  "maximum_power_pu": 1.0982625141823206,
+                  "minimum_power_at_s": 0.01,
+                  "current_peak_pu": 1.29617020456209,
+                  "current_peak_at_s": 0.010805441049470618,
+                  "voltage_peak_pu": 0.8841777154073766,
+                  "voltage_peak_at_s": 0.015,
+                  "hypothetical_inverter_current_peak_pu": 1.299999907727464,
+                  "hypothetical_inverter_voltage_peak_pu": 0.8972579092393829
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "minimum_power_pu": 1.0982625141823208,
+                  "maximum_power_pu": 1.1739695071978806,
+                  "minimum_power_at_s": 0.015,
+                  "current_peak_pu": 1.2885713710550986,
+                  "current_peak_at_s": 0.015,
+                  "voltage_peak_pu": 0.975593897847884,
+                  "voltage_peak_at_s": 0.025,
+                  "hypothetical_inverter_current_peak_pu": 1.2901551409700873,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0037259098176246
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "minimum_power_pu": 1.055756727416202,
+                  "maximum_power_pu": 1.1739638964132328,
+                  "minimum_power_at_s": 0.04,
+                  "current_peak_pu": 1.2463099346012432,
+                  "current_peak_at_s": 0.025,
+                  "voltage_peak_pu": 1.016701890228567,
+                  "voltage_peak_at_s": 0.04,
+                  "hypothetical_inverter_current_peak_pu": 1.2447573555874274,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0432579295730906
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "minimum_power_pu": 0.9999853219226686,
+                  "maximum_power_pu": 1.0557567274162019,
+                  "minimum_power_at_s": 0.05729979505628455,
+                  "current_peak_pu": 1.0738627480754654,
+                  "current_peak_at_s": 0.04,
+                  "voltage_peak_pu": 1.035115106455465,
+                  "voltage_peak_at_s": 0.06,
+                  "hypothetical_inverter_current_peak_pu": 1.0711861174597983,
+                  "hypothetical_inverter_voltage_peak_pu": 1.061974688569687
+                }
+              ],
+              "hardware_segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2138924971287302,
+                      "peak_time_s": 5e-05
+                    },
+                    "vc": {
+                      "peak_pu": 1.0351151064554809,
+                      "peak_time_s": 0.0
+                    },
+                    "i1": {
+                      "peak_pu": 1.201439787034398,
+                      "peak_time_s": 4.590877521386483e-06
+                    },
+                    "vi": {
+                      "peak_pu": 1.1265104997089446,
+                      "peak_time_s": 0.0
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.769430072577464e-14,
+                    "capacitor": 3.979039320256561e-13,
+                    "inverter_inductor": 9.542627105174617e-13
+                  },
+                  "inverter_current_peak_pu": 1.201439787034398,
+                  "inverter_current_peak_at_s": 4.590877521386483e-06,
+                  "inverter_voltage_peak_pu": 1.1265104997089446,
+                  "inverter_voltage_peak_at_s": 0.0
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2266893806874177,
+                      "peak_time_s": 0.0001
+                    },
+                    "vc": {
+                      "peak_pu": 1.0197104345235035,
+                      "peak_time_s": 5e-05
+                    },
+                    "i1": {
+                      "peak_pu": 1.1874429253497956,
+                      "peak_time_s": 0.0001
+                    },
+                    "vi": {
+                      "peak_pu": 1.1277920677377007,
+                      "peak_time_s": 9.06726366176042e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.685598022243751e-14,
+                    "capacitor": 3.4306021565178035e-13,
+                    "inverter_inductor": 3.428698297502919e-13
+                  },
+                  "inverter_current_peak_pu": 1.1874429253497956,
+                  "inverter_current_peak_at_s": 0.0001,
+                  "inverter_voltage_peak_pu": 1.1277920677377007,
+                  "inverter_voltage_peak_at_s": 9.06726366176042e-05
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2483540876158705,
+                      "peak_time_s": 0.0002
+                    },
+                    "vc": {
+                      "peak_pu": 0.9796619779046919,
+                      "peak_time_s": 0.0001
+                    },
+                    "i1": {
+                      "peak_pu": 1.2168360221857375,
+                      "peak_time_s": 0.0002
+                    },
+                    "vi": {
+                      "peak_pu": 1.1175058016765422,
+                      "peak_time_s": 0.0001
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 4.761815941556335e-16,
+                    "capacitor": 4.764227207187943e-13,
+                    "inverter_inductor": 1.5650675200262754e-13
+                  },
+                  "inverter_current_peak_pu": 1.2168360221857375,
+                  "inverter_current_peak_at_s": 0.0002,
+                  "inverter_voltage_peak_pu": 1.1175058016765422,
+                  "inverter_voltage_peak_at_s": 0.0001
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2782814929173323,
+                      "peak_time_s": 0.0004
+                    },
+                    "vc": {
+                      "peak_pu": 0.9150453802799984,
+                      "peak_time_s": 0.0002
+                    },
+                    "i1": {
+                      "peak_pu": 1.254430226861885,
+                      "peak_time_s": 0.0004
+                    },
+                    "vi": {
+                      "peak_pu": 0.9784131821221149,
+                      "peak_time_s": 0.0002
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1766282392855487e-13,
+                    "capacitor": 1.3642420526593924e-12,
+                    "inverter_inductor": 2.0166941033794572e-13
+                  },
+                  "inverter_current_peak_pu": 1.254430226861885,
+                  "inverter_current_peak_at_s": 0.0004,
+                  "inverter_voltage_peak_pu": 0.9784131821221149,
+                  "inverter_voltage_peak_at_s": 0.0002
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2992871152198593,
+                      "peak_time_s": 0.0008
+                    },
+                    "vc": {
+                      "peak_pu": 0.8044524868533436,
+                      "peak_time_s": 0.0004
+                    },
+                    "i1": {
+                      "peak_pu": 1.293174026521234,
+                      "peak_time_s": 0.0008
+                    },
+                    "vi": {
+                      "peak_pu": 0.8478972545692669,
+                      "peak_time_s": 0.0004
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.2329026688462363e-13,
+                    "capacitor": 3.9479530755670567e-13,
+                    "inverter_inductor": 2.0310142456736457e-13
+                  },
+                  "inverter_current_peak_pu": 1.293174026521234,
+                  "inverter_current_peak_at_s": 0.0008,
+                  "inverter_voltage_peak_pu": 0.8478972545692669,
+                  "inverter_voltage_peak_at_s": 0.0004
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.300000005640485,
+                      "peak_time_s": 0.0009241422989502361
+                    },
+                    "vc": {
+                      "peak_pu": 0.6811637909970347,
+                      "peak_time_s": 0.0008
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000000015678081,
+                      "peak_time_s": 0.001170579308995847
+                    },
+                    "vi": {
+                      "peak_pu": 0.6842606390977805,
+                      "peak_time_s": 0.0008
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.812764281185741e-14,
+                    "capacitor": 1.3543333121646128e-12,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000000015678081,
+                  "inverter_current_peak_at_s": 0.001170579308995847,
+                  "inverter_voltage_peak_pu": 0.6842606390977805,
+                  "inverter_voltage_peak_at_s": 0.0008
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2941605234429137,
+                      "peak_time_s": 0.0015
+                    },
+                    "vc": {
+                      "peak_pu": 0.6794467907841615,
+                      "peak_time_s": 0.003
+                    },
+                    "i1": {
+                      "peak_pu": 1.2979768869206516,
+                      "peak_time_s": 0.0015
+                    },
+                    "vi": {
+                      "peak_pu": 0.6556577410476432,
+                      "peak_time_s": 0.003
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.873079800267078e-14,
+                    "capacitor": 9.415801471845953e-13,
+                    "inverter_inductor": 1.2967404927621828e-13
+                  },
+                  "inverter_current_peak_pu": 1.2979768869206516,
+                  "inverter_current_peak_at_s": 0.0015,
+                  "inverter_voltage_peak_pu": 0.6556577410476432,
+                  "inverter_voltage_peak_at_s": 0.003
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.294029424508779,
+                      "peak_time_s": 0.006
+                    },
+                    "vc": {
+                      "peak_pu": 0.73312738199346,
+                      "peak_time_s": 0.006
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000001833969903,
+                      "peak_time_s": 0.0058939519579595204
+                    },
+                    "vi": {
+                      "peak_pu": 0.713890844354397,
+                      "peak_time_s": 0.006
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1368683772161603e-13,
+                    "capacitor": 8.242295734817162e-13,
+                    "inverter_inductor": 1.7148986346056935e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000001833969903,
+                  "inverter_current_peak_at_s": 0.0058939519579595204,
+                  "inverter_voltage_peak_pu": 0.713890844354397,
+                  "inverter_voltage_peak_at_s": 0.006
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2959175842943258,
+                      "peak_time_s": 0.01
+                    },
+                    "vc": {
+                      "peak_pu": 0.8124178344730925,
+                      "peak_time_s": 0.01
+                    },
+                    "i1": {
+                      "peak_pu": 1.3000002117157374,
+                      "peak_time_s": 0.009966389425660263
+                    },
+                    "vi": {
+                      "peak_pu": 0.8101765806492826,
+                      "peak_time_s": 0.01
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 1.854322251304552e-12,
+                    "inverter_inductor": 1.7068360848406996e-13
+                  },
+                  "inverter_current_peak_pu": 1.3000002117157374,
+                  "inverter_current_peak_at_s": 0.009966389425660263,
+                  "inverter_voltage_peak_pu": 0.8101765806492826,
+                  "inverter_voltage_peak_at_s": 0.01
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.29617020456209,
+                      "peak_time_s": 0.010805441049470618
+                    },
+                    "vc": {
+                      "peak_pu": 0.8841777154073766,
+                      "peak_time_s": 0.015
+                    },
+                    "i1": {
+                      "peak_pu": 1.299999907727464,
+                      "peak_time_s": 0.01
+                    },
+                    "vi": {
+                      "peak_pu": 0.8972579092393829,
+                      "peak_time_s": 0.015
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.861977570020827e-14,
+                    "capacitor": 2.0685120283303604e-12,
+                    "inverter_inductor": 3.601702269762086e-13
+                  },
+                  "inverter_current_peak_pu": 1.299999907727464,
+                  "inverter_current_peak_at_s": 0.01,
+                  "inverter_voltage_peak_pu": 0.8972579092393829,
+                  "inverter_voltage_peak_at_s": 0.015
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2885713710550986,
+                      "peak_time_s": 0.015
+                    },
+                    "vc": {
+                      "peak_pu": 0.975593897847884,
+                      "peak_time_s": 0.025
+                    },
+                    "i1": {
+                      "peak_pu": 1.2901551409700873,
+                      "peak_time_s": 0.015
+                    },
+                    "vi": {
+                      "peak_pu": 1.0037259098176246,
+                      "peak_time_s": 0.025
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 3.2218672174622043e-12,
+                    "inverter_inductor": 1.241229341530925e-13
+                  },
+                  "inverter_current_peak_pu": 1.2901551409700873,
+                  "inverter_current_peak_at_s": 0.015,
+                  "inverter_voltage_peak_pu": 1.0037259098176246,
+                  "inverter_voltage_peak_at_s": 0.025
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2463099346012432,
+                      "peak_time_s": 0.025
+                    },
+                    "vc": {
+                      "peak_pu": 1.016701890228567,
+                      "peak_time_s": 0.04
+                    },
+                    "i1": {
+                      "peak_pu": 1.2447573555874274,
+                      "peak_time_s": 0.025
+                    },
+                    "vi": {
+                      "peak_pu": 1.0432579295730906,
+                      "peak_time_s": 0.04
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.5987211554602254e-14,
+                    "capacitor": 1.6379952949563403e-12,
+                    "inverter_inductor": 1.7053025658242404e-13
+                  },
+                  "inverter_current_peak_pu": 1.2447573555874274,
+                  "inverter_current_peak_at_s": 0.025,
+                  "inverter_voltage_peak_pu": 1.0432579295730906,
+                  "inverter_voltage_peak_at_s": 0.04
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.0738627480754654,
+                      "peak_time_s": 0.04
+                    },
+                    "vc": {
+                      "peak_pu": 1.035115106455465,
+                      "peak_time_s": 0.06
+                    },
+                    "i1": {
+                      "peak_pu": 1.0711861174597983,
+                      "peak_time_s": 0.04
+                    },
+                    "vi": {
+                      "peak_pu": 1.061974688569687,
+                      "peak_time_s": 0.06
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 7.460698725481052e-14,
+                    "capacitor": 6.669687331724031e-13,
+                    "inverter_inductor": 4.849454171562684e-13
+                  },
+                  "inverter_current_peak_pu": 1.0711861174597983,
+                  "inverter_current_peak_at_s": 0.04,
+                  "inverter_voltage_peak_pu": 1.061974688569687,
+                  "inverter_voltage_peak_at_s": 0.06
+                }
+              ]
+            },
+            "input_endpoint_audit": {
+              "actual_inverter_inputs_pu": [
+                [
+                  0.5458949400508107,
+                  0.985405815074636
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "target_inverter_inputs_pu": [
+                [
+                  0.5458949400509348,
+                  0.9854058150723664
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "inverter_input_errors_pu": {
+                "start": 2.273014392987743e-12,
+                "end": 0.0
+              },
+              "i2_third_derivative_errors_pu_per_s3": {
+                "start": 0.1278762661362186,
+                "end": 7.227267202988946e-07
+              },
+              "input_endpoint_pass": true,
+              "scope": "Endpoint inverter input voltage continuity only; not derivative continuity or ratings validation"
+            },
+            "scope": "Own strategy constraints; missing power floor is not baseline failure"
+          }
+        }
+      ]
+    },
+    {
+      "hard_power": true,
+      "selected_step": 0,
+      "candidates": [
+        {
+          "step": 0,
+          "coordinate_error": 2.220446049250313e-16,
+          "audit": {
+            "numerically_feasible": true,
+            "power_floor_pass": true,
+            "physical_audit": {
+              "strategy_constraints_pass": true,
+              "inverter_current_pass": true,
+              "actual_voltage_peak_pu": 1.1850016160192463,
+              "hardware_summary": {
+                "hypothetical_hardware": {
+                  "Cf_pu": 0.02,
+                  "X1_pu": 0.1,
+                  "R1_pu": 0.01,
+                  "Rf_pu": 0.0
+                },
+                "full_horizon_extrema": {
+                  "i2": {
+                    "peak_pu": 1.2974744120396515,
+                    "peak_time_s": 0.0008156526323670684
+                  },
+                  "vc": {
+                    "peak_pu": 1.035115120582206,
+                    "peak_time_s": 0.058574934495717046
+                  },
+                  "i1": {
+                    "peak_pu": 1.295930710019815,
+                    "peak_time_s": 0.0008670064760824774
+                  },
+                  "vi": {
+                    "peak_pu": 1.1850016160192463,
+                    "peak_time_s": 9.292156007984338e-05
+                  }
+                },
+                "endpoint_check": {
+                  "start_i1": [
+                    0.6838723276910756,
+                    0.9870459587809858
+                  ],
+                  "frozen_segment_i1": [
+                    0.6838723276911144,
+                    0.987045958781053
+                  ],
+                  "start_i1_error_pu": 7.754301829774326e-14,
+                  "end_i1": [
+                    0.935530998318399,
+                    0.3477127161698271
+                  ],
+                  "steady_i1": [
+                    0.935530998318399,
+                    0.34771271616982713
+                  ],
+                  "end_i1_error_pu": 5.551115123125783e-17,
+                  "maximum_internal_i1_jump_pu": 2.482534153247273e-16
+                },
+                "equation_residuals_pu_per_s": {
+                  "RL": 1.7053025658242404e-13,
+                  "capacitor": 1.8474111129762605e-12,
+                  "inverter_inductor": 1.2491674361569949e-12
+                },
+                "representation_errors_pu": {
+                  "i2": 7.771561172376096e-16,
+                  "vc": 1.687538997430238e-14,
+                  "i1": 8.348877145181177e-14,
+                  "vi": 2.3315793740152913e-12
+                },
+                "dense_check": {
+                  "points": 3341,
+                  "peaks_pu": {
+                    "i2": 1.297474345752672,
+                    "vc": 1.0351151205641465,
+                    "i1": 1.2959305081552897,
+                    "vi": 1.1850013146330454
+                  }
+                },
+                "hardware_ratings_evaluated": false,
+                "scope": "Floating-point hypothetical LC demand reconstruction; not physical ratings, causality or control-bandwidth validation",
+                "i1_peak_pu": 1.295930710019815,
+                "i1_peak_time_s": 0.0008670064760824774,
+                "vi_peak_pu": 1.1850016160192463,
+                "vi_peak_time_s": 9.292156007984338e-05,
+                "inverter_current_peak_pu": 1.295930710019815,
+                "inverter_current_peak_at_s": 0.0008670064760824774,
+                "inverter_voltage_peak_pu": 1.1850016160192463,
+                "inverter_voltage_peak_at_s": 9.292156007984338e-05,
+                "maximum_representation_difference": 2.3315793740152913e-12,
+                "endpoint_inverter_current_errors": {
+                  "start": 7.754301829774326e-14,
+                  "end": 5.551115123125783e-17
+                },
+                "equation_residuals": {
+                  "RL": 1.7053025658242404e-13,
+                  "capacitor": 1.8474111129762605e-12,
+                  "inverter_inductor": 1.2491674361569949e-12
+                }
+              },
+              "polynomial_summary": {
+                "minimum_power_pu": 0.9999999862415105,
+                "minimum_power_at_s": 0.058712430898881604,
+                "current_peak_pu": 1.2974744120396515,
+                "current_peak_at_s": 0.0008156526323670684,
+                "voltage_peak_pu": 1.035115120582206,
+                "voltage_peak_at_s": 0.058574934495717046,
+                "maximum_representation_difference": 1.0687013985862918e-14,
+                "hypothetical_inverter_current_peak_pu": 1.295930710019815,
+                "hypothetical_inverter_voltage_peak_pu": 1.1850016160192463
+              },
+              "dense_check": {
+                "grid_count": 8006,
+                "current_peak_pu": 1.297474362303675,
+                "voltage_peak_pu": 1.0351151205812767,
+                "power_min_pu": 0.9999999862424317,
+                "current_pass": true,
+                "voltage_pass": true,
+                "power_pass": true
+              },
+              "independent_endpoints": {
+                "residuals": {
+                  "start_i": 1.1102230246251565e-16,
+                  "end_i": 0.0,
+                  "start_di": 8.16371241821629e-12,
+                  "end_di": 0.0,
+                  "start_ddi": 1.7256367310486413e-06,
+                  "end_ddi": 0.0,
+                  "start_v": 1.0500268446867465e-14,
+                  "end_v": 0.0,
+                  "start_dv": 2.1945369554389884e-09,
+                  "end_dv": 0.0
+                },
+                "passed": true,
+                "units": {
+                  "start_i": "p.u.",
+                  "end_i": "p.u.",
+                  "start_di": "p.u./s",
+                  "end_di": "p.u./s",
+                  "start_ddi": "p.u./s^2",
+                  "end_ddi": "p.u./s^2",
+                  "start_v": "p.u.",
+                  "end_v": "p.u.",
+                  "start_dv": "p.u./s",
+                  "end_dv": "p.u./s"
+                },
+                "checked_keys": [
+                  "start_i",
+                  "end_i",
+                  "start_v",
+                  "end_v",
+                  "start_dv",
+                  "end_dv"
+                ],
+                "scope": "Independent current, capacitor-voltage and voltage-derivative endpoint match; raw current derivatives retained with units"
+              },
+              "epigraph_pass": true,
+              "segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "minimum_power_pu": 1.0652637713871542,
+                  "maximum_power_pu": 1.0745978641807037,
+                  "minimum_power_at_s": 5e-05,
+                  "current_peak_pu": 1.213835581299125,
+                  "current_peak_at_s": 5e-05,
+                  "voltage_peak_pu": 1.0351151064554809,
+                  "voltage_peak_at_s": 0.0,
+                  "hypothetical_inverter_current_peak_pu": 1.201267678613156,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1785701162636568
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "minimum_power_pu": 1.0315434751596664,
+                  "maximum_power_pu": 1.065263771387154,
+                  "minimum_power_at_s": 0.0001,
+                  "current_peak_pu": 1.2261479634742734,
+                  "current_peak_at_s": 0.0001,
+                  "voltage_peak_pu": 1.018173580353309,
+                  "voltage_peak_at_s": 5e-05,
+                  "hypothetical_inverter_current_peak_pu": 1.1918877086018504,
+                  "hypothetical_inverter_voltage_peak_pu": 1.1850016160192463
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "minimum_power_pu": 1.0023712806505507,
+                  "maximum_power_pu": 1.0315434751596666,
+                  "minimum_power_at_s": 0.0002,
+                  "current_peak_pu": 1.2457725396729837,
+                  "current_peak_at_s": 0.0002,
+                  "voltage_peak_pu": 1.0222571884112366,
+                  "voltage_peak_at_s": 0.0002,
+                  "hypothetical_inverter_current_peak_pu": 1.2357021820840755,
+                  "hypothetical_inverter_voltage_peak_pu": 1.177967198581469
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "minimum_power_pu": 1.0012537453824837,
+                  "maximum_power_pu": 1.004868594731658,
+                  "minimum_power_at_s": 0.00023459621277052096,
+                  "current_peak_pu": 1.2745172976384507,
+                  "current_peak_at_s": 0.0004,
+                  "voltage_peak_pu": 1.029345220657236,
+                  "voltage_peak_at_s": 0.00026367203012975715,
+                  "hypothetical_inverter_current_peak_pu": 1.268924223685221,
+                  "hypothetical_inverter_voltage_peak_pu": 1.045162819271523
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "minimum_power_pu": 1.0026971083468574,
+                  "maximum_power_pu": 1.0055474263665432,
+                  "minimum_power_at_s": 0.0006077905306875207,
+                  "current_peak_pu": 1.297445657153723,
+                  "current_peak_at_s": 0.0008,
+                  "voltage_peak_pu": 1.0225674714893944,
+                  "voltage_peak_at_s": 0.0006246210624617126,
+                  "hypothetical_inverter_current_peak_pu": 1.2954181372832898,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0432319605959368
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "minimum_power_pu": 1.0055474263665432,
+                  "maximum_power_pu": 1.023429142827584,
+                  "minimum_power_at_s": 0.0008,
+                  "current_peak_pu": 1.2974744120396515,
+                  "current_peak_at_s": 0.0008156526323670684,
+                  "voltage_peak_pu": 1.011759951681901,
+                  "voltage_peak_at_s": 0.0008,
+                  "hypothetical_inverter_current_peak_pu": 1.295930710019815,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9995607203720975
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "minimum_power_pu": 1.023429142827584,
+                  "maximum_power_pu": 1.0426527604121671,
+                  "minimum_power_at_s": 0.0015,
+                  "current_peak_pu": 1.2569498930407854,
+                  "current_peak_at_s": 0.0015,
+                  "voltage_peak_pu": 0.9365760571933301,
+                  "voltage_peak_at_s": 0.003,
+                  "hypothetical_inverter_current_peak_pu": 1.2637533715801075,
+                  "hypothetical_inverter_voltage_peak_pu": 0.962733529840601
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "minimum_power_pu": 1.0284885249675,
+                  "maximum_power_pu": 1.0428663026475369,
+                  "minimum_power_at_s": 0.004407083615083776,
+                  "current_peak_pu": 1.1510902290397038,
+                  "current_peak_at_s": 0.006,
+                  "voltage_peak_pu": 0.9523409519449801,
+                  "voltage_peak_at_s": 0.0037101959840637492,
+                  "hypothetical_inverter_current_peak_pu": 1.151977017725787,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9870745804630662
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "minimum_power_pu": 1.0257047245568265,
+                  "maximum_power_pu": 1.0533535310668303,
+                  "minimum_power_at_s": 0.01,
+                  "current_peak_pu": 1.153742915274867,
+                  "current_peak_at_s": 0.006638241542014493,
+                  "voltage_peak_pu": 0.9520877912816883,
+                  "voltage_peak_at_s": 0.01,
+                  "hypothetical_inverter_current_peak_pu": 1.1545879798895695,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9696694800554779
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "minimum_power_pu": 1.0153759617848583,
+                  "maximum_power_pu": 1.0419690044962857,
+                  "minimum_power_at_s": 0.011708172767184,
+                  "current_peak_pu": 1.1307682243530148,
+                  "current_peak_at_s": 0.015,
+                  "voltage_peak_pu": 0.9682753186916983,
+                  "voltage_peak_at_s": 0.013035604794079282,
+                  "hypothetical_inverter_current_peak_pu": 1.129906408342992,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9936713791214459
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "minimum_power_pu": 1.041969004496286,
+                  "maximum_power_pu": 1.0720601223200086,
+                  "minimum_power_at_s": 0.015,
+                  "current_peak_pu": 1.2202533060424825,
+                  "current_peak_at_s": 0.0207839128579952,
+                  "voltage_peak_pu": 0.9596547340831629,
+                  "voltage_peak_at_s": 0.015,
+                  "hypothetical_inverter_current_peak_pu": 1.220352551943865,
+                  "hypothetical_inverter_voltage_peak_pu": 0.9860630506873581
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "minimum_power_pu": 1.0044522365757091,
+                  "maximum_power_pu": 1.0515917532906018,
+                  "minimum_power_at_s": 0.04,
+                  "current_peak_pu": 1.1800164570604088,
+                  "current_peak_at_s": 0.025,
+                  "voltage_peak_pu": 1.0236986718834669,
+                  "voltage_peak_at_s": 0.04,
+                  "hypothetical_inverter_current_peak_pu": 1.1805653893991752,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0484557128065952
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "minimum_power_pu": 0.9999999862415105,
+                  "maximum_power_pu": 1.0044522365757087,
+                  "minimum_power_at_s": 0.058712430898881604,
+                  "current_peak_pu": 1.0136039102117707,
+                  "current_peak_at_s": 0.04,
+                  "voltage_peak_pu": 1.035115120582206,
+                  "voltage_peak_at_s": 0.058574934495717046,
+                  "hypothetical_inverter_current_peak_pu": 1.0113073579634588,
+                  "hypothetical_inverter_voltage_peak_pu": 1.0619748928670572
+                }
+              ],
+              "hardware_segments": [
+                {
+                  "start_s": 0.0,
+                  "end_s": 5e-05,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.213835581299125,
+                      "peak_time_s": 5e-05
+                    },
+                    "vc": {
+                      "peak_pu": 1.0351151064554809,
+                      "peak_time_s": 0.0
+                    },
+                    "i1": {
+                      "peak_pu": 1.201267678613156,
+                      "peak_time_s": 3.318377278111523e-06
+                    },
+                    "vi": {
+                      "peak_pu": 1.1785701162636568,
+                      "peak_time_s": 3.662231858517026e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.763878957454338e-14,
+                    "capacitor": 7.059937332158939e-13,
+                    "inverter_inductor": 1.2491674361569949e-12
+                  },
+                  "inverter_current_peak_pu": 1.201267678613156,
+                  "inverter_current_peak_at_s": 3.318377278111523e-06,
+                  "inverter_voltage_peak_pu": 1.1785701162636568,
+                  "inverter_voltage_peak_at_s": 3.662231858517026e-05
+                },
+                {
+                  "start_s": 5e-05,
+                  "end_s": 0.0001,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2261479634742734,
+                      "peak_time_s": 0.0001
+                    },
+                    "vc": {
+                      "peak_pu": 1.018173580353309,
+                      "peak_time_s": 5e-05
+                    },
+                    "i1": {
+                      "peak_pu": 1.1918877086018504,
+                      "peak_time_s": 0.0001
+                    },
+                    "vi": {
+                      "peak_pu": 1.1850016160192463,
+                      "peak_time_s": 9.292156007984338e-05
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.983302824892235e-14,
+                    "capacitor": 1.2208558816673154e-12,
+                    "inverter_inductor": 9.509910220417694e-13
+                  },
+                  "inverter_current_peak_pu": 1.1918877086018504,
+                  "inverter_current_peak_at_s": 0.0001,
+                  "inverter_voltage_peak_pu": 1.1850016160192463,
+                  "inverter_voltage_peak_at_s": 9.292156007984338e-05
+                },
+                {
+                  "start_s": 0.0001,
+                  "end_s": 0.0002,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2457725396729837,
+                      "peak_time_s": 0.0002
+                    },
+                    "vc": {
+                      "peak_pu": 1.0222571884112366,
+                      "peak_time_s": 0.0002
+                    },
+                    "i1": {
+                      "peak_pu": 1.2357021820840755,
+                      "peak_time_s": 0.0002
+                    },
+                    "vi": {
+                      "peak_pu": 1.177967198581469,
+                      "peak_time_s": 0.0001
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.3011813848606835e-13,
+                    "capacitor": 1.2505552149377763e-12,
+                    "inverter_inductor": 4.417577414983498e-13
+                  },
+                  "inverter_current_peak_pu": 1.2357021820840755,
+                  "inverter_current_peak_at_s": 0.0002,
+                  "inverter_voltage_peak_pu": 1.177967198581469,
+                  "inverter_voltage_peak_at_s": 0.0001
+                },
+                {
+                  "start_s": 0.0002,
+                  "end_s": 0.0004,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2745172976384507,
+                      "peak_time_s": 0.0004
+                    },
+                    "vc": {
+                      "peak_pu": 1.029345220657236,
+                      "peak_time_s": 0.00026367203012975715
+                    },
+                    "i1": {
+                      "peak_pu": 1.268924223685221,
+                      "peak_time_s": 0.0004
+                    },
+                    "vi": {
+                      "peak_pu": 1.045162819271523,
+                      "peak_time_s": 0.0003746933235125603
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.972200594645983e-14,
+                    "capacitor": 1.6484591469634324e-12,
+                    "inverter_inductor": 7.975842208907125e-13
+                  },
+                  "inverter_current_peak_pu": 1.268924223685221,
+                  "inverter_current_peak_at_s": 0.0004,
+                  "inverter_voltage_peak_pu": 1.045162819271523,
+                  "inverter_voltage_peak_at_s": 0.0003746933235125603
+                },
+                {
+                  "start_s": 0.0004,
+                  "end_s": 0.0008,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.297445657153723,
+                      "peak_time_s": 0.0008
+                    },
+                    "vc": {
+                      "peak_pu": 1.0225674714893944,
+                      "peak_time_s": 0.0006246210624617126
+                    },
+                    "i1": {
+                      "peak_pu": 1.2954181372832898,
+                      "peak_time_s": 0.0008
+                    },
+                    "vi": {
+                      "peak_pu": 1.0432319605959368,
+                      "peak_time_s": 0.0004
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 6.88338275267597e-14,
+                    "capacitor": 5.889733145636455e-13,
+                    "inverter_inductor": 3.2929214910382143e-13
+                  },
+                  "inverter_current_peak_pu": 1.2954181372832898,
+                  "inverter_current_peak_at_s": 0.0008,
+                  "inverter_voltage_peak_pu": 1.0432319605959368,
+                  "inverter_voltage_peak_at_s": 0.0004
+                },
+                {
+                  "start_s": 0.0008,
+                  "end_s": 0.0015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2974744120396515,
+                      "peak_time_s": 0.0008156526323670684
+                    },
+                    "vc": {
+                      "peak_pu": 1.011759951681901,
+                      "peak_time_s": 0.0008
+                    },
+                    "i1": {
+                      "peak_pu": 1.295930710019815,
+                      "peak_time_s": 0.0008670064760824774
+                    },
+                    "vi": {
+                      "peak_pu": 0.9995607203720975,
+                      "peak_time_s": 0.0008
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 8.171241461241152e-14,
+                    "capacitor": 1.3642420526593924e-12,
+                    "inverter_inductor": 5.950527153707872e-14
+                  },
+                  "inverter_current_peak_pu": 1.295930710019815,
+                  "inverter_current_peak_at_s": 0.0008670064760824774,
+                  "inverter_voltage_peak_pu": 0.9995607203720975,
+                  "inverter_voltage_peak_at_s": 0.0008
+                },
+                {
+                  "start_s": 0.0015,
+                  "end_s": 0.003,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2569498930407854,
+                      "peak_time_s": 0.0015
+                    },
+                    "vc": {
+                      "peak_pu": 0.9365760571933301,
+                      "peak_time_s": 0.003
+                    },
+                    "i1": {
+                      "peak_pu": 1.2637533715801075,
+                      "peak_time_s": 0.0015
+                    },
+                    "vi": {
+                      "peak_pu": 0.962733529840601,
+                      "peak_time_s": 0.003
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.3877787807814457e-13,
+                    "capacitor": 1.4210854715202004e-12,
+                    "inverter_inductor": 3.517186542012496e-13
+                  },
+                  "inverter_current_peak_pu": 1.2637533715801075,
+                  "inverter_current_peak_at_s": 0.0015,
+                  "inverter_voltage_peak_pu": 0.962733529840601,
+                  "inverter_voltage_peak_at_s": 0.003
+                },
+                {
+                  "start_s": 0.003,
+                  "end_s": 0.006,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.1510902290397038,
+                      "peak_time_s": 0.006
+                    },
+                    "vc": {
+                      "peak_pu": 0.9523409519449801,
+                      "peak_time_s": 0.0037101959840637492
+                    },
+                    "i1": {
+                      "peak_pu": 1.151977017725787,
+                      "peak_time_s": 0.006
+                    },
+                    "vi": {
+                      "peak_pu": 0.9870745804630662,
+                      "peak_time_s": 0.0036883729488368998
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.0835776720341528e-13,
+                    "capacitor": 6.552356816604785e-13,
+                    "inverter_inductor": 1.6342482922482304e-13
+                  },
+                  "inverter_current_peak_pu": 1.151977017725787,
+                  "inverter_current_peak_at_s": 0.006,
+                  "inverter_voltage_peak_pu": 0.9870745804630662,
+                  "inverter_voltage_peak_at_s": 0.0036883729488368998
+                },
+                {
+                  "start_s": 0.006,
+                  "end_s": 0.01,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.153742915274867,
+                      "peak_time_s": 0.006638241542014493
+                    },
+                    "vc": {
+                      "peak_pu": 0.9520877912816883,
+                      "peak_time_s": 0.01
+                    },
+                    "i1": {
+                      "peak_pu": 1.1545879798895695,
+                      "peak_time_s": 0.0066107473270158364
+                    },
+                    "vi": {
+                      "peak_pu": 0.9696694800554779,
+                      "peak_time_s": 0.01
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.7053025658242404e-13,
+                    "capacitor": 9.094947017729282e-13,
+                    "inverter_inductor": 4.192202140984591e-13
+                  },
+                  "inverter_current_peak_pu": 1.1545879798895695,
+                  "inverter_current_peak_at_s": 0.0066107473270158364,
+                  "inverter_voltage_peak_pu": 0.9696694800554779,
+                  "inverter_voltage_peak_at_s": 0.01
+                },
+                {
+                  "start_s": 0.01,
+                  "end_s": 0.015,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.1307682243530148,
+                      "peak_time_s": 0.015
+                    },
+                    "vc": {
+                      "peak_pu": 0.9682753186916983,
+                      "peak_time_s": 0.013035604794079282
+                    },
+                    "i1": {
+                      "peak_pu": 1.129906408342992,
+                      "peak_time_s": 0.015
+                    },
+                    "vi": {
+                      "peak_pu": 0.9936713791214459,
+                      "peak_time_s": 0.013315114128310606
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 5.684341886080802e-14,
+                    "capacitor": 8.014307469244087e-13,
+                    "inverter_inductor": 2.8421709430404007e-13
+                  },
+                  "inverter_current_peak_pu": 1.129906408342992,
+                  "inverter_current_peak_at_s": 0.015,
+                  "inverter_voltage_peak_pu": 0.9936713791214459,
+                  "inverter_voltage_peak_at_s": 0.013315114128310606
+                },
+                {
+                  "start_s": 0.015,
+                  "end_s": 0.025,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.2202533060424825,
+                      "peak_time_s": 0.0207839128579952
+                    },
+                    "vc": {
+                      "peak_pu": 0.9596547340831629,
+                      "peak_time_s": 0.015
+                    },
+                    "i1": {
+                      "peak_pu": 1.220352551943865,
+                      "peak_time_s": 0.020815396248299138
+                    },
+                    "vi": {
+                      "peak_pu": 0.9860630506873581,
+                      "peak_time_s": 0.015
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1369506159587252e-13,
+                    "capacitor": 1.8474111129762605e-12,
+                    "inverter_inductor": 2.8421709430404007e-13
+                  },
+                  "inverter_current_peak_pu": 1.220352551943865,
+                  "inverter_current_peak_at_s": 0.020815396248299138,
+                  "inverter_voltage_peak_pu": 0.9860630506873581,
+                  "inverter_voltage_peak_at_s": 0.015
+                },
+                {
+                  "start_s": 0.025,
+                  "end_s": 0.04,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.1800164570604088,
+                      "peak_time_s": 0.025
+                    },
+                    "vc": {
+                      "peak_pu": 1.0236986718834669,
+                      "peak_time_s": 0.04
+                    },
+                    "i1": {
+                      "peak_pu": 1.1805653893991752,
+                      "peak_time_s": 0.025
+                    },
+                    "vi": {
+                      "peak_pu": 1.0484557128065952,
+                      "peak_time_s": 0.04
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 1.1368683772161603e-13,
+                    "capacitor": 9.379164112033322e-13,
+                    "inverter_inductor": 2.3628791181151825e-13
+                  },
+                  "inverter_current_peak_pu": 1.1805653893991752,
+                  "inverter_current_peak_at_s": 0.025,
+                  "inverter_voltage_peak_pu": 1.0484557128065952,
+                  "inverter_voltage_peak_at_s": 0.04
+                },
+                {
+                  "start_s": 0.04,
+                  "end_s": 0.06,
+                  "extrema": {
+                    "i2": {
+                      "peak_pu": 1.0136039102117707,
+                      "peak_time_s": 0.04
+                    },
+                    "vc": {
+                      "peak_pu": 1.035115120582206,
+                      "peak_time_s": 0.058574934495717046
+                    },
+                    "i1": {
+                      "peak_pu": 1.0113073579634588,
+                      "peak_time_s": 0.04
+                    },
+                    "vi": {
+                      "peak_pu": 1.0619748928670572,
+                      "peak_time_s": 0.05780984231398636
+                    }
+                  },
+                  "equation_residuals_pu_per_s": {
+                    "RL": 4.263256414560601e-14,
+                    "capacitor": 2.5934809855243657e-13,
+                    "inverter_inductor": 4.920508445138694e-13
+                  },
+                  "inverter_current_peak_pu": 1.0113073579634588,
+                  "inverter_current_peak_at_s": 0.04,
+                  "inverter_voltage_peak_pu": 1.0619748928670572,
+                  "inverter_voltage_peak_at_s": 0.05780984231398636
+                }
+              ]
+            },
+            "input_endpoint_audit": {
+              "actual_inverter_inputs_pu": [
+                [
+                  0.5458949400508107,
+                  0.985405815074636
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "target_inverter_inputs_pu": [
+                [
+                  0.5458949400509348,
+                  0.9854058150723664
+                ],
+                [
+                  0.8923071900415778,
+                  0.5758282016042529
+                ]
+              ],
+              "inverter_input_errors_pu": {
+                "start": 2.273014392987743e-12,
+                "end": 0.0
+              },
+              "i2_third_derivative_errors_pu_per_s3": {
+                "start": 0.1278762661362186,
+                "end": 7.204797454030837e-07
+              },
+              "input_endpoint_pass": true,
+              "scope": "Endpoint inverter input voltage continuity only; not derivative continuity or ratings validation"
+            },
+            "scope": "Own strategy constraints; missing power floor is not baseline failure"
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Every candidate's original constraints and coefficient provenance; no strict interval or optimality proof"
+}

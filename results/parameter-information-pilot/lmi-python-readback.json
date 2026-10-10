@@ -1,0 +1,22 @@
+{
+  "checked": [
+    {
+      "name": "whole-box",
+      "p_minimum": 1.9942111557073684e-08,
+      "q_margin": -7.308543881190587e-07,
+      "stable": false
+    },
+    {
+      "name": "axis-0-value-3.0",
+      "p_minimum": 55.40869683530209,
+      "q_margin": 950.7577565626437,
+      "stable": true
+    },
+    {
+      "name": "axis-1-value-3.0",
+      "p_minimum": 21.58854885998975,
+      "q_margin": 420.76749225091436,
+      "stable": true
+    }
+  ]
+}

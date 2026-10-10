@@ -1,0 +1,60 @@
+{
+  "schema": "gfm-literature-snapshot/1.0",
+  "recorded_on": "2026-10-01",
+  "status": "downloaded-and-read-selected-method-sections-not-reproduced",
+  "hash_scope": "local-baseline-no-trusted-upstream-checksum",
+  "reading_note": "docs/research/expanded-literature-and-software-priorities-2026-10-01.md",
+  "artifacts": [
+    {
+      "title": "Impedance-based Root-cause Analysis: Comparative Study of Impedance Models and Calculation of Eigenvalue Sensitivity",
+      "version": "arxiv-2204.01608v1",
+      "source_url": "https://arxiv.org/pdf/2204.01608v1",
+      "path": "references/papers/Zhu-et-al-2022-impedance-root-cause-arxiv-2204.01608v1.pdf",
+      "pages": 13,
+      "bytes": 3401466,
+      "sha256": "5DE9CC5EF7AE8B8AFCE31A22F38969F68E9F67BFD6677F4F59901B0F3C242D82",
+      "redistribution": "not-in-release-package"
+    },
+    {
+      "title": "Open-Source Python Tool for Grid Converter Output Admittance Identification",
+      "version": "arxiv-2607.10653v1",
+      "source_url": "https://arxiv.org/pdf/2607.10653v1",
+      "path": "references/papers/Maatta-et-al-2026-output-admittance-identification-arxiv-2607.10653v1.pdf",
+      "pages": 8,
+      "bytes": 599799,
+      "sha256": "499C4EDA9FAC4DA005492639C9F4FB76603C9051A4EB4CA2EFAADF0CD19B2504",
+      "redistribution": "not-in-release-package"
+    },
+    {
+      "title": "Model Reduction and Dynamic Aggregation of Grid-Forming Inverter Networks",
+      "version": "accepted-author-manuscript-not-final-typeset-version",
+      "doi": "10.1109/TPWRS.2022.3229970",
+      "source_url": "https://johnsonlab.ece.utexas.edu/wp-content/uploads/2023/04/Model_Reduction_and_Dynamic_Aggregation_of_Grid-forming_Inverter_Networks-1.pdf",
+      "path": "references/papers/Ajala-et-al-2023-GFM-network-model-reduction-author-manuscript.pdf",
+      "pages": 16,
+      "bytes": 5004955,
+      "sha256": "B8A0EF35183FF0C6A6206EBB77448BE8084698B760D8CE6A9B6DB8A25ED7F660",
+      "redistribution": "not-in-release-package"
+    },
+    {
+      "title": "Robust Stability Analysis of Grid-Forming Converter-Dominated Grids Using Grey-Box Modelling Approach",
+      "version": "Energies-2025-18-3-587",
+      "doi": "10.3390/en18030587",
+      "source_url": "https://macau.uni-kiel.de/servlets/MCRFileNodeServlet/macau_derivate_00007483/energies-18-00587.pdf",
+      "path": "references/papers/Almawu-et-al-2025-robust-GFM-grey-box-Energies-18-587.pdf",
+      "pages": 22,
+      "bytes": 8062177,
+      "sha256": "87FB3663C8374C227A220D0AA18B0DB8C6BDCC707D76BE7997B9C5EDF91B06AA",
+      "license": "CC-BY-4.0",
+      "redistribution": "not-in-release-package"
+    }
+  ],
+  "pending": [
+    {
+      "title": "Limitations of Using Passivity Index to Analyze Grid-Inverter Interactions",
+      "doi": "10.1109/TPEL.2024.3428403",
+      "status": "metadata-and-abstract-only-pdf-download-incomplete",
+      "metadata_url": "https://vbn.aau.dk/en/publications/limitations-of-using-passivity-index-to-analyze-grid-inverter-int/"
+    }
+  ]
+}

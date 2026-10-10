@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "point_count": 6,
+  "sampled_records": 72,
+  "rebuilt_steps": [
+    1e-05,
+    5e-06
+  ],
+  "classification_counts": {
+    "continuous": {
+      "stable": 12
+    },
+    "ideal_command": {
+      "unstable": 12
+    },
+    "sampled": {
+      "unstable": 66,
+      "stable": 6
+    }
+  },
+  "maximum_matrix_relative_error": 1.2944397796490985e-12,
+  "maximum_matched_spectrum_absolute_error": 2.4637714091113594e-10,
+  "maximum_metric_absolute_error_per_s": 3.991473818132363e-11,
+  "pilot_sha256": "9ae5d776055a38a060d5bf7dfb834e6dff153589d7ca66f079cd858b81ac5451",
+  "verifier_sha256": "247d04dfac09c3200c1a12c5cae880e6d90cdcdf1addd8893b51429eb85ed022",
+  "limitation": "Independent analytic reconstruction and numerical recomputation; same production physical model, not physical validation."
+}

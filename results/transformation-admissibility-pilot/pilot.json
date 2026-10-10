@@ -1,0 +1,7022 @@
+{
+  "scope": "Zeros of the analysis transformation F, NOT converter closed-loop poles.",
+  "limitations": [
+    "F inverse stability is only one necessary admissibility check.",
+    "No physical closed-loop stability, sectoriality, internal-stability or continuum frequency certificate is established.",
+    "Jnet diagnostic operating point is constructed, not the author's workbook point.",
+    "Imaginary-axis invertibility is checked on a finite grid only.",
+    "Rv=0 and Xv=0 are excluded degenerate families."
+  ],
+  "correctedMatrices": {
+    "E": "V diag(1,-1)",
+    "FJ": "[[0,1],[V,0]]",
+    "WNormalization": "sqrt(Rv^2+Xv^2)"
+  },
+  "rootRealPartTolerancePerSecond": 1e-07,
+  "sourceHashes": {
+    "backend/core/fig8_kernel.py": "02af388b5b4b1cb9881dd86325c14b98eae06be7c2750bf53cc4bfb453878f24",
+    "external/cifelli-small-gain-phase/dec_conditions_inf_bus.m": "3ef778d85fee4980e90e347fc9477b6637578202dffb39b34023065b739c51ad"
+  },
+  "rowCount": 135,
+  "statusCounts": {
+    "strict-lhp-zeros": 54,
+    "critical": 27,
+    "rhp-zero": 54
+  },
+  "allThreeRoutesAgree": true,
+  "rows": [
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 8.684399107189515,
+      "cutoffHz": 1.382165045692054,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.0012567906845485624,
+        0.0039000563574519602
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233781e-09,
+        6.366197723675816e-08,
+        0.00010100000000000003,
+        0.0012567906845485624,
+        0.0039000563574519607
+      ],
+      "coefficientMaximumRelativeError": 4.157863256941595e-16,
+      "fZerosPerSecond": [
+        [
+          -25.162075038226334,
+          313.65834893223916
+        ],
+        [
+          -25.162075038226334,
+          -313.65834893223916
+        ],
+        [
+          -6.739243431519471,
+          0.0
+        ],
+        [
+          -5.7684595638237095,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.7684595638237095,
+      "maximumScaledPolynomialResidual": 2.0382971137005263e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6693877551020408,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 34.73759642875806,
+      "cutoffHz": 5.528660182768216,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.00502716273819425,
+        0.062400901719231364
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233781e-09,
+        6.366197723675816e-08,
+        0.00010100000000000003,
+        0.00502716273819425,
+        0.06240090171923137
+      ],
+      "coefficientMaximumRelativeError": 4.157863256941595e-16,
+      "fZerosPerSecond": [
+        [
+          -6.251412627694316,
+          313.6701470722113
+        ],
+        [
+          -6.251412627694316,
+          -313.6701470722113
+        ],
+        [
+          -27.911270803195055,
+          0.0
+        ],
+        [
+          -22.417757013212153,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.251412627694316,
+      "maximumScaledPolynomialResidual": 1.7139266332562377e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11596180081855391,
+      "routhNormalizedDelta3": 0.11111111111111109,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 43.42199553594757,
+      "cutoffHz": 6.910825228460269,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.006283953422742811,
+        0.09750140893629901
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233781e-09,
+        6.366197723675816e-08,
+        0.00010100000000000003,
+        0.006283953422742813,
+        0.09750140893629901
+      ],
+      "coefficientMaximumRelativeError": 4.157863256941595e-16,
+      "fZerosPerSecond": [
+        [
+          -7.105427357601002e-15,
+          314.1784676612104
+        ],
+        [
+          -7.105427357601002e-15,
+          -314.1784676612104
+        ],
+        [
+          -34.88947386574335,
+          0.0
+        ],
+        [
+          -27.94237920605247,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -7.105427357601002e-15,
+      "maximumScaledPolynomialResidual": 1.0770275621899354e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.004914004914004976,
+      "routhNormalizedDelta3": 5.613113558987543e-17,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 52.10639464313709,
+      "cutoffHz": 8.292990274152324,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.007540744107291374,
+        0.14040202886827055
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233781e-09,
+        6.366197723675816e-08,
+        0.00010100000000000003,
+        0.007540744107291374,
+        0.14040202886827055
+      ],
+      "coefficientMaximumRelativeError": 4.157863256941595e-16,
+      "fZerosPerSecond": [
+        [
+          6.1774446660611915,
+          314.9239506858749
+        ],
+        [
+          6.1774446660611915,
+          -314.9239506858749
+        ],
+        [
+          -41.6663018279693,
+          0.0
+        ],
+        [
+          -33.52044057594903,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 6.1774446660611915,
+      "maximumScaledPolynomialResidual": 4.271589968677904e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.08603351955307258,
+      "routhNormalizedDelta3": -0.09090909090909094,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 86.84399107189515,
+      "cutoffHz": 13.821650456920539,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.012567906845485623,
+        0.39000563574519603
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233781e-09,
+        6.366197723675816e-08,
+        0.00010100000000000003,
+        0.012567906845485626,
+        0.39000563574519603
+      ],
+      "coefficientMaximumRelativeError": 4.157863256941595e-16,
+      "fZerosPerSecond": [
+        [
+          29.738555960518248,
+          319.9131138816123
+        ],
+        [
+          29.738555960518248,
+          -319.9131138816123
+        ],
+        [
+          -64.48080518422793,
+          0.0
+        ],
+        [
+          -57.82815980860449,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 29.738555960518248,
+      "maximumScaledPolynomialResidual": 1.1266113674858184e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.3289581624282198,
+      "routhNormalizedDelta3": -0.3333333333333333,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 0.8726220732415655,
+      "cutoffHz": 0.1388821164074931,
+      "limitHz": 0.6944105820374654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.012566386126864868,
+        0.0038991125997397975
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-07,
+        0.010001000000000001,
+        0.012566386126864868,
+        0.0038991125997397975
+      ],
+      "coefficientMaximumRelativeError": 1.6631453027766379e-16,
+      "fZerosPerSecond": [
+        [
+          -2.513303413814385,
+          314.15424666319086
+        ],
+        [
+          -2.513303413814385,
+          -314.15424666319086
+        ],
+        [
+          -0.6979211704990435,
+          0.0
+        ],
+        [
+          -0.5586573090517751,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.5586573090517751,
+      "maximumScaledPolynomialResidual": 2.472366097839976e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6666940992510905,
+      "routhNormalizedDelta3": 0.6666666666666669,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 3.490488292966262,
+      "cutoffHz": 0.5555284656299724,
+      "limitHz": 0.6944105820374654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.05026554450745947,
+        0.06238580159583676
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-07,
+        0.010001000000000001,
+        0.05026554450745947,
+        0.06238580159583676
+      ],
+      "coefficientMaximumRelativeError": 1.6631453027766379e-16,
+      "fZerosPerSecond": [
+        [
+          -0.6282867579663274,
+          314.15436303492737
+        ],
+        [
+          -0.6282867579663274,
+          -314.15436303492737
+        ],
+        [
+          -2.792513010891856,
+          0.0
+        ],
+        [
+          -2.234098780355079,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.6282867579663274,
+      "maximumScaledPolynomialResidual": 1.9771597060030402e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11115988148798427,
+      "routhNormalizedDelta3": 0.1111111111111112,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 4.363110366207827,
+      "cutoffHz": 0.6944105820374654,
+      "limitHz": 0.6944105820374654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.06283193063432434,
+        0.09747781499349492
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-07,
+        0.010001000000000001,
+        0.06283193063432434,
+        0.09747781499349494
+      ],
+      "coefficientMaximumRelativeError": 1.6631453027766379e-16,
+      "fZerosPerSecond": [
+        [
+          -3.1086244689504383e-15,
+          314.1594592652405
+        ],
+        [
+          -3.1086244689504383e-15,
+          -314.1594592652405
+        ],
+        [
+          -3.4906412674456435,
+          0.0
+        ],
+        [
+          -2.792544039733937,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -3.1086244689504383e-15,
+      "maximumScaledPolynomialResidual": 4.572698192964589e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 4.938027751724606e-05,
+      "routhNormalizedDelta3": 1.0857571198821912e-16,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 5.235732439449393,
+      "cutoffHz": 0.8332926984449585,
+      "limitHz": 0.6944105820374654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.07539831676118922,
+        0.1403680535906327
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-07,
+        0.010001000000000001,
+        0.0753983167611892,
+        0.1403680535906327
+      ],
+      "coefficientMaximumRelativeError": 1.840596501878137e-16,
+      "fZerosPerSecond": [
+        [
+          0.6282098392208999,
+          314.16708265676596
+        ],
+        [
+          0.6282098392208999,
+          -314.16708265676596
+        ],
+        [
+          -4.188562727088376,
+          0.0
+        ],
+        [
+          -3.35104225853301,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.6282098392208999,
+      "maximumScaledPolynomialResidual": 1.1948778945335114e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09086011851319803,
+      "routhNormalizedDelta3": -0.09090909090909093,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 8.726220732415655,
+      "cutoffHz": 1.3888211640749308,
+      "limitHz": 0.6944105820374654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.12566386126864867,
+        0.3899112599739797
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-07,
+        0.010001000000000001,
+        0.12566386126864867,
+        0.38991125997397974
+      ],
+      "coefficientMaximumRelativeError": 1.6631453027766379e-16,
+      "fZerosPerSecond": [
+        [
+          3.139671863552401,
+          314.22280159959337
+        ],
+        [
+          3.139671863552401,
+          -314.22280159959337
+        ],
+        [
+          -6.976113608551677,
+          0.0
+        ],
+        [
+          -5.586415425732693,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 3.139671863552401,
+      "maximumScaledPolynomialResidual": 2.2157322231890855e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.33328943903081376,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 0.2908866325352858,
+      "cutoffHz": 0.04629604544734648,
+      "limitHz": 0.2314802272367324,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.03769911701436669,
+        0.0038991040429709528
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        1.9098593171027437e-06,
+        0.09000099999999998,
+        0.03769911701436669,
+        0.0038991040429709536
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          -0.8377591257925441,
+          314.15870771668784
+        ],
+        [
+          -0.8377591257925441,
+          -314.15870771668784
+        ],
+        [
+          -0.23270277705199396,
+          0.0
+        ],
+        [
+          -0.18617407375611458,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.18617407375611458,
+      "maximumScaledPolynomialResidual": 3.398457250342243e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6666697149545958,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 1.1635465301411432,
+      "cutoffHz": 0.18518418178938592,
+      "limitHz": 0.2314802272367324,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.15079646805746677,
+        0.062385664687535244
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        1.9098593171027437e-06,
+        0.09000099999999998,
+        0.15079646805746677,
+        0.06238566468753526
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          -0.20943833347081348,
+          314.1587206452559
+        ],
+        [
+          -0.20943833347081348,
+          -314.1587206452559
+        ],
+        [
+          -0.9308417569716813,
+          0.0
+        ],
+        [
+          -0.7446766784798855,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.20943833347081348,
+      "maximumScaledPolynomialResidual": 2.9870685245646607e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11111653030617108,
+      "routhNormalizedDelta3": 0.11111111111111124,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 1.4544331626764289,
+      "cutoffHz": 0.2314802272367324,
+      "limitHz": 0.2314802272367324,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.18849558507183345,
+        0.09747760107427382
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        1.9098593171027437e-06,
+        0.09000099999999998,
+        0.18849558507183345,
+        0.09747760107427382
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          -2.220446049250313e-16,
+          314.15928690601663
+        ],
+        [
+          -2.220446049250313e-16,
+          -314.15928690601663
+        ],
+        [
+          -1.1635521962303803,
+          0.0
+        ],
+        [
+          -0.930842906162818,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.220446049250313e-16,
+      "maximumScaledPolynomialResidual": 7.015403137958676e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 5.486938343367597e-06,
+      "routhNormalizedDelta3": 1.1163600222762514e-16,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 1.7453197952117145,
+      "cutoffHz": 0.27777627268407884,
+      "limitHz": 0.2314802272367324,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.22619470208620016,
+        0.14036774554695428
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        1.9098593171027437e-06,
+        0.09000099999999998,
+        0.22619470208620013,
+        0.1403677455469543
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          0.20943548361173825,
+          314.16013412314794
+        ],
+        [
+          0.20943548361173825,
+          -314.16013412314794
+        ],
+        [
+          -1.3962549744701704,
+          0.0
+        ],
+        [
+          -1.117011095146503,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.20943548361173825,
+      "maximumScaledPolynomialResidual": 3.8440016387570244e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09090364931463109,
+      "routhNormalizedDelta3": -0.09090909090909087,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 2.9088663253528577,
+      "cutoffHz": 0.4629604544734648,
+      "limitHz": 0.2314802272367324,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.3769911701436669,
+        0.3899104042970953
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        1.9098593171027437e-06,
+        0.09000099999999998,
+        0.3769911701436669,
+        0.3899104042970953
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          1.0471263137062774,
+          314.1663319832284
+        ],
+        [
+          1.0471263137062774,
+          -314.1663319832284
+        ],
+        [
+          -2.3269128711808604,
+          0.0
+        ],
+        [
+          -1.8617348586248996,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 1.0471263137062774,
+      "maximumScaledPolynomialResidual": 3.5708343937358513e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.33332845604588546,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 62.08997894941815,
+      "cutoffHz": 9.881927066271626,
+      "limitHz": 49.409635331358125,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.012644422605752707,
+        0.3947689457601731
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-07,
+        0.0002,
+        0.01264442260575271,
+        0.3947689457601731
+      ],
+      "coefficientMaximumRelativeError": 2.743855579751941e-16,
+      "fZerosPerSecond": [
+        [
+          -278.43721221029193,
+          278.50899001653244
+        ],
+        [
+          -278.43721221029193,
+          -278.50899001653244
+        ],
+        [
+          -35.722053148687436,
+          35.1580531965008
+        ],
+        [
+          -35.722053148687436,
+          -35.1580531965008
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.722053148687436,
+      "maximumScaledPolynomialResidual": 2.1233677635759304e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.8171557562076749,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 248.3599157976726,
+      "cutoffHz": 39.5277082650865,
+      "limitHz": 49.409635331358125,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.05057769042301083,
+        6.316303132162769
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-07,
+        0.0002,
+        0.05057769042301084,
+        6.316303132162769
+      ],
+      "coefficientMaximumRelativeError": 2.743855579751941e-16,
+      "fZerosPerSecond": [
+        [
+          -35.40420773344384,
+          279.88604351730214
+        ],
+        [
+          -35.40420773344384,
+          -279.88604351730214
+        ],
+        [
+          -278.7550576255353,
+          24.932764012027217
+        ],
+        [
+          -278.7550576255353,
+          -24.932764012027217
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40420773344384,
+      "maximumScaledPolynomialResidual": 1.2174924392703325e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.4260407440212579,
+      "routhNormalizedDelta3": 0.1111111111111111,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 310.44989474709075,
+      "cutoffHz": 49.409635331358125,
+      "limitHz": 49.409635331358125,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.06322211302876354,
+        9.869223644004327
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-07,
+        0.0002,
+        0.06322211302876354,
+        9.869223644004327
+      ],
+      "coefficientMaximumRelativeError": 1.6631453027766379e-16,
+      "fZerosPerSecond": [
+        [
+          1.1368683772161603e-13,
+          315.1334049538282
+        ],
+        [
+          1.1368683772161603e-13,
+          -315.1334049538282
+        ],
+        [
+          -338.9184839835627,
+          0.0
+        ],
+        [
+          -289.4000467343959,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 1.1368683772161603e-13,
+      "maximumScaledPolynomialResidual": 3.1922685341632504e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.3305785123966942,
+      "routhNormalizedDelta3": 1.003508983629297e-16,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 372.5398736965089,
+      "cutoffHz": 59.291562397629754,
+      "limitHz": 49.409635331358125,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.07586653563451626,
+        14.21168204736623
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-07,
+        0.0002,
+        0.07586653563451624,
+        14.21168204736623
+      ],
+      "coefficientMaximumRelativeError": 1.8292370531679603e-16,
+      "fZerosPerSecond": [
+        [
+          28.778621077321258,
+          343.8439482238239
+        ],
+        [
+          28.778621077321258,
+          -343.8439482238239
+        ],
+        [
+          -342.9378864363005,
+          14.350688288774064
+        ],
+        [
+          -342.9378864363005,
+          -14.350688288774064
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 28.778621077321258,
+      "maximumScaledPolynomialResidual": 3.5920326635518923e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.2470952749806352,
+      "routhNormalizedDelta3": -0.09090909090909083,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 620.8997894941815,
+      "cutoffHz": 98.81927066271625,
+      "limitHz": 49.409635331358125,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.1264442260575271,
+        39.47689457601731
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-07,
+        0.0002,
+        0.1264442260575271,
+        39.47689457601731
+      ],
+      "coefficientMaximumRelativeError": 1.6631453027766379e-16,
+      "fZerosPerSecond": [
+        [
+          114.98794430397778,
+          429.97284727322807
+        ],
+        [
+          114.98794430397778,
+          -429.97284727322807
+        ],
+        [
+          -429.1472096629575,
+          111.86109915654302
+        ],
+        [
+          -429.1472096629575,
+          -111.86109915654302
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 114.98794430397778,
+      "maximumScaledPolynomialResidual": 3.4057568247887726e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.003095975232198129,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 8.684399107189515,
+      "cutoffHz": 1.382165045692054,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12567906845485624,
+        0.3900056357451961
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233783e-07,
+        6.366197723675817e-06,
+        0.010100000000000005,
+        0.12567906845485627,
+        0.3900056357451961
+      ],
+      "coefficientMaximumRelativeError": 3.9915487266639305e-16,
+      "fZerosPerSecond": [
+        [
+          -25.16207503822639,
+          313.6583489322395
+        ],
+        [
+          -25.16207503822639,
+          -313.6583489322395
+        ],
+        [
+          -6.73924343151948,
+          0.0
+        ],
+        [
+          -5.7684595638237015,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.7684595638237015,
+      "maximumScaledPolynomialResidual": 6.856544614552025e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6693877551020408,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 34.73759642875806,
+      "cutoffHz": 5.528660182768216,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.502716273819425,
+        6.240090171923137
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233783e-07,
+        6.366197723675817e-06,
+        0.010100000000000005,
+        0.5027162738194251,
+        6.240090171923137
+      ],
+      "coefficientMaximumRelativeError": 3.9915487266639305e-16,
+      "fZerosPerSecond": [
+        [
+          -6.2514126276943305,
+          313.6701470722114
+        ],
+        [
+          -6.2514126276943305,
+          -313.6701470722114
+        ],
+        [
+          -27.91127080319512,
+          0.0
+        ],
+        [
+          -22.417757013212107,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.2514126276943305,
+      "maximumScaledPolynomialResidual": 1.8174534217329485e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11596180081855387,
+      "routhNormalizedDelta3": 0.1111111111111111,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 43.42199553594757,
+      "cutoffHz": 6.910825228460269,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6283953422742812,
+        9.750140893629903
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233783e-07,
+        6.366197723675817e-06,
+        0.010100000000000005,
+        0.6283953422742814,
+        9.7501408936299
+      ],
+      "coefficientMaximumRelativeError": 3.9915487266639305e-16,
+      "fZerosPerSecond": [
+        [
+          -2.1316282072803006e-14,
+          314.1784676612104
+        ],
+        [
+          -2.1316282072803006e-14,
+          -314.1784676612104
+        ],
+        [
+          -34.889473865743334,
+          0.0
+        ],
+        [
+          -27.94237920605249,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.1316282072803006e-14,
+      "maximumScaledPolynomialResidual": 1.4520335638730004e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.004914004914004895,
+      "routhNormalizedDelta3": -4.926138745311161e-17,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 52.10639464313709,
+      "cutoffHz": 8.292990274152324,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7540744107291374,
+        14.040202886827057
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233783e-07,
+        6.366197723675817e-06,
+        0.010100000000000005,
+        0.7540744107291376,
+        14.040202886827055
+      ],
+      "coefficientMaximumRelativeError": 3.9915487266639305e-16,
+      "fZerosPerSecond": [
+        [
+          6.17744466606117,
+          314.923950685875
+        ],
+        [
+          6.17744466606117,
+          -314.923950685875
+        ],
+        [
+          -41.66630182796926,
+          0.0
+        ],
+        [
+          -33.52044057594903,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 6.17744466606117,
+      "maximumScaledPolynomialResidual": 1.7983383208562535e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.08603351955307265,
+      "routhNormalizedDelta3": -0.09090909090909093,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 86.84399107189515,
+      "cutoffHz": 13.821650456920539,
+      "limitHz": 6.910825228460269,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2567906845485624,
+        39.00056357451961
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233783e-07,
+        6.366197723675817e-06,
+        0.010100000000000005,
+        1.2567906845485628,
+        39.0005635745196
+      ],
+      "coefficientMaximumRelativeError": 3.9915487266639305e-16,
+      "fZerosPerSecond": [
+        [
+          29.738555960518198,
+          319.9131138816121
+        ],
+        [
+          29.738555960518198,
+          -319.9131138816121
+        ],
+        [
+          -64.48080518422857,
+          0.0
+        ],
+        [
+          -57.828159808603864,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 29.738555960518198,
+      "maximumScaledPolynomialResidual": 5.773230742814846e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.32895816242821985,
+      "routhNormalizedDelta3": -0.33333333333333337,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 2.9073072230071944,
+      "cutoffHz": 0.4627123156283663,
+      "limitHz": 2.3135615781418313,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        0.37699628410792546,
+        0.38992098280160126
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027442e-05,
+        0.0901,
+        0.3769962841079255,
+        0.3899209828016012
+      ],
+      "coefficientMaximumRelativeError": 1.7740216562950806e-16,
+      "fZerosPerSecond": [
+        [
+          -8.378665423511187,
+          314.1035128050202
+        ],
+        [
+          -8.378665423511187,
+          -314.1035128050202
+        ],
+        [
+          -2.31921997631879,
+          0.0
+        ],
+        [
+          -1.8674002005908075,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -1.8674002005908075,
+      "maximumScaledPolynomialResidual": 6.093911358994234e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6669712197350388,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 11.629228892028777,
+      "cutoffHz": 1.8508492625134652,
+      "limitHz": 2.3135615781418313,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.5079851364317018,
+        6.23873572482562
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027442e-05,
+        0.0901,
+        1.507985136431702,
+        6.238735724825619
+      ],
+      "coefficientMaximumRelativeError": 1.7740216562950806e-16,
+      "fZerosPerSecond": [
+        [
+          -2.093218333101548,
+          314.1048076703131
+        ],
+        [
+          -2.093218333101548,
+          -314.1048076703131
+        ],
+        [
+          -9.307911085146323,
+          0.0
+        ],
+        [
+          -7.449603272582524,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.093218333101548,
+      "maximumScaledPolynomialResidual": 2.382882450411082e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11165270373191168,
+      "routhNormalizedDelta3": 0.11111111111111097,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 14.536536115035972,
+      "cutoffHz": 2.3135615781418313,
+      "limitHz": 2.3135615781418313,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.8849814205396271,
+        9.74802457004003
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027442e-05,
+        0.0901,
+        1.8849814205396271,
+        9.74802457004003
+      ],
+      "coefficientMaximumRelativeError": 1.7740216562950806e-16,
+      "fZerosPerSecond": [
+        [
+          -3.552713678800501e-15,
+          314.16141771708544
+        ],
+        [
+          -3.552713678800501e-15,
+          -314.16141771708544
+        ],
+        [
+          -11.63489043384269,
+          0.0
+        ],
+        [
+          -9.309060590089276,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -3.552713678800501e-15,
+      "maximumScaledPolynomialResidual": 4.045722767762182e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.0005483959418700325,
+      "routhNormalizedDelta3": -2.996435756798231e-17,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 17.443843338043166,
+      "cutoffHz": 2.7762738937701976,
+      "limitHz": 2.3135615781418313,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        2.261977704647553,
+        14.037155380857644
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027442e-05,
+        0.0901,
+        2.2619777046475527,
+        14.037155380857646
+      ],
+      "coefficientMaximumRelativeError": 1.9632784573323536e-16,
+      "fZerosPerSecond": [
+        [
+          2.0903810091668475,
+          314.2459252732868
+        ],
+        [
+          2.0903810091668475,
+          -314.2459252732868
+        ],
+        [
+          -13.954231862622107,
+          0.0
+        ],
+        [
+          -11.17048117964355,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 2.0903810091668475,
+      "maximumScaledPolynomialResidual": 1.404631923229297e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09036520004985672,
+      "routhNormalizedDelta3": -0.09090909090909108,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 29.073072230071944,
+      "cutoffHz": 4.6271231562836626,
+      "limitHz": 2.3135615781418313,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        3.7699628410792543,
+        38.99209828016012
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027442e-05,
+        0.0901,
+        3.7699628410792543,
+        38.99209828016012
+      ],
+      "coefficientMaximumRelativeError": 1.7740216562950806e-16,
+      "fZerosPerSecond": [
+        [
+          10.401915549549294,
+          314.8573709218538
+        ],
+        [
+          10.401915549549294,
+          -314.8573709218538
+        ],
+        [
+          -23.079136830898022,
+          0.0
+        ],
+        [
+          -18.668645292132503,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 10.401915549549294,
+      "maximumScaledPolynomialResidual": 5.027815071276767e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.33284578115001373,
+      "routhNormalizedDelta3": -0.3333333333333333,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 87.90791324936299,
+      "cutoffHz": 13.99097893052964,
+      "limitHz": 69.95489465264819,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12721875757464718,
+        39.96200562675767
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675815e-06,
+        0.010100000000000005,
+        0.1272187575746472,
+        39.962005626757666
+      ],
+      "coefficientMaximumRelativeError": 3.435095992033281e-16,
+      "fZerosPerSecond": [
+        [
+          -3136.5136623630424,
+          250.753859079462
+        ],
+        [
+          -3136.5136623630424,
+          -250.753859079462
+        ],
+        [
+          -5.07899122674879,
+          62.91180668377747
+        ],
+        [
+          -5.07899122674879,
+          -62.91180668377747
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.07899122674879,
+      "maximumScaledPolynomialResidual": 2.4812246285304767e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.9959986168058094,
+      "routhNormalizedDelta3": 0.6666666666666664,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 351.63165299745197,
+      "cutoffHz": 55.96391572211856,
+      "limitHz": 69.95489465264819,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5088750302985887,
+        639.3920900281228
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675815e-06,
+        0.010100000000000005,
+        0.5088750302985888,
+        639.3920900281227
+      ],
+      "coefficientMaximumRelativeError": 3.435095992033281e-16,
+      "fZerosPerSecond": [
+        [
+          -3136.513677649186,
+          52.27472805189417
+        ],
+        [
+          -3136.513677649186,
+          -52.27472805189417
+        ],
+        [
+          -5.07897594060972,
+          253.18539018996262
+        ],
+        [
+          -5.07897594060972,
+          -253.18539018996262
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.07897594060972,
+      "maximumScaledPolynomialResidual": 1.5240743087854486e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.9840899604704264,
+      "routhNormalizedDelta3": 0.11111111111111091,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 439.5395662468149,
+      "cutoffHz": 69.95489465264819,
+      "limitHz": 69.95489465264819,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.636093787873236,
+        999.0501406689415
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675815e-06,
+        0.010100000000000005,
+        0.6360937878732362,
+        999.0501406689415
+      ],
+      "coefficientMaximumRelativeError": 3.4907526084703955e-16,
+      "fZerosPerSecond": [
+        [
+          -3176.540250616516,
+          0.0
+        ],
+        [
+          -3106.6450565630757,
+          0.0
+        ],
+        [
+          -3.552713678800501e-14,
+          316.09710303771055
+        ],
+        [
+          -3.552713678800501e-14,
+          -316.09710303771055
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -3.552713678800501e-14,
+      "maximumScaledPolynomialResidual": 2.83020307759867e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.9801519235481498,
+      "routhNormalizedDelta3": 0.0,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 527.4474794961778,
+      "cutoffHz": 83.94587358317781,
+      "limitHz": 69.95489465264819,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7633125454478831,
+        1438.6322025632758
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675815e-06,
+        0.010100000000000005,
+        0.7633125454478832,
+        1438.6322025632755
+      ],
+      "coefficientMaximumRelativeError": 3.435095992033281e-16,
+      "fZerosPerSecond": [
+        [
+          -3149.0617315812005,
+          51.47490540009918
+        ],
+        [
+          -3149.0617315812005,
+          -51.47490540009918
+        ],
+        [
+          7.46907799140603,
+          378.26915479696584
+        ],
+        [
+          7.46907799140603,
+          -378.26915479696584
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 7.46907799140603,
+      "maximumScaledPolynomialResidual": 7.121405293020156e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.9762294881514268,
+      "routhNormalizedDelta3": -0.09090909090909102,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 879.0791324936298,
+      "cutoffHz": 139.90978930529639,
+      "limitHz": 69.95489465264819,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.272187575746472,
+        3996.200562675766
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675815e-06,
+        0.010100000000000005,
+        1.2721875757464725,
+        3996.200562675766
+      ],
+      "coefficientMaximumRelativeError": 3.4907526084703955e-16,
+      "fZerosPerSecond": [
+        [
+          -3199.1802003648204,
+          297.3485609965107
+        ],
+        [
+          -3199.1802003648204,
+          -297.3485609965107
+        ],
+        [
+          57.58754677502606,
+          615.4232333481466
+        ],
+        [
+          57.58754677502606,
+          -615.4232333481466
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 57.58754677502606,
+      "maximumScaledPolynomialResidual": 5.462544587525832e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.9606939221157345,
+      "routhNormalizedDelta3": -0.3333333333333333,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 62.08997894941817,
+      "cutoffHz": 9.881927066271627,
+      "limitHz": 49.40963533135814,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        1.2644422605752712,
+        39.47689457601734
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.02,
+        1.2644422605752714,
+        39.476894576017344
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          -278.43721221029193,
+          278.50899001653187
+        ],
+        [
+          -278.43721221029193,
+          -278.50899001653187
+        ],
+        [
+          -35.722053148687436,
+          35.15805319650084
+        ],
+        [
+          -35.722053148687436,
+          -35.15805319650084
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.722053148687436,
+      "maximumScaledPolynomialResidual": 2.4322358240035955e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.8171557562076749,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 248.35991579767267,
+      "cutoffHz": 39.52770826508651,
+      "limitHz": 49.40963533135814,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        5.057769042301085,
+        631.6303132162774
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.02,
+        5.057769042301086,
+        631.6303132162775
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          -35.40420773344363,
+          279.88604351730214
+        ],
+        [
+          -35.40420773344363,
+          -279.88604351730214
+        ],
+        [
+          -278.7550576255354,
+          24.932764012025913
+        ],
+        [
+          -278.7550576255354,
+          -24.932764012025913
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40420773344363,
+      "maximumScaledPolynomialResidual": 1.2456391013728587e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.4260407440212578,
+      "routhNormalizedDelta3": 0.11111111111111109,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 310.4498947470908,
+      "cutoffHz": 49.40963533135814,
+      "limitHz": 49.40963533135814,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        6.322211302876355,
+        986.9223644004333
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.02,
+        6.322211302876357,
+        986.9223644004334
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          5.684341886080802e-14,
+          315.1334049538281
+        ],
+        [
+          5.684341886080802e-14,
+          -315.1334049538281
+        ],
+        [
+          -338.9184839835649,
+          0.0
+        ],
+        [
+          -289.400046734394,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 5.684341886080802e-14,
+      "maximumScaledPolynomialResidual": 4.1030179636166726e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.3305785123966943,
+      "routhNormalizedDelta3": 5.261277180090364e-17,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 372.53987369650895,
+      "cutoffHz": 59.29156239762976,
+      "limitHz": 49.40963533135814,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        7.586653563451627,
+        1421.1682047366237
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.02,
+        7.586653563451627,
+        1421.1682047366237
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          28.778621077321304,
+          343.84394822382353
+        ],
+        [
+          28.778621077321304,
+          -343.84394822382353
+        ],
+        [
+          -342.9378864363004,
+          14.350688288772776
+        ],
+        [
+          -342.9378864363004,
+          -14.350688288772776
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 28.778621077321304,
+      "maximumScaledPolynomialResidual": 2.8483346896686536e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.24709527498063524,
+      "routhNormalizedDelta3": -0.09090909090909081,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 620.8997894941816,
+      "cutoffHz": 98.81927066271628,
+      "limitHz": 49.40963533135814,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        12.64442260575271,
+        3947.689457601733
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.02,
+        12.644422605752714,
+        3947.6894576017335
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          114.98794430397771,
+          429.97284727322796
+        ],
+        [
+          114.98794430397771,
+          -429.97284727322796
+        ],
+        [
+          -429.14720966295704,
+          111.86109915654272
+        ],
+        [
+          -429.14720966295704,
+          -111.86109915654272
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 114.98794430397771,
+      "maximumScaledPolynomialResidual": 1.024592545656324e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.003095975232198031,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 27.630189861608432,
+      "cutoffHz": 4.397481295042554,
+      "limitHz": 21.98740647521277,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        3.7745711486888487,
+        39.08748245957271
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        0.0001909859317102744,
+        0.1,
+        3.7745711486888487,
+        39.08748245957271
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          -84.8757604897244,
+          308.7120356616152
+        ],
+        [
+          -84.8757604897244,
+          -308.7120356616152
+        ],
+        [
+          -19.8439946299355,
+          4.937081913001885
+        ],
+        [
+          -19.8439946299355,
+          -4.937081913001885
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -19.8439946299355,
+      "maximumScaledPolynomialResidual": 1.7968549958433895e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6945957268537916,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 110.52075944643373,
+      "cutoffHz": 17.589925180170216,
+      "limitHz": 21.98740647521277,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        15.098284594755395,
+        625.3997193531634
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        0.0001909859317102744,
+        0.1,
+        15.098284594755395,
+        625.3997193531634
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          -19.76865696218661,
+          308.85902933540183
+        ],
+        [
+          -19.76865696218661,
+          -308.85902933540183
+        ],
+        [
+          -92.47401163465557,
+          0.0
+        ],
+        [
+          -77.42818468029076,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -19.76865696218661,
+      "maximumScaledPolynomialResidual": 2.204332623225516e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.16218934061198123,
+      "routhNormalizedDelta3": 0.11111111111111134,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 138.15094930804216,
+      "cutoffHz": 21.98740647521277,
+      "limitHz": 21.98740647521277,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        18.872855743444244,
+        977.1870614893178
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        0.0001909859317102744,
+        0.1,
+        18.87285574344424,
+        977.1870614893178
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          -1.2079226507921703e-13,
+          314.3533705769788
+        ],
+        [
+          -1.2079226507921703e-13,
+          -314.3533705769788
+        ],
+        [
+          -115.76500668826213,
+          0.0
+        ],
+        [
+          -93.67450355105744,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -1.2079226507921703e-13,
+      "maximumScaledPolynomialResidual": 2.2765532064317175e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.05201560468140459,
+      "routhNormalizedDelta3": 7.519886467256286e-17,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 165.78113916965057,
+      "cutoffHz": 26.384887770255318,
+      "limitHz": 21.98740647521277,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        22.647426892133087,
+        1407.1493685446176
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        0.0001909859317102744,
+        0.1,
+        22.64742689213309,
+        1407.1493685446176
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          17.834480544744267,
+          321.2116995957372
+        ],
+        [
+          17.834480544744267,
+          -321.2116995957372
+        ],
+        [
+          -133.0198786462109,
+          0.0
+        ],
+        [
+          -112.08859268259738,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 17.834480544744267,
+      "maximumScaledPolynomialResidual": 5.979914474825236e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.0390782753296113,
+      "routhNormalizedDelta3": -0.0909090909090907,
+      "agreement": true
+    },
+    {
+      "V": 0.8,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 276.3018986160843,
+      "cutoffHz": 43.97481295042554,
+      "limitHz": 21.98740647521277,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        37.74571148688849,
+        3908.748245957271
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810396e-07,
+        0.0001909859317102744,
+        0.1,
+        37.74571148688848,
+        3908.748245957271
+      ],
+      "coefficientMaximumRelativeError": 2.3221889178024263e-16,
+      "fZerosPerSecond": [
+        [
+          74.03086434519858,
+          352.1538900376474
+        ],
+        [
+          74.03086434519858,
+          -352.1538900376474
+        ],
+        [
+          -178.7506194648584,
+          33.90881101855962
+        ],
+        [
+          -178.7506194648584,
+          -33.90881101855962
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 74.03086434519858,
+      "maximumScaledPolynomialResidual": 4.514466813481991e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.28628142920158783,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 6.252003053624665,
+      "cutoffHz": 0.9950371902099895,
+      "limitHz": 4.975185951049947,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.0012566370614359177,
+        0.003947841760435745
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233775e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.0012566370614359177,
+        0.003947841760435745
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -25.162936131715057,
+          313.6576241232133
+        ],
+        [
+          -25.162936131715057,
+          -313.6576241232133
+        ],
+        [
+          -6.252990404182886,
+          0.5016412357662221
+        ],
+        [
+          -6.252990404182886,
+          -0.5016412357662221
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.252990404182886,
+      "maximumScaledPolynomialResidual": 5.355652603849245e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6694214876033058,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 25.00801221449866,
+      "cutoffHz": 3.980148760839958,
+      "limitHz": 4.975185951049947,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.005026548245743671,
+        0.06316546816697192
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233775e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.005026548245743671,
+        0.06316546816697192
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -6.2529904041829045,
+          313.6576241232133
+        ],
+        [
+          -6.2529904041829045,
+          -313.6576241232133
+        ],
+        [
+          -25.162936131715064,
+          0.5016412357661804
+        ],
+        [
+          -25.162936131715064,
+          -0.5016412357661804
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.2529904041829045,
+      "maximumScaledPolynomialResidual": 5.009196673935696e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11602209944751368,
+      "routhNormalizedDelta3": 0.11111111111111097,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 31.260015268123322,
+      "cutoffHz": 4.975185951049947,
+      "limitHz": 4.975185951049947,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.0062831853071795875,
+        0.09869604401089363
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233775e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.006283185307179588,
+        0.09869604401089363
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -3.552713678800501e-14,
+          314.1592653589794
+        ],
+        [
+          -3.552713678800501e-14,
+          -314.1592653589794
+        ],
+        [
+          -31.415926535897945,
+          3.677471276178144e-07
+        ],
+        [
+          -31.415926535897945,
+          -3.677471276178144e-07
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -3.552713678800501e-14,
+      "maximumScaledPolynomialResidual": 9.331236312624469e-17,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.00497512437810943,
+      "routhNormalizedDelta3": -1.177677558072828e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 37.51201832174799,
+      "cutoffHz": 5.970223141259936,
+      "limitHz": 4.975185951049947,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.007539822368615505,
+        0.14212230337568682
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233775e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.007539822368615506,
+        0.14212230337568682
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          6.1803640248426674,
+          314.8971531402185
+        ],
+        [
+          6.1803640248426674,
+          -314.8971531402185
+        ],
+        [
+          -37.59629056074063,
+          0.7378877812390043
+        ],
+        [
+          -37.59629056074063,
+          -0.7378877812390043
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 6.1803640248426674,
+      "maximumScaledPolynomialResidual": 2.553830556519727e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.0859728506787331,
+      "routhNormalizedDelta3": -0.09090909090909102,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 62.520030536246644,
+      "cutoffHz": 9.950371902099894,
+      "limitHz": 4.975185951049947,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.012566370614359175,
+        0.3947841760435745
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233775e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.012566370614359177,
+        0.3947841760435745
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          29.7674562072507,
+          319.8533549725599
+        ],
+        [
+          29.7674562072507,
+          -319.8533549725599
+        ],
+        [
+          -61.183382743148655,
+          5.694089613580223
+        ],
+        [
+          -61.183382743148655,
+          -5.694089613580223
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 29.7674562072507,
+      "maximumScaledPolynomialResidual": 2.1494703698722056e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.3289036544850499,
+      "routhNormalizedDelta3": -0.3333333333333334,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 0.6282871171474209,
+      "cutoffHz": 0.09999500037496875,
+      "limitHz": 0.4999750018748437,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.012566370614359175,
+        0.003947841760435744
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.012566370614359175,
+        0.003947841760435744
+      ],
+      "coefficientMaximumRelativeError": 1.7345500209747095e-16,
+      "fZerosPerSecond": [
+        [
+          -2.5133042825231664,
+          314.1542389112728
+        ],
+        [
+          -2.5133042825231664,
+          -314.1542389112728
+        ],
+        [
+          -0.6282883710666296,
+          0.0050264477065419845
+        ],
+        [
+          -0.6282883710666296,
+          -0.0050264477065419845
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.6282883710666296,
+      "maximumScaledPolynomialResidual": 3.2957666606774876e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6666944421298224,
+      "routhNormalizedDelta3": 0.6666666666666665,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 2.5131484685896837,
+      "cutoffHz": 0.399980001499875,
+      "limitHz": 0.4999750018748437,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.0502654824574367,
+        0.06316546816697191
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.0502654824574367,
+        0.06316546816697191
+      ],
+      "coefficientMaximumRelativeError": 1.7345500209747095e-16,
+      "fZerosPerSecond": [
+        [
+          -0.6282883710666313,
+          314.15423891127284
+        ],
+        [
+          -0.6282883710666313,
+          -314.15423891127284
+        ],
+        [
+          -2.513304282523162,
+          0.00502644770688683
+        ],
+        [
+          -2.513304282523162,
+          -0.00502644770688683
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.6282883710666313,
+      "maximumScaledPolynomialResidual": 2.129442625252514e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11116049108382864,
+      "routhNormalizedDelta3": 0.11111111111111097,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 3.141435585737104,
+      "cutoffHz": 0.4999750018748437,
+      "limitHz": 0.4999750018748437,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.06283185307179587,
+        0.09869604401089357
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.06283185307179585,
+        0.09869604401089357
+      ],
+      "coefficientMaximumRelativeError": 2.2087185287941088e-16,
+      "fZerosPerSecond": [
+        [
+          4.440892098500626e-16,
+          314.1592653589794
+        ],
+        [
+          4.440892098500626e-16,
+          -314.1592653589794
+        ],
+        [
+          -3.1415926535897896,
+          1.2147036706478902e-07
+        ],
+        [
+          -3.1415926535897896,
+          -1.2147036706478902e-07
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 4.440892098500626e-16,
+      "maximumScaledPolynomialResidual": 2.9112329854304893e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 4.9997500124970554e-05,
+      "routhNormalizedDelta3": 4.117442181035577e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 3.7697227028845246,
+      "cutoffHz": 0.5999700022498125,
+      "limitHz": 0.4999750018748437,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.07539822368615504,
+        0.1421223033756867
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.07539822368615502,
+        0.1421223033756867
+      ],
+      "coefficientMaximumRelativeError": 1.8405987739950908e-16,
+      "fZerosPerSecond": [
+        [
+          0.6282130014845846,
+          314.166803523098
+        ],
+        [
+          0.6282130014845846,
+          -314.166803523098
+        ],
+        [
+          -3.769805655074378,
+          0.007538164118572126
+        ],
+        [
+          -3.769805655074378,
+          -0.007538164118572126
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.6282130014845846,
+      "maximumScaledPolynomialResidual": 1.9079248681144464e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09085950638607332,
+      "routhNormalizedDelta3": -0.09090909090909088,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 6.282871171474208,
+      "cutoffHz": 0.9999500037496875,
+      "limitHz": 0.4999750018748437,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.12566370614359174,
+        0.3947841760435743
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.1256637061435917,
+        0.3947841760435743
+      ],
+      "coefficientMaximumRelativeError": 2.2087185287941088e-16,
+      "fZerosPerSecond": [
+        [
+          3.1397105197703414,
+          314.22202822052327
+        ],
+        [
+          3.1397105197703414,
+          -314.22202822052327
+        ],
+        [
+          -6.2813031733601346,
+          0.06276286154406842
+        ],
+        [
+          -6.2813031733601346,
+          -0.06276286154406842
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 3.1397105197703414,
+      "maximumScaledPolynomialResidual": 7.03309494749093e-17,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.333288890370321,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 0.20943834669618103,
+      "cutoffHz": 0.033333148149691336,
+      "limitHz": 0.1666657407484567,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.037699111843077504,
+        0.003947841760435741
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.037699111843077504,
+        0.003947841760435741
+      ],
+      "coefficientMaximumRelativeError": 0.0,
+      "fZerosPerSecond": [
+        [
+          -0.8377591579694894,
+          314.1587068548597
+        ],
+        [
+          -0.8377591579694894,
+          -314.1587068548597
+        ],
+        [
+          -0.20943839322710886,
+          0.0005585041195514319
+        ],
+        [
+          -0.20943839322710886,
+          -0.0005585041195514319
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.20943839322710886,
+      "maximumScaledPolynomialResidual": 2.760321158629863e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.666669753057842,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 0.8377533867847241,
+      "cutoffHz": 0.13333259259876534,
+      "limitHz": 0.1666657407484567,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.15079644737231002,
+        0.06316546816697186
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.15079644737231002,
+        0.06316546816697186
+      ],
+      "coefficientMaximumRelativeError": 0.0,
+      "fZerosPerSecond": [
+        [
+          -0.20943839322710894,
+          314.1587068548598
+        ],
+        [
+          -0.20943839322710894,
+          -314.1587068548598
+        ],
+        [
+          -0.8377591579694894,
+          0.0005585041189383927
+        ],
+        [
+          -0.8377591579694894,
+          -0.0005585041189383927
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.20943839322710894,
+      "maximumScaledPolynomialResidual": 2.1970323921684765e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.1111165980456912,
+      "routhNormalizedDelta3": 0.1111111111111113,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 1.047191733480905,
+      "cutoffHz": 0.1666657407484567,
+      "limitHz": 0.1666657407484567,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.18849555921538752,
+        0.09869604401089353
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.18849555921538752,
+        0.09869604401089353
+      ],
+      "coefficientMaximumRelativeError": 0.0,
+      "fZerosPerSecond": [
+        [
+          -6.661338147750939e-16,
+          314.1592653589793
+        ],
+        [
+          -6.661338147750939e-16,
+          -314.1592653589793
+        ],
+        [
+          -1.0471975379768186,
+          0.0
+        ],
+        [
+          -1.0471975644163762,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.661338147750939e-16,
+      "maximumScaledPolynomialResidual": 7.107237491789895e-17,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 5.555524691709784e-06,
+      "routhNormalizedDelta3": 1.3701563084170419e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 1.256630080177086,
+      "cutoffHz": 0.19999888889814801,
+      "limitHz": 0.1666657407484567,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.226194671058465,
+        0.14212230337568663
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.22619467105846502,
+        0.14212230337568663
+      ],
+      "coefficientMaximumRelativeError": 1.227065849330061e-16,
+      "fZerosPerSecond": [
+        [
+          0.20943560081820722,
+          314.1601030965423
+        ],
+        [
+          0.20943560081820722,
+          -314.1601030965423
+        ],
+        [
+          -1.256633152014805,
+          0.0008377375623413128
+        ],
+        [
+          -1.256633152014805,
+          -0.0008377375623413128
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.20943560081820722,
+      "maximumScaledPolynomialResidual": 4.73380519417393e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09090358129504375,
+      "routhNormalizedDelta3": -0.09090909090909065,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 2.09438346696181,
+      "cutoffHz": 0.3333314814969134,
+      "limitHz": 0.1666657407484567,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.37699111843077504,
+        0.39478417604357413
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.37699111843077504,
+        0.39478417604357413
+      ],
+      "coefficientMaximumRelativeError": 0.0,
+      "fZerosPerSecond": [
+        [
+          1.0471277496594538,
+          314.1662458228851
+        ],
+        [
+          1.0471277496594538,
+          -314.1662458228851
+        ],
+        [
+          -2.0943253008560507,
+          0.006980463905405675
+        ],
+        [
+          -2.0943253008560507,
+          -0.006980463905405675
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 1.0471277496594538,
+      "maximumScaledPolynomialResidual": 4.751611860035409e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.3333283950800181,
+      "routhNormalizedDelta3": -0.33333333333333315,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 44.42882938158366,
+      "cutoffHz": 7.0710678118654755,
+      "limitHz": 35.35533905932738,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.012566370614359173,
+        0.39478417604357435
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.00020000000000000006,
+        0.012566370614359175,
+        0.39478417604357435
+      ],
+      "coefficientMaximumRelativeError": 2.710505431213761e-16,
+      "fZerosPerSecond": [
+        [
+          -278.7529929586982,
+          278.75299295869826
+        ],
+        [
+          -278.7529929586982,
+          -278.75299295869826
+        ],
+        [
+          -35.40627240028128,
+          35.4062724002813
+        ],
+        [
+          -35.40627240028128,
+          -35.4062724002813
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40627240028128,
+      "maximumScaledPolynomialResidual": 1.7723337686618771e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.8181818181818182,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 177.71531752633464,
+      "cutoffHz": 28.284271247461902,
+      "limitHz": 35.35533905932738,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.05026548245743669,
+        6.31654681669719
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.00020000000000000006,
+        0.0502654824574367,
+        6.31654681669719
+      ],
+      "coefficientMaximumRelativeError": 2.710505431213761e-16,
+      "fZerosPerSecond": [
+        [
+          -35.40627240028139,
+          278.75299295869814
+        ],
+        [
+          -35.40627240028139,
+          -278.75299295869814
+        ],
+        [
+          -278.7529929586979,
+          35.40627240028143
+        ],
+        [
+          -278.7529929586979,
+          -35.40627240028143
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40627240028139,
+      "maximumScaledPolynomialResidual": 1.6319640607593538e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.42857142857142855,
+      "routhNormalizedDelta3": 0.11111111111111119,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 222.1441469079183,
+      "cutoffHz": 35.35533905932738,
+      "limitHz": 35.35533905932738,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.06283185307179587,
+        9.869604401089358
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.00020000000000000006,
+        0.06283185307179587,
+        9.869604401089358
+      ],
+      "coefficientMaximumRelativeError": 2.710505431213761e-16,
+      "fZerosPerSecond": [
+        [
+          -1.4921397450962104e-13,
+          314.1592653589792
+        ],
+        [
+          -1.4921397450962104e-13,
+          -314.1592653589792
+        ],
+        [
+          -314.15926655471935,
+          0.0
+        ],
+        [
+          -314.15926416323975,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -1.4921397450962104e-13,
+      "maximumScaledPolynomialResidual": 2.1048564379854602e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.3333333333333333,
+      "routhNormalizedDelta3": 5.048709793414475e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 266.5729762895019,
+      "cutoffHz": 42.426406871192846,
+      "limitHz": 35.35533905932738,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.07539822368615502,
+        14.212230337568673
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.00020000000000000006,
+        0.07539822368615504,
+        14.212230337568673
+      ],
+      "coefficientMaximumRelativeError": 2.710505431213761e-16,
+      "fZerosPerSecond": [
+        [
+          28.77949516687874,
+          342.9387605258582
+        ],
+        [
+          28.77949516687874,
+          -342.9387605258582
+        ],
+        [
+          -342.938760525858,
+          28.77949516687901
+        ],
+        [
+          -342.938760525858,
+          -28.77949516687901
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 28.77949516687874,
+      "maximumScaledPolynomialResidual": 9.068600981504703e-17,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.25000000000000017,
+      "routhNormalizedDelta3": -0.09090909090909081,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 444.2882938158366,
+      "cutoffHz": 70.71067811865476,
+      "limitHz": 35.35533905932738,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.12566370614359174,
+        39.47841760435743
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.00020000000000000006,
+        0.12566370614359174,
+        39.47841760435743
+      ],
+      "coefficientMaximumRelativeError": 2.710505431213761e-16,
+      "fZerosPerSecond": [
+        [
+          114.99027195564297,
+          429.1495373146227
+        ],
+        [
+          114.99027195564297,
+          -429.1495373146227
+        ],
+        [
+          -429.14953731462174,
+          114.99027195564366
+        ],
+        [
+          -429.14953731462174,
+          -114.99027195564366
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 114.99027195564297,
+      "maximumScaledPolynomialResidual": 6.532714972630912e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.0,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 6.252003053624662,
+      "cutoffHz": 0.995037190209989,
+      "limitHz": 4.975185951049945,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12566370614359174,
+        0.3947841760435743
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12566370614359174,
+        0.3947841760435743
+      ],
+      "coefficientMaximumRelativeError": 1.3062312662638644e-16,
+      "fZerosPerSecond": [
+        [
+          -25.162936131715064,
+          313.65762412321317
+        ],
+        [
+          -25.162936131715064,
+          -313.65762412321317
+        ],
+        [
+          -6.252990404182878,
+          0.5016412357662497
+        ],
+        [
+          -6.252990404182878,
+          -0.5016412357662497
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.252990404182878,
+      "maximumScaledPolynomialResidual": 3.453001694165968e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6694214876033058,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 25.00801221449865,
+      "cutoffHz": 3.980148760839956,
+      "limitHz": 4.975185951049945,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5026548245743669,
+        6.316546816697189
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5026548245743669,
+        6.316546816697189
+      ],
+      "coefficientMaximumRelativeError": 1.3062312662638644e-16,
+      "fZerosPerSecond": [
+        [
+          -6.25299040418286,
+          313.657624123213
+        ],
+        [
+          -6.25299040418286,
+          -313.657624123213
+        ],
+        [
+          -25.162936131715064,
+          0.5016412357661502
+        ],
+        [
+          -25.162936131715064,
+          -0.5016412357661502
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.25299040418286,
+      "maximumScaledPolynomialResidual": 5.13324915090021e-17,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11602209944751378,
+      "routhNormalizedDelta3": 0.11111111111111115,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 31.26001526812331,
+      "cutoffHz": 4.975185951049945,
+      "limitHz": 4.975185951049945,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6283185307179586,
+        9.869604401089356
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6283185307179586,
+        9.869604401089356
+      ],
+      "coefficientMaximumRelativeError": 1.3062312662638644e-16,
+      "fZerosPerSecond": [
+        [
+          0.0,
+          314.1592653589793
+        ],
+        [
+          0.0,
+          -314.1592653589793
+        ],
+        [
+          -31.415927261319524,
+          0.0
+        ],
+        [
+          -31.41592581047635,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.0,
+      "maximumScaledPolynomialResidual": 1.3365043201295716e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.004975124378109523,
+      "routhNormalizedDelta3": 4.41487177182541e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 37.51201832174797,
+      "cutoffHz": 5.970223141259934,
+      "limitHz": 4.975185951049945,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7539822368615503,
+        14.212230337568675
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7539822368615504,
+        14.212230337568675
+      ],
+      "coefficientMaximumRelativeError": 1.4724790191960726e-16,
+      "fZerosPerSecond": [
+        [
+          6.180364024842753,
+          314.8971531402184
+        ],
+        [
+          6.180364024842753,
+          -314.8971531402184
+        ],
+        [
+          -37.59629056074061,
+          0.7378877812393541
+        ],
+        [
+          -37.59629056074061,
+          -0.7378877812393541
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 6.180364024842753,
+      "maximumScaledPolynomialResidual": 1.613714843107582e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.08597285067873295,
+      "routhNormalizedDelta3": -0.09090909090909088,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 62.52003053624662,
+      "cutoffHz": 9.95037190209989,
+      "limitHz": 4.975185951049945,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2566370614359172,
+        39.478417604357425
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2566370614359172,
+        39.478417604357425
+      ],
+      "coefficientMaximumRelativeError": 1.3062312662638644e-16,
+      "fZerosPerSecond": [
+        [
+          29.767456207250632,
+          319.85335497255977
+        ],
+        [
+          29.767456207250632,
+          -319.85335497255977
+        ],
+        [
+          -61.18338274314863,
+          5.694089613580352
+        ],
+        [
+          -61.18338274314863,
+          -5.694089613580352
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 29.767456207250632,
+      "maximumScaledPolynomialResidual": 1.4017508824511518e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.32890365448504977,
+      "routhNormalizedDelta3": -0.3333333333333333,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 2.0932325182889637,
+      "cutoffHz": 0.3331483023263848,
+      "limitHz": 1.665741511631924,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        0.37699111843077515,
+        0.39478417604357424
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        0.37699111843077515,
+        0.39478417604357424
+      ],
+      "coefficientMaximumRelativeError": 0.0,
+      "fZerosPerSecond": [
+        [
+          -8.378697568966064,
+          314.1034272455083
+        ],
+        [
+          -8.378697568966064,
+          -314.1034272455083
+        ],
+        [
+          -2.0932779429998947,
+          0.05583811347108655
+        ],
+        [
+          -2.0932779429998947,
+          -0.05583811347108655
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.0932779429998947,
+      "maximumScaledPolynomialResidual": 2.839331403194673e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6669750231267345,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 8.372930073155855,
+      "cutoffHz": 1.3325932093055393,
+      "limitHz": 1.665741511631924,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.5079644737231006,
+        6.316546816697188
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.5079644737231006,
+        6.316546816697188
+      ],
+      "coefficientMaximumRelativeError": 0.0,
+      "fZerosPerSecond": [
+        [
+          -2.0932779429998947,
+          314.1034272455083
+        ],
+        [
+          -2.0932779429998947,
+          -314.1034272455083
+        ],
+        [
+          -8.378697568966079,
+          0.055838113470962555
+        ],
+        [
+          -8.378697568966079,
+          -0.055838113470962555
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.0932779429998947,
+      "maximumScaledPolynomialResidual": 2.5402200688884344e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11165946946329425,
+      "routhNormalizedDelta3": 0.11111111111111105,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 10.466162591444819,
+      "cutoffHz": 1.665741511631924,
+      "limitHz": 1.665741511631924,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.884955592153876,
+        9.869604401089358
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.8849555921538756,
+        9.869604401089358
+      ],
+      "coefficientMaximumRelativeError": 2.355966430713716e-16,
+      "fZerosPerSecond": [
+        [
+          -5.329070518200751e-15,
+          314.1592653589792
+        ],
+        [
+          -5.329070518200751e-15,
+          -314.1592653589792
+        ],
+        [
+          -10.471975511965978,
+          4.458682373370477e-08
+        ],
+        [
+          -10.471975511965978,
+          -4.458682373370477e-08
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.329070518200751e-15,
+      "maximumScaledPolynomialResidual": 3.047379283443716e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.000555247084952662,
+      "routhNormalizedDelta3": -1.5403165926194004e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 12.559395109733783,
+      "cutoffHz": 1.998889813958309,
+      "limitHz": 1.665741511631924,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        2.261946710584651,
+        14.212230337568675
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        2.2619467105846507,
+        14.212230337568675
+      ],
+      "coefficientMaximumRelativeError": 1.9633053589280968e-16,
+      "fZerosPerSecond": [
+        [
+          2.090497162764777,
+          314.24283707608873
+        ],
+        [
+          2.090497162764777,
+          -314.24283707608873
+        ],
+        [
+          -12.56247267473076,
+          0.08357171710981565
+        ],
+        [
+          -12.56247267473076,
+          -0.08357171710981565
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 2.090497162764777,
+      "maximumScaledPolynomialResidual": 4.893762136825532e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09035840484603748,
+      "routhNormalizedDelta3": -0.09090909090909094,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 20.932325182889638,
+      "cutoffHz": 3.331483023263848,
+      "limitHz": 1.665741511631924,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        3.769911184307752,
+        39.47841760435743
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        3.7699111843077513,
+        39.47841760435743
+      ],
+      "coefficientMaximumRelativeError": 2.355966430713716e-16,
+      "fZerosPerSecond": [
+        [
+          10.403300597672725,
+          314.84903014031346
+        ],
+        [
+          10.403300597672725,
+          -314.84903014031346
+        ],
+        [
+          -20.87527610963868,
+          0.689764781334291
+        ],
+        [
+          -20.87527610963868,
+          -0.689764781334291
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 10.403300597672725,
+      "maximumScaledPolynomialResidual": 1.7602013613674146e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.3328396890040727,
+      "routhNormalizedDelta3": -0.3333333333333335,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 62.52003053624662,
+      "cutoffHz": 9.95037190209989,
+      "limitHz": 49.75185951049945,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12566370614359174,
+        39.478417604357425
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12566370614359174,
+        39.478417604357425
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -3136.57624123213,
+          251.62936131716214
+        ],
+        [
+          -3136.57624123213,
+          -251.62936131716214
+        ],
+        [
+          -5.016412357662711,
+          62.52990404182877
+        ],
+        [
+          -5.016412357662711,
+          -62.52990404182877
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.016412357662711,
+      "maximumScaledPolynomialResidual": 3.588417658318265e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.9960474308300398,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 250.0801221449865,
+      "cutoffHz": 39.80148760839956,
+      "limitHz": 49.75185951049945,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5026548245743669,
+        631.6546816697188
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5026548245743669,
+        631.6546816697188
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -3136.576241232129,
+          62.529904041768965
+        ],
+        [
+          -3136.576241232129,
+          -62.529904041768965
+        ],
+        [
+          -5.016412357662844,
+          251.62936131715063
+        ],
+        [
+          -5.016412357662844,
+          -251.62936131715063
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.016412357662844,
+      "maximumScaledPolynomialResidual": 5.940234025888499e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.9842829076620825,
+      "routhNormalizedDelta3": 0.11111111111111123,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 312.6001526812331,
+      "cutoffHz": 49.75185951049945,
+      "limitHz": 49.75185951049945,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6283185307179586,
+        986.9604401089358
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6283185307179586,
+        986.9604401089358
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -3141.592706524,
+          0.0
+        ],
+        [
+          -3141.59260065559,
+          0.0
+        ],
+        [
+          -2.1316282072803006e-14,
+          314.1592653589794
+        ],
+        [
+          -2.1316282072803006e-14,
+          -314.1592653589794
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.1316282072803006e-14,
+      "maximumScaledPolynomialResidual": 2.585588882625819e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.9803921568627453,
+      "routhNormalizedDelta3": 0.0,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 375.12018321747973,
+      "cutoffHz": 59.70223141259934,
+      "limitHz": 49.75185951049945,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7539822368615503,
+        1421.2230337568674
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7539822368615504,
+        1421.2230337568674
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -3148.9715314021855,
+          61.803640248358754
+        ],
+        [
+          -3148.9715314021855,
+          -61.803640248358754
+        ],
+        [
+          7.37887781239079,
+          375.96290560740624
+        ],
+        [
+          7.37887781239079,
+          -375.96290560740624
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 7.37887781239079,
+      "maximumScaledPolynomialResidual": 2.8532348777739267e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.9765166340508805,
+      "routhNormalizedDelta3": -0.09090909090909094,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 625.2003053624662,
+      "cutoffHz": 99.5037190209989,
+      "limitHz": 49.75185951049945,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2566370614359172,
+        3947.8417604357433
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2566370614359172,
+        3947.8417604357433
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -3198.533549725598,
+          297.67456207250285
+        ],
+        [
+          -3198.533549725598,
+          -297.67456207250285
+        ],
+        [
+          56.94089613580526,
+          611.833827431486
+        ],
+        [
+          56.94089613580526,
+          -611.833827431486
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 56.94089613580526,
+      "maximumScaledPolynomialResidual": 3.6554607654555483e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.9611650485436892,
+      "routhNormalizedDelta3": -0.33333333333333337,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 44.428829381583675,
+      "cutoffHz": 7.071067811865477,
+      "limitHz": 35.355339059327385,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        1.256637061435918,
+        39.47841760435747
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.020000000000000004,
+        1.256637061435918,
+        39.47841760435747
+      ],
+      "coefficientMaximumRelativeError": 1.7347234759768064e-16,
+      "fZerosPerSecond": [
+        [
+          -278.7529929586982,
+          278.7529929586983
+        ],
+        [
+          -278.7529929586982,
+          -278.7529929586983
+        ],
+        [
+          -35.4062724002813,
+          35.406272400281345
+        ],
+        [
+          -35.4062724002813,
+          -35.406272400281345
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.4062724002813,
+      "maximumScaledPolynomialResidual": 2.652093564391972e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.8181818181818182,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 177.7153175263347,
+      "cutoffHz": 28.28427124746191,
+      "limitHz": 35.355339059327385,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        5.026548245743672,
+        631.6546816697195
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.020000000000000004,
+        5.026548245743672,
+        631.6546816697195
+      ],
+      "coefficientMaximumRelativeError": 1.7347234759768064e-16,
+      "fZerosPerSecond": [
+        [
+          -35.40627240028134,
+          278.75299295869814
+        ],
+        [
+          -35.40627240028134,
+          -278.75299295869814
+        ],
+        [
+          -278.75299295869837,
+          35.40627240028085
+        ],
+        [
+          -278.75299295869837,
+          -35.40627240028085
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40627240028134,
+      "maximumScaledPolynomialResidual": 2.0050074196722577e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.42857142857142855,
+      "routhNormalizedDelta3": 0.11111111111111108,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 222.14414690791835,
+      "cutoffHz": 35.355339059327385,
+      "limitHz": 35.355339059327385,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        6.28318530717959,
+        986.9604401089367
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.020000000000000004,
+        6.28318530717959,
+        986.9604401089367
+      ],
+      "coefficientMaximumRelativeError": 1.7347234759768064e-16,
+      "fZerosPerSecond": [
+        [
+          -1.1368683772161603e-13,
+          314.15926535897904
+        ],
+        [
+          -1.1368683772161603e-13,
+          -314.15926535897904
+        ],
+        [
+          -314.15927151654506,
+          0.0
+        ],
+        [
+          -314.15925920141405,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -1.1368683772161603e-13,
+      "maximumScaledPolynomialResidual": 5.81185819864663e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.33333333333333326,
+      "routhNormalizedDelta3": -1.0587911840678741e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 266.57297628950204,
+      "cutoffHz": 42.42640687119286,
+      "limitHz": 35.355339059327385,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        7.539822368615507,
+        1421.223033756869
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.020000000000000004,
+        7.539822368615508,
+        1421.223033756869
+      ],
+      "coefficientMaximumRelativeError": 1.7347234759768064e-16,
+      "fZerosPerSecond": [
+        [
+          28.779495166878846,
+          342.9387605258581
+        ],
+        [
+          28.779495166878846,
+          -342.9387605258581
+        ],
+        [
+          -342.93876052585824,
+          28.77949516687762
+        ],
+        [
+          -342.93876052585824,
+          -28.77949516687762
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 28.779495166878846,
+      "maximumScaledPolynomialResidual": 2.7675457565710854e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.25,
+      "routhNormalizedDelta3": -0.090909090909091,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 444.2882938158367,
+      "cutoffHz": 70.71067811865477,
+      "limitHz": 35.355339059327385,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        12.56637061435918,
+        3947.841760435747
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-07,
+        6.366197723675815e-05,
+        0.020000000000000004,
+        12.56637061435918,
+        3947.841760435747
+      ],
+      "coefficientMaximumRelativeError": 1.7347234759768064e-16,
+      "fZerosPerSecond": [
+        [
+          114.99027195564321,
+          429.1495373146225
+        ],
+        [
+          114.99027195564321,
+          -429.1495373146225
+        ],
+        [
+          -429.149537314622,
+          114.99027195564335
+        ],
+        [
+          -429.149537314622,
+          -114.99027195564335
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 114.99027195564321,
+      "maximumScaledPolynomialResidual": 2.957558160049884e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -8.315726513883186e-17,
+      "routhNormalizedDelta3": -0.3333333333333334,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 19.869176531592203,
+      "cutoffHz": 3.1622776601683795,
+      "limitHz": 15.811388300841898,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        3.7699111843077517,
+        39.47841760435744
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.09999999999999999,
+        3.7699111843077517,
+        39.47841760435744
+      ],
+      "coefficientMaximumRelativeError": 1.3877787807814457e-16,
+      "fZerosPerSecond": [
+        [
+          -84.90491919057214,
+          308.70955703279736
+        ],
+        [
+          -84.90491919057214,
+          -308.70955703279736
+        ],
+        [
+          -19.814835929087714,
+          5.449708326182142
+        ],
+        [
+          -19.814835929087714,
+          -5.449708326182142
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -19.814835929087714,
+      "maximumScaledPolynomialResidual": 4.1540606923796564e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6949152542372883,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 79.47670612636881,
+      "cutoffHz": 12.649110640673518,
+      "limitHz": 15.811388300841898,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        15.079644737231007,
+        631.654681669719
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.09999999999999999,
+        15.079644737231007,
+        631.654681669719
+      ],
+      "coefficientMaximumRelativeError": 1.3877787807814457e-16,
+      "fZerosPerSecond": [
+        [
+          -19.814835929087643,
+          308.70955703279697
+        ],
+        [
+          -19.814835929087643,
+          -308.70955703279697
+        ],
+        [
+          -84.90491919057219,
+          5.449708326181986
+        ],
+        [
+          -84.90491919057219,
+          -5.449708326181986
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -19.814835929087643,
+      "maximumScaledPolynomialResidual": 4.782779478384996e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.16279069767441873,
+      "routhNormalizedDelta3": 0.11111111111111117,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 99.34588265796101,
+      "cutoffHz": 15.811388300841898,
+      "limitHz": 15.811388300841898,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        18.84955592153876,
+        986.9604401089359
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.09999999999999999,
+        18.849555921538762,
+        986.9604401089359
+      ],
+      "coefficientMaximumRelativeError": 1.884773144570973e-16,
+      "fZerosPerSecond": [
+        [
+          9.237055564881302e-14,
+          314.1592653589793
+        ],
+        [
+          9.237055564881302e-14,
+          -314.1592653589793
+        ],
+        [
+          -104.71975511965977,
+          9.618282244755081e-07
+        ],
+        [
+          -104.71975511965977,
+          -9.618282244755081e-07
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 9.237055564881302e-14,
+      "maximumScaledPolynomialResidual": 1.5407874549125715e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.05263157894736859,
+      "routhNormalizedDelta3": 7.529181753371559e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 119.21505918955322,
+      "cutoffHz": 18.973665961010276,
+      "limitHz": 15.811388300841898,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        22.61946710584651,
+        1421.2230337568678
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.09999999999999999,
+        22.61946710584651,
+        1421.2230337568678
+      ],
+      "coefficientMaximumRelativeError": 1.3877787807814457e-16,
+      "fZerosPerSecond": [
+        [
+          17.88826975057737,
+          320.991976403773
+        ],
+        [
+          17.88826975057737,
+          -320.991976403773
+        ],
+        [
+          -122.60802487023707,
+          6.832711044794441
+        ],
+        [
+          -122.60802487023707,
+          -6.832711044794441
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 17.88826975057737,
+      "maximumScaledPolynomialResidual": 5.775118158200172e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.038461538461538346,
+      "routhNormalizedDelta3": -0.09090909090909076,
+      "agreement": true
+    },
+    {
+      "V": 1.0,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 198.69176531592203,
+      "cutoffHz": 31.622776601683796,
+      "limitHz": 15.811388300841898,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        37.69911184307752,
+        3947.8417604357437
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.09999999999999999,
+        37.699111843077524,
+        3947.8417604357437
+      ],
+      "coefficientMaximumRelativeError": 1.884773144570973e-16,
+      "fZerosPerSecond": [
+        [
+          74.2694071674495,
+          351.93196131629435
+        ],
+        [
+          74.2694071674495,
+          -351.93196131629435
+        ],
+        [
+          -178.9891622871093,
+          37.772695957315335
+        ],
+        [
+          -178.9891622871093,
+          -37.772695957315335
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 74.2694071674495,
+      "maximumScaledPolynomialResidual": 5.46299804618095e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.2857142857142856,
+      "routhNormalizedDelta3": -0.33333333333333326,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 4.736753541037237,
+      "cutoffHz": 0.7538777402641151,
+      "limitHz": 3.7693887013205756,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.0012567398958926636,
+        0.003915855783293314
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.00010099999999999999,
+        0.0012567398958926639,
+        0.003915855783293314
+      ],
+      "coefficientMaximumRelativeError": 1.7254201542084324e-16,
+      "fZerosPerSecond": [
+        [
+          -25.162359721181375,
+          313.6581092857118
+        ],
+        [
+          -25.162359721181375,
+          -313.6581092857118
+        ],
+        [
+          -6.5265233288581985,
+          0.0
+        ],
+        [
+          -5.980610300574844,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.980610300574844,
+      "maximumScaledPolynomialResidual": 1.7904280770180118e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6693989071038251,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 18.947014164148946,
+      "cutoffHz": 3.0155109610564605,
+      "limitHz": 3.7693887013205756,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.005026959583570655,
+        0.06265369253269303
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.00010099999999999999,
+        0.0050269595835706555,
+        0.06265369253269303
+      ],
+      "coefficientMaximumRelativeError": 1.7254201542084324e-16,
+      "fZerosPerSecond": [
+        [
+          -6.2519341803233015,
+          313.66600686006404
+        ],
+        [
+          -6.2519341803233015,
+          -313.66600686006404
+        ],
+        [
+          -27.392690739544307,
+          0.0
+        ],
+        [
+          -22.935293971604988,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.2519341803233015,
+      "maximumScaledPolynomialResidual": 4.873596178026159e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11598173515981723,
+      "routhNormalizedDelta3": 0.11111111111111102,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 23.68376770518618,
+      "cutoffHz": 3.7693887013205756,
+      "limitHz": 3.7693887013205756,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.006283699479463319,
+        0.09789639458233283
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.00010099999999999999,
+        0.006283699479463318,
+        0.09789639458233283
+      ],
+      "coefficientMaximumRelativeError": 1.3803361233667457e-16,
+      "fZerosPerSecond": [
+        [
+          7.105427357601002e-15,
+          314.1721194031065
+        ],
+        [
+          7.105427357601002e-15,
+          -314.1721194031065
+        ],
+        [
+          -34.25786238074532,
+          0.0
+        ],
+        [
+          -28.573990691050618,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 7.105427357601002e-15,
+      "maximumScaledPolynomialResidual": 2.8669739434805614e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.004934210526315618,
+      "routhNormalizedDelta3": -1.4765525839686e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 28.420521246223416,
+      "cutoffHz": 4.52326644158469,
+      "limitHz": 3.7693887013205756,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.007540439375355983,
+        0.14097080819855928
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.00010099999999999999,
+        0.007540439375355981,
+        0.14097080819855928
+      ],
+      "coefficientMaximumRelativeError": 2.3005602056112427e-16,
+      "fZerosPerSecond": [
+        [
+          6.178409535369084,
+          314.91509173284646
+        ],
+        [
+          6.178409535369084,
+          -314.91509173284646
+        ],
+        [
+          -40.89957150863071,
+          0.0
+        ],
+        [
+          -34.28910063390333,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 6.178409535369084,
+      "maximumScaledPolynomialResidual": 1.6040539436099295e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.08601346297681392,
+      "routhNormalizedDelta3": -0.09090909090909106,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 47.36753541037236,
+      "cutoffHz": 7.538777402641151,
+      "limitHz": 3.7693887013205756,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.000101,
+        0.012567398958926638,
+        0.39158557832933133
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-08,
+        0.00010099999999999999,
+        0.012567398958926636,
+        0.39158557832933133
+      ],
+      "coefficientMaximumRelativeError": 1.3803361233667457e-16,
+      "fZerosPerSecond": [
+        [
+          29.748104719835027,
+          319.8933586313348
+        ],
+        [
+          29.748104719835027,
+          -319.8933586313348
+        ],
+        [
+          -61.16403125573301,
+          1.8196505772545057
+        ],
+        [
+          -61.16403125573301,
+          -1.8196505772545057
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 29.748104719835027,
+      "maximumScaledPolynomialResidual": 4.308826176273733e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.32894014277869316,
+      "routhNormalizedDelta3": -0.3333333333333335,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 0.4759754820768802,
+      "cutoffHz": 0.07575385076308332,
+      "limitHz": 0.37876925381541654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.012566380998759577,
+        0.003915221439817826
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233776e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.012566380998759572,
+        0.003915221439817825
+      ],
+      "coefficientMaximumRelativeError": 4.1413438192301534e-16,
+      "fZerosPerSecond": [
+        [
+          -2.5133037009910844,
+          314.1542441005693
+        ],
+        [
+          -2.5133037009910844,
+          -314.1542441005693
+        ],
+        [
+          -0.685187161334836,
+          0.0
+        ],
+        [
+          -0.5713907438625824,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.5713907438625824,
+      "maximumScaledPolynomialResidual": 8.058616305660872e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6666942125995096,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 1.9039019283075207,
+      "cutoffHz": 0.30301540305233327,
+      "limitHz": 0.37876925381541654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.05026552399503831,
+        0.06264354303708522
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233776e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.05026552399503829,
+        0.0626435430370852
+      ],
+      "coefficientMaximumRelativeError": 4.1413438192301534e-16,
+      "fZerosPerSecond": [
+        [
+          -0.6282872912223559,
+          314.15432200227355
+        ],
+        [
+          -0.6282872912223559,
+          -314.15432200227355
+        ],
+        [
+          -2.7417292028402547,
+          0.0
+        ],
+        [
+          -2.28488152189462,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.6282872912223559,
+      "maximumScaledPolynomialResidual": 2.787688766738462e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.1111600830073641,
+      "routhNormalizedDelta3": 0.11111111111111106,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 2.3798774103844007,
+      "cutoffHz": 0.37876925381541654,
+      "limitHz": 0.37876925381541654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.06283190499379787,
+        0.09788053599544562
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233776e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.06283190499379787,
+        0.09788053599544565
+      ],
+      "coefficientMaximumRelativeError": 2.8356583189246514e-16,
+      "fZerosPerSecond": [
+        [
+          -1.3322676295501878e-15,
+          314.1593951639576
+        ],
+        [
+          -1.3322676295501878e-15,
+          -314.1593951639576
+        ],
+        [
+          -3.4271778248372486,
+          0.0
+        ],
+        [
+          -2.8560074823423376,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -1.3322676295501878e-15,
+      "maximumScaledPolynomialResidual": 1.124779898401157e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 4.958431813303055e-05,
+      "routhNormalizedDelta3": 4.219980357306727e-18,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 2.855852892461281,
+      "cutoffHz": 0.45452310457849987,
+      "limitHz": 0.37876925381541654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.07539828599255743,
+        0.1409479718334417
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233776e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.07539828599255743,
+        0.14094797183344174
+      ],
+      "coefficientMaximumRelativeError": 2.6124625325277287e-16,
+      "fZerosPerSecond": [
+        [
+          0.6282108845947612,
+          314.16699038115763
+        ],
+        [
+          0.6282108845947612,
+          -314.16699038115763
+        ],
+        [
+          -4.112398094468169,
+          0.0
+        ],
+        [
+          -3.427208981900949,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.6282108845947612,
+      "maximumScaledPolynomialResidual": 7.199104229225524e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09085991615704765,
+      "routhNormalizedDelta3": -0.09090909090909087,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 4.759754820768801,
+      "cutoffHz": 0.7575385076308331,
+      "limitHz": 0.37876925381541654,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-07,
+        0.010001000000000001,
+        0.12566380998759574,
+        0.3915221439817825
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233776e-07,
+        6.366197723675814e-07,
+        0.010001,
+        0.12566380998759574,
+        0.3915221439817826
+      ],
+      "coefficientMaximumRelativeError": 2.8356583189246514e-16,
+      "fZerosPerSecond": [
+        [
+          3.1396846423560802,
+          314.22254593771504
+        ],
+        [
+          3.1396846423560802,
+          -314.22254593771504
+        ],
+        [
+          -6.8486439895200935,
+          0.0
+        ],
+        [
+          -5.713910602371664,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 3.1396846423560802,
+      "maximumScaledPolynomialResidual": 3.0769226202444207e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.3332892576553943,
+      "routhNormalizedDelta3": -0.33333333333333337,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 0.1586654287334398,
+      "cutoffHz": 0.025252387280721787,
+      "limitHz": 0.12626193640360892,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.03769911530484945,
+        0.003915215688067036
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.037699115304849456,
+        0.003915215688067035
+      ],
+      "coefficientMaximumRelativeError": 2.215361316190028e-16,
+      "fZerosPerSecond": [
+        [
+          -0.8377591364295516,
+          314.1587074317859
+        ],
+        [
+          -0.8377591364295516,
+          -314.1587074317859
+        ],
+        [
+          -0.22847017458474317,
+          0.0
+        ],
+        [
+          -0.19040665494934975,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.19040665494934975,
+      "maximumScaledPolynomialResidual": 1.5920862379606344e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6666697275507113,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 0.6346617149337592,
+      "cutoffHz": 0.10100954912288715,
+      "limitHz": 0.12626193640360892,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.1507964612193978,
+        0.06264345100907258
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.15079646121939783,
+        0.06264345100907256
+      ],
+      "coefficientMaximumRelativeError": 2.215361316190028e-16,
+      "fZerosPerSecond": [
+        [
+          -0.20943835322495907,
+          314.1587160864467
+        ],
+        [
+          -0.20943835322495907,
+          -314.1587160864467
+        ],
+        [
+          -0.9139169598359209,
+          0.0
+        ],
+        [
+          -0.7616014361073556,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -0.20943835322495907,
+      "maximumScaledPolynomialResidual": 5.034864258239487e-17,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11111655269940193,
+      "routhNormalizedDelta3": 0.11111111111111119,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 0.7933271436671989,
+      "cutoffHz": 0.12626193640360892,
+      "limitHz": 0.12626193640360892,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.18849557652424723,
+        0.09788039220167588
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.1884955765242472,
+        0.09788039220167588
+      ],
+      "coefficientMaximumRelativeError": 1.4724788839837079e-16,
+      "fZerosPerSecond": [
+        [
+          -2.220446049250313e-16,
+          314.1592797830287
+        ],
+        [
+          -2.220446049250313e-16,
+          -314.1592797830287
+        ],
+        [
+          -1.1423968040657635,
+          0.0
+        ],
+        [
+          -0.9519982983274324,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.220446049250313e-16,
+      "maximumScaledPolynomialResidual": 1.5844212922709933e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 5.50961151744749e-06,
+      "routhNormalizedDelta3": 1.3542700654039324e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 0.9519925724006386,
+      "cutoffHz": 0.15151432368433068,
+      "limitHz": 0.12626193640360892,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.22619469182909666,
+        0.14094776477041324
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.22619469182909663,
+        0.14094776477041324
+      ],
+      "coefficientMaximumRelativeError": 1.2270657366530898e-16,
+      "fZerosPerSecond": [
+        [
+          0.2094355223576687,
+          314.1601238664187
+        ],
+        [
+          0.2094355223576687,
+          -314.1601238664187
+        ],
+        [
+          -1.370868189102904,
+          0.0
+        ],
+        [
+          -1.1423979580056298,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.2094355223576687,
+      "maximumScaledPolynomialResidual": 3.13280442757687e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09090362682881611,
+      "routhNormalizedDelta3": -0.09090909090909065,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.001,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 1.5866542873343978,
+      "cutoffHz": 0.25252387280721783,
+      "limitHz": 0.12626193640360892,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.37699115304849445,
+        0.3915215688067035
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-06,
+        0.09000099999999998,
+        0.3769911530484944,
+        0.3915215688067035
+      ],
+      "coefficientMaximumRelativeError": 1.4724788839837079e-16,
+      "fZerosPerSecond": [
+        [
+          1.0471267884010826,
+          314.1663035004782
+        ],
+        [
+          1.0471267884010826,
+          -314.1663035004782
+        ],
+        [
+          -2.284582116783068,
+          0.0
+        ],
+        [
+          -1.9040665624122906,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 1.0471267884010826,
+      "maximumScaledPolynomialResidual": 3.0932780791635254e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.33332843589187905,
+      "routhNormalizedDelta3": -0.3333333333333332,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 33.79786467478702,
+      "cutoffHz": 5.3790972289433086,
+      "limitHz": 26.89548614471654,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.012618513231016266,
+        0.3947773789123948
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-07,
+        0.00020000000000000004,
+        0.012618513231016266,
+        0.39477737891239484
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -278.5422337240427,
+          278.5900067429339
+        ],
+        [
+          -278.5422337240427,
+          -278.5900067429339
+        ],
+        [
+          -35.6170316349367,
+          35.2414110590853
+        ],
+        [
+          -35.6170316349367,
+          -35.2414110590853
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.6170316349367,
+      "maximumScaledPolynomialResidual": 1.674723405945625e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.8174962292609352,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 135.1914586991481,
+      "cutoffHz": 21.516388915773234,
+      "limitHz": 26.89548614471654,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.050474052924065066,
+        6.3164380625983165
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-07,
+        0.00020000000000000004,
+        0.050474052924065066,
+        6.316438062598317
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -35.40534776911147,
+          279.5105010949464
+        ],
+        [
+          -35.40534776911147,
+          -279.5105010949464
+        ],
+        [
+          -278.7539175898681,
+          28.829932362091192
+        ],
+        [
+          -278.7539175898681,
+          -28.829932362091192
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40534776911147,
+      "maximumScaledPolynomialResidual": 2.6323766663954414e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.4268798105387803,
+      "routhNormalizedDelta3": 0.11111111111111113,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 168.9893233739351,
+      "cutoffHz": 26.89548614471654,
+      "limitHz": 26.89548614471654,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.06309256615508133,
+        9.869434472809868
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-07,
+        0.00020000000000000004,
+        0.06309256615508133,
+        9.869434472809868
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          -2.2026824808563106e-13,
+          314.8103733431694
+        ],
+        [
+          -2.2026824808563106e-13,
+          -314.8103733431694
+        ],
+        [
+          -334.39604261159815,
+          0.0
+        ],
+        [
+          -293.9224881063603,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.2026824808563106e-13,
+      "maximumScaledPolynomialResidual": 3.4047132006972786e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.33149171270718236,
+      "routhNormalizedDelta3": 1.005569471250321e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 202.7871880487221,
+      "cutoffHz": 32.274583373659844,
+      "limitHz": 26.89548614471654,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.07571107938609759,
+        14.211985640846205
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-07,
+        0.00020000000000000004,
+        0.07571107938609759,
+        14.211985640846207
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          28.779104491769566,
+          343.54375004810794
+        ],
+        [
+          28.779104491769566,
+          -343.54375004810794
+        ],
+        [
+          -342.9383698507489,
+          20.313891161480267
+        ],
+        [
+          -342.9383698507489,
+          -20.313891161480267
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 28.779104491769566,
+      "maximumScaledPolynomialResidual": 1.0102265347958533e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.2480580010357329,
+      "routhNormalizedDelta3": -0.09090909090909076,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 337.9786467478702,
+      "cutoffHz": 53.79097228943308,
+      "limitHz": 26.89548614471654,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-07,
+        0.0002,
+        0.12618513231016265,
+        39.47773789123947
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.013211836423378e-09,
+        6.366197723675814e-07,
+        0.00020000000000000004,
+        0.12618513231016265,
+        39.47773789123947
+      ],
+      "coefficientMaximumRelativeError": 2.0409863535372883e-16,
+      "fZerosPerSecond": [
+        [
+          114.98923243377237,
+          429.6998596012982
+        ],
+        [
+          114.98923243377237,
+          -429.6998596012982
+        ],
+        [
+          -429.1484977927521,
+          112.91141391422254
+        ],
+        [
+          -429.1484977927521,
+          -112.91141391422254
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 114.98923243377237,
+      "maximumScaledPolynomialResidual": 1.0827307479008987e-15,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.002070393374741152,
+      "routhNormalizedDelta3": -0.3333333333333332,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 4.736753541037234,
+      "cutoffHz": 0.7538777402641147,
+      "limitHz": 3.769388701320573,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12567398958926632,
+        0.391585578329331
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.12567398958926632,
+        0.391585578329331
+      ],
+      "coefficientMaximumRelativeError": 1.3305162422213102e-16,
+      "fZerosPerSecond": [
+        [
+          -25.162359721181417,
+          313.6581092857119
+        ],
+        [
+          -25.162359721181417,
+          -313.6581092857119
+        ],
+        [
+          -6.526523328858126,
+          0.0
+        ],
+        [
+          -5.9806103005749,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.9806103005749,
+      "maximumScaledPolynomialResidual": 3.003031720810519e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6693989071038251,
+      "routhNormalizedDelta3": 0.6666666666666669,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 18.947014164148936,
+      "cutoffHz": 3.0155109610564588,
+      "limitHz": 3.769388701320573,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5026959583570653,
+        6.265369253269296
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.5026959583570653,
+        6.265369253269296
+      ],
+      "coefficientMaximumRelativeError": 1.3305162422213102e-16,
+      "fZerosPerSecond": [
+        [
+          -6.25193418032333,
+          313.6660068600643
+        ],
+        [
+          -6.25193418032333,
+          -313.6660068600643
+        ],
+        [
+          -27.392690739544243,
+          0.0
+        ],
+        [
+          -22.935293971604995,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -6.25193418032333,
+      "maximumScaledPolynomialResidual": 7.652564135523362e-17,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11598173515981741,
+      "routhNormalizedDelta3": 0.11111111111111122,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 23.683767705186167,
+      "cutoffHz": 3.769388701320573,
+      "limitHz": 3.769388701320573,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6283699479463316,
+        9.789639458233273
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.6283699479463315,
+        9.789639458233273
+      ],
+      "coefficientMaximumRelativeError": 1.7668302379094352e-16,
+      "fZerosPerSecond": [
+        [
+          7.105427357601002e-15,
+          314.17211940310665
+        ],
+        [
+          7.105427357601002e-15,
+          -314.17211940310665
+        ],
+        [
+          -34.25786238074499,
+          0.0
+        ],
+        [
+          -28.573990691050856,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 7.105427357601002e-15,
+      "maximumScaledPolynomialResidual": 3.4530823319341806e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.00493421052631583,
+      "routhNormalizedDelta3": -3.710747972424488e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 28.420521246223398,
+      "cutoffHz": 4.5232664415846875,
+      "limitHz": 3.769388701320573,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7540439375355977,
+        14.097080819855911
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.7540439375355977,
+        14.097080819855913
+      ],
+      "coefficientMaximumRelativeError": 1.3305162422213102e-16,
+      "fZerosPerSecond": [
+        [
+          6.178409535369035,
+          314.9150917328464
+        ],
+        [
+          6.178409535369035,
+          -314.9150917328464
+        ],
+        [
+          -40.89957150863054,
+          0.0
+        ],
+        [
+          -34.28910063390343,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 6.178409535369035,
+      "maximumScaledPolynomialResidual": 3.6442297494363354e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.08601346297681356,
+      "routhNormalizedDelta3": -0.09090909090909077,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 47.367535410372334,
+      "cutoffHz": 7.538777402641146,
+      "limitHz": 3.769388701320573,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2567398958926632,
+        39.15855783293309
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        1.256739895892663,
+        39.15855783293309
+      ],
+      "coefficientMaximumRelativeError": 1.7668302379094352e-16,
+      "fZerosPerSecond": [
+        [
+          29.748104719835055,
+          319.8933586313348
+        ],
+        [
+          29.748104719835055,
+          -319.8933586313348
+        ],
+        [
+          -61.16403125573294,
+          1.819650577254643
+        ],
+        [
+          -61.16403125573294,
+          -1.819650577254643
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 29.748104719835055,
+      "maximumScaledPolynomialResidual": 4.648252398186713e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.328940142778693,
+      "routhNormalizedDelta3": -0.33333333333333337,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 1.58579675661667,
+      "cutoffHz": 0.2523873925546383,
+      "limitHz": 1.2619369627731913,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        0.37699457643039397,
+        0.39152867949843556
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027436e-05,
+        0.09009999999999999,
+        0.37699457643039397,
+        0.39152867949843556
+      ],
+      "coefficientMaximumRelativeError": 1.7740216562950806e-16,
+      "fZerosPerSecond": [
+        [
+          -8.378676050207588,
+          314.1034845203751
+        ],
+        [
+          -8.378676050207588,
+          -314.1034845203751
+        ],
+        [
+          -2.275324405911923,
+          0.0
+        ],
+        [
+          -1.9112745176048316,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -1.9112745176048316,
+      "maximumScaledPolynomialResidual": 2.979359896881196e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6669724770642201,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 6.34318702646668,
+      "cutoffHz": 1.0095495702185533,
+      "limitHz": 1.2619369627731913,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.5079783057215759,
+        6.264458871974969
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027436e-05,
+        0.09009999999999999,
+        1.5079783057215759,
+        6.264458871974969
+      ],
+      "coefficientMaximumRelativeError": 1.7740216562950806e-16,
+      "fZerosPerSecond": [
+        [
+          -2.093238038742268,
+          314.10435132652873
+        ],
+        [
+          -2.093238038742268,
+          -314.10435132652873
+        ],
+        [
+          -9.138273750749516,
+          0.0
+        ],
+        [
+          -7.619201195697892,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -2.093238038742268,
+      "maximumScaledPolynomialResidual": 5.414291633729405e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.11165494034873032,
+      "routhNormalizedDelta3": 0.11111111111111102,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 7.928983783083349,
+      "cutoffHz": 1.2619369627731913,
+      "limitHz": 1.2619369627731913,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        1.8849728821519696,
+        9.788216987460887
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027436e-05,
+        0.09009999999999999,
+        1.8849728821519693,
+        9.788216987460888
+      ],
+      "coefficientMaximumRelativeError": 1.8147910305583106e-16,
+      "fZerosPerSecond": [
+        [
+          0.0,
+          314.16070618884964
+        ],
+        [
+          0.0,
+          -314.16070618884964
+        ],
+        [
+          -11.423449202188483,
+          0.0
+        ],
+        [
+          -9.520501821743471,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 0.0,
+      "maximumScaledPolynomialResidual": 3.045764868171814e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.0005506607929514286,
+      "routhNormalizedDelta3": -1.9164524862473538e-16,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 9.514780539700018,
+      "cutoffHz": 1.5143243553278296,
+      "limitHz": 1.2619369627731913,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        2.2619674585823635,
+        14.095032461943674
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027436e-05,
+        0.09009999999999999,
+        2.261967458582363,
+        14.095032461943676
+      ],
+      "coefficientMaximumRelativeError": 1.9632873504218553e-16,
+      "fZerosPerSecond": [
+        [
+          2.0904194060191976,
+          314.24490437959906
+        ],
+        [
+          2.0904194060191976,
+          -314.24490437959906
+        ],
+        [
+          -13.700186377069071,
+          0.0
+        ],
+        [
+          -11.424603458901311,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 2.0904194060191976,
+      "maximumScaledPolynomialResidual": 7.099480793244946e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.09036295369211525,
+      "routhNormalizedDelta3": -0.09090909090909109,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.01,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 15.857967566166698,
+      "cutoffHz": 2.5238739255463827,
+      "limitHz": 1.2619369627731913,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        1.909859317102744e-05,
+        0.09009999999999999,
+        3.769945764303939,
+        39.15286794984355
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.118906527810398e-07,
+        1.9098593171027436e-05,
+        0.09009999999999999,
+        3.7699457643039387,
+        39.152867949843554
+      ],
+      "coefficientMaximumRelativeError": 1.8147910305583106e-16,
+      "fZerosPerSecond": [
+        [
+          10.40237337474435,
+          314.8546137023777
+        ],
+        [
+          10.40237337474435,
+          -314.8546137023777
+        ],
+        [
+          -22.634524057391776,
+          0.0
+        ],
+        [
+          -19.11417371602897,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 10.40237337474435,
+      "maximumScaledPolynomialResidual": 2.4342655139903907e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.33284376721130904,
+      "routhNormalizedDelta3": -0.33333333333333354,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 47.754416526256094,
+      "cutoffHz": 7.600351444622955,
+      "limitHz": 38.00175722311477,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.12670044986229145,
+        39.8008363520009
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.12670044986229145,
+        39.8008363520009
+      ],
+      "coefficientMaximumRelativeError": 1.3305162422213102e-16,
+      "fZerosPerSecond": [
+        [
+          -3136.534521645057,
+          251.04601945247848
+        ],
+        [
+          -3136.534521645057,
+          -251.04601945247848
+        ],
+        [
+          -5.058131944734737,
+          62.784784849279156
+        ],
+        [
+          -5.058131944734737,
+          -62.784784849279156
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.058131944734737,
+      "maximumScaledPolynomialResidual": 6.428442617029333e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.9960148865395382,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 191.01766610502438,
+      "cutoffHz": 30.40140577849182,
+      "limitHz": 38.00175722311477,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.5068017994491658,
+        636.8133816320144
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.5068017994491658,
+        636.8133816320144
+      ],
+      "coefficientMaximumRelativeError": 1.3305162422213102e-16,
+      "fZerosPerSecond": [
+        [
+          -3136.5345317521746,
+          55.90236111751453
+        ],
+        [
+          -3136.5345317521746,
+          -55.90236111751453
+        ],
+        [
+          -5.058121837619467,
+          252.66781040206408
+        ],
+        [
+          -5.058121837619467,
+          -252.66781040206408
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -5.058121837619467,
+      "maximumScaledPolynomialResidual": 3.0554926612208185e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.9841542667255972,
+      "routhNormalizedDelta3": 0.11111111111111097,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 238.77208263128045,
+      "cutoffHz": 38.00175722311477,
+      "limitHz": 38.00175722311477,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.6335022493114573,
+        995.0209088000224
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.6335022493114572,
+        995.0209088000224
+      ],
+      "coefficientMaximumRelativeError": 1.7525163104501032e-16,
+      "fZerosPerSecond": [
+        [
+          -3170.1278356039325,
+          0.0
+        ],
+        [
+          -3113.0574715756593,
+          0.0
+        ],
+        [
+          -8.526512829121202e-14,
+          315.45253307506385
+        ],
+        [
+          -8.526512829121202e-14,
+          -315.45253307506385
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -8.526512829121202e-14,
+      "maximumScaledPolynomialResidual": 3.8205556544239344e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.9802319882372162,
+      "routhNormalizedDelta3": -8.122892023027434e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 286.52649915753653,
+      "cutoffHz": 45.602108667737724,
+      "limitHz": 38.00175722311477,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        0.7602026991737487,
+        1432.8301086720319
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        0.7602026991737485,
+        1432.830108672032
+      ],
+      "coefficientMaximumRelativeError": 2.920860517416839e-16,
+      "fZerosPerSecond": [
+        [
+          -3149.0316704310626,
+          55.1328518703552
+        ],
+        [
+          -3149.0316704310626,
+          -55.1328518703552
+        ],
+        [
+          7.439016841267852,
+          377.5020687566848
+        ],
+        [
+          7.439016841267852,
+          -377.5020687566848
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 7.439016841267852,
+      "maximumScaledPolynomialResidual": 3.755073366350394e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.9763251862842609,
+      "routhNormalizedDelta3": -0.0909090909090908,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.01,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 477.5441652625609,
+      "cutoffHz": 76.00351444622954,
+      "limitHz": 38.00175722311477,
+      "coefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675814e-06,
+        0.010100000000000001,
+        1.2670044986229145,
+        3980.0836352000897
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233777e-09,
+        6.366197723675813e-06,
+        0.010100000000000001,
+        1.2670044986229143,
+        3980.0836352000897
+      ],
+      "coefficientMaximumRelativeError": 1.7525163104501032e-16,
+      "fZerosPerSecond": [
+        [
+          -3198.964806859987,
+          297.4575425594597
+        ],
+        [
+          -3198.964806859987,
+          -297.4575425594597
+        ],
+        [
+          57.37215327019227,
+          614.2296417429101
+        ],
+        [
+          57.37215327019227,
+          -614.2296417429101
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 57.37215327019227,
+      "maximumScaledPolynomialResidual": 1.3933439139174737e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.9608509261506105,
+      "routhNormalizedDelta3": -0.33333333333333337,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 33.79786467478703,
+      "cutoffHz": 5.379097228943309,
+      "limitHz": 26.895486144716543,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        1.261851323101627,
+        39.47773789123951
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-05,
+        0.02,
+        1.261851323101627,
+        39.47773789123951
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          -278.5422337240426,
+          278.5900067429339
+        ],
+        [
+          -278.5422337240426,
+          -278.5900067429339
+        ],
+        [
+          -35.6170316349367,
+          35.2414110590853
+        ],
+        [
+          -35.6170316349367,
+          -35.2414110590853
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.6170316349367,
+      "maximumScaledPolynomialResidual": 2.31391666842578e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.8174962292609352,
+      "routhNormalizedDelta3": 0.6666666666666666,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 135.19145869914811,
+      "cutoffHz": 21.516388915773238,
+      "limitHz": 26.895486144716543,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        5.047405292406508,
+        631.6438062598321
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-05,
+        0.02,
+        5.047405292406508,
+        631.6438062598321
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          -35.40534776911141,
+          279.5105010949461
+        ],
+        [
+          -35.40534776911141,
+          -279.5105010949461
+        ],
+        [
+          -278.75391758986825,
+          28.8299323620901
+        ],
+        [
+          -278.75391758986825,
+          -28.8299323620901
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -35.40534776911141,
+      "maximumScaledPolynomialResidual": 3.8914188145129596e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.4268798105387803,
+      "routhNormalizedDelta3": 0.111111111111111,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 168.98932337393512,
+      "cutoffHz": 26.895486144716543,
+      "limitHz": 26.895486144716543,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        6.3092566155081355,
+        986.9434472809874
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-05,
+        0.02,
+        6.309256615508135,
+        986.9434472809874
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          2.2026824808563106e-13,
+          314.8103733431694
+        ],
+        [
+          2.2026824808563106e-13,
+          -314.8103733431694
+        ],
+        [
+          -334.3960426116007,
+          0.0
+        ],
+        [
+          -293.9224881063583,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 2.2026824808563106e-13,
+      "maximumScaledPolynomialResidual": 3.5499637984695823e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.3314917127071823,
+      "routhNormalizedDelta3": 5.272080069428878e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 202.78718804872213,
+      "cutoffHz": 32.27458337365985,
+      "limitHz": 26.895486144716543,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        7.571107938609761,
+        1421.1985640846217
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-05,
+        0.02,
+        7.571107938609762,
+        1421.1985640846217
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          28.7791044917698,
+          343.54375004810794
+        ],
+        [
+          28.7791044917698,
+          -343.54375004810794
+        ],
+        [
+          -342.93836985074915,
+          20.313891161480075
+        ],
+        [
+          -342.93836985074915,
+          -20.313891161480075
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 28.7791044917698,
+      "maximumScaledPolynomialResidual": 2.2120320159279733e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": 0.24805800103573286,
+      "routhNormalizedDelta3": -0.09090909090909088,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.1,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 337.97864674787024,
+      "cutoffHz": 53.790972289433086,
+      "limitHz": 26.895486144716543,
+      "coefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675815e-05,
+        0.020000000000000007,
+        12.618513231016271,
+        3947.7737891239494
+      ],
+      "directDeterminantCoefficientsDescending": [
+        1.0132118364233779e-07,
+        6.366197723675813e-05,
+        0.02,
+        12.61851323101627,
+        3947.7737891239494
+      ],
+      "coefficientMaximumRelativeError": 3.4694469519536127e-16,
+      "fZerosPerSecond": [
+        [
+          114.98923243377277,
+          429.6998596012975
+        ],
+        [
+          114.98923243377277,
+          -429.6998596012975
+        ],
+        [
+          -429.1484977927523,
+          112.91141391422288
+        ],
+        [
+          -429.1484977927523,
+          -112.91141391422288
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 114.98923243377277,
+      "maximumScaledPolynomialResidual": 5.41866800421924e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.0020703933747412352,
+      "routhNormalizedDelta3": -0.3333333333333333,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.2,
+      "cutoffRadPerSecond": 15.06485675816889,
+      "cutoffHz": 2.3976464200339245,
+      "limitHz": 11.988232100169622,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        3.773029390415534,
+        39.21694430010858
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.1189065278104e-07,
+        0.00019098593171027443,
+        0.10000000000000002,
+        3.7730293904155343,
+        39.21694430010858
+      ],
+      "coefficientMaximumRelativeError": 1.4192173250360643e-16,
+      "fZerosPerSecond": [
+        [
+          -84.8854083874862,
+          308.7112126454549
+        ],
+        [
+          -84.8854083874862,
+          -308.7112126454549
+        ],
+        [
+          -19.834346732173717,
+          5.112529016769983
+        ],
+        [
+          -19.834346732173717,
+          -5.112529016769983
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -19.834346732173717,
+      "maximumScaledPolynomialResidual": 5.286823535503986e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.6947014297729184,
+      "routhNormalizedDelta3": 0.6666666666666667,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 0.8,
+      "cutoffRadPerSecond": 60.25942703267556,
+      "cutoffHz": 9.590585680135698,
+      "limitHz": 11.988232100169622,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        15.092117561662135,
+        627.4711088017373
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.1189065278104e-07,
+        0.00019098593171027443,
+        0.10000000000000002,
+        15.092117561662137,
+        627.4711088017373
+      ],
+      "coefficientMaximumRelativeError": 1.4192173250360643e-16,
+      "fZerosPerSecond": [
+        [
+          -19.78391490725334,
+          308.8095824200585
+        ],
+        [
+          -19.78391490725334,
+          -308.8095824200585
+        ],
+        [
+          -90.23122067407817,
+          0.0
+        ],
+        [
+          -79.6404597507347,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": -19.78391490725334,
+      "maximumScaledPolynomialResidual": 2.7241829249335755e-16,
+      "analyticStatus": "strict-lhp-zeros",
+      "routhStatus": "strict-lhp-zeros",
+      "rootStatus": "strict-lhp-zeros",
+      "routhNormalizedDelta2": 0.1623882319007788,
+      "routhNormalizedDelta3": 0.11111111111111117,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.0,
+      "cutoffRadPerSecond": 75.32428379084445,
+      "cutoffHz": 11.988232100169622,
+      "limitHz": 11.988232100169622,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        18.86514695207767,
+        980.4236075027144
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.1189065278104e-07,
+        0.00019098593171027443,
+        0.10000000000000002,
+        18.86514695207767,
+        980.4236075027144
+      ],
+      "coefficientMaximumRelativeError": 1.4192173250360643e-16,
+      "fZerosPerSecond": [
+        [
+          7.105427357601002e-14,
+          314.2891637583108
+        ],
+        [
+          7.105427357601002e-14,
+          -314.2891637583108
+        ],
+        [
+          -113.7549333140773,
+          0.0
+        ],
+        [
+          -95.68457692524235,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 7.105427357601002e-14,
+      "maximumScaledPolynomialResidual": 6.108202137307835e-16,
+      "analyticStatus": "critical",
+      "routhStatus": "critical",
+      "rootStatus": "critical",
+      "routhNormalizedDelta2": 0.05221932114882513,
+      "routhNormalizedDelta3": -1.880739822278143e-17,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 1.2,
+      "cutoffRadPerSecond": 90.38914054901333,
+      "cutoffHz": 14.385878520203546,
+      "limitHz": 11.988232100169622,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        22.6381763424932,
+        1411.8099948039085
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.1189065278104e-07,
+        0.00019098593171027443,
+        0.10000000000000002,
+        22.638176342493207,
+        1411.8099948039087
+      ],
+      "coefficientMaximumRelativeError": 3.1386924680252153e-16,
+      "fZerosPerSecond": [
+        [
+          17.85225305512739,
+          321.13900212032127
+        ],
+        [
+          17.85225305512739,
+          -321.13900212032127
+        ],
+        [
+          -130.1773784563254,
+          0.0
+        ],
+        [
+          -114.9666378932492,
+          0.0
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 17.85225305512739,
+      "maximumScaledPolynomialResidual": 3.3691694689938844e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.038874314333412714,
+      "routhNormalizedDelta3": -0.0909090909090909,
+      "agreement": true
+    },
+    {
+      "V": 1.2,
+      "Rv": 0.1,
+      "Xv": 0.3,
+      "f0Hz": 50.0,
+      "cutoffRatioToLimit": 2.0,
+      "cutoffRadPerSecond": 150.6485675816889,
+      "cutoffHz": 23.976464200339244,
+      "limitHz": 11.988232100169622,
+      "coefficientsDescending": [
+        9.118906527810398e-07,
+        0.0001909859317102744,
+        0.1,
+        37.73029390415534,
+        3921.6944300108576
+      ],
+      "directDeterminantCoefficientsDescending": [
+        9.1189065278104e-07,
+        0.00019098593171027443,
+        0.10000000000000002,
+        37.73029390415534,
+        3921.6944300108576
+      ],
+      "coefficientMaximumRelativeError": 1.4192173250360643e-16,
+      "fZerosPerSecond": [
+        [
+          74.10977863627883,
+          352.080336289225
+        ],
+        [
+          74.10977863627883,
+          -352.080336289225
+        ],
+        [
+          -178.82953375593866,
+          35.23514055488942
+        ],
+        [
+          -178.82953375593866,
+          -35.23514055488942
+        ]
+      ],
+      "maximumZeroRealPartPerSecond": 74.10977863627883,
+      "maximumScaledPolynomialResidual": 4.361334332578133e-16,
+      "analyticStatus": "rhp-zero",
+      "routhStatus": "rhp-zero",
+      "rootStatus": "rhp-zero",
+      "routhNormalizedDelta2": -0.28609388839681127,
+      "routhNormalizedDelta3": -0.3333333333333334,
+      "agreement": true
+    }
+  ],
+  "diagnosticConvention": "V=1,P=.5,Q=.1; P=V Id,Q=-V Iq; Ynet=Znet^-1; Jnet=(E Ynet-h C)F; line R=.02,X=.3.",
+  "diagnostics": [
+    {
+      "cutoffHz": 0.5,
+      "fZeroStatus": "strict-lhp-zeros",
+      "fZerosPerSecond": [
+        [
+          -28.281272830339866,
+          313.87682336238373
+        ],
+        [
+          -28.281272830339866,
+          -313.87682336238373
+        ],
+        [
+          -3.1346537055580646,
+          0.28244199659550684
+        ],
+        [
+          -3.1346537055580646,
+          -0.28244199659550684
+        ]
+      ],
+      "sampleCount": 1000,
+      "sampleFrequencyBoundsHz": [
+        0.001,
+        10000.0
+      ],
+      "sampledMaximumConditionNumber": 22.267901316589786,
+      "sampledMinimumSingularValue": 0.08978177468009971,
+      "rhpZeroProbes": []
+    },
+    {
+      "cutoffHz": 5.0,
+      "fZeroStatus": "rhp-zero",
+      "fZerosPerSecond": [
+        [
+          0.15511476357222165,
+          314.17485264919566
+        ],
+        [
+          0.15511476357222165,
+          -314.17485264919566
+        ],
+        [
+          -31.571041299470135,
+          0.015587290219170429
+        ],
+        [
+          -31.571041299470135,
+          -0.015587290219170429
+        ]
+      ],
+      "sampleCount": 1000,
+      "sampleFrequencyBoundsHz": [
+        0.001,
+        10000.0
+      ],
+      "sampledMaximumConditionNumber": 319.47243503494434,
+      "sampledMinimumSingularValue": 0.006249056958942078,
+      "rhpZeroProbes": [
+        {
+          "zeroPerSecond": [
+            0.15511476357222165,
+            314.17485264919566
+          ],
+          "bracketConditionNumber": 29.79718081263593,
+          "jnetRelativeMinimumSingularValue": 5.983859452683906e-16,
+          "realOffsetsPerSecond": [
+            0.001,
+            0.0001,
+            1e-05
+          ],
+          "jnetInverseNormAtOffsets": [
+            6363.949904930632,
+            63636.7846555267,
+            636365.1320877081
+          ],
+          "successiveInverseNormRatios": [
+            9.999573473421355,
+            9.999957344363427
+          ]
+        },
+        {
+          "zeroPerSecond": [
+            0.15511476357222165,
+            -314.17485264919566
+          ],
+          "bracketConditionNumber": 29.79718081263593,
+          "jnetRelativeMinimumSingularValue": 5.983859452683906e-16,
+          "realOffsetsPerSecond": [
+            0.001,
+            0.0001,
+            1e-05
+          ],
+          "jnetInverseNormAtOffsets": [
+            6363.949904930632,
+            63636.7846555267,
+            636365.1320877081
+          ],
+          "successiveInverseNormRatios": [
+            9.999573473421355,
+            9.999957344363427
+          ]
+        }
+      ]
+    }
+  ]
+}

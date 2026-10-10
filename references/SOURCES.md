@@ -66,3 +66,94 @@
 - `PowerImpedance.jl`：较新的Julia频域分析项目，公开GFM/GFL、线路电缆和广义奈奎斯特/相位移分析能力；2026-08-21在线核查约9 stars、GPL-3.0。方向相关但社区与项目成熟度尚不足以替代当前作者基线或Sienna固定参照。<https://github.com/Electa-Git/PowerImpedance.jl>
 
 本轮阶段决策见 `docs/research/next-stage-online-review-2026-08-21.md`。GitHub stars与更新时间只用于维护性筛查，不构成模型验证。
+
+## 研究价值与候选改进核查补充（2026-10-01）
+
+- Zhongze Li, Xiaoyu Peng, Xi Ru, Zhaojian Wang, Jianxin Zhang, Yingshang Liu, Feng Liu, “When Can Phasor-Domain Device Models Be Trusted for Electromechanical Stability Analysis of Grid-Forming Converter-Dominated Microgrids?”, arXiv:2606.08082v1，2026-06-06，预印本。以结构化不确定性和结构奇异值充分条件评估理想内环跟踪降阶模型的有效性，并提供模型/测量权重构造。本地PDF：`references/papers/Li-et-al-2026-GFM-model-validity-arxiv-2606.08082v1.pdf`，2,982,451 bytes，SHA-256：`C71B071F304BA9A3E24FBFB4ED336B9CCA10E0A7D296F3CFB61B21B7AF42D33D`。已核对首面题名、作者与版本，并阅读官方HTML的问题表述与结论；未复现算法。<https://arxiv.org/abs/2606.08082v1>
+- Diego Cifelli, Adolfo Anta, “Partitioned Mixed Small Gain-Phase Decentralized Stability Criterion for Power Systems”, arXiv:2608.03641v1，2026-08-04，预印本。允许同频率下不同设备子集分别满足增益和相位条件，以网络二次约束耦合，并给出界限选择算法；包含GFM/GFL两机及IEEE39算例。它是原论文作者的独立后续工作，不是arXiv:2510.20544的v2。本地PDF：`references/papers/Cifelli-Anta-2026-partitioned-gain-phase-arxiv-2608.03641v1.pdf`，764,886 bytes，SHA-256：`7B953B6FCFF35F07097F4783AEA9F9038CA80A29F1FBAEE0E533920D26275FCD`。已核对首面题名、作者与版本，并阅读官方HTML的判据、参数选择与结论。<https://arxiv.org/abs/2608.03641v1>
+- 分组判据作者代码：<https://github.com/diegoCifelli/Partitioned-Mixed-Small-Gain-Phase-Decentralized-Stability-Criterion-for-Power-Systems>。固定提交 `3ab48eb782f7b0150f949968705d802405e2cd32`（提交时间2026-07-22T13:47:35Z），本地快照 `references/_archive/Cifelli-Anta-partitioned-3ab48eb782f7/`。原始ZIP为104,352 bytes，SHA-256：`8AE633BBD31A541A299975569F7B0604D6545FA6AFCF27F737A120A6AE7068CC`；保留全部22个源码文件、两机/IEEE39工作簿及许可。MATLAB/Control System Toolbox、Simplus、YALMIP、SDPT3依赖；顶层MIT，定制Simplus模型BSD-3-Clause。本轮完成归档，尚未执行或移植。两篇PDF、ZIP及逐文件清单见 `references/manifests/research-snapshot-2026-10-01.json`。
+
+研究建议及失败条件见 `docs/research/research-value-and-software-direction-2026-10-01.md`。两篇PDF只作本地研究归档；SHA-256是下载身份记录，尚无上游可信哈希用于一致性比较。既有核心论文v2/作者v1.0.0及原实验结果未改写。
+
+## 扩展文献：模态诊断、模型适用性与开放接口（2026-10-01）
+
+本轮选读相关方法与结论，未运行或移植新算法。四篇PDF的路径、下载地址、版本、页数、字节数和SHA-256统一登记在 `references/manifests/expanded-literature-2026-10-01.json`；用途、假设和阅读范围见 `docs/research/expanded-literature-and-software-priorities-2026-10-01.md`。原始论文保持只读，仅用于本地研究，不默认纳入发行包或推送GitHub。
+
+- Yue Zhu, Yunjie Gu, Yitong Li, Timothy C. Green，*Impedance-based Root-cause Analysis: Comparative Study of Impedance Models and Calculation of Eigenvalue Sensitivity*，arXiv:2204.01608v1，2022-04-04。固定预印本13页，3,401,466 bytes；SHA-256 `5DE9CC5EF7AE8B8AFCE31A22F38969F68E9F67BFD6677F4F59901B0F3C242D82`。可借鉴设备/参数层面的方向灵敏度；局部预测不替代大步参数改动及全部模态重算。<https://arxiv.org/abs/2204.01608v1>
+- Juho Määttä, Jarno Kukkola, Janne Seppänen, Marko Hinkkanen，*Open-Source Python Tool for Grid Converter Output Admittance Identification*，arXiv:2607.10653v1，2026-07-12。8页，599,799 bytes；SHA-256 `499C4EDA9FAC4DA005492639C9F4FB76603C9051A4EB4CA2EFAADF0CD19B2504`。motulator提供MIT实现和官方示例；论文DO-GFM不等于团队VSM，新辨识实现也不等于既有v0.7.5采样/延迟精选快照。作者说明精确复现使用专门归档分支，本轮未取得固定新源码提交或执行。<https://arxiv.org/abs/2607.10653v1>
+- Olaoluwapo Ajala, Nathan Baeckeland, Brian Johnson, Sairaj Dhople, Alejandro Domínguez-García，*Model Reduction and Dynamic Aggregation of Grid-Forming Inverter Networks*，IEEE Transactions on Power Systems，38(6)，5475–5490，2023；DOI `10.1109/TPWRS.2022.3229970`。本地为16页接收作者稿，5,004,955 bytes；SHA-256 `B8A0EF35183FF0C6A6206EBB77448BE8084698B760D8CE6A9B6DB8A25ED7F660`。保存网络电流与限流参考动态的结构化降阶；动态约简、聚合和奇异摄动各有假设，不能直接推广到任意RL网络/团队三状态模型。<https://experts.umn.edu/en/publications/model-reduction-and-dynamic-aggregation-of-grid-forming-inverter-/>
+- Endalkachew Degarege Almawu, Federico Cecati, Marco Liserre，*Robust Stability Analysis of Grid-Forming Converter-Dominated Grids Using Grey-Box Modelling Approach*，Energies，18(3)，587，2025；DOI `10.3390/en18030587`，CC BY 4.0。22页，8,062,177 bytes；SHA-256 `87FB3663C8374C227A220D0AA18B0DB8C6BDCC707D76BE7997B9C5EDF91B06AA`。借鉴未知控制环节的不确定性建模和名义/鲁棒稳定区别；不沿用其算例SCR界限或假定权重覆盖所有控制器。<https://doi.org/10.3390/en18030587>
+- 待补读：Feifan Chen等，*Limitations of Using Passivity Index to Analyze Grid–Inverter Interactions*，IEEE Transactions on Power Electronics，39(11)，14465–14477，2024，DOI `10.1109/TPEL.2024.3428403`。仅核对作者机构元数据与摘要；全文下载未完成，残片移到临时目录，不列为已保存PDF，也不据摘要宣称已核对具体方法。<https://vbn.aau.dk/en/publications/limitations-of-using-passivity-index-to-analyze-grid-inverter-int/>
+
+## 参数信息补充试验的最近邻与数学依据（2026-10-03）
+
+以下三个作者站点PDF已实际下载、解析，标题与相关章节已核对；身份和阅读范围登记在 `references/manifests/parameter-information-literature-2026-10-03.json`。PDF仅在`references/papers/`本地归档，Git忽略，不包含在发行包，尚未建立再分发授权。
+
+- Daniel Golovin、Andreas Krause、Debajyoti Ray，*Near-Optimal Bayesian Active Learning with Noisy Observations*，2010，9页。EC²是为确定等价类别而逐次获取信息的直接近邻；本项目不能将“少问几个参数”本身认定为原创。已读第1—3节，不把其有限假设及噪声理论保证移用于本项目连续矩阵族。<https://www.cs.cmu.edu/~dgolovin/papers/nips10.pdf>
+- X. Bombois、G. Scorletti、M. Gevers、P. M. J. Van den Hof、R. Hildebrand，*Least costly identification experiment for control*，2006年5月16日作者预印本，12页。已读引言及问题建模；体现满足控制性能后不必继续追求辨识精度的成本思想，物理辨识试验与索取参数不是同一行动。<https://perso.uclouvain.be/michel.gevers/PublisMig/LCID_final.pdf>
+- Oliver Mason、Robert Shorten、Selim Solmaz，*On the Kalman-Yacubovich-Popov lemma and common Lyapunov solutions for matrices with regular inertia*，2006年7月生成的作者稿，22页；最终出版元数据未查定。已核第2.3定理（第8—9页）：严格Lyapunov不等式联系P与−A的惯性。未将其特殊伴随形式、秩一差矩阵对的后续定理套用到GFM模型。<https://www.hamilton.ie/selim/General_Matrix_Inertia_Result_3July06.pdf>
+
+## 创新概念与研究方法补充（2026-10-03）
+
+- Mark A. Runco、Garrett J. Jaeger，*The Standard Definition of Creativity*，Creativity Research Journal，24(1)，92—96，2012，DOI:10.1080/10400419.2012.650092。用于区分原创性与有效性，阅读范围为开篇及相邻讨论，非普适创新标准的实验证明。已保存PDF，7物理页（含封面），187,959 bytes。<https://disf.org/files/doc/2012runcojaegerstandarddefinition.pdf>
+- OECD，*Frascati Manual 2015*，第2章§2.6—2.17。用于区分新增知识与例行修改、记录可复现研究条件，不替代大创验收规范。已保存PDF，402页，4,974,093 bytes，未通读全书。<https://www.oecd.org/en/publications/2015/10/frascati-manual-2015_g1g57dcb.html>
+
+上述下载身份、阅读范围及哈希登记在`references/manifests/innovation-methodology-2026-10-03.json`。科学哲学、企业创新定义和控制更新错位的技术来源及阅读限制见`docs/research/brainstorming-session-2026-10-02.md`本日再议节；未完成的技术PDF下载不登记为完整归档。这里修正的是研究筛选方法，不表示新机制已经发现。
+
+## 虚拟电抗频率反馈候选的核查资料（2026-10-03）
+
+- Yicheng Liao、Xiongfei Wang、Frede Blaabjerg，*Passivity-Based Analysis and Design of Linear Voltage Controllers for Voltage-Source Converters*，IEEE Open Journal of the Industrial Electronics Society，1，114—126，2020，DOI:10.1109/OJIES.2020.3001406，CC BY 4.0。数字延迟与虚拟阻抗联合分析为已有工作；该文忽略慢外环，不能直接套用为本项目VSM反馈结论。本轮已读物理第2—4、8—9页，核对第4、8页版面与图表。完整PDF保存于`references/papers/Liao-Wang-Blaabjerg-2020-voltage-control-passivity.pdf`，14物理页（含机构封面），5,587,144 bytes；SHA-256 `337A84C99A2E57BE0058C059E2E972CB4008ED6AA8627614CDB1B025E30776CF`。本地身份记录，不称已与上游可信摘要校验。<https://vbn.aau.dk/en/publications/passivity-based-analysis-and-design-of-linear-voltage-controllers/>
+- Nature Genetics编辑文章*Cause, correlation, conjecture*（2015，DOI:10.1038/ng.3271）与Nature Methods编辑文章*So you're writing a paper*（2017，DOI:10.1038/nmeth.4532），用于结论—证据—方法对应及清楚陈述；不是电力系统技术来源。读取在线相关正文，PDF未下载成功。<https://www.nature.com/articles/ng.3271>；<https://www.nature.com/articles/nmeth.4532>
+
+下载状态、用途和另外两篇技术近邻的有限阅读范围见`references/manifests/virtual-reactance-frequency-literature-2026-10-03.json`；本轮试验、作者模型区别和处置见`docs/research/virtual-reactance-frequency-pilot-2026-10-03.md`。全文原件保持本地，不纳入发行包或自动推送Git。
+
+## 分析变换可用范围与第二候选的文献（2026-10-03）
+
+- Kaustav Dey、A. M. Kulkarni，*Passivity of Electrical Transmission Networks modelled using Rectangular and Polar D-Q variables*，arXiv:2111.15377v1，2021。原件5页、537,699 bytes，SHA-256 `4A0219D5C5412D1B0E23F3C62E2DFB65FA5857421CBE77F2BBA6CB2E98E2CF25`。本轮读物理第2—4页，检查第2页版面；用于说明坐标变换、适当性和极点检查为已有理论背景，不作为新截止频率公式的来源。<https://arxiv.org/abs/2111.15377v1>
+- M A Awal、Rahul Chakraborty、David Michaud、Mikko Qvintus、Devin Dilley，*Quantifying Implicit Overload Mandates in Phase Jump Requirements for Grid Forming Inverters*，arXiv:2607.07904v1，2026。原件10页、4,171,616 bytes，SHA-256 `A3639891DCE05A209EC98D39C34C77875ABAB552DE32E66CD39E7F638DA3A69F`。本轮读原始HTML相关第I—VI节、PDF第5—7页，检查第5页版面；第二候选要区分电压跟踪目标最优与功率要求可行，尚未复现其数值门槛或取得同条件反例。<https://arxiv.org/abs/2607.07904v1>
+
+原件均已完整下载并解析，身份／阅读范围见`references/manifests/transformation-admissibility-literature-2026-10-03.json`；本地计算哈希不是上游可信摘要核验。仅本地归档，不纳入发行包，不自动推送。新研究推导、135项试验与独立复核见`docs/research/transformation-admissibility-2026-10-03.md`。
+
+同时核到Cifelli—Anta同名工作的EPSR出版页面 <https://www.sciencedirect.com/science/article/abs/pii/S037877962600903X>，搜索索引给出0.5Hz截止频率片段；网页直接访问403，未取得完整期刊版，不将索引片段冒充全文查重。Chen等2025扩展频域无源理论（DOI `10.1109/TPEL.2024.3488853`）仅查机构摘要，不能据此排除其含有关联结果。以上是本轮新颖性审查的明确缺口，不阻塞特定公式的本地验证，也不允许声称“首次”。
+
+## 轨迹优化核查方法及Awal参数复查（2026-10-05）
+
+- Matthew Kelly，*An Introduction to Trajectory Optimization: How to Do Your Own Direct Collocation*，SIAM Review，59(4)，849–904，2017，DOI `10.1137/16M1062569`。下载的是44页作者站点版本，不是56页出版社排版；990,404 bytes，SHA-256 `A81D9939283EE58A207A6C32A447FAE5DBA46C81116EF023783FDF7DBFB40CF9`。已读§5.1–5.5（物理页11–14）并视觉核页12，用于初始化、网格/误差和优化失败核查，不作为GFM创新性的依据。文件、版本与再分发边界见`references/manifests/trajectory-optimization-methodology-2026-10-05.json`。<https://www.matthewpeterkelly.com/research/MatthewKelly_IntroTrajectoryOptimization_SIAM_Review_2017.pdf>；出版元数据：<https://doi.org/10.1137/16M1062569>。
+- SciPy官方SLSQP接口说明：<https://docs.scipy.org/doc/scipy/reference/optimize.minimize-slsqp.html>；仅使用现有安装依赖与官方接口，没有复制第三方源码或安装新工具。不能把优化器success当作连续时间可行性或全局最优证明。
+- Awal2607.07904v1复查：式(15)不含有功下限硬约束，式(17)-(18)为事后功率评价；式(18)/图5明确故障前POI有功，纠正先前“测量点未披露”的笼统提示。R2、Vmax、明确基频、完整LC参数/初态、N与容差仍有精确复现缺口。原PDF本次与既有登记哈希比较通过；当前提交历史仅v1。正文引用的GitHub仓库是PNNL通用模型，不是本篇OCP程序，不能据此宣称所有网上源码均不存在。研究细节及范围见`docs/research/phase-jump-power-feasibility-2026-10-03.md`。
+
+## 可行性阶段补充依据（2026-10-05）
+
+- Stephen Boyd、Lieven Vandenberghe，*Convex Optimization*，Cambridge University Press，2004，作者站点公开PDF第579–580印刷页（物理页593–594），§11.4.1。在线完整读取所需页面，借鉴通过统一松弛最小化最大约束违反的构造；本项目增加非负松弛下界，目标是寻找非严格可行点，且硬有功问题非凸，不套用书中凸优化不可行性/全局最优结论。<https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf>。
+- **下载未完成：** 首次请求仅取得49,152字节后中断，残片移到`tmp/downloads/Boyd-Vandenberghe-2004-Convex-Optimization-incomplete.pdf.part`；一次有上限的替代下载也失败。不列为本地完整PDF，不纳入发行包，不宣称已通读全书。来源和状态见`references/manifests/phase-one-methodology-2026-10-05.json`。
+
+## LC内部约束与功率内近似方法（2026-10-05）
+
+- Jaume Girona-Badia、Eduardo Prieto-Araujo、Oriol Gomis-Bellmunt，*Pairing grid-forming VSC filter topologies with voltage control structures*，International Journal of Electrical Power & Energy Systems，155，109670，2024，DOI `10.1016/j.ijepes.2023.109670`。出版社最终版11页，3,468,217 bytes，2023-11-28在线发布；CC BY-NC-ND 4.0。本地原件`references/papers/Girona-Badia-et-al-2024-filter-control-pairing-109670.pdf`，SHA-256 `3F83183B67492EFA1F47DC79F17C25F1B6D56CE091D9D3FDC0AD1E15A666C12E`。主代理读页1、3–4、8–10，视觉核页3；另一代理读页1–6相关内容，重点§3.2、算法1–2及§5.2。该文已处理内部电流/输入电压限制、滤波器与控制配对和相位跳变测试；不能把这些通用内容作为本项目创新。所读范围未见完全相同的硬POI有功轨迹约束，不意味着已完成穷尽查重。原件仅本地保存，不纳入发行包，不自动推送。出版入口：<https://doi.org/10.1016/j.ijepes.2023.109670>；机构原件：<https://upcommons.upc.edu/server/api/core/bitstreams/a4703edb-ec6a-4c7e-bffe-e0015d23e902/content>。
+- Ruusila等，*Grid-Forming and -Following Model Predictive Control for Converters With an LCL Filter*，IEEE Transactions on Industrial Electronics，2026，早期在线，DOI `10.1109/TIE.2026.3686588`。仅读取Aalto官方摘要/元数据；官方12页PDF链接下载403，没有完整本地文件或哈希。摘要提到LCL模型预测控制、参考量限制、软电流约束及故障试验，不能据此判断正文是否覆盖硬有功下限。<https://research.aalto.fi/fi/publications/grid-forming-and-following-model-predictive-control-for-converter/>。
+- CVXPY官方`linearize`说明，已读相关段落：凸函数的仿射下界、凹函数的仿射上界在参考点相切；非DCP表达式不保证上下界。此轮自行实现实对称二次型的正负谱分解，不直接对非凸功率调用`linearize`，未安装或运行CVXPY。<https://www.cvxpy.org/api_reference/cvxpy.transforms.html>。
+- Luo、Elango、Açıkmeşe，*Remarks on "Successive Convexification: A Superlinearly Convergent Algorithm for Non-convex Optimal Control Problems"*，arXiv:2403.00733v2，2024-03-13。已读官方摘要与版本历史，未读全文、未下载PDF。摘要指出原2018年收敛证明的问题及修订所需更强假设；不能将通用SCvx收敛主张直接套到本项目。<https://arxiv.org/abs/2403.00733v2>。
+
+本轮文献阅读范围、下载状态和用途见`references/manifests/lc-hardware-constraints-literature-2026-10-05.json`；实验范围及失败候选见现有相位跳变研究文档。没有以未获取全文、算法名称或代理认同证明创新。
+
+## 有限输入轨迹检查的成熟求解器（2026-10-05）
+
+- Clarabel0.11.1，Apache-2.0，采用官方Python直接锥接口，不复制第三方实现源码。已读取问题格式、矩阵符号、SOC类型、二次目标、时间/线程/容差选项及状态说明：<https://clarabel.org/stable/python/getting_started_py/>、<https://clarabel.org/stable/api_settings/>。`AlmostSolved`只允许送审数值候选，不自动判为物理可行或最优。
+- 官方PyPI固定版本元数据：<https://pypi.org/pypi/clarabel/0.11.1/json>。Windows wheel `clarabel-0.11.1-cp39-abi3-win_amd64.whl`，887,310 bytes，2025-06-11发布；SHA-256 `557D5148A4377AE1980B65D00605AE870A8F34F95F0F6A41E04AA6D3EDF67148`与元数据期望值实比一致。原件位于项目tmp/research-conic-wheels，隔离安装于tmp/research-conic-env，安装清单RECORD/许可证原件保留；详细版本与边界见`references/manifests/lc-conic-solver-2026-10-05.json`。
+- 官方CVXPY求解器功能表在线核对Clarabel的二阶锥能力，但本轮没有安装/运行CVXPY：<https://www.cvxpy.org/tutorial/solvers/>。可选应用运行环境查询无返回后终止等待，改用已知解释器和临时隔离环境，不把工具延迟当研究阻塞。
+
+成熟求解器、凹下界、端点等式消元均不作为新方法主张。原论文全文、硬件参数恢复和新场景确认的缺口仍按研究文档记录；没有新增付费服务、MATLAB会话、正式依赖或发行包。
+
+## 工程接线与含变流器潮流/短路方法（2026-10-06）
+
+### 普通导线与计算节点转换（2026-10-07）
+
+- pandapower官方固定版本文档：[v3.3.3 Switch](https://pandapower.readthedocs.io/en/v3.3.3/elements/switch.html)。核读零阻抗闭合母线连接的内部节点合并、与小阻抗替代的区别；本项目只借鉴等电位节点合并思路，没有复制库源码、安装依赖或接入开关/潮流/短路服务。
+- 本地HTML快照：`references/software-docs/engineering-connection-20261007/pandapower-switch-v3.3.3.html`，21429 bytes，SHA-256 `9C8A061BF44F57A5738376DF3ACE452E8B120C9649E6E765F3F9E153A16847C7`。已核对文件实际包含母线合并说明；哈希仅记录本地快照，不冒称与出版方可信期望值完成完整性验证。
+- 实施和适用范围见`docs/software/NETWORK_EDITOR.md`与`results/test-reports/2026-10-07-network-connection-semantics.md`。属于工程输入表达与现有模型编译，不表述为新的稳定性研究方法。
+
+- pandapower 官方稳定版文档（页面显示 3.5.5）：[Generator](https://pandapower.readthedocs.io/en/stable/elements/gen.html)、[Current Source Elements](https://pandapower.readthedocs.io/en/stable/shortcircuit/current_source.html)。核读 PV 节点定义、输入/输出、无功限值转换，以及 full-converter 电流源模型完整说明。前者可支持明确假设下的网络稳态近似，后者是给定倍率/相角的故障电流等值；均不能直接代表 GFM 的全部控制、限流切换与故障恢复。没有下载/复制库源码，没有安装或正式接入，无可声称的第三方代码固定版本/本地哈希。
+- X. Lyu、W. Du、S. Mohiuddin、S. Nandanoori、M. A. Elizondo，*Criteria for Grid-Forming Inverters Transitioning Between Current Limiting Mode and Normal Operation*，IEEE Transactions on Power Systems 39(4)，6107-6110，2024，DOI `10.1109/TPWRS.2024.3402012`。本轮仅读 [PNNL 官方摘要及元数据](https://www.pnnl.gov/publications/criteria-grid-forming-inverters-transitioning-between-current-limiting-mode-and-normal)；摘要区分限流模式退出与故障恢复，并列出优先级、圆形限流、虚拟阻抗及 EMT 核查。未获取全文、未下载 PDF、未复现其判据，不将摘要当全文查重依据。
+- 用户提供的两张工程接线 PDF 保持本地原件。R7 局部选择 G1、T1、220 kV I/II 段、分段开关组和 L1；原件 SHA-256 `97e7ec4340cde3ae512cf70ff984318fa7ad47989d0404366bff434c109489a4` 仅用于来源身份记录，不冒充上游完整性校验。结构草稿及参数缺项见 `examples/engineering-main-connection/r7-subnetwork-draft.json` 和 `docs/design/r7-subnetwork-parameter-gaps-2026-10-06.md`。不复制课程原始 PDF、私人会话或图纸渲染产物入 Git。
+
+方法选择、现有 PV 潮流原型与平均值模型工作点的差别，以及本轮实施范围见 `docs/design/converter-power-flow-short-circuit-feasibility-2026-10-06.md`。本轮不宣称通用潮流/短路已接入，也不由工程输入功能推定研究创新。

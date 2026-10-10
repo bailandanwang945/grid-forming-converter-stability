@@ -1,0 +1,76 @@
+{
+  "status": "exploratory-reduced-model-only",
+  "scope": "predeclared-main-case-only",
+  "rows": [
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.0008379630901659787,
+      "phase2_split_s": 0.0007508888548626186,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.285556539727265,
+      "voltage_peak_pu": 1.0351151064554647,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 2.2887833992611187e-16,
+      "terminal_current_error": 4.136871126180421e-06,
+      "sample_count": 12039,
+      "sampled_constraints_pass": true
+    }
+  ],
+  "checked_case": {
+    "frequency_hz": 60.0,
+    "pre_point": "poi",
+    "vmax_pu": 1.035115106455465,
+    "transition_time_s": 5e-05,
+    "tlim_s": 0.0008379630901659787,
+    "phase2_split_s": 0.0007508888548626186,
+    "ppre_pu": 0.9999999999999999,
+    "initial_phase2_power_pu": 1.0719958174636273,
+    "initial_i": [
+      0.7003080256096607,
+      0.9744581413620077
+    ],
+    "steady_i": [
+      0.9451069578106134,
+      0.3293582531363196
+    ],
+    "current_peak_pu": 1.285556539727265,
+    "voltage_peak_pu": 1.0351151064554647,
+    "power_min_pu": 0.9999999999999996,
+    "power_target_error": 4.440892098500626e-16,
+    "initial_voltage_jump": 1.5700924586837752e-16,
+    "split_voltage_jump": 2.2887833992611187e-16,
+    "terminal_current_error": 4.136871126180421e-06,
+    "sample_count": 12039,
+    "sampled_constraints_pass": true,
+    "prescribed_input_reintegration_errors": {
+      "DOP853": 2.8594304701812234e-10,
+      "Radau": 3.8252068179644994e-11
+    }
+  },
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1"
+  },
+  "source_pdf_sha256": "a3639891dce05a209ec98d39c34c77875abab552de32e66cd39e7f638da3a69f",
+  "script_sha256": "3c0c49c46119fd01c23559e0a10093f24e086253aaf036b4962df328e7580d5b",
+  "caveats": [
+    "Vmax and pre-power measurement point not fully specified by paper",
+    "No semiconductor current, DC, LC-state or real control bandwidth validation",
+    "Finite checks do not prove continuous-time extrema or worldwide novelty"
+  ]
+}

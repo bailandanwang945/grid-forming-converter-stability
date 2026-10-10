@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-05",
+  "scope": "Internal LC limits and sampled hard POI power inner approximation; not an originality proof",
+  "sources": [
+    {
+      "title": "Pairing grid-forming VSC filter topologies with voltage control structures",
+      "authors": ["Jaume Girona-Badia", "Eduardo Prieto-Araujo", "Oriol Gomis-Bellmunt"],
+      "journal": "International Journal of Electrical Power & Energy Systems",
+      "volume": 155,
+      "article": "109670",
+      "year": 2024,
+      "online_date": "2023-11-28",
+      "doi": "10.1016/j.ijepes.2023.109670",
+      "url": "https://upcommons.upc.edu/server/api/core/bitstreams/a4703edb-ec6a-4c7e-bffe-e0015d23e902/content",
+      "local_path": "references/papers/Girona-Badia-et-al-2024-filter-control-pairing-109670.pdf",
+      "bytes": 3468217,
+      "pages": 11,
+      "sha256": "3f83183b67492efa1f47dc79f17c25f1b6d56ce091d9d3fdc0ad1e15a666c12e",
+      "version": "Publisher final PDF",
+      "download_status": "complete-local-identity-verified",
+      "license": "CC BY-NC-ND 4.0",
+      "distribution": "Local research archive only; not included in release or automatic Git push",
+      "reading_scope": "Main: pages 1, 3-4, 8-10 and visual page 3; independent reader: pages 1-6 including section 3.2, algorithms 1-2, section 5.2; not full-paper reading",
+      "use": "Already studies converter-side current and applied voltage caps, L/LC filter-control pairing, and phase-jump simulations",
+      "limit": "Absence of the exact hard POI power trajectory problem in read sections is not an exhaustive originality check"
+    },
+    {
+      "title": "Grid-Forming and -Following Model Predictive Control for Converters With an LCL Filter",
+      "year": 2026,
+      "doi": "10.1109/TIE.2026.3686588",
+      "url": "https://research.aalto.fi/fi/publications/grid-forming-and-following-model-predictive-control-for-converter/",
+      "reading_scope": "Official abstract and metadata only",
+      "download_status": "pdf-request-403-no-complete-local-file",
+      "use": "Near-neighbor MPC, LCL filter and current constraints",
+      "limit": "No conclusion about full-text coverage of hard POI power constraints"
+    },
+    {
+      "title": "CVXPY linearize transform documentation",
+      "url": "https://www.cvxpy.org/api_reference/cvxpy.transforms.html",
+      "reading_scope": "linearize section including DCP restriction and tangent-bound description",
+      "download_status": "online-read-no-local-pdf",
+      "use": "Convex lower tangent / concave upper tangent and no bound guarantee for non-DCP expressions",
+      "limit": "CVXPY not installed or run; implementation uses explicit spectral split of quadratic power"
+    },
+    {
+      "title": "Remarks on Successive Convexification: A Superlinearly Convergent Algorithm for Non-convex Optimal Control Problems",
+      "authors": ["Luo", "Elango", "Acikmese"],
+      "arxiv": "2403.00733v2",
+      "version_date": "2024-03-13",
+      "url": "https://arxiv.org/abs/2403.00733v2",
+      "reading_scope": "Official abstract and version history only",
+      "download_status": "online-abstract-no-local-pdf",
+      "use": "Caution against importing original SCvx convergence guarantees without corrected assumptions",
+      "limit": "Full proof not read or applied to this project"
+    }
+  ],
+  "method_limits": [
+    "Quadratic DC linearization is a mature method, not claimed as a new algorithm",
+    "Numerical PSD reconstruction checks are not exact interval proofs",
+    "Original POI power and segment extrema must be checked after any future optimization",
+    "The current turn implements the sampled kernel only; no convex trajectory optimization executed"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "download_date": "2026-10-03",
+  "purpose": "Distinguish creative ideas, research contributions and software product improvements; these are not institutional acceptance rules",
+  "hash_scope": "Local downloaded-file identity; not compared against trusted upstream hashes",
+  "distribution": "Local research reading only; PDFs ignored by Git and excluded from release packages",
+  "documents": [
+    {
+      "title": "Frascati Manual 2015: Guidelines for Collecting and Reporting Data on Research and Experimental Development",
+      "authors": ["OECD"],
+      "year": 2015,
+      "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2015/10/frascati-manual-2015_g1g57dcb/9789264239012-en.pdf",
+      "file": "references/papers/OECD-2015-Frascati-Manual.pdf",
+      "pages": 402,
+      "bytes": 4974093,
+      "sha256": "98E19466A97C2C63E2D8070FE66DE7AC8AD18DB253429D979349F8A2E72F3775",
+      "read_scope": "Chapter 2, physical PDF pages 46-49, sections 2.6-2.17; physical page 47 visually inspected; not a full-manual reading"
+    },
+    {
+      "title": "The Standard Definition of Creativity",
+      "authors": ["Mark A. Runco", "Garrett J. Jaeger"],
+      "year": 2012,
+      "doi": "10.1080/10400419.2012.650092",
+      "journal": "Creativity Research Journal",
+      "volume_issue_pages": "24(1), 92-96",
+      "url": "https://disf.org/files/doc/2012runcojaegerstandarddefinition.pdf",
+      "file": "references/papers/Runco-Jaeger-2012-Standard-Definition-of-Creativity.pdf",
+      "pages": 7,
+      "bytes": 187959,
+      "sha256": "4D70C84EEFB572F19FADF4BF4C9C79A96E51B681CD836DD6F17AF2E08E7B9E40",
+      "read_scope": "Definition discussion at printed page 92 (physical page 3), visually inspected, and adjacent discussion; historical conceptual article, not an empirical universal criterion"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "status": "reject-as-direct-full-LC-trajectory",
+  "scope": "initial-continuity-only",
+  "voltage_derivative_right_pu_per_s": [
+    -1278.5583961532675,
+    -1539.4676552263948
+  ],
+  "voltage_derivative_left_pu_per_s": [
+    0.0,
+    0.0
+  ],
+  "finite_difference_relative_errors": {
+    "1e-10": 6.566331034055528e-05,
+    "1e-11": 6.5684859346758365e-06
+  },
+  "rows": [
+    {
+      "hypothetical_capacitance_pu": 0.0,
+      "required_inverter_current_jump_pu": 0.0
+    },
+    {
+      "hypothetical_capacitance_pu": 0.01,
+      "required_inverter_current_jump_pu": 0.05308262236798419
+    },
+    {
+      "hypothetical_capacitance_pu": 0.02,
+      "required_inverter_current_jump_pu": 0.10616524473596838
+    },
+    {
+      "hypothetical_capacitance_pu": 0.05,
+      "required_inverter_current_jump_pu": 0.2654131118399209
+    }
+  ],
+  "explanation": "i1=i2+Cf/wb*(dvc/dt-Omega*vc); nonzero dvc jump requires an impossible inductor-current jump for any Cf>0",
+  "caveats": [
+    "This rejects this prescribed trajectory, not all feasible controllers",
+    "Cf values are hypothetical diagnostic settings, not paper hardware values"
+  ],
+  "script_sha256": "528f421021e618ce8c3cfb69242f4c36fcb99767efe17557da195239c2725b0a",
+  "construction_sha256": "3c0c49c46119fd01c23559e0a10093f24e086253aaf036b4962df328e7580d5b"
+}

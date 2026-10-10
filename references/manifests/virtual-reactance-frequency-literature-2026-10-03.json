@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-03",
+  "purpose": "Prior-work screening for the algebraic virtual-reactance frequency-factor pilot and evidence-bounded academic writing",
+  "documents": [
+    {
+      "title": "Passivity-Based Analysis and Design of Linear Voltage Controllers for Voltage-Source Converters",
+      "authors": ["Yicheng Liao", "Xiongfei Wang", "Frede Blaabjerg"],
+      "year": 2020,
+      "journal": "IEEE Open Journal of the Industrial Electronics Society",
+      "volume": 1,
+      "article_pages": "114-126",
+      "doi": "10.1109/OJIES.2020.3001406",
+      "metadata_url": "https://vbn.aau.dk/en/publications/passivity-based-analysis-and-design-of-linear-voltage-controllers/",
+      "download_url": "https://vbn.aau.dk/ws/portalfiles/portal/402718678/09113284.pdf",
+      "file": "references/papers/Liao-Wang-Blaabjerg-2020-voltage-control-passivity.pdf",
+      "status": "downloaded-and-parsed",
+      "version": "Version of record with one institution-generated cover page",
+      "license": "CC BY 4.0; retained for local research, excluded from release packages",
+      "physical_pages": 14,
+      "bytes": 5587144,
+      "sha256": "337A84C99A2E57BE0058C059E2E972CB4008ED6AA8627614CDB1B025E30776CF",
+      "hash_scope": "Local file identity, not compared against a trusted upstream digest",
+      "read_scope": "Physical pages 2-4 and 8-9; figures/tables on pages 4 and 8 visually inspected; not a complete article reading",
+      "use": "Exclude general delay-plus-virtual-impedance analysis as an original contribution; respect its neglect of slower outer-loop dynamics"
+    },
+    {
+      "title": "Cause, correlation, conjecture",
+      "year": 2015,
+      "journal": "Nature Genetics",
+      "volume_pages": "47, 305",
+      "doi": "10.1038/ng.3271",
+      "url": "https://www.nature.com/articles/ng.3271",
+      "status": "relevant-online-text-read-pdf-not-downloaded",
+      "use": "Editorial guidance to pair claims with evidence and methods, not power-system technical evidence or acceptance criteria"
+    },
+    {
+      "title": "So you're writing a paper",
+      "year": 2017,
+      "journal": "Nature Methods",
+      "volume_pages": "14, 1115",
+      "doi": "10.1038/nmeth.4532",
+      "url": "https://www.nature.com/articles/nmeth.4532",
+      "status": "online-text-read-pdf-not-downloaded",
+      "use": "Editorial guidance on clear direct language and reproducible records, not a scientific innovation criterion"
+    },
+    {
+      "title": "Boundaries Extension of Stability Region and z-Domain Controller Implementation for Grid-Forming Converters",
+      "year": 2024,
+      "doi": "10.1109/JESTIE.2023.3319251",
+      "url": "https://portal.fis.tum.de/en/publications/boundaries-extension-of-stability-region-and-z-domain-controller-/",
+      "status": "institutional-metadata-and-abstract-only",
+      "use": "Prior-work lead for digital-delay and virtual-impedance damping analysis; full text and thresholds not verified"
+    },
+    {
+      "title": "Virtual Synchronous Machine-Based Control of a Single-Phase Bi-Directional Battery Charger for Providing Vehicle-to-Grid Services",
+      "authors": ["Jon Are Suul", "Salvatore D'Arco", "Giuseppe Guidi"],
+      "year": 2016,
+      "doi": "10.1109/TIA.2016.2550588",
+      "url": "https://www.researchgate.net/publication/282878918_Virtual_Synchronous_Machine-Based_Control_of_a_Single-Phase_Bi-Directional_Battery_Charger_for_Providing_Vehicle-to-Grid_Services",
+      "status": "author-uploaded-online-relevant-text-read-pdf-not-downloaded",
+      "read_scope": "Section II-B and Eq. (1), virtual inductive voltage drop using the VSM operating frequency; whole-paper validation not performed",
+      "use": "Frequency-factor virtual-inductance voltage drop is existing work, not an original equation"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "status": "verified",
+  "run_file_sha256": "d64c1960128baa6705d9dd1abc65c2a189e188daabdbb67d8e0d1d2091806f48",
+  "inputs": [
+    {
+      "path": "results/automatic-transform-search/new-operating-points-01/models.json",
+      "sha256": "03d5a093e501033eb68ee35243d3b0c7d32d8a49a7d92740cea28937e0b16f3a",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "results/automatic-transform-search/run-2026-10-03-01/run.json",
+      "sha256": "cbe9953c01fbcc225e24b30e4fc91522a5a0d24028bbc3e5b99b736f68dcbbd9",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/transformations/compare_author_damping_holdout.py",
+      "sha256": "f698dbe30e8ce4ced5956235d560e487ea616917c018fcc09fe224f0913bfb4c",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/transformations/export_author_damping_holdout.m",
+      "sha256": "3a8d013c6f5981c1935ecbb4b8d029cba7092df68c5c3c1b7edd5be1c4d9761c",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/transformations/automatic_search.py",
+      "sha256": "2beb80b00999efc0ef53c9ffd7b3ea0463ab15dae86a131dd3fb53c937bf6814",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/transformations/run_admissibility_pilot.py",
+      "sha256": "8fc4e465d6fa57070c1608ae21aa8dafd3d2e3e16d6be84dca6798a38297d6f3",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "backend/core/fig8_kernel.py",
+      "sha256": "02af388b5b4b1cb9881dd86325c14b98eae06be7c2750bf53cc4bfb453878f24",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "results/automatic-transform-search/new-operating-points-plan.md",
+      "sha256": "ea9f695de5f7b58b926c69d6af583c6555dc43b3e15388e754373f40f2c1adf7",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "external/cifelli-small-gain-phase/GridFormingVSI.m",
+      "sha256": "1ad5083d6ec86eb5c7cfb7d45fa58da680e72837684dadba9eb5780d25d5dc2c",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "external/cifelli-small-gain-phase/UserData_inf_bus_Fig_8.xlsm",
+      "sha256": "5dd0facca95a134090ef5cdf5f5acb2eb20a681f9cca36accf182e54d751bfb2",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/baseline/fixtures/author_fig8_fixture_manifest.json",
+      "sha256": "cb42da4eff7ecac73c31449c39593d112e2fbd0d8b395e20ef57b519cab4adea",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/baseline/fixtures/author_fig8_raw_frequency_response.csv",
+      "sha256": "950b6f84bb3d93c340a2451f9b16b03074afd2c2ddad6535eaa788c966ee6a7f",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/baseline/fixtures/author_fig8_spectrum.csv",
+      "sha256": "925e3a899e6fbd2095b0e1500547adafe652f575754bee53d2f83855f1dffcfb",
+      "provenance": "current-source-matches-run-hash"
+    }
+  ]
+}

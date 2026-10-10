@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-05",
+  "title": "Convex Optimization",
+  "authors": ["Stephen Boyd", "Lieven Vandenberghe"],
+  "publisher": "Cambridge University Press",
+  "year": 2004,
+  "url": "https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf",
+  "reading_scope": "Online PDF section 11.4.1, printed pages 579-580, physical pages 593-594",
+  "download_status": "incomplete-not-registered-as-paper",
+  "partial_path": "tmp/downloads/Boyd-Vandenberghe-2004-Convex-Optimization-incomplete.pdf.part",
+  "partial_bytes": 49152,
+  "use": "Adapt the basic scalar-slack Phase-I construction, with a nonnegative slack bound, for numerical non-strict feasibility search",
+  "limits": [
+    "Hard POI power constraint is generally nonconvex",
+    "Local SLSQP failure or positive numerical slack does not prove infeasibility",
+    "Not a newly proposed algorithm",
+    "No complete local PDF or redistribution permission asserted"
+  ]
+}

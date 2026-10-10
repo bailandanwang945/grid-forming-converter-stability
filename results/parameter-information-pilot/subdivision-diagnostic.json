@@ -1,0 +1,30 @@
+{
+  "x_pu": 0.4,
+  "scope": "Post-hoc floating-point sufficient-condition coverage of two continuous slices; not interval arithmetic, not a fair re-evaluation of the eight policies",
+  "slices": [
+    {
+      "fixed_axis": "current-pi",
+      "fixed_value": 3.0,
+      "remaining_interval": [
+        1.0,
+        3.0
+      ],
+      "segments": 256,
+      "stable_segments": 256,
+      "minimum_margin": 0.4783535633505055,
+      "maximum_residual": 1.057474363222058e-09
+    },
+    {
+      "fixed_axis": "voltage-pi",
+      "fixed_value": 3.0,
+      "remaining_interval": [
+        1.0,
+        3.0
+      ],
+      "segments": 512,
+      "stable_segments": 512,
+      "minimum_margin": 0.4032045911967123,
+      "maximum_residual": 9.660926506098264e-10
+    }
+  ]
+}

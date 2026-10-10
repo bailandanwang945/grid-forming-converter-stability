@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-05",
+  "package": "clarabel",
+  "version": "0.11.1",
+  "license": "Apache-2.0",
+  "primary_metadata": "https://pypi.org/pypi/clarabel/0.11.1/json",
+  "documentation": [
+    "https://clarabel.org/stable/python/getting_started_py/",
+    "https://clarabel.org/stable/api_settings/"
+  ],
+  "reading_scope": "Direct Python conic format, signs, SOC specification, quadratic objective, settings and status codes; solver time/threads/tolerance options",
+  "wheel": {
+    "filename": "clarabel-0.11.1-cp39-abi3-win_amd64.whl",
+    "local_path": "tmp/research-conic-wheels/clarabel-0.11.1-cp39-abi3-win_amd64.whl",
+    "bytes": 887310,
+    "sha256": "557d5148a4377ae1980b65d00605ae870a8f34f95f0f6a41e04aa6d3edf67148",
+    "upload_time": "2025-06-11T16:49:04",
+    "url": "https://files.pythonhosted.org/packages/41/e6/4eee3062088c221e5a18b054e51c69f616e0bb0dc1b0a1a5e0fe90dfa18e/clarabel-0.11.1-cp39-abi3-win_amd64.whl",
+    "verification": "Actual local SHA-256 and byte count compared to exact-version PyPI metadata; mismatch raises error"
+  },
+  "environment": {
+    "path": "tmp/research-conic-env",
+    "python": "3.12",
+    "system_site_packages": true,
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "cffi": "2.0.0",
+    "base_interpreter": "F:/SOFTWARE/Python312/python.exe",
+    "global_packages_modified": false
+  },
+  "installed_file_inventory": "tmp/research-conic-env/Lib/site-packages/clarabel-0.11.1.dist-info/RECORD",
+  "installed_license": "tmp/research-conic-env/Lib/site-packages/clarabel-0.11.1.dist-info/licenses/LICENSE.md",
+  "use": "Bounded diagnostic SOCP feasibility restoration; mature solver reuse, no novelty assertion",
+  "distribution": "Temporary research environment only; not added to production requirements or release package",
+  "limits": [
+    "Inner approximation may be conservative",
+    "Phase-I relaxations are not the earlier squared-norm slack scaling",
+    "Regularized slack optimum is not a proof of original infeasibility",
+    "Solver status does not establish full continuous-time physical feasibility"
+  ]
+}

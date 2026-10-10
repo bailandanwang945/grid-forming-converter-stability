@@ -1,0 +1,9 @@
+{
+  "matlab_version": "24.2.0.2712019 (R2024b)",
+  "conditions": 66,
+  "points": 150,
+  "condition_mismatch": 0,
+  "point_mismatch": 0,
+  "max_lyapunov_residual": 7.0296304351230735E-9,
+  "scope": "Independent solver checks of shared exported matrices only"
+}

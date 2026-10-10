@@ -1,0 +1,793 @@
+{
+  "status": "exploratory-reduced-model-only",
+  "scope": "full-grid",
+  "rows": [
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0008678813004752452,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2765324279049028,
+      "voltage_peak_pu": 1.0351151064554651,
+      "power_min_pu": 0.9999999999999994,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 6.181118547224574e-08,
+      "terminal_current_error": 4.133363417196214e-06,
+      "sample_count": 12180,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0008942544252460542,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2837811805837265,
+      "voltage_peak_pu": 1.0351151064554647,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 1.2637497893501372e-08,
+      "terminal_current_error": 4.238575263448624e-06,
+      "sample_count": 12044,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0009291345396688175,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.292494173169219,
+      "voltage_peak_pu": 1.0351151064554647,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 6.504640202844712e-09,
+      "terminal_current_error": 4.368372807420063e-06,
+      "sample_count": 12028,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.05,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0008275154566877937,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2726780527850976,
+      "voltage_peak_pu": 1.0500000000000003,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 6.689313222223456e-08,
+      "terminal_current_error": 4.056156551460383e-06,
+      "sample_count": 12170,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.05,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0008547656067286191,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.279988248925321,
+      "voltage_peak_pu": 1.0499999849390735,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 1.3661622334156377e-08,
+      "terminal_current_error": 4.162033157174588e-06,
+      "sample_count": 12040,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.05,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0008906957663449475,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2887526827381248,
+      "voltage_peak_pu": 1.0499447628938063,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 7.0217135024109374e-09,
+      "terminal_current_error": 4.292351772602756e-06,
+      "sample_count": 12024,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.1,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0007208144822728169,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2628136041537419,
+      "voltage_peak_pu": 1.1000000000000003,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 8.325085473329697e-08,
+      "terminal_current_error": 3.859587524068457e-06,
+      "sample_count": 12148,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.1,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.000750402334902251,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2703094735680043,
+      "voltage_peak_pu": 1.0999998576121004,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 1.696394624882118e-08,
+      "terminal_current_error": 3.96738912200421e-06,
+      "sample_count": 12034,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.1,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.001005555708199174,
+      "phase2_split_s": 0.0007889946597778,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958174636273,
+      "initial_i": [
+        0.7003080256096607,
+        0.9744581413620077
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.279202727324552,
+      "voltage_peak_pu": 1.099821456660126,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 8.691101000179345e-09,
+      "terminal_current_error": 4.098794338754265e-06,
+      "sample_count": 12021,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0007243050774564388,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2769001569344063,
+      "voltage_peak_pu": 1.0351151064554651,
+      "power_min_pu": 0.9999999999999994,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 6.99194412129743e-08,
+      "terminal_current_error": 4.018860364807689e-06,
+      "sample_count": 12152,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0007508888551100019,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2855565396437056,
+      "voltage_peak_pu": 1.035115106455465,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 1.4354854806764397e-08,
+      "terminal_current_error": 4.1368711254564384e-06,
+      "sample_count": 12039,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.035115106455465,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0007863361190709784,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2958570027533953,
+      "voltage_peak_pu": 1.035115106455465,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 7.4227396317423705e-09,
+      "terminal_current_error": 4.28101838945831e-06,
+      "sample_count": 12025,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.05,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0006907034274040593,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2730491611925778,
+      "voltage_peak_pu": 1.0500000000000003,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 7.488843984862642e-08,
+      "terminal_current_error": 3.949228052123684e-06,
+      "sample_count": 12143,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.05,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0007181615548916105,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2817763780578604,
+      "voltage_peak_pu": 1.0499997676780517,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 1.5358648895035382e-08,
+      "terminal_current_error": 4.068077136684935e-06,
+      "sample_count": 12035,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.05,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.000754626498244222,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2921270591200311,
+      "voltage_peak_pu": 1.0497831457996738,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 7.929586887682958e-09,
+      "terminal_current_error": 4.212802750468871e-06,
+      "sample_count": 12022,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.1,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0006018863143062661,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2631957218362244,
+      "voltage_peak_pu": 1.1000000000000003,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 9.096122830644593e-08,
+      "terminal_current_error": 3.7715816885576557e-06,
+      "sample_count": 12124,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.1,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0006316578300279864,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2721324944864016,
+      "voltage_peak_pu": 1.09999846421436,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 3.3306690738754696e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 1.8612338492090832e-08,
+      "terminal_current_error": 3.89279336570841e-06,
+      "sample_count": 12030,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "poi",
+      "vmax_pu": 1.1,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.0008379630897121848,
+      "phase2_split_s": 0.0006706566414396986,
+      "ppre_pu": 0.9999999999999999,
+      "initial_phase2_power_pu": 1.0719958173705397,
+      "initial_i": [
+        0.7003080255953418,
+        0.9744581412159715
+      ],
+      "steady_i": [
+        0.9451069578106134,
+        0.3293582531363196
+      ],
+      "current_peak_pu": 1.2825973354621625,
+      "voltage_peak_pu": 1.0994137288293144,
+      "power_min_pu": 0.9999999999999996,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.1102230246251565e-16,
+      "split_voltage_jump": 9.572231869455675e-09,
+      "terminal_current_error": 4.038615271761511e-06,
+      "sample_count": 12018,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "grid",
+      "vmax_pu": 1.1811921145547493,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.0013503373003290317,
+      "phase2_split_s": 0.00024402370432387486,
+      "ppre_pu": 1.054799662435119,
+      "initial_phase2_power_pu": 1.2474676220300958,
+      "initial_i": [
+        0.9031609258976062,
+        0.7901267885167854
+      ],
+      "steady_i": [
+        1.0,
+        0.0
+      ],
+      "current_peak_pu": 1.2087045934826401,
+      "voltage_peak_pu": 1.1811921145547493,
+      "power_min_pu": 1.0547996624351186,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 9.62616533565987e-08,
+      "terminal_current_error": 4.6111440315024675e-06,
+      "sample_count": 12055,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "grid",
+      "vmax_pu": 1.1811921145547493,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.0013503373003290317,
+      "phase2_split_s": 0.0002801560225008345,
+      "ppre_pu": 1.054799662435119,
+      "initial_phase2_power_pu": 1.2474676220300958,
+      "initial_i": [
+        0.9031609258976062,
+        0.7901267885167854
+      ],
+      "steady_i": [
+        1.0,
+        0.0
+      ],
+      "current_peak_pu": 1.2165708961305803,
+      "voltage_peak_pu": 1.1811921145547493,
+      "power_min_pu": 1.0547996624351186,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 1.9249232290307384e-08,
+      "terminal_current_error": 4.739602436081256e-06,
+      "sample_count": 12018,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 50.0,
+      "pre_point": "grid",
+      "vmax_pu": 1.1811921145547493,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.0013503373003290317,
+      "phase2_split_s": 0.0003224079864880789,
+      "ppre_pu": 1.054799662435119,
+      "initial_phase2_power_pu": 1.2474676220300958,
+      "initial_i": [
+        0.9031609258976062,
+        0.7901267885167854
+      ],
+      "steady_i": [
+        1.0,
+        0.0
+      ],
+      "current_peak_pu": 1.2253446777259573,
+      "voltage_peak_pu": 1.1811921145547493,
+      "power_min_pu": 1.0547996624351186,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 8.826370295789409e-09,
+      "terminal_current_error": 4.884357441785283e-06,
+      "sample_count": 12014,
+      "sampled_constraints_pass": true
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 50.0,
+      "vmax_pu": 1.05,
+      "transition_time_s": 1e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 50.0,
+      "vmax_pu": 1.05,
+      "transition_time_s": 5e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 50.0,
+      "vmax_pu": 1.05,
+      "transition_time_s": 0.0001,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 50.0,
+      "vmax_pu": 1.1,
+      "transition_time_s": 1e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 50.0,
+      "vmax_pu": 1.1,
+      "transition_time_s": 5e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 50.0,
+      "vmax_pu": 1.1,
+      "transition_time_s": 0.0001,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "grid",
+      "vmax_pu": 1.1811921145547493,
+      "transition_time_s": 1e-05,
+      "tlim_s": 0.0011252810836074104,
+      "phase2_split_s": 0.00020484982681324542,
+      "ppre_pu": 1.054799662435119,
+      "initial_phase2_power_pu": 1.2474676220300673,
+      "initial_i": [
+        0.9031609258975988,
+        0.7901267885167492
+      ],
+      "steady_i": [
+        1.0,
+        0.0
+      ],
+      "current_peak_pu": 1.209110992154051,
+      "voltage_peak_pu": 1.1811921145547493,
+      "power_min_pu": 1.0547996624351186,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 1.0530152114164354e-07,
+      "terminal_current_error": 4.580025420106486e-06,
+      "sample_count": 12047,
+      "sampled_constraints_pass": false
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "grid",
+      "vmax_pu": 1.1811921145547493,
+      "transition_time_s": 5e-05,
+      "tlim_s": 0.0011252810836074104,
+      "phase2_split_s": 0.00024086038095973047,
+      "ppre_pu": 1.054799662435119,
+      "initial_phase2_power_pu": 1.2474676220300673,
+      "initial_i": [
+        0.9031609258975988,
+        0.7901267885167492
+      ],
+      "steady_i": [
+        1.0,
+        0.0
+      ],
+      "current_peak_pu": 1.2184296445687537,
+      "voltage_peak_pu": 1.1811921145547493,
+      "power_min_pu": 1.0547996624351186,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 2.091645931365803e-08,
+      "terminal_current_error": 4.724550082250384e-06,
+      "sample_count": 12017,
+      "sampled_constraints_pass": true
+    },
+    {
+      "frequency_hz": 60.0,
+      "pre_point": "grid",
+      "vmax_pu": 1.1811921145547493,
+      "transition_time_s": 0.0001,
+      "tlim_s": 0.0011252810836074104,
+      "phase2_split_s": 0.00028139734772528055,
+      "ppre_pu": 1.054799662435119,
+      "initial_phase2_power_pu": 1.2474676220300673,
+      "initial_i": [
+        0.9031609258975988,
+        0.7901267885167492
+      ],
+      "steady_i": [
+        1.0,
+        0.0
+      ],
+      "current_peak_pu": 1.2285254620034416,
+      "voltage_peak_pu": 1.1811921145547493,
+      "power_min_pu": 1.0547996624351186,
+      "power_target_error": 4.440892098500626e-16,
+      "initial_voltage_jump": 1.5700924586837752e-16,
+      "split_voltage_jump": 9.302740434948186e-09,
+      "terminal_current_error": 4.880957697672195e-06,
+      "sample_count": 12014,
+      "sampled_constraints_pass": true
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 60.0,
+      "vmax_pu": 1.05,
+      "transition_time_s": 1e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 60.0,
+      "vmax_pu": 1.05,
+      "transition_time_s": 5e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 60.0,
+      "vmax_pu": 1.05,
+      "transition_time_s": 0.0001,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 60.0,
+      "vmax_pu": 1.1,
+      "transition_time_s": 1e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 60.0,
+      "vmax_pu": 1.1,
+      "transition_time_s": 5e-05,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    },
+    {
+      "pre_point": "grid",
+      "frequency_hz": 60.0,
+      "vmax_pu": 1.1,
+      "transition_time_s": 0.0001,
+      "sampled_constraints_pass": false,
+      "failure": "Required radial voltage exceeds the declared bound"
+    }
+  ],
+  "checked_case": {
+    "frequency_hz": 60.0,
+    "pre_point": "poi",
+    "vmax_pu": 1.035115106455465,
+    "transition_time_s": 5e-05,
+    "tlim_s": 0.0008379630897121848,
+    "phase2_split_s": 0.0007508888551100019,
+    "ppre_pu": 0.9999999999999999,
+    "initial_phase2_power_pu": 1.0719958173705397,
+    "initial_i": [
+      0.7003080255953418,
+      0.9744581412159715
+    ],
+    "steady_i": [
+      0.9451069578106134,
+      0.3293582531363196
+    ],
+    "current_peak_pu": 1.2855565396437056,
+    "voltage_peak_pu": 1.035115106455465,
+    "power_min_pu": 0.9999999999999996,
+    "power_target_error": 4.440892098500626e-16,
+    "initial_voltage_jump": 1.1102230246251565e-16,
+    "split_voltage_jump": 1.4354854806764397e-08,
+    "terminal_current_error": 4.1368711254564384e-06,
+    "sample_count": 12039,
+    "sampled_constraints_pass": true,
+    "prescribed_input_reintegration_errors": {
+      "DOP853": 2.859431580404248e-10,
+      "Radau": 3.8251180001225293e-11
+    }
+  },
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1"
+  },
+  "source_pdf_sha256": "a3639891dce05a209ec98d39c34c77875abab552de32e66cd39e7f638da3a69f",
+  "script_sha256": "d26d5089a55119ebafb6bb9ffd49f697de320fc68dd7dbfc73bdfaa722b076f9",
+  "caveats": [
+    "Vmax and pre-power measurement point not fully specified by paper",
+    "No semiconductor current, DC, LC-state or real control bandwidth validation",
+    "Finite checks do not prove continuous-time extrema or worldwide novelty"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-05",
+  "identityScope": "Local identity hash; not compared to a trusted publisher checksum.",
+  "redistribution": "Local research archive only; PDF ignored by Git and excluded from software release.",
+  "papers": [
+    {
+      "author": "Matthew Kelly",
+      "title": "An Introduction to Trajectory Optimization: How to Do Your Own Direct Collocation",
+      "publication": "SIAM Review 59(4), 849-904, 2017",
+      "doi": "10.1137/16M1062569",
+      "version": "44-page author-hosted PDF; not the 56-page publisher layout",
+      "url": "https://www.matthewpeterkelly.com/research/MatthewKelly_IntroTrajectoryOptimization_SIAM_Review_2017.pdf",
+      "publisherUrl": "https://epubs.siam.org/doi/full/10.1137/16M1062569",
+      "path": "references/papers/Kelly-2017-introduction-trajectory-optimization-author.pdf",
+      "bytes": 990404,
+      "pages": 44,
+      "sha256": "a81d9939283ee58a207a6c32a447fae5dba46c81116ef023783fdf7dbfb40cf9",
+      "status": "complete-pdf-parsed",
+      "readScope": "Opening identity, sections 5.1-5.5 on physical PDF pages 11-14; page 12 rendered and visually inspected. Not a full-paper reader.",
+      "use": "Initialization, mesh/error checks and distinguishing optimization failure from infeasibility. The project does not claim its inverse-dynamics B-spline parameterization is Kelly's direct collocation implementation.",
+      "licenseScope": "Public author download; no redistribution permission inferred. No third-party code copied."
+    }
+  ],
+  "onlineDocumentation": [
+    {
+      "url": "https://docs.scipy.org/doc/scipy/reference/optimize.minimize-slsqp.html",
+      "scope": "SLSQP constraints, analytic Jacobians, stopping options and convergence limitations; installed version recorded in each numerical result. Specific 1.17.1 URLs were inaccessible."
+    }
+  ],
+  "authorRecheck": {
+    "arxivVersion": "2607.07904v1",
+    "scope": "Physical PDF pages 2-3 and 5-7, page 6 visually inspected; current submission history shows only v1. Source identity compared to prior registered local hash.",
+    "correction": "Ppre in equation 18 and Figure 5 is clearly POI power; previous blanket missing-measurement-point caveat was inaccurate.",
+    "remainingMissing": ["R2", "Vmax", "explicit base frequency", "unambiguous default QT pair", "N and solver tolerances", "complete LC numerical state and hardware values"],
+    "codeScope": "PDF reference 22 points to PNNL generic PSCAD/PSS-E models, not the author's OCP source. No claim of exhaustive internet code search."
+  }
+}

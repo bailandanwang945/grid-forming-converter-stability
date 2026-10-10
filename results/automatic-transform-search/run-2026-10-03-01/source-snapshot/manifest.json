@@ -1,0 +1,41 @@
+{
+  "status": "verified",
+  "run_file_sha256": "cbe9953c01fbcc225e24b30e4fc91522a5a0d24028bbc3e5b99b736f68dcbbd9",
+  "inputs": [
+    {
+      "path": "experiments/transformations/automatic_search.py",
+      "sha256": "2beb80b00999efc0ef53c9ffd7b3ea0463ab15dae86a131dd3fb53c937bf6814",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/transformations/run_admissibility_pilot.py",
+      "sha256": "8fc4e465d6fa57070c1608ae21aa8dafd3d2e3e16d6be84dca6798a38297d6f3",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "backend/core/fig8_kernel.py",
+      "sha256": "02af388b5b4b1cb9881dd86325c14b98eae06be7c2750bf53cc4bfb453878f24",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/baseline/fixtures/author_fig8_fixture_manifest.json",
+      "sha256": "cb42da4eff7ecac73c31449c39593d112e2fbd0d8b395e20ef57b519cab4adea",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/baseline/fixtures/author_fig8_raw_frequency_response.csv",
+      "sha256": "950b6f84bb3d93c340a2451f9b16b03074afd2c2ddad6535eaa788c966ee6a7f",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "experiments/baseline/fixtures/author_fig8_spectrum.csv",
+      "sha256": "925e3a899e6fbd2095b0e1500547adafe652f575754bee53d2f83855f1dffcfb",
+      "provenance": "current-source-matches-run-hash"
+    },
+    {
+      "path": "results/automatic-transform-search/plan.md",
+      "sha256": "c0b32ec7fb73174f54d37bb9375604ce9988de859addadb0ac6b6c8aedfab30a",
+      "provenance": "post-run-reconstructed-plan-matches-original-hash-not-contemporaneous-snapshot"
+    }
+  ]
+}

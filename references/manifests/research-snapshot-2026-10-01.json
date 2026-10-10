@@ -1,0 +1,61 @@
+{
+  "schema": "gfm-research-snapshot/1.0",
+  "archived_on": "2026-10-01",
+  "hash_role": "Local archival baseline; no upstream signed checksum was provided.",
+  "artifacts": [
+    {
+      "path": "references/papers/Li-et-al-2026-GFM-model-validity-arxiv-2606.08082v1.pdf",
+      "url": "https://arxiv.org/pdf/2606.08082v1",
+      "version": "2606.08082v1",
+      "bytes": 2982451,
+      "sha256": "C71B071F304BA9A3E24FBFB4ED336B9CCA10E0A7D296F3CFB61B21B7AF42D33D"
+    },
+    {
+      "path": "references/papers/Cifelli-Anta-2026-partitioned-gain-phase-arxiv-2608.03641v1.pdf",
+      "url": "https://arxiv.org/pdf/2608.03641v1",
+      "version": "2608.03641v1",
+      "bytes": 764886,
+      "sha256": "7B953B6FCFF35F07097F4783AEA9F9038CA80A29F1FBAEE0E533920D26275FCD"
+    },
+    {
+      "path": "references/_archive/Cifelli-Anta-partitioned-3ab48eb782f7/archive/author-source-3ab48eb782f7.zip",
+      "url": "https://codeload.github.com/diegoCifelli/Partitioned-Mixed-Small-Gain-Phase-Decentralized-Stability-Criterion-for-Power-Systems/zip/3ab48eb782f7b0150f949968705d802405e2cd32",
+      "version": "3ab48eb782f7b0150f949968705d802405e2cd32",
+      "bytes": 104352,
+      "sha256": "8AE633BBD31A541A299975569F7B0604D6545FA6AFCF27F737A120A6AE7068CC"
+    }
+  ],
+  "author_code": {
+    "repository": "https://github.com/diegoCifelli/Partitioned-Mixed-Small-Gain-Phase-Decentralized-Stability-Criterion-for-Power-Systems",
+    "commit": "3ab48eb782f7b0150f949968705d802405e2cd32",
+    "commit_date_utc": "2026-07-22T13:47:35Z",
+    "source_root": "references/_archive/Cifelli-Anta-partitioned-3ab48eb782f7/source/Partitioned-Mixed-Small-Gain-Phase-Decentralized-Stability-Criterion-for-Power-Systems-3ab48eb782f7b0150f949968705d802405e2cd32",
+    "licenses": {"top_level": "MIT", "customModels": "BSD-3-Clause", "linspecer": "See libs/linspecer/license.txt"},
+    "file_count": 22,
+    "execution_status": "archived-not-executed",
+    "files": [
+      {"path": ".gitignore", "bytes": 360, "sha256": "85AF55EDC72D761870EC60603241C09C097D209EBB980EF1BDCEEBBEC8DE489A"},
+      {"path": "customModels/GridFollowingVSI.m", "bytes": 14225, "sha256": "107B7F67DCB9505A74B0DBF32198836CCEAAB77C7B987E9E8D6AA8E8FA0D73D5"},
+      {"path": "customModels/GridFormingVSI.m", "bytes": 11796, "sha256": "807FB2AD4A6FDA87577A822A854987EC8E1140E7F4663C844A53485B8C94F46D"},
+      {"path": "functions/addConverterToNetwork.m", "bytes": 1005, "sha256": "D4F55972F5D6C830783227E391A36D66063155E277960063ED647BF4426C46C9"},
+      {"path": "functions/computeFeasibilityRegions.m", "bytes": 3543, "sha256": "9BE8962D53CE2717B821466190A14E02B8C74E3DC619CE66C041C216AB0F5C5C"},
+      {"path": "functions/isSectorial.m", "bytes": 1296, "sha256": "ADB2368148682A043F430AD3E0B85F17314B0F1714E426732CD6D199C6B66C12"},
+      {"path": "functions/kronReductionDq.m", "bytes": 2262, "sha256": "A86BBF7C5163F373E71514B05EC11D379EBE061B60353332A1B95A1009D2B15C"},
+      {"path": "functions/numericalRange.m", "bytes": 1789, "sha256": "825C8E1E707A72EC84EBA9C71BD24D459C050D8174C12F1D85C7F519D694C9A5"},
+      {"path": "functions/sectorPhases.m", "bytes": 1544, "sha256": "800F40913050D5E68844822A757247A6944F93CF4E58BCFAA6ABB60931B15977"},
+      {"path": "functions/solveGainPhaseSdp.m", "bytes": 2098, "sha256": "29DE7D7D1A887F5B33C1F00DFA61C8BB96E00F0C9113EC08A9E653578764EB9B"},
+      {"path": "functions/solvePhaseInterval.m", "bytes": 4656, "sha256": "0F72042EF3A8C090B5A559F4846B8BF654AC0EE33C0E87C68808978F80325FBC"},
+      {"path": "libs/linspecer/license.txt", "bytes": 1318, "sha256": "0B38AFB801DC550BC26989890276A359D7B0CC9B18A97E790E7AA4EC971961EE"},
+      {"path": "libs/linspecer/linspecer.m", "bytes": 8188, "sha256": "7A742D6A046E8369DD8BEDB7BD1FFE6D1A3B93063BCD6418A857CEEFB832D0C9"},
+      {"path": "LICENSE", "bytes": 1108, "sha256": "EF7DE207D1EB3FD712140EBDDD4CBFE46676FBEA80119219B2AB7AE96082E04B"},
+      {"path": "plotFeasibilitySetLk.m", "bytes": 2250, "sha256": "43FE6DAF2C0D456A87902A86D6C1BE893E8EB449B07E090AF8D71B9EF24D3292"},
+      {"path": "plotGainPhasePartitionedConditions.m", "bytes": 3915, "sha256": "006AC253A4C5CE6FF041697454F0646D8811642E1D26155790D157278A6C803B"},
+      {"path": "plotGainPhaseUniformConditions.m", "bytes": 2715, "sha256": "92D379CA537FFBFEAA18424417DAD0C345E6FB48EC7D3456CB5E1986E9DB5A27"},
+      {"path": "README.md", "bytes": 4283, "sha256": "CCD141FCD5BBC9A70E4353BCCB035CBAAB87D21A1B850D2B3196BD9B2C8E93AE"},
+      {"path": "setupSystem.m", "bytes": 4151, "sha256": "5833A9D32EB52644FBD9DE8C3D1C3C6808C3BC67CCD9F2D630760360A3BC9A03"},
+      {"path": "UserData_2Conv.xlsm", "bytes": 35770, "sha256": "E906D021D1138E0E759AE63177AC21B284B86E63655C00AE2567B038801D396F"},
+      {"path": "UserData_IEEE39.xlsm", "bytes": 39963, "sha256": "47C99DF4B1BCFA83528B4A3A430F876B3C677DEA9A0D02D1B3AD20612C84FBCC"},
+      {"path": "UserMain.m", "bytes": 1062, "sha256": "15DAAF2CCE275717460D0DC74C1AC8DA9996A41DCA93D23D1F2F70C2B2066F0E"}
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "status": "verified",
+  "script_sha256": "f547e4fac7967057a0246c7703f2d1f81f46185b778415a44db0b0000bdd817b",
+  "results": [
+    {
+      "path": "results\\phase-jump-power-feasibility\\lc-trajectory-combination-2026-10-05.json",
+      "result_sha256": "d6897a3b8637e0ffd243551db910a2c604e9c20c7b9e511c6740fdc733abecf1",
+      "rows": [
+        {
+          "identifier": 0.0,
+          "feasible": false,
+          "power_min_pu": 0.999999835971112,
+          "voltage_peak_pu": 1.0819042483949195,
+          "inverter_current_peak_pu": 1.2962048238605142
+        },
+        {
+          "identifier": 0.0001,
+          "feasible": false,
+          "power_min_pu": 0.9999987991190697,
+          "voltage_peak_pu": 1.0826255547437555,
+          "inverter_current_peak_pu": 1.2962048261653667
+        },
+        {
+          "identifier": 0.001,
+          "feasible": false,
+          "power_min_pu": 0.9999894728038184,
+          "voltage_peak_pu": 1.0892449507246067,
+          "inverter_current_peak_pu": 1.2962048502349306
+        },
+        {
+          "identifier": 0.01,
+          "feasible": false,
+          "power_min_pu": 0.9998967433750441,
+          "voltage_peak_pu": 1.1672109105282433,
+          "inverter_current_peak_pu": 1.2962054206557834
+        },
+        {
+          "identifier": 0.05,
+          "feasible": false,
+          "power_min_pu": 0.9994967645374121,
+          "voltage_peak_pu": 1.6887186287986558,
+          "inverter_current_peak_pu": 1.2962152639195916
+        },
+        {
+          "identifier": 0.1,
+          "feasible": false,
+          "power_min_pu": 0.9990265532861773,
+          "voltage_peak_pu": 2.517509202799596,
+          "inverter_current_peak_pu": 1.2962446332821944
+        },
+        {
+          "identifier": 0.25,
+          "feasible": false,
+          "power_min_pu": 0.9978445141672283,
+          "voltage_peak_pu": 5.255955438285436,
+          "inverter_current_peak_pu": 1.2964525655958252
+        },
+        {
+          "identifier": 0.5,
+          "feasible": false,
+          "power_min_pu": 0.996835281706382,
+          "voltage_peak_pu": 9.959935878067004,
+          "inverter_current_peak_pu": 1.297254351909835
+        },
+        {
+          "identifier": 1.0,
+          "feasible": false,
+          "power_min_pu": 0.9999999998584588,
+          "voltage_peak_pu": 19.43483846152002,
+          "inverter_current_peak_pu": 1.3013856129006192
+        }
+      ]
+    },
+    {
+      "path": "results\\phase-jump-power-feasibility\\lc-fixed-cap-feasibility-2026-10-05.json",
+      "result_sha256": "65f893527bd5f056eeeb6b6251914a5219180d2f550f5e2ecddb7e4a7f09149c",
+      "rows": [
+        {
+          "identifier": 1,
+          "feasible": false,
+          "power_min_pu": 0.9790183737252279,
+          "voltage_peak_pu": 1.093642927203697,
+          "inverter_current_peak_pu": 1.2964294833752419
+        },
+        {
+          "identifier": 2,
+          "feasible": false,
+          "power_min_pu": 0.9999886431259367,
+          "voltage_peak_pu": 1.0834033938143672,
+          "inverter_current_peak_pu": 1.2961956950009323
+        }
+      ]
+    }
+  ],
+  "scope": "Re-read and numerical re-evaluation using the independent hardware checker, not a new independent physical method"
+}

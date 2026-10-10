@@ -1,0 +1,1420 @@
+{
+  "cases": [
+    {
+      "x_pu": 0.1,
+      "bounds": [
+        0.5,
+        2.0,
+        0.5,
+        2.0
+      ],
+      "regions": [
+        {
+          "name": "whole-box",
+          "bounds": [
+            0.5,
+            2.0,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 6.5249713974400395e-09,
+            "margin": -48103.27351821752,
+            "inertia_gap": 0.0008443769991346944,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 15,
+            "stable": 10
+          }
+        },
+        {
+          "name": "axis-0-value-0.5",
+          "bounds": [
+            0.5,
+            0.5,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 6.177935729936327e-09,
+            "margin": -13414.07647311247,
+            "inertia_gap": 0.0008801307220386165,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-0.875",
+          "bounds": [
+            0.875,
+            0.875,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.867914087446374e-09,
+            "margin": -6188.634355641328,
+            "inertia_gap": 0.0008652436245295934,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 88,
+            "stable": 13
+          }
+        },
+        {
+          "name": "axis-0-value-1.25",
+          "bounds": [
+            1.25,
+            1.25,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 6.5249713974400395e-09,
+            "margin": -42637.111818819234,
+            "inertia_gap": 0.0008443769991346944,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 53,
+            "stable": 48
+          }
+        },
+        {
+          "name": "axis-0-value-1.625",
+          "bounds": [
+            1.625,
+            1.625,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.914868261606304e-09,
+            "margin": -7641.559778943858,
+            "inertia_gap": 0.0008223087329644034,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 34,
+            "stable": 67
+          }
+        },
+        {
+          "name": "axis-0-value-2.0",
+          "bounds": [
+            2.0,
+            2.0,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 4.4320091838211116e-09,
+            "margin": -4395.075323490462,
+            "inertia_gap": 0.0007999596069450321,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 22,
+            "stable": 79
+          }
+        },
+        {
+          "name": "axis-1-value-0.5",
+          "bounds": [
+            0.5,
+            2.0,
+            0.5,
+            0.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.2650346970078637e-09,
+            "margin": -1390.0199398783366,
+            "inertia_gap": 0.000863907386854196,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-0.875",
+          "bounds": [
+            0.5,
+            2.0,
+            0.875,
+            0.875
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 5.036341996434282e-09,
+            "margin": -983.2859962538853,
+            "inertia_gap": 0.0008569575364548984,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 92,
+            "stable": 9
+          }
+        },
+        {
+          "name": "axis-1-value-1.25",
+          "bounds": [
+            0.5,
+            2.0,
+            1.25,
+            1.25
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 6.5249713974400395e-09,
+            "margin": -9878.344740883698,
+            "inertia_gap": 0.0008443769991346944,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 53,
+            "stable": 48
+          }
+        },
+        {
+          "name": "axis-1-value-1.625",
+          "bounds": [
+            0.5,
+            2.0,
+            1.625,
+            1.625
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.869473068591923e-09,
+            "margin": -1868.219983654059,
+            "inertia_gap": 0.0008303631085147407,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 33,
+            "stable": 68
+          }
+        },
+        {
+          "name": "axis-1-value-2.0",
+          "bounds": [
+            0.5,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.1042936675154133e-09,
+            "margin": -1244.6292851126523,
+            "inertia_gap": 0.0008156149616163074,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 20,
+            "stable": 81
+          }
+        }
+      ]
+    },
+    {
+      "x_pu": 0.1,
+      "bounds": [
+        1.0,
+        3.0,
+        1.0,
+        3.0
+      ],
+      "regions": [
+        {
+          "name": "whole-box",
+          "bounds": [
+            1.0,
+            3.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.3591357182167902e-09,
+            "margin": -3215.289471551859,
+            "inertia_gap": 0.00074520996107856,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 3,
+            "stable": 22
+          }
+        },
+        {
+          "name": "axis-0-value-1.0",
+          "bounds": [
+            1.0,
+            1.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 4.721822137276469e-09,
+            "margin": -10110.629846142754,
+            "inertia_gap": 0.0008399765811260119,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 31,
+            "stable": 70
+          }
+        },
+        {
+          "name": "axis-0-value-1.5",
+          "bounds": [
+            1.5,
+            1.5,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.374562415121253e-09,
+            "margin": -4083.9777338727918,
+            "inertia_gap": 0.0007914614171112802,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 5,
+            "stable": 96
+          }
+        },
+        {
+          "name": "axis-0-value-2.0",
+          "bounds": [
+            2.0,
+            2.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.3591357182167902e-09,
+            "margin": -2781.4004484331795,
+            "inertia_gap": 0.00074520996107856,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-2.5",
+          "bounds": [
+            2.5,
+            2.5,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.558952652585596e-09,
+            "margin": -2170.977853048834,
+            "inertia_gap": 0.0007026468896864468,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-3.0",
+          "bounds": [
+            3.0,
+            3.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.2286810126962944e-09,
+            "margin": -1815.2002467531097,
+            "inertia_gap": 0.0006639722773771491,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-1.0",
+          "bounds": [
+            1.0,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.7209061024148494e-09,
+            "margin": -1690.5638478330561,
+            "inertia_gap": 0.000818466116626564,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 32,
+            "stable": 69
+          }
+        },
+        {
+          "name": "axis-1-value-1.5",
+          "bounds": [
+            1.0,
+            3.0,
+            1.5,
+            1.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.7170345412925243e-09,
+            "margin": -862.4405385702081,
+            "inertia_gap": 0.0007813763379581453,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 4,
+            "stable": 97
+          }
+        },
+        {
+          "name": "axis-1-value-2.0",
+          "bounds": [
+            1.0,
+            3.0,
+            2.0,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.3591357182167902e-09,
+            "margin": -735.4605066750055,
+            "inertia_gap": 0.00074520996107856,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-2.5",
+          "bounds": [
+            1.0,
+            3.0,
+            2.5,
+            2.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.538211357800599e-09,
+            "margin": -685.4919273601349,
+            "inertia_gap": 0.000711355481889067,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-3.0",
+          "bounds": [
+            1.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.1706108536008793e-09,
+            "margin": -659.8142448546481,
+            "inertia_gap": 0.0006801916256057427,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        }
+      ]
+    },
+    {
+      "x_pu": 0.2,
+      "bounds": [
+        0.5,
+        2.0,
+        0.5,
+        2.0
+      ],
+      "regions": [
+        {
+          "name": "whole-box",
+          "bounds": [
+            0.5,
+            2.0,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.6246975154746296e-09,
+            "margin": -2467.3877694841462,
+            "inertia_gap": 0.0008706063680591709,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 9,
+            "stable": 16
+          }
+        },
+        {
+          "name": "axis-0-value-0.5",
+          "bounds": [
+            0.5,
+            0.5,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.1188957994304992e-09,
+            "margin": -5745.1107299532405,
+            "inertia_gap": 0.0008826981849375852,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 94,
+            "stable": 7
+          }
+        },
+        {
+          "name": "axis-0-value-0.875",
+          "bounds": [
+            0.875,
+            0.875,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.942013879627349e-09,
+            "margin": -10997.819900747989,
+            "inertia_gap": 0.0008797792158771495,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 42,
+            "stable": 59
+          }
+        },
+        {
+          "name": "axis-0-value-1.25",
+          "bounds": [
+            1.25,
+            1.25,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.6246975154746296e-09,
+            "margin": -2323.4044166767385,
+            "inertia_gap": 0.0008706063680591709,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 20,
+            "stable": 81
+          }
+        },
+        {
+          "name": "axis-0-value-1.625",
+          "bounds": [
+            1.625,
+            1.625,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.0769528176567061e-09,
+            "margin": -1383.2230186874206,
+            "inertia_gap": 0.0008560685147195005,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 8,
+            "stable": 93
+          }
+        },
+        {
+          "name": "axis-0-value-2.0",
+          "bounds": [
+            2.0,
+            2.0,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.110990737297913e-09,
+            "margin": -1018.8820148486967,
+            "inertia_gap": 0.0008377327044440223,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 1,
+            "stable": 100
+          }
+        },
+        {
+          "name": "axis-1-value-0.5",
+          "bounds": [
+            0.5,
+            2.0,
+            0.5,
+            0.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.5348155118639305e-09,
+            "margin": -484.3524824457419,
+            "inertia_gap": 0.0008691505981992313,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-0.875",
+          "bounds": [
+            0.5,
+            2.0,
+            0.875,
+            0.875
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.6077491292963284e-09,
+            "margin": -1920.783803142665,
+            "inertia_gap": 0.0008721219157325616,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 42,
+            "stable": 59
+          }
+        },
+        {
+          "name": "axis-1-value-1.25",
+          "bounds": [
+            0.5,
+            2.0,
+            1.25,
+            1.25
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.6246975154746296e-09,
+            "margin": -473.2448824873627,
+            "inertia_gap": 0.0008706063680591709,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 19,
+            "stable": 82
+          }
+        },
+        {
+          "name": "axis-1-value-1.625",
+          "bounds": [
+            0.5,
+            2.0,
+            1.625,
+            1.625
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.586776471607778e-09,
+            "margin": -342.90382406353984,
+            "inertia_gap": 0.0008648409088636568,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 7,
+            "stable": 94
+          }
+        },
+        {
+          "name": "axis-1-value-2.0",
+          "bounds": [
+            0.5,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 8.185985543559017e-10,
+            "margin": -296.3691036288594,
+            "inertia_gap": 0.0008556321948872146,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        }
+      ]
+    },
+    {
+      "x_pu": 0.2,
+      "bounds": [
+        1.0,
+        3.0,
+        1.0,
+        3.0
+      ],
+      "regions": [
+        {
+          "name": "whole-box",
+          "bounds": [
+            1.0,
+            3.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 7.508075879470124e-10,
+            "margin": -867.9152576845584,
+            "inertia_gap": 0.0007855229483223799,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 25
+          }
+        },
+        {
+          "name": "axis-0-value-1.0",
+          "bounds": [
+            1.0,
+            1.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.8126171779322484e-09,
+            "margin": -1837.219923842781,
+            "inertia_gap": 0.0008747492173236146,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-1.5",
+          "bounds": [
+            1.5,
+            1.5,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 9.800396264590297e-10,
+            "margin": -1031.6074351761044,
+            "inertia_gap": 0.0008334177311764712,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-2.0",
+          "bounds": [
+            2.0,
+            2.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 7.508075879470124e-10,
+            "margin": -746.2247666765836,
+            "inertia_gap": 0.0007855229483223799,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-2.5",
+          "bounds": [
+            2.5,
+            2.5,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.0035839014245288e-09,
+            "margin": -599.7426645045516,
+            "inertia_gap": 0.0007382446341189011,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-3.0",
+          "bounds": [
+            3.0,
+            3.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.1737175847595122e-09,
+            "margin": -511.3967546990789,
+            "inertia_gap": 0.0006941639992898768,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-1.0",
+          "bounds": [
+            1.0,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.3894318084126299e-09,
+            "margin": -287.84592856850924,
+            "inertia_gap": 0.0008514190988186867,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-1.5",
+          "bounds": [
+            1.0,
+            3.0,
+            1.5,
+            1.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.2222200733970273e-09,
+            "margin": -223.35651134372603,
+            "inertia_gap": 0.0008215127131997995,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-2.0",
+          "bounds": [
+            1.0,
+            3.0,
+            2.0,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 7.508075879470124e-10,
+            "margin": -205.7341798694387,
+            "inertia_gap": 0.0007855229483223799,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-2.5",
+          "bounds": [
+            1.0,
+            3.0,
+            2.5,
+            2.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 7.955605459089957e-10,
+            "margin": -199.21431259378573,
+            "inertia_gap": 0.0007488814465743984,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-3.0",
+          "bounds": [
+            1.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 7.219384036396139e-10,
+            "margin": -196.84925439541593,
+            "inertia_gap": 0.0007139146496955959,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        }
+      ]
+    },
+    {
+      "x_pu": 0.4,
+      "bounds": [
+        0.5,
+        2.0,
+        0.5,
+        2.0
+      ],
+      "regions": [
+        {
+          "name": "whole-box",
+          "bounds": [
+            0.5,
+            2.0,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.382241842799644e-10,
+            "margin": -500.3489362658381,
+            "inertia_gap": 0.0008413016444691864,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 3,
+            "stable": 22
+          }
+        },
+        {
+          "name": "axis-0-value-0.5",
+          "bounds": [
+            0.5,
+            0.5,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.9570981162243818e-09,
+            "margin": -5024.131767351774,
+            "inertia_gap": 0.0008296475311602629,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 35,
+            "stable": 66
+          }
+        },
+        {
+          "name": "axis-0-value-0.875",
+          "bounds": [
+            0.875,
+            0.875,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 8.926834540468742e-10,
+            "margin": -859.1427959373729,
+            "inertia_gap": 0.0008380528479121419,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 7,
+            "stable": 94
+          }
+        },
+        {
+          "name": "axis-0-value-1.25",
+          "bounds": [
+            1.25,
+            1.25,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.382241842799644e-10,
+            "margin": -470.1920454925372,
+            "inertia_gap": 0.0008413016444691864,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-1.625",
+          "bounds": [
+            1.625,
+            1.625,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.3074845483022554e-10,
+            "margin": -332.66147534238166,
+            "inertia_gap": 0.0008388550344971521,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-2.0",
+          "bounds": [
+            2.0,
+            2.0,
+            0.5,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 5.339259808141978e-10,
+            "margin": -263.1458939744202,
+            "inertia_gap": 0.0008309795691681353,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-0.5",
+          "bounds": [
+            0.5,
+            2.0,
+            0.5,
+            0.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 1.5607107986209134e-09,
+            "margin": -562.2209273343245,
+            "inertia_gap": 0.0008195638817790681,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 36,
+            "stable": 65
+          }
+        },
+        {
+          "name": "axis-1-value-0.875",
+          "bounds": [
+            0.5,
+            2.0,
+            0.875,
+            0.875
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 4.71416901067007e-10,
+            "margin": -136.1197364181848,
+            "inertia_gap": 0.0008321993745557171,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "unstable": 6,
+            "stable": 95
+          }
+        },
+        {
+          "name": "axis-1-value-1.25",
+          "bounds": [
+            0.5,
+            2.0,
+            1.25,
+            1.25
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.382241842799644e-10,
+            "margin": -97.9587816749332,
+            "inertia_gap": 0.0008413016444691864,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-1.625",
+          "bounds": [
+            0.5,
+            2.0,
+            1.625,
+            1.625
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 5.804585727380963e-10,
+            "margin": -85.37420350238283,
+            "inertia_gap": 0.0008465353687994083,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-2.0",
+          "bounds": [
+            0.5,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.162857781393473e-10,
+            "margin": -80.03985682622881,
+            "inertia_gap": 0.0008478704149947847,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        }
+      ]
+    },
+    {
+      "x_pu": 0.4,
+      "bounds": [
+        1.0,
+        3.0,
+        1.0,
+        3.0
+      ],
+      "regions": [
+        {
+          "name": "whole-box",
+          "bounds": [
+            1.0,
+            3.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 8.402507981614764e-10,
+            "margin": -250.84289964782602,
+            "inertia_gap": 0.0007992992669308118,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 25
+          }
+        },
+        {
+          "name": "axis-0-value-1.0",
+          "bounds": [
+            1.0,
+            1.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 4.192373761360493e-10,
+            "margin": -441.8049361544768,
+            "inertia_gap": 0.0008544330385087296,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-1.5",
+          "bounds": [
+            1.5,
+            1.5,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.8633903537453924e-10,
+            "margin": -278.8180490451476,
+            "inertia_gap": 0.0008355353387142045,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-2.0",
+          "bounds": [
+            2.0,
+            2.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 8.402507981614764e-10,
+            "margin": -211.75811371914318,
+            "inertia_gap": 0.0007992992669308118,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-2.5",
+          "bounds": [
+            2.5,
+            2.5,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 3.9284940637481877e-10,
+            "margin": -175.70387172734468,
+            "inertia_gap": 0.0007562077832440344,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-0-value-3.0",
+          "bounds": [
+            3.0,
+            3.0,
+            1.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 5.579644876677503e-10,
+            "margin": -153.5935784452773,
+            "inertia_gap": 0.0007124757481376345,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-1.0",
+          "bounds": [
+            1.0,
+            3.0,
+            1.0,
+            1.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 2.818596685278723e-10,
+            "margin": -70.35780659859464,
+            "inertia_gap": 0.0008341787351726048,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-1.5",
+          "bounds": [
+            1.0,
+            3.0,
+            1.5,
+            1.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 4.6465157312683025e-10,
+            "margin": -62.87449172665625,
+            "inertia_gap": 0.0008234910351928582,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-2.0",
+          "bounds": [
+            1.0,
+            3.0,
+            2.0,
+            2.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 8.402507981614764e-10,
+            "margin": -61.70898814159341,
+            "inertia_gap": 0.0007992992669308118,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-2.5",
+          "bounds": [
+            1.0,
+            3.0,
+            2.5,
+            2.5
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 5.147639318728721e-10,
+            "margin": -62.43590772714243,
+            "inertia_gap": 0.0007684935956845652,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        },
+        {
+          "name": "axis-1-value-3.0",
+          "bounds": [
+            1.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "condition": {
+            "label": "pending",
+            "residual": 6.44461582618914e-10,
+            "margin": -63.931616492053635,
+            "inertia_gap": 0.0007356643201884955,
+            "negative_inertia": null,
+            "method": "common-inertia-numerical-condition"
+          },
+          "sample_labels": {
+            "stable": 101
+          }
+        }
+      ]
+    }
+  ],
+  "checked_policy_rows": 1200,
+  "scope": "diagnostic samples do not establish continuous-family stability"
+}

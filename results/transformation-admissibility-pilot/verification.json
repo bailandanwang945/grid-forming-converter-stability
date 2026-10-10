@@ -1,0 +1,834 @@
+{
+  "inputSha256": "861246380db9a5b92481c9c496244c32925668c0e4a0760440754657ed10d4c1",
+  "verifierSha256": "a8f38892f2abe65b33d9594f09acbc59b486a9d79ddbd7a30abf449d0d1dd0ff",
+  "verifiedSourceHashes": {
+    "backend/core/fig8_kernel.py": "02af388b5b4b1cb9881dd86325c14b98eae06be7c2750bf53cc4bfb453878f24",
+    "external/cifelli-small-gain-phase/dec_conditions_inf_bus.m": "3ef778d85fee4980e90e347fc9477b6637578202dffb39b34023065b739c51ad"
+  },
+  "rowCount": 135,
+  "allChecksPassed": true,
+  "maximumRotationRelativeError": 4.224572153088391e-16,
+  "maximumProductionRelativeError": 3.0696370374123283e-16,
+  "productionComparedPointCount": 54,
+  "rows": [
+    {
+      "row": 0,
+      "coefficientRelativeError": 2.078931628470797e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.190356365998835e-16
+    },
+    {
+      "row": 1,
+      "coefficientRelativeError": 2.078931628470797e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.052426457341578e-16
+    },
+    {
+      "row": 2,
+      "coefficientRelativeError": 2.078931628470797e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 5.618214979116814e-16
+    },
+    {
+      "row": 3,
+      "coefficientRelativeError": 2.078931628470797e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 9.48669850193277e-16
+    },
+    {
+      "row": 4,
+      "coefficientRelativeError": 2.078931628470797e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 6.922376937127337e-16
+    },
+    {
+      "row": 5,
+      "coefficientRelativeError": 2.2245106182526917e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.777201979195776e-16
+    },
+    {
+      "row": 6,
+      "coefficientRelativeError": 2.2245106182526917e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.996642529451434e-16
+    },
+    {
+      "row": 7,
+      "coefficientRelativeError": 2.2087158022537651e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 3.228908798148604e-16
+    },
+    {
+      "row": 8,
+      "coefficientRelativeError": 3.6811930037562754e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.547429391604313e-16
+    },
+    {
+      "row": 9,
+      "coefficientRelativeError": 2.2087158022537651e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 7.507825871398615e-16
+    },
+    {
+      "row": 10,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.684306284429399e-16
+    },
+    {
+      "row": 11,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.000255564747255e-16
+    },
+    {
+      "row": 12,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 4.740164370667391e-16
+    },
+    {
+      "row": 13,
+      "coefficientRelativeError": 2.4541313620202824e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.187890190290568e-16
+    },
+    {
+      "row": 14,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 8.431495862961875e-16
+    },
+    {
+      "row": 15,
+      "coefficientRelativeError": 2.812336270491829e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 2.81224817812683e-16
+    },
+    {
+      "row": 16,
+      "coefficientRelativeError": 2.812336270491829e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.552029850335555e-16
+    },
+    {
+      "row": 17,
+      "coefficientRelativeError": 2.195084463801552e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 5.554415144939196e-16
+    },
+    {
+      "row": 18,
+      "coefficientRelativeError": 2.499854462659404e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 9.715127252343355e-16
+    },
+    {
+      "row": 19,
+      "coefficientRelativeError": 2.195084463801552e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 8.327713983627805e-16
+    },
+    {
+      "row": 20,
+      "coefficientRelativeError": 2.8466845677853314e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.004606501417235e-16
+    },
+    {
+      "row": 21,
+      "coefficientRelativeError": 2.8466845677853314e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.764283848544428e-16
+    },
+    {
+      "row": 22,
+      "coefficientRelativeError": 3.643756246765224e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 6.17186287833618e-16
+    },
+    {
+      "row": 23,
+      "coefficientRelativeError": 2.53038628247585e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 6.77674258664599e-16
+    },
+    {
+      "row": 24,
+      "coefficientRelativeError": 3.643756246765224e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.174594786885727e-16
+    },
+    {
+      "row": 25,
+      "coefficientRelativeError": 1.7740216562950803e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.5603096756939083e-16
+    },
+    {
+      "row": 26,
+      "coefficientRelativeError": 1.7740216562950803e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.832773499278093e-16
+    },
+    {
+      "row": 27,
+      "coefficientRelativeError": 1.7740216562950803e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 2.6218093698700053e-16
+    },
+    {
+      "row": 28,
+      "coefficientRelativeError": 1.9632784573323539e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 1.8380650194399936e-16
+    },
+    {
+      "row": 29,
+      "coefficientRelativeError": 1.7740216562950803e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.866321418259611e-16
+    },
+    {
+      "row": 30,
+      "coefficientRelativeError": 3.5560914654610666e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 8.437134867110506e-16
+    },
+    {
+      "row": 31,
+      "coefficientRelativeError": 3.5560914654610666e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.947811189395974e-16
+    },
+    {
+      "row": 32,
+      "coefficientRelativeError": 2.275898537895083e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 6.945697563222162e-16
+    },
+    {
+      "row": 33,
+      "coefficientRelativeError": 4.741455287281425e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.547860856734724e-16
+    },
+    {
+      "row": 34,
+      "coefficientRelativeError": 2.275898537895083e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.553266612404851e-16
+    },
+    {
+      "row": 35,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.56965731569411e-16
+    },
+    {
+      "row": 36,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 2.784398896507051e-16
+    },
+    {
+      "row": 37,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 4.1683670310522867e-16
+    },
+    {
+      "row": 38,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 8.329652775851082e-16
+    },
+    {
+      "row": 39,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 6.939721159283369e-16
+    },
+    {
+      "row": 40,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.315383558169506e-16
+    },
+    {
+      "row": 41,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.1427299061628617e-16
+    },
+    {
+      "row": 42,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 5.518529089747765e-16
+    },
+    {
+      "row": 43,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.761702810368811e-16
+    },
+    {
+      "row": 44,
+      "coefficientRelativeError": 2.322188917802427e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.169556153061706e-16
+    },
+    {
+      "row": 45,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.7711255442752e-16
+    },
+    {
+      "row": 46,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.664545813986769e-16
+    },
+    {
+      "row": 47,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 4.517641272204793e-16
+    },
+    {
+      "row": 48,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.449091551925859e-16
+    },
+    {
+      "row": 49,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.23302397763518e-16
+    },
+    {
+      "row": 50,
+      "coefficientRelativeError": 1.7345500209747098e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.580370022169211e-16
+    },
+    {
+      "row": 51,
+      "coefficientRelativeError": 1.7345500209747098e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.552797465108318e-16
+    },
+    {
+      "row": 52,
+      "coefficientRelativeError": 2.2087185287941092e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 5.631702971853448e-16
+    },
+    {
+      "row": 53,
+      "coefficientRelativeError": 1.840598773995091e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.587480264982429e-16
+    },
+    {
+      "row": 54,
+      "coefficientRelativeError": 2.2087185287941092e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.644414960718465e-16
+    },
+    {
+      "row": 55,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.3406857895215797e-16
+    },
+    {
+      "row": 56,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.338909652507529e-16
+    },
+    {
+      "row": 57,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 5.554232864148509e-16
+    },
+    {
+      "row": 58,
+      "coefficientRelativeError": 1.2270658493300609e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.6111831556128735e-16
+    },
+    {
+      "row": 59,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.89983723901608e-16
+    },
+    {
+      "row": 60,
+      "coefficientRelativeError": 2.71050543121376e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.556376595892281e-16
+    },
+    {
+      "row": 61,
+      "coefficientRelativeError": 2.71050543121376e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.3484486744854876e-16
+    },
+    {
+      "row": 62,
+      "coefficientRelativeError": 2.71050543121376e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 7.800614812989098e-16
+    },
+    {
+      "row": 63,
+      "coefficientRelativeError": 2.71050543121376e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.454379217007772e-16
+    },
+    {
+      "row": 64,
+      "coefficientRelativeError": 2.71050543121376e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.448815540890791e-16
+    },
+    {
+      "row": 65,
+      "coefficientRelativeError": 1.3062312662638641e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.3760839477283175e-16
+    },
+    {
+      "row": 66,
+      "coefficientRelativeError": 1.3062312662638641e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.3365620607776373e-16
+    },
+    {
+      "row": 67,
+      "coefficientRelativeError": 1.3062312662638641e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 3.5619010427722114e-16
+    },
+    {
+      "row": 68,
+      "coefficientRelativeError": 1.4724790191960723e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.334574180931295e-16
+    },
+    {
+      "row": 69,
+      "coefficientRelativeError": 1.3062312662638641e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 2.225514077773895e-16
+    },
+    {
+      "row": 70,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 2.5915016213862533e-16
+    },
+    {
+      "row": 71,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 1.2871034601344644e-16
+    },
+    {
+      "row": 72,
+      "coefficientRelativeError": 2.3559664307137164e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 4.821407744062639e-16
+    },
+    {
+      "row": 73,
+      "coefficientRelativeError": 1.963305358928097e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 6.726926770411931e-16
+    },
+    {
+      "row": 74,
+      "coefficientRelativeError": 2.3559664307137164e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.446861495665673e-16
+    },
+    {
+      "row": 75,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.646712979697448e-16
+    },
+    {
+      "row": 76,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.651992762610806e-16
+    },
+    {
+      "row": 77,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 4.4394191207952123e-16
+    },
+    {
+      "row": 78,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.586810390035986e-16
+    },
+    {
+      "row": 79,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.437774411872931e-16
+    },
+    {
+      "row": 80,
+      "coefficientRelativeError": 1.7347234759768068e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.426791612602662e-16
+    },
+    {
+      "row": 81,
+      "coefficientRelativeError": 1.7347234759768068e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.693562856188795e-16
+    },
+    {
+      "row": 82,
+      "coefficientRelativeError": 1.7347234759768068e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 6.685824882909318e-16
+    },
+    {
+      "row": 83,
+      "coefficientRelativeError": 1.7347234759768068e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.446562577638527e-16
+    },
+    {
+      "row": 84,
+      "coefficientRelativeError": 1.7347234759768068e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.440077647412585e-16
+    },
+    {
+      "row": 85,
+      "coefficientRelativeError": 1.3877787807814457e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.757643390754002e-16
+    },
+    {
+      "row": 86,
+      "coefficientRelativeError": 1.3877787807814457e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.449990568708027e-16
+    },
+    {
+      "row": 87,
+      "coefficientRelativeError": 1.8847731445709725e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 3.3692060538581323e-16
+    },
+    {
+      "row": 88,
+      "coefficientRelativeError": 1.3877787807814457e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.462781742252961e-16
+    },
+    {
+      "row": 89,
+      "coefficientRelativeError": 1.8847731445709725e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.3333398909862584e-16
+    },
+    {
+      "row": 90,
+      "coefficientRelativeError": 3.4508403084168633e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.512846455226213e-16
+    },
+    {
+      "row": 91,
+      "coefficientRelativeError": 3.4508403084168633e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.885188634331378e-16
+    },
+    {
+      "row": 92,
+      "coefficientRelativeError": 2.8351989604975603e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 7.838197049497411e-16
+    },
+    {
+      "row": 93,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 1.905499565968714e-16
+    },
+    {
+      "row": 94,
+      "coefficientRelativeError": 2.8351989604975603e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.713068188691063e-16
+    },
+    {
+      "row": 95,
+      "coefficientRelativeError": 2.7608958794867696e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.4048874931630433e-16
+    },
+    {
+      "row": 96,
+      "coefficientRelativeError": 2.7608958794867696e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.5826061507631555e-16
+    },
+    {
+      "row": 97,
+      "coefficientRelativeError": 2.8356583189246504e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 6.888934078796137e-16
+    },
+    {
+      "row": 98,
+      "coefficientRelativeError": 1.9692071659198961e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.978312232408517e-16
+    },
+    {
+      "row": 99,
+      "coefficientRelativeError": 2.8356583189246504e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 8.348205864564398e-16
+    },
+    {
+      "row": 100,
+      "coefficientRelativeError": 2.2175270703688511e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.193844560000168e-16
+    },
+    {
+      "row": 101,
+      "coefficientRelativeError": 2.2175270703688511e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 6.155660541488378e-16
+    },
+    {
+      "row": 102,
+      "coefficientRelativeError": 2.944957767967416e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 6.01898648905309e-16
+    },
+    {
+      "row": 103,
+      "coefficientRelativeError": 2.2175270703688511e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 1.8534885124245423e-16
+    },
+    {
+      "row": 104,
+      "coefficientRelativeError": 2.944957767967416e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.136719208828701e-16
+    },
+    {
+      "row": 105,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.1768591188180855e-16
+    },
+    {
+      "row": 106,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 7.41501331123689e-16
+    },
+    {
+      "row": 107,
+      "coefficientRelativeError": 2.1995915927247121e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 7.41266869587957e-16
+    },
+    {
+      "row": 108,
+      "coefficientRelativeError": 2.0409863535372878e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 1.8638927490202255e-16
+    },
+    {
+      "row": 109,
+      "coefficientRelativeError": 2.1995915927247121e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 9.24885804486403e-16
+    },
+    {
+      "row": 110,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.64212911015815e-16
+    },
+    {
+      "row": 111,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.628946148482231e-16
+    },
+    {
+      "row": 112,
+      "coefficientRelativeError": 1.7668302379094355e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 2.1402342502158102e-16
+    },
+    {
+      "row": 113,
+      "coefficientRelativeError": 0.0,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 4.219204088517007e-16
+    },
+    {
+      "row": 114,
+      "coefficientRelativeError": 1.7668302379094355e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.572321151777025e-16
+    },
+    {
+      "row": 115,
+      "coefficientRelativeError": 1.774021656295081e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.719789014991256e-16
+    },
+    {
+      "row": 116,
+      "coefficientRelativeError": 1.774021656295081e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.8247094726541146e-16
+    },
+    {
+      "row": 117,
+      "coefficientRelativeError": 1.774021656295081e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 4.2099511829541326e-16
+    },
+    {
+      "row": 118,
+      "coefficientRelativeError": 3.926574700843712e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 6.277199716771802e-16
+    },
+    {
+      "row": 119,
+      "coefficientRelativeError": 1.774021656295081e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.9808506868944973e-16
+    },
+    {
+      "row": 120,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 4.028738660526612e-16
+    },
+    {
+      "row": 121,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 5.540381194496547e-16
+    },
+    {
+      "row": 122,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 5.561047334949709e-16
+    },
+    {
+      "row": 123,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.69459226560152e-16
+    },
+    {
+      "row": 124,
+      "coefficientRelativeError": 2.0409863535372888e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.6977076801092297e-16
+    },
+    {
+      "row": 125,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 7.548646539074706e-16
+    },
+    {
+      "row": 126,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.7388584389186525e-16
+    },
+    {
+      "row": 127,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 3.7290109489397493e-16
+    },
+    {
+      "row": 128,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 5.585848178042466e-16
+    },
+    {
+      "row": 129,
+      "coefficientRelativeError": 3.469446951953614e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.7149534879949665e-16
+    },
+    {
+      "row": 130,
+      "coefficientRelativeError": 1.161094458901213e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.7956298728670853e-16
+    },
+    {
+      "row": 131,
+      "coefficientRelativeError": 1.161094458901213e-16,
+      "scaledRootStatus": "strict-lhp-zeros",
+      "maxDeterminantRelativeError": 3.7529656523749016e-16
+    },
+    {
+      "row": 132,
+      "coefficientRelativeError": 1.161094458901213e-16,
+      "scaledRootStatus": "critical",
+      "maxDeterminantRelativeError": 3.735893287745838e-16
+    },
+    {
+      "row": 133,
+      "coefficientRelativeError": 1.6105118697279997e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 7.468711767696237e-16
+    },
+    {
+      "row": 134,
+      "coefficientRelativeError": 1.161094458901213e-16,
+      "scaledRootStatus": "rhp-zero",
+      "maxDeterminantRelativeError": 3.721205866474477e-16
+    }
+  ],
+  "failures": [],
+  "reviewLimits": [
+    "Checks zeros of specified F, not physical closed-loop poles.",
+    "F itself is improper; properness of actual theorem ports must be checked separately.",
+    "F inverse Hurwitz does not establish Jnet inverse Hurwitz or sectoriality.",
+    "Global rotation invariance assumes isotropic W=aI+bJ and consistent E,FJ definitions.",
+    "Author legacy normalized-magnitude FJ differs from absolute-magnitude corrected FJ when V!=1.",
+    "No exhaustive novelty claim or continuous-frequency gain/phase certificate."
+  ]
+}

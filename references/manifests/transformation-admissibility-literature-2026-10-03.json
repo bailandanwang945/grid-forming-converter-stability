@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-03",
+  "integrityScope": "Locally computed identity hashes; no trusted upstream checksum comparison.",
+  "redistribution": "Local research archive only; not added to release packages or automatically pushed.",
+  "papers": [
+    {
+      "authors": ["Kaustav Dey", "A. M. Kulkarni"],
+      "title": "Passivity of Electrical Transmission Networks modelled using Rectangular and Polar D-Q variables",
+      "version": "arXiv:2111.15377v1",
+      "url": "https://arxiv.org/pdf/2111.15377v1",
+      "path": "references/papers/Dey-Kulkarni-2021-transmission-network-rectangular-polar-passivity-arxiv-2111.15377v1.pdf",
+      "bytes": 537699,
+      "pages": 5,
+      "sha256": "4a0219d5c5412d1b0e23f3c62e2dfb65fa5857421cbe77f2bba6cb2e98e2cf25",
+      "status": "complete-pdf-parsed",
+      "readScope": "Opening identity and physical pages 2-4; rendered and inspected page 2. Not a full-paper reader.",
+      "use": "Existing requirements on passivity, properness and changes of port coordinates. Not evidence of a new cutoff rule."
+    },
+    {
+      "authors": ["M A Awal", "Rahul Chakraborty", "David Michaud", "Mikko Qvintus", "Devin Dilley"],
+      "title": "Quantifying Implicit Overload Mandates in Phase Jump Requirements for Grid Forming Inverters",
+      "version": "arXiv:2607.07904v1",
+      "url": "https://arxiv.org/pdf/2607.07904v1",
+      "path": "references/papers/Awal-et-al-2026-phase-jump-overload-arxiv-2607.07904v1.pdf",
+      "bytes": 4171616,
+      "pages": 10,
+      "sha256": "a3639891dce05a209ec98d39c34c77875abab552de32e66cd39e7f638da3a69f",
+      "status": "complete-pdf-parsed",
+      "readScope": "Primary HTML sections I-VI and PDF physical pages 5-7; rendered and inspected page 5; later PDF extraction output truncated and relevant HTML used to verify equations 15-18.",
+      "use": "Nearest work for a secondary candidate separating voltage-cost optimality from power-performance feasibility. No reproduced numerical counterexample or novelty claim."
+    }
+  ],
+  "onlineSources": [
+    {"id": "2510.20544v2", "scope": "Current arXiv metadata plus local source section IV and conclusion; original code dynamic weighting."},
+    {"id": "2608.03641v1", "scope": "Primary HTML section III, theorem III.1 and IV.1; bound selection is not cutoff selection."},
+    {"id": "2609.00065v2", "scope": "Current primary metadata for scientific-brainstorming method attribution; no stability evidence."}
+  ],
+  "searchLimits": "Targeted primary-literature checks, not a systematic or exhaustive novelty review. Chen 2025 weighted passivity related work remains only partially read."
+}
