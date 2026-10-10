@@ -2,6 +2,9 @@
 docs/project/*.pdf
 references/papers/*.pdf
 
+# Private administrative records (invoices, reimbursement materials, etc.)
+private/
+
 # Third-party repositories and toolboxes
 external/
 

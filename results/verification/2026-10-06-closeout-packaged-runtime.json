@@ -1,0 +1,141 @@
+{
+  "schema_version": "gfm-runtime-acceptance/1.7",
+  "generated_at_utc": "2026-10-06T10:05:42.274906+00:00",
+  "build_label": "0.5.0-closeout-dev-20261006 (015c0a1dc38e83436ed223bf030e1f25d4fe1ac1)",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "port": 18080,
+  "status": "passed",
+  "checks": {
+    "health": "passed",
+    "frontend": {
+      "index": "passed",
+      "local_asset_count": 2
+    },
+    "fig8": {
+      "scenario_id": "fig8_D_0p05",
+      "closed_loop_reference": "unstable",
+      "uncovered_points": 75,
+      "frequency_points": 1000
+    },
+    "fig8_sensitivity": {
+      "baseline_reconstruction_exact": true,
+      "common_scale_invariant_on_tested_range": true,
+      "stable_case_remains_covered_in_all_tested_settings": true,
+      "nine_point_detects_uncovered_region": false,
+      "nine_point_unobserved_full_grid_uncovered_points": 75,
+      "report": "passed"
+    },
+    "same_domain": {
+      "point_count": 176,
+      "classification_counts": {
+        "criterionCoveredStable": 45,
+        "stableNotCovered": 96,
+        "unstableNotCovered": 35,
+        "numericalPending": 0,
+        "consistencyViolation": 0
+      }
+    },
+    "reduced_order": {
+      "preset_id": "reduced-smib-stable",
+      "stability": "stable",
+      "pole_count": 3,
+      "report": "passed"
+    },
+    "average_dq": {
+      "preset_id": "average-dq-smib-verification",
+      "stability": "stable",
+      "pole_count": 16,
+      "closed_rhs_residual_inf": 5.950795411990839e-14,
+      "active_power_balance_residual_pu": 7.762887554996212e-17,
+      "port_interconnection_max_abs_error": 5.744254849560093e-09,
+      "reduction_frequency_relative_error": 0.008443757625547112,
+      "reduction_decay_relative_error": 0.024125868050400994,
+      "hierarchy_scan_point_count": 42,
+      "hierarchy_scan_agreement_count": 39,
+      "hierarchy_scan_disagreement_count": 3,
+      "report": "passed"
+    },
+    "average_dq_port_identification": {
+      "preset_id": "average-dq-smib-verification",
+      "frequencies_hz": [
+        0.2,
+        2.0,
+        20.0
+      ],
+      "source_amplitude_pu": 0.0001,
+      "point_count": 3,
+      "passed": true,
+      "maximum_magnitude_relative_error": 0.00017095904827370915,
+      "maximum_phase_error_deg": 0.02308945430690992,
+      "maximum_harmonic_residual_ratio": 0.0007595352066524712,
+      "maximum_voltage_matrix_condition_number": 3.068815698659923,
+      "amplitude_halving_maximum_element_relative_difference": 0.00029412629053288304,
+      "physical_validation": false,
+      "emt_validation": false,
+      "report": "passed"
+    },
+    "mathworks_team_comparison": {
+      "run_id": "mathworks-team-aligned-eight-point-comparison-v1",
+      "point_count": 8,
+      "classification_agreement_count": 7,
+      "classification_disagreement_count": 1,
+      "disagreement_points": [
+        {
+          "scr": 5.0,
+          "damping_mathworks_pu_per_hz": 1.056,
+          "external_vendor_outcome": "Unstable",
+          "team_pre_step_stability": "stable",
+          "team_post_step_stability": "stable"
+        }
+      ],
+      "external_vendor_classification_bracket_pu_per_hz": [
+        1.30675,
+        1.3215
+      ],
+      "team_local_eigenvalue_boundaries_pu_per_hz": [
+        0.7586000104691523,
+        0.7560116929636128
+      ],
+      "quantitative_transition_reproduced": false,
+      "same_full_physical_model": false,
+      "same_classifier": false,
+      "nonlinear_team_step_completed": true,
+      "nonlinear_team_step_study_id": "average-dq-aligned-three-point-nonlinear-step-v1",
+      "paper_sufficient_condition_evaluated": false,
+      "physical_hardware_validation": false
+    },
+    "average_dq_aligned_nonlinear_step": {
+      "study_id": "average-dq-aligned-three-point-nonlinear-step-v1",
+      "point_count": 3,
+      "solver_agreement_count": 3,
+      "outcomes_by_damping": {
+        "0.6": "departed_declared_diagnostic_range",
+        "1.056": "converged_within_horizon",
+        "2.0": "converged_within_horizon"
+      },
+      "disagreement_coordinate_outcome": "converged_within_horizon",
+      "low_damping_exit_event": "grid_current_limit",
+      "same_full_model_as_mathworks": false,
+      "diagnostic_exit_is_physical_instability": false,
+      "emt_validation": false,
+      "hardware_validation": false
+    },
+    "sienna_test08_layered_audit": {
+      "audit_schema_version": "gfm-sienna-test08-source-transcription-audit/2.3",
+      "source_state_count": 19,
+      "source_transcription_verified": true,
+      "julia_runtime_executed": false,
+      "cross_model_comparison_status": "not-ready",
+      "blocking_condition_count": 5,
+      "static_network_reactance_pu_device_base": 0.0020625,
+      "static_network_mapping_passed": true,
+      "loaded_common_state_count": 13,
+      "loaded_common_matrix_difference_per_s": 7.585340426885523e-07,
+      "loaded_common_operating_points_aligned": true,
+      "original_full_model_eigenvalues_comparable": false,
+      "modulation_delay_audit_passed": true,
+      "external_line_dynamics_audit_passed": true,
+      "team_model_validated": false
+    }
+  }
+}

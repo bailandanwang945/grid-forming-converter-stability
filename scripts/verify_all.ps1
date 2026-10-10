@@ -167,6 +167,16 @@ Invoke-Stage "Frontend production build" {
     Assert-NativeSuccess $Npm.Source @("run", "build") $FrontendRoot
 }
 
+Invoke-Stage "Engineering main-connection structural checks" {
+    $Python = Get-Command python -ErrorAction SilentlyContinue
+    if ($null -eq $Python) { throw "Python was not found." }
+    Assert-NativeSuccess $Python.Source @(
+        "-m", "unittest", "discover",
+        "-s", "experiments/engineering-main-connection",
+        "-p", "test_*.py", "-v"
+    ) $ProjectRoot
+}
+
 Invoke-Stage "Case files and workbench input-result ownership" {
     $Node = Get-Command node.exe -ErrorAction SilentlyContinue
     if ($null -eq $Node) { throw "Node.js was not found." }
@@ -175,7 +185,21 @@ Invoke-Stage "Case files and workbench input-result ownership" {
         "test_average_dq_comparison.mjs",
         "test_average_dq_request_consistency.mjs",
         "test_average_dq_case_workflow.mjs",
-        "test_reduced_order_request_consistency.mjs"
+        "test_reduced_order_request_consistency.mjs",
+        "test_network_topology_checks.mjs",
+        "test_network_editor_operations.mjs",
+        "test_network_palette_operations.mjs",
+        "test_network_editor_shortcuts.mjs",
+        "test_network_diagram_positions.mjs",
+        "test_network_ideal_connections.mjs",
+        "test_network_ideal_connections_backend.mjs",
+        "test_network_connection_report.mjs",
+        "test_network_editor_drag_targets.mjs",
+        "test_network_editor_usability.mjs",
+        "test_network_palette_ui.mjs",
+        "test_network_source_move_regression.mjs",
+        "test_network_ideal_wire_ui.mjs",
+        "test_network_topology_applicability_ui.mjs"
     )) {
         Assert-NativeSuccess $Node.Source @((Join-Path $PSScriptRoot $ScriptName)) $ProjectRoot
     }

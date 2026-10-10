@@ -1,0 +1,46 @@
+{
+  "threadId": "019f5bea-d45f-7b93-9922-24956372c1b5",
+  "exportedAt": "2026-10-10T16:08:57.440Z",
+  "snapshotBytes": 241273560,
+  "records": 40709,
+  "recordTypes": {
+    "session_meta": 1,
+    "event_msg": 15790,
+    "response_item": 22734,
+    "world_state": 210,
+    "turn_context": 292,
+    "compacted": 66,
+    "inter_agent_communication_metadata": 532,
+    "token_usage_record": 1084
+  },
+  "visibleMessages": 1613,
+  "roles": {
+    "user": 271,
+    "assistant": 1342
+  },
+  "channels": {
+    "unspecified": 271,
+    "commentary": 1148,
+    "final_answer": 194
+  },
+  "omittedMessageRecords": 183,
+  "compactionRecords": 66,
+  "partialSnapshotRecords": 0,
+  "attachmentNotices": 1,
+  "redactions": {
+    "user_directory": 18,
+    "wechat_identifier": 7
+  },
+  "firstMessageAt": "2026-07-13T14:39:27.639Z",
+  "lastMessageAt": "2026-10-10T16:04:41.463Z",
+  "outputBytes": 1233509,
+  "outputSha256": "7beee29cbcd84d33f2ccc47f27907a49bcafac9b9b70dc39dd5f9bd43097c29d",
+  "identityVerified": true,
+  "scope": "Single-thread visible user and assistant text; not raw logs or hidden reasoning",
+  "limitations": [
+    "Non-text attachments are not copied",
+    "Compaction summaries are excluded",
+    "Source omissions or truncations cannot be reconstructed",
+    "Messages after the fixed snapshot are not included"
+  ]
+}
