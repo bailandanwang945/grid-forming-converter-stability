@@ -89,6 +89,7 @@ from backend.core.reporting import (
 )
 from backend.domain.network_models import NetworkTopology
 from backend.domain.average_dq_models import AverageDQGFMParameters
+from backend.api.sampled_command import router as sampled_command_router
 
 
 app = FastAPI(title="构网型变流器稳定性分析平台", version="0.5.0-dev")
@@ -98,6 +99,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(sampled_command_router)
 
 
 Fig8CaseId = Literal["fig8_D_0p05", "fig8_D_0p5"]
