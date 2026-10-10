@@ -1,0 +1,1229 @@
+{
+  "schema": "EngineeringSwitchConnectivityResult/0.1",
+  "analysis_kind": "connectivity-only",
+  "case_id": "r7-g1-t1-bus-sections-l1-draft",
+  "source_draft": {
+    "path": "E:/git_Projects/grid-forming-converter-stability/examples/engineering-main-connection/r7-subnetwork-draft.json",
+    "sha256": "99f436e23daecbfc5b13dd9786a9ca5fb3e5e9fee5518780db9fdeaea01cd9dc",
+    "original_run_sha256": "865af492a287dde00e301cce2194ac3af868f2ff9f1466f3a7afd3c05f40a9ca",
+    "privacy_cleanup_note": "原 PDF 的个人目录位置已改为文件名和本地来源说明；sha256 对应清理后的草稿，original_run_sha256 保留原核查时的草稿指纹。连接核查结果未重新计算，数值、工况及参数缺失边界未改写。",
+    "original_pdf_sources": [
+      {
+        "source_id": "r7-p1",
+        "path": "D-09R7_最终电气主接线图_A2_手绘定位辅助版.pdf",
+        "location_note": "用户提供的本地课程图纸；原始 PDF 保留在本地，不随项目提交，公开记录不包含个人目录位置。",
+        "page": 1,
+        "sha256": "97e7ec4340cde3ae512cf70ff984318fa7ad47989d0404366bff434c109489a4",
+        "verification": "页面整体目视检查，并以高分辨率局部渲染复核 G1/T1/L1 及分段开关标识；SHA-256 仅记录来源身份，没有外部可信预期值比较"
+      }
+    ]
+  },
+  "actual_state_check": {
+    "status": "rejected",
+    "reason": "QS-220-T1A.current_closed: explicit true/false required, got None"
+  },
+  "scenarios": {
+    "all_switches_closed": {
+      "analysis_kind": "connectivity-only",
+      "state_origin": "teaching-scenario",
+      "state_source": {
+        "origin": "explicit-teaching-assumption",
+        "label": "全部开关闭合",
+        "assumption": "所有 G1/T1/L1 本体投运；除本工况指定开关外，其余八或九个开关均人为设为闭合。",
+        "not_from_actual_drawing_state": true
+      },
+      "switch_current_closed": {
+        "QS-220-T1A": true,
+        "QF-220-T1": true,
+        "QS-220-T1B": true,
+        "QS-S1": true,
+        "QF-S": true,
+        "QS-S2": true,
+        "QS-L1A": true,
+        "QF-L1": true,
+        "QS-L1B": true
+      },
+      "device_in_service": {
+        "G1": true,
+        "T1": true,
+        "L1": true
+      },
+      "engineering_node_to_calculation_node": {
+        "n-10p5-I": "eq-001",
+        "n-220-I": "eq-002",
+        "n-220-II": "eq-002",
+        "n-L1-QF-QSB": "eq-002",
+        "n-L1-QSA-QF": "eq-002",
+        "n-L1-local": "eq-002",
+        "n-S-QF-QS2": "eq-002",
+        "n-S-QS1-QF": "eq-002",
+        "n-T1-QF-QSB": "eq-002",
+        "n-T1-QSA-QF": "eq-002",
+        "n-T1-hv": "eq-002",
+        "n-L1-external": "eq-003"
+      },
+      "equipotential_groups": [
+        {
+          "calculation_node_id": "eq-001",
+          "engineering_node_ids": [
+            "n-10p5-I"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-002",
+          "engineering_node_ids": [
+            "n-220-I",
+            "n-220-II",
+            "n-L1-QF-QSB",
+            "n-L1-QSA-QF",
+            "n-L1-local",
+            "n-S-QF-QS2",
+            "n-S-QS1-QF",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-003",
+          "engineering_node_ids": [
+            "n-L1-external"
+          ]
+        }
+      ],
+      "device_terminal_mapping": [
+        {
+          "component_id": "G1",
+          "kind": "synchronous_generator",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-001"
+          ]
+        },
+        {
+          "component_id": "L1",
+          "kind": "system_tie_line",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-external"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "QF-220-T1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QSA-QF",
+            "n-T1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-L1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QSA-QF",
+            "n-L1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-S",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QS1-QF",
+            "n-S-QF-QS2"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-hv",
+            "n-T1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S1",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-220-I",
+            "n-S-QS1-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S2",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QF-QS2",
+            "n-220-II"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "T1",
+          "kind": "two_winding_transformer",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I",
+            "n-T1-hv"
+          ],
+          "terminal_roles": [
+            "lv",
+            "hv"
+          ],
+          "calculation_terminal_nodes": [
+            "eq-001",
+            "eq-002"
+          ]
+        }
+      ],
+      "non_switch_device_edges": [
+        {
+          "component_id": "L1",
+          "from": "eq-002",
+          "to": "eq-003"
+        },
+        {
+          "component_id": "T1",
+          "from": "eq-001",
+          "to": "eq-002"
+        }
+      ],
+      "topological_regions": [
+        {
+          "region_id": "region-001",
+          "calculation_node_ids": [
+            "eq-001",
+            "eq-002",
+            "eq-003"
+          ],
+          "engineering_node_ids": [
+            "n-10p5-I",
+            "n-220-I",
+            "n-220-II",
+            "n-L1-QF-QSB",
+            "n-L1-QSA-QF",
+            "n-L1-external",
+            "n-L1-local",
+            "n-S-QF-QS2",
+            "n-S-QS1-QF",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        }
+      ],
+      "summary": {
+        "equipotential_node_count": 3,
+        "topological_region_count": 1,
+        "bus_sections_same_equipotential_node": true,
+        "transformer_hv_lv_same_equipotential_node": false
+      },
+      "limitations": [
+        "只检查结构连接，不求解潮流、故障电流或稳定性。",
+        "连接区域不等于带电区域，也不表示具备可靠供电能力。",
+        "等电位节点仅按闭合理想开关形成，不合并变压器和线路本体。",
+        "教学开关工况不是图纸实际运行状态，未写回来源草稿。",
+        "本草稿省略多个电源和负荷支路，不能代表全厂运行接线。"
+      ]
+    },
+    "section_breaker_open": {
+      "analysis_kind": "connectivity-only",
+      "state_origin": "teaching-scenario",
+      "state_source": {
+        "origin": "explicit-teaching-assumption",
+        "label": "分段断路器 QF-S 断开",
+        "assumption": "所有 G1/T1/L1 本体投运；除本工况指定开关外，其余八或九个开关均人为设为闭合。",
+        "not_from_actual_drawing_state": true
+      },
+      "switch_current_closed": {
+        "QS-220-T1A": true,
+        "QF-220-T1": true,
+        "QS-220-T1B": true,
+        "QS-S1": true,
+        "QF-S": false,
+        "QS-S2": true,
+        "QS-L1A": true,
+        "QF-L1": true,
+        "QS-L1B": true
+      },
+      "device_in_service": {
+        "G1": true,
+        "T1": true,
+        "L1": true
+      },
+      "engineering_node_to_calculation_node": {
+        "n-10p5-I": "eq-001",
+        "n-220-I": "eq-002",
+        "n-L1-QF-QSB": "eq-002",
+        "n-L1-QSA-QF": "eq-002",
+        "n-L1-local": "eq-002",
+        "n-S-QS1-QF": "eq-002",
+        "n-T1-QF-QSB": "eq-002",
+        "n-T1-QSA-QF": "eq-002",
+        "n-T1-hv": "eq-002",
+        "n-220-II": "eq-003",
+        "n-S-QF-QS2": "eq-003",
+        "n-L1-external": "eq-004"
+      },
+      "equipotential_groups": [
+        {
+          "calculation_node_id": "eq-001",
+          "engineering_node_ids": [
+            "n-10p5-I"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-002",
+          "engineering_node_ids": [
+            "n-220-I",
+            "n-L1-QF-QSB",
+            "n-L1-QSA-QF",
+            "n-L1-local",
+            "n-S-QS1-QF",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-003",
+          "engineering_node_ids": [
+            "n-220-II",
+            "n-S-QF-QS2"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-004",
+          "engineering_node_ids": [
+            "n-L1-external"
+          ]
+        }
+      ],
+      "device_terminal_mapping": [
+        {
+          "component_id": "G1",
+          "kind": "synchronous_generator",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-001"
+          ]
+        },
+        {
+          "component_id": "L1",
+          "kind": "system_tie_line",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-external"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-004"
+          ]
+        },
+        {
+          "component_id": "QF-220-T1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QSA-QF",
+            "n-T1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-L1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QSA-QF",
+            "n-L1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-S",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": false,
+          "terminal_nodes": [
+            "n-S-QS1-QF",
+            "n-S-QF-QS2"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-hv",
+            "n-T1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S1",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-220-I",
+            "n-S-QS1-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S2",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QF-QS2",
+            "n-220-II"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-003",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "T1",
+          "kind": "two_winding_transformer",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I",
+            "n-T1-hv"
+          ],
+          "terminal_roles": [
+            "lv",
+            "hv"
+          ],
+          "calculation_terminal_nodes": [
+            "eq-001",
+            "eq-002"
+          ]
+        }
+      ],
+      "non_switch_device_edges": [
+        {
+          "component_id": "L1",
+          "from": "eq-002",
+          "to": "eq-004"
+        },
+        {
+          "component_id": "T1",
+          "from": "eq-001",
+          "to": "eq-002"
+        }
+      ],
+      "topological_regions": [
+        {
+          "region_id": "region-001",
+          "calculation_node_ids": [
+            "eq-001",
+            "eq-002",
+            "eq-004"
+          ],
+          "engineering_node_ids": [
+            "n-10p5-I",
+            "n-220-I",
+            "n-L1-QF-QSB",
+            "n-L1-QSA-QF",
+            "n-L1-external",
+            "n-L1-local",
+            "n-S-QS1-QF",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "region_id": "region-002",
+          "calculation_node_ids": [
+            "eq-003"
+          ],
+          "engineering_node_ids": [
+            "n-220-II",
+            "n-S-QF-QS2"
+          ]
+        }
+      ],
+      "summary": {
+        "equipotential_node_count": 4,
+        "topological_region_count": 2,
+        "bus_sections_same_equipotential_node": false,
+        "transformer_hv_lv_same_equipotential_node": false
+      },
+      "limitations": [
+        "只检查结构连接，不求解潮流、故障电流或稳定性。",
+        "连接区域不等于带电区域，也不表示具备可靠供电能力。",
+        "等电位节点仅按闭合理想开关形成，不合并变压器和线路本体。",
+        "教学开关工况不是图纸实际运行状态，未写回来源草稿。",
+        "本草稿省略多个电源和负荷支路，不能代表全厂运行接线。"
+      ]
+    },
+    "section_disconnector_open": {
+      "analysis_kind": "connectivity-only",
+      "state_origin": "teaching-scenario",
+      "state_source": {
+        "origin": "explicit-teaching-assumption",
+        "label": "分段隔离开关 QS-S1 断开",
+        "assumption": "所有 G1/T1/L1 本体投运；除本工况指定开关外，其余八或九个开关均人为设为闭合。",
+        "not_from_actual_drawing_state": true
+      },
+      "switch_current_closed": {
+        "QS-220-T1A": true,
+        "QF-220-T1": true,
+        "QS-220-T1B": true,
+        "QS-S1": false,
+        "QF-S": true,
+        "QS-S2": true,
+        "QS-L1A": true,
+        "QF-L1": true,
+        "QS-L1B": true
+      },
+      "device_in_service": {
+        "G1": true,
+        "T1": true,
+        "L1": true
+      },
+      "engineering_node_to_calculation_node": {
+        "n-10p5-I": "eq-001",
+        "n-220-I": "eq-002",
+        "n-L1-QF-QSB": "eq-002",
+        "n-L1-QSA-QF": "eq-002",
+        "n-L1-local": "eq-002",
+        "n-T1-QF-QSB": "eq-002",
+        "n-T1-QSA-QF": "eq-002",
+        "n-T1-hv": "eq-002",
+        "n-220-II": "eq-003",
+        "n-S-QF-QS2": "eq-003",
+        "n-S-QS1-QF": "eq-003",
+        "n-L1-external": "eq-004"
+      },
+      "equipotential_groups": [
+        {
+          "calculation_node_id": "eq-001",
+          "engineering_node_ids": [
+            "n-10p5-I"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-002",
+          "engineering_node_ids": [
+            "n-220-I",
+            "n-L1-QF-QSB",
+            "n-L1-QSA-QF",
+            "n-L1-local",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-003",
+          "engineering_node_ids": [
+            "n-220-II",
+            "n-S-QF-QS2",
+            "n-S-QS1-QF"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-004",
+          "engineering_node_ids": [
+            "n-L1-external"
+          ]
+        }
+      ],
+      "device_terminal_mapping": [
+        {
+          "component_id": "G1",
+          "kind": "synchronous_generator",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-001"
+          ]
+        },
+        {
+          "component_id": "L1",
+          "kind": "system_tie_line",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-external"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-004"
+          ]
+        },
+        {
+          "component_id": "QF-220-T1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QSA-QF",
+            "n-T1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-L1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QSA-QF",
+            "n-L1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-S",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QS1-QF",
+            "n-S-QF-QS2"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-003",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-hv",
+            "n-T1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S1",
+          "kind": "disconnector",
+          "active_for_connectivity": false,
+          "terminal_nodes": [
+            "n-220-I",
+            "n-S-QS1-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "QS-S2",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QF-QS2",
+            "n-220-II"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-003",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "T1",
+          "kind": "two_winding_transformer",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I",
+            "n-T1-hv"
+          ],
+          "terminal_roles": [
+            "lv",
+            "hv"
+          ],
+          "calculation_terminal_nodes": [
+            "eq-001",
+            "eq-002"
+          ]
+        }
+      ],
+      "non_switch_device_edges": [
+        {
+          "component_id": "L1",
+          "from": "eq-002",
+          "to": "eq-004"
+        },
+        {
+          "component_id": "T1",
+          "from": "eq-001",
+          "to": "eq-002"
+        }
+      ],
+      "topological_regions": [
+        {
+          "region_id": "region-001",
+          "calculation_node_ids": [
+            "eq-001",
+            "eq-002",
+            "eq-004"
+          ],
+          "engineering_node_ids": [
+            "n-10p5-I",
+            "n-220-I",
+            "n-L1-QF-QSB",
+            "n-L1-QSA-QF",
+            "n-L1-external",
+            "n-L1-local",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "region_id": "region-002",
+          "calculation_node_ids": [
+            "eq-003"
+          ],
+          "engineering_node_ids": [
+            "n-220-II",
+            "n-S-QF-QS2",
+            "n-S-QS1-QF"
+          ]
+        }
+      ],
+      "summary": {
+        "equipotential_node_count": 4,
+        "topological_region_count": 2,
+        "bus_sections_same_equipotential_node": false,
+        "transformer_hv_lv_same_equipotential_node": false
+      },
+      "limitations": [
+        "只检查结构连接，不求解潮流、故障电流或稳定性。",
+        "连接区域不等于带电区域，也不表示具备可靠供电能力。",
+        "等电位节点仅按闭合理想开关形成，不合并变压器和线路本体。",
+        "教学开关工况不是图纸实际运行状态，未写回来源草稿。",
+        "本草稿省略多个电源和负荷支路，不能代表全厂运行接线。"
+      ]
+    },
+    "l1_breaker_open": {
+      "analysis_kind": "connectivity-only",
+      "state_origin": "teaching-scenario",
+      "state_source": {
+        "origin": "explicit-teaching-assumption",
+        "label": "L1 断路器 QF-L1 断开",
+        "assumption": "所有 G1/T1/L1 本体投运；除本工况指定开关外，其余八或九个开关均人为设为闭合。",
+        "not_from_actual_drawing_state": true
+      },
+      "switch_current_closed": {
+        "QS-220-T1A": true,
+        "QF-220-T1": true,
+        "QS-220-T1B": true,
+        "QS-S1": true,
+        "QF-S": true,
+        "QS-S2": true,
+        "QS-L1A": true,
+        "QF-L1": false,
+        "QS-L1B": true
+      },
+      "device_in_service": {
+        "G1": true,
+        "T1": true,
+        "L1": true
+      },
+      "engineering_node_to_calculation_node": {
+        "n-10p5-I": "eq-001",
+        "n-220-I": "eq-002",
+        "n-220-II": "eq-002",
+        "n-L1-QF-QSB": "eq-002",
+        "n-S-QF-QS2": "eq-002",
+        "n-S-QS1-QF": "eq-002",
+        "n-T1-QF-QSB": "eq-002",
+        "n-T1-QSA-QF": "eq-002",
+        "n-T1-hv": "eq-002",
+        "n-L1-QSA-QF": "eq-003",
+        "n-L1-local": "eq-003",
+        "n-L1-external": "eq-004"
+      },
+      "equipotential_groups": [
+        {
+          "calculation_node_id": "eq-001",
+          "engineering_node_ids": [
+            "n-10p5-I"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-002",
+          "engineering_node_ids": [
+            "n-220-I",
+            "n-220-II",
+            "n-L1-QF-QSB",
+            "n-S-QF-QS2",
+            "n-S-QS1-QF",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-003",
+          "engineering_node_ids": [
+            "n-L1-QSA-QF",
+            "n-L1-local"
+          ]
+        },
+        {
+          "calculation_node_id": "eq-004",
+          "engineering_node_ids": [
+            "n-L1-external"
+          ]
+        }
+      ],
+      "device_terminal_mapping": [
+        {
+          "component_id": "G1",
+          "kind": "synchronous_generator",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-001"
+          ]
+        },
+        {
+          "component_id": "L1",
+          "kind": "system_tie_line",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-external"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-003",
+            "eq-004"
+          ]
+        },
+        {
+          "component_id": "QF-220-T1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QSA-QF",
+            "n-T1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-L1",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": false,
+          "terminal_nodes": [
+            "n-L1-QSA-QF",
+            "n-L1-QF-QSB"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-003",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QF-S",
+          "kind": "circuit_breaker",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QS1-QF",
+            "n-S-QF-QS2"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-hv",
+            "n-T1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-220-T1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-T1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-L1A",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-local",
+            "n-L1-QSA-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-003",
+            "eq-003"
+          ]
+        },
+        {
+          "component_id": "QS-L1B",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-L1-QF-QSB",
+            "n-220-I"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S1",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-220-I",
+            "n-S-QS1-QF"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "QS-S2",
+          "kind": "disconnector",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-S-QF-QS2",
+            "n-220-II"
+          ],
+          "terminal_roles": null,
+          "calculation_terminal_nodes": [
+            "eq-002",
+            "eq-002"
+          ]
+        },
+        {
+          "component_id": "T1",
+          "kind": "two_winding_transformer",
+          "active_for_connectivity": true,
+          "terminal_nodes": [
+            "n-10p5-I",
+            "n-T1-hv"
+          ],
+          "terminal_roles": [
+            "lv",
+            "hv"
+          ],
+          "calculation_terminal_nodes": [
+            "eq-001",
+            "eq-002"
+          ]
+        }
+      ],
+      "non_switch_device_edges": [
+        {
+          "component_id": "L1",
+          "from": "eq-003",
+          "to": "eq-004"
+        },
+        {
+          "component_id": "T1",
+          "from": "eq-001",
+          "to": "eq-002"
+        }
+      ],
+      "topological_regions": [
+        {
+          "region_id": "region-001",
+          "calculation_node_ids": [
+            "eq-001",
+            "eq-002"
+          ],
+          "engineering_node_ids": [
+            "n-10p5-I",
+            "n-220-I",
+            "n-220-II",
+            "n-L1-QF-QSB",
+            "n-S-QF-QS2",
+            "n-S-QS1-QF",
+            "n-T1-QF-QSB",
+            "n-T1-QSA-QF",
+            "n-T1-hv"
+          ]
+        },
+        {
+          "region_id": "region-002",
+          "calculation_node_ids": [
+            "eq-003",
+            "eq-004"
+          ],
+          "engineering_node_ids": [
+            "n-L1-QSA-QF",
+            "n-L1-external",
+            "n-L1-local"
+          ]
+        }
+      ],
+      "summary": {
+        "equipotential_node_count": 4,
+        "topological_region_count": 2,
+        "bus_sections_same_equipotential_node": true,
+        "transformer_hv_lv_same_equipotential_node": false
+      },
+      "limitations": [
+        "只检查结构连接，不求解潮流、故障电流或稳定性。",
+        "连接区域不等于带电区域，也不表示具备可靠供电能力。",
+        "等电位节点仅按闭合理想开关形成，不合并变压器和线路本体。",
+        "教学开关工况不是图纸实际运行状态，未写回来源草稿。",
+        "本草稿省略多个电源和负荷支路，不能代表全厂运行接线。"
+      ]
+    }
+  },
+  "physical_results_computed": [],
+  "not_computed": [
+    "power-flow",
+    "short-circuit",
+    "energization",
+    "stability"
+  ]
+}

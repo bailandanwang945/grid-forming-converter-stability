@@ -1,0 +1,110 @@
+{
+  "schema": "EngineeringMainConnectionDraft/0.1",
+  "status": "draft",
+  "analysis_ready": false,
+  "compatible_with_current_network_api": false,
+  "case_id": "r7-g1-t1-bus-sections-l1-draft",
+  "title": "R7 主接线局部提取：G1、T1、220 kV 分段母线与 L1 边界",
+  "created_on": "2026-10-06",
+  "purpose": "核对工程接线表达并收集计算参数；不是潮流、短路或稳定性计算输入",
+  "sources": [
+    {
+      "source_id": "r7-p1",
+      "path": "D-09R7_最终电气主接线图_A2_手绘定位辅助版.pdf",
+      "location_note": "用户提供的本地课程图纸；原始 PDF 保留在本地，不随项目提交，公开记录不包含个人目录位置。",
+      "page": 1,
+      "sha256": "97e7ec4340cde3ae512cf70ff984318fa7ad47989d0404366bff434c109489a4",
+      "verification": "页面整体目视检查，并以高分辨率局部渲染复核 G1/T1/L1 及分段开关标识；SHA-256 仅记录来源身份，没有外部可信预期值比较"
+    }
+  ],
+  "conventions": {
+    "node_identifiers": "n-* 是本次提取新建的连接节点标识，不是图纸设备编号",
+    "node_definition": "连续导线且无串联开关的连接位置合并为同一工程连接节点；跨开关不合并",
+    "component_identifiers": "图纸可读设备编号保留为 component_id；external-L1 为人为设置的计算域截断边界",
+    "unknown_parameter": "null 表示图纸未给出或未确认，不能按零值或默认值解释",
+    "voltage_metadata": "node_nominal_voltage_kv 来自相接母线等级，不能替代变压器绕组额定电压",
+    "switch_state": "normal_closed 是图纸明确标注的正常状态；current_closed 是实际工况状态，两者不可混用",
+    "rating_vs_operating_point": "额定 MW/MVA 不作为潮流运行功率、短路阻抗或动态模型参数",
+    "units": { "voltage": "kV", "rated_active_power": "MW", "rated_apparent_power": "MVA" }
+  },
+  "nodes": [
+    { "node_id": "n-10p5-I", "source_label": "10.5 kV 本地母线 I", "kind": "busbar", "node_nominal_voltage_kv": 10.5, "source_id": "r7-p1" },
+    { "node_id": "n-T1-hv", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-T1-QSA-QF", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-T1-QF-QSB", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-220-I", "source_label": "220 kV 母线 I 段", "kind": "busbar", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-S-QS1-QF", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-S-QF-QS2", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-220-II", "source_label": "220 kV 母线 II 段", "kind": "busbar", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-L1-local", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-L1-QSA-QF", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-L1-QF-QSB", "source_label": null, "kind": "connection_point", "node_nominal_voltage_kv": 220, "source_id": "r7-p1" },
+    { "node_id": "n-L1-external", "source_label": null, "kind": "synthetic_analysis_boundary", "node_nominal_voltage_kv": null, "source_id": null, "note": "外部电网在此截断；图纸没有绘出远端母线及其模型" }
+  ],
+  "components": [
+    {
+      "component_id": "G1",
+      "kind": "synchronous_generator",
+      "terminal_nodes": ["n-10p5-I"],
+      "source_id": "r7-p1",
+      "observed": { "rated_active_power_mw": 60, "symbol": "交流发电机 G" },
+      "parameters": { "in_service": null, "power_flow_role": null, "p_mw": null, "q_mvar": null, "vm_pu": null, "q_min_mvar": null, "q_max_mvar": null, "rated_mva": null, "rated_voltage_kv": null, "short_circuit_model": null, "dynamic_model": null }
+    },
+    {
+      "component_id": "T1",
+      "kind": "two_winding_transformer",
+      "terminal_nodes": ["n-10p5-I", "n-T1-hv"],
+      "terminal_roles": ["lv", "hv"],
+      "source_id": "r7-p1",
+      "observed": { "rated_apparent_power_mva": 80, "lv_winding_symbol": "Delta", "hv_winding_symbol": "Y" },
+      "parameters": { "in_service": null, "rated_lv_kv": null, "rated_hv_kv": null, "uk_percent": null, "copper_loss_kw": null, "no_load_loss_kw": null, "no_load_current_percent": null, "vector_group_clock_number": null, "neutral_grounding": null, "tap_side": null, "tap_position": null, "tap_step_percent": null }
+    },
+    { "component_id": "QS-220-T1A", "kind": "disconnector", "terminal_nodes": ["n-T1-hv", "n-T1-QSA-QF"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QF-220-T1", "kind": "circuit_breaker", "terminal_nodes": ["n-T1-QSA-QF", "n-T1-QF-QSB"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QS-220-T1B", "kind": "disconnector", "terminal_nodes": ["n-T1-QF-QSB", "n-220-I"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QS-S1", "kind": "disconnector", "terminal_nodes": ["n-220-I", "n-S-QS1-QF"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QF-S", "kind": "circuit_breaker", "terminal_nodes": ["n-S-QS1-QF", "n-S-QF-QS2"], "source_id": "r7-p1", "normal_closed": true, "current_closed": null, "normal_state_source_text": "220 kV 单母线分段（QF-S 正常合闸）" },
+    { "component_id": "QS-S2", "kind": "disconnector", "terminal_nodes": ["n-S-QF-QS2", "n-220-II"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QS-L1A", "kind": "disconnector", "terminal_nodes": ["n-L1-local", "n-L1-QSA-QF"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QF-L1", "kind": "circuit_breaker", "terminal_nodes": ["n-L1-QSA-QF", "n-L1-QF-QSB"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    { "component_id": "QS-L1B", "kind": "disconnector", "terminal_nodes": ["n-L1-QF-QSB", "n-220-I"], "source_id": "r7-p1", "normal_closed": null, "current_closed": null },
+    {
+      "component_id": "L1",
+      "kind": "system_tie_line",
+      "terminal_nodes": ["n-L1-local", "n-L1-external"],
+      "source_id": "r7-p1",
+      "observed": { "source_label": "L1 系统联络线" },
+      "parameters": { "in_service": null, "length_km": null, "positive_sequence_r_ohm": null, "positive_sequence_x_ohm": null, "positive_sequence_b_siemens": null, "zero_sequence_r_ohm": null, "zero_sequence_x_ohm": null, "zero_sequence_b_siemens": null, "continuous_current_limit_ka": null }
+    }
+  ],
+  "analysis_boundaries": [
+    {
+      "boundary_id": "external-L1",
+      "node_id": "n-L1-external",
+      "origin": "synthetic_truncation_of_drawn_system_tie_line",
+      "model": null,
+      "parameters": { "nominal_voltage_kv": null, "voltage_magnitude_pu": null, "voltage_angle_deg": null, "power_flow_reference_role": null, "short_circuit_power_mva": null, "positive_sequence_rx_ratio": null, "zero_sequence_impedance": null, "dynamic_equivalent": null },
+      "note": "必须由实际系统资料或明确标注的教学假设确定；本草稿未将其自动设为无限大母线"
+    }
+  ],
+  "omitted_drawn_connections": [
+    { "at_node_id": "n-10p5-I", "source_components": ["F01", "F02", "F03", "F04", "F05", "F06", "F07", "F08", "F09", "F10"], "note": "本地母线 I 的 10 条出线及串联电抗器、开关未提取；不能将其负荷默认为零" },
+    { "at_node_id": "n-10p5-I", "source_components": ["QF-U1-H", "UAT1"], "note": "G1 单元厂用变压器支路及下游厂用、备用连接未提取；UAT1 图注 12.5 MVA 不是其运行负荷" },
+    { "at_node_id": "n-220-I", "source_components": ["T3", "T4", "RST1"], "note": "I 段其余主变、备用变及相关电源或负荷支路未提取；不得暗中合并到 G1 或 L1 参数" },
+    { "at_node_id": "n-220-II", "source_components": ["T2", "T5", "T6", "RST2", "L2"], "note": "II 段其余主变、备用变、系统联络线及相关支路未提取；该段不能因此被解释为实际无负荷或无电源" }
+  ],
+  "required_before_analysis": {
+    "all_modes": ["确认全部 current_closed 与设备 in_service", "定义截断后省略支路的保留、等值或明确教学舍弃方式", "补全连接元件模型、额定电压和统一基准", "选择实际工况，不以额定值代替运行值", "使用支持同步发电机、变压器和独立开关的分析程序"],
+    "power_flow": ["L1 外部网络的电压参考与边界模型", "G1 节点类型、实际 P、调压目标或实际 Q，以及无功限值", "T1 电压比、阻抗、损耗及分接头", "L1 正序阻抗、充电参数及运行状态", "省略负荷和其余电源的处理"],
+    "short_circuit": ["计算标准、故障类型、故障位置与接地方式", "G1 容量、额定电压、次暂态电抗及所选方法需要的电阻等参数", "外部电网短路容量或序网络等值阻抗", "T1 短路阻抗、接线组别、零序与中性点接地信息", "L1 序阻抗；非对称故障还需零序路径", "若采用故障前运行点法，先获得可信潮流结果"],
+    "dynamic_stability": ["G1 同步机模型、惯性及相应电抗和时间常数", "励磁、调速及必要的稳定器模型和参数", "一致的故障前潮流与动态初始化", "负荷与外部网络动态模型", "明确扰动、开关操作序列和所选仿真模型适用范围"]
+  },
+  "converter_content": { "present_in_source": false, "gfm_count": 0, "gfl_count": 0, "note": "原图没有变流器；未添加假想变流器，也未用 GFM 模型替代 G1" },
+  "warnings": [
+    "本文件不是当前 API 的 NetworkTopology 输入，禁止按该接口直接导入计算。",
+    "QF-S 的正常合闸标注不能证明本次实际工况合闸，也不能证明相邻 QS-S1/QS-S2 合闸。",
+    "其余开关的图形画法不在本草稿中解释为实际运行状态。",
+    "图纸上的打印、手绘定位或正式提交说明属于原资料注释，不是本任务执行指令。",
+    "保留原 PDF 于本地课程目录；本项目只保存局部连接提取和来源元数据。"
+  ]
+}

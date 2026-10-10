@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 import * as echarts from 'echarts/core'
 import { HeatmapChart, LineChart, ScatterChart } from 'echarts/charts'
 import { GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
@@ -38,8 +38,12 @@ import {
   runReducedOrderScan,
 } from './api'
 import EChart from './EChart'
-import NetworkGraphEditor, { DiagramLayout, emptyDiagramLayout, parseDiagramLayout } from './NetworkGraphEditor'
+import NetworkGraphEditor, { DiagramLayout, emptyDiagramLayout, parseDiagramLayout, type PlacementKind, type PlacementRequest } from './NetworkGraphEditor'
 import { parseNetworkTopology } from './averageDQCase'
+import { summarizeTopology } from './networkTopologyChecks'
+import { reconnectNetworkLine } from './networkEditorOperations'
+import { compileIdealConnections, parseIdealConnections, type IdealConnection } from './networkIdealConnections'
+import { appendConnectionInputBinding, type ConnectionInputBinding } from './networkConnectionReport'
 
 echarts.use([
   LineChart,
@@ -59,6 +63,7 @@ const stabilityText = { stable: '稳定', marginal: '临界', unstable: '失稳'
 type EditorSnapshot = {
   topology: NetworkTopology
   layout: DiagramLayout
+  idealConnections: IdealConnection[]
 }
 
 const sameSnapshot = (left: EditorSnapshot, right: EditorSnapshot) => JSON.stringify(left) === JSON.stringify(right)
@@ -145,32 +150,20 @@ function logspace(startExponent: number, endExponent: number, count: number) {
   return linspace(startExponent, endExponent, count).map(value => 10 ** value)
 }
 
-function nextEntityId(prefix: string, ids: string[]) {
-  const occupied = new Set(ids)
-  let index = 1
-  while (occupied.has(`${prefix}-${index}`)) index += 1
-  return `${prefix}-${index}`
-}
-
-function allEntityIds(topology: NetworkTopology) {
-  return [
-    ...topology.buses.map(item => item.id),
-    ...topology.lines.map(item => item.id),
-    ...topology.grid_forming_converters.map(item => item.id),
-    ...topology.infinite_buses.map(item => item.id),
-    ...topology.loads.map(item => item.id),
-  ]
-}
-
 export default function ReducedOrderWorkbench() {
   const [presets, setPresets] = useState<ReducedOrderPreset[]>([])
   const [selectedPreset, setSelectedPreset] = useState<ReducedOrderPresetId>('reduced-smib-stable')
   const [topology, setTopology] = useState<NetworkTopology | null>(null)
   const [diagramLayout, setDiagramLayout] = useState<DiagramLayout>(emptyDiagramLayout())
+  const [idealConnections, setIdealConnections] = useState<IdealConnection[]>([])
+  const [placementRequest, setPlacementRequest] = useState<PlacementRequest | null>(null)
+  const [editorResetRevision, setEditorResetRevision] = useState(0)
   const [modelView, setModelView] = useState<'editor' | 'results'>('editor')
+  const [editorExpanded, setEditorExpanded] = useState(false)
   const [customized, setCustomized] = useState(false)
   const [result, setResult] = useState<ReducedOrderAnalysisResult | null>(null)
   const [completedInput, setCompletedInput] = useState<ReducedOrderAnalysisInput | null>(null)
+  const [completedConnectionBinding, setCompletedConnectionBinding] = useState<ConnectionInputBinding | null>(null)
   const [simulationTime, setSimulationTime] = useState(20)
   const [timeStep, setTimeStep] = useState(0.02)
   const [initialAngleMrad, setInitialAngleMrad] = useState(1)
@@ -255,6 +248,7 @@ export default function ReducedOrderWorkbench() {
     reportRequest.current += 1
     setResult(null)
     setCompletedInput(null)
+    setCompletedConnectionBinding(null)
     setModelView('editor')
     setError('')
   }
@@ -273,16 +267,19 @@ export default function ReducedOrderWorkbench() {
     setDqNetworkResult(null)
   }
 
-  function updateDiagramLayout(layout: DiagramLayout) {
+  function updateDiagramLayout(update: DiagramLayout | ((current: DiagramLayout) => DiagramLayout)) {
     layoutRevision.current += 1
-    setDiagramLayout(layout)
+    setDiagramLayout(update)
   }
 
   function choosePreset(id: ReducedOrderPresetId) {
+    setPlacementRequest(null)
+    setEditorResetRevision(value => value + 1)
     setSelectedPreset(id)
     const preset = presets.find(item => item.id === id)
     if (preset) setTopology(clone(preset.topology))
     setDiagramLayout(emptyDiagramLayout())
+    setIdealConnections([])
     undoStack.current = []
     redoStack.current = []
     setHistoryRevision(value => value + 1)
@@ -293,7 +290,7 @@ export default function ReducedOrderWorkbench() {
 
   function checkpoint() {
     if (!topology) return
-    const snapshot = clone({ topology, layout: diagramLayout })
+    const snapshot = clone({ topology, layout: diagramLayout, idealConnections })
     const previous = undoStack.current[undoStack.current.length - 1]
     if (!previous || !sameSnapshot(previous, snapshot)) {
       undoStack.current = [...undoStack.current.slice(-49), snapshot]
@@ -309,17 +306,40 @@ export default function ReducedOrderWorkbench() {
     return draft
   }
 
-  function commitTopology(value: NetworkTopology, message = '') {
+  function commitTopology(value: NetworkTopology, message = '', connections = idealConnections) {
     checkpoint()
     setTopology(prepareCustomTopology(value))
+    const busIds = new Set(value.buses.map(bus => bus.id))
+    setIdealConnections(connections.filter(wire => busIds.has(wire.from_bus_id) && busIds.has(wire.to_bus_id)))
     setCustomized(true)
     invalidateModel()
     if (message) setEditorMessage(message)
   }
 
+  function commitDiagramEdit(value: NetworkTopology, layout: DiagramLayout, message: string) {
+    commitTopology(value, message)
+    updateDiagramLayout(layout)
+  }
+
+  function commitIdealConnections(connections: IdealConnection[], message: string) {
+    if (!topology) return
+    checkpoint()
+    setIdealConnections(connections)
+    setTopology(prepareCustomTopology(topology))
+    setCustomized(true)
+    invalidateModel()
+    setEditorMessage(message)
+  }
+
+  function requestPlacement(kind: PlacementKind) {
+    setPlacementRequest(current => ({ kind, sequence: (current?.sequence ?? 0) + 1 }))
+  }
+
   function restoreSnapshot(snapshot: EditorSnapshot) {
     const modelChanged = JSON.stringify(snapshot.topology) !== JSON.stringify(topology)
+      || JSON.stringify(snapshot.idealConnections) !== JSON.stringify(idealConnections)
     setTopology(clone(snapshot.topology))
+    setIdealConnections(clone(snapshot.idealConnections))
     updateDiagramLayout(clone(snapshot.layout))
     if (modelChanged) {
       setCustomized(true)
@@ -329,7 +349,7 @@ export default function ReducedOrderWorkbench() {
 
   function undoEditorChange() {
     if (!topology || undoStack.current.length === 0) return
-    const current = clone({ topology, layout: diagramLayout })
+    const current = clone({ topology, layout: diagramLayout, idealConnections })
     while (undoStack.current.length && sameSnapshot(undoStack.current[undoStack.current.length - 1], current)) {
       undoStack.current = undoStack.current.slice(0, -1)
     }
@@ -347,7 +367,7 @@ export default function ReducedOrderWorkbench() {
 
   function redoEditorChange() {
     if (!topology || redoStack.current.length === 0) return
-    const current = clone({ topology, layout: diagramLayout })
+    const current = clone({ topology, layout: diagramLayout, idealConnections })
     while (redoStack.current.length && sameSnapshot(redoStack.current[redoStack.current.length - 1], current)) {
       redoStack.current = redoStack.current.slice(0, -1)
     }
@@ -363,26 +383,50 @@ export default function ReducedOrderWorkbench() {
     setHistoryRevision(value => value + 1)
   }
 
-  function changeTopology(mutator: (draft: NetworkTopology) => void) {
+  function handleEditorKeyboard(event: KeyboardEvent<HTMLDivElement>) {
+    if (!(event.ctrlKey || event.metaKey) || event.altKey || event.nativeEvent.isComposing) return
+    const target = event.target as HTMLElement
+    if (target.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]')) return
+    const key = event.key.toLowerCase()
+    if (key === 'z') {
+      event.preventDefault()
+      if (event.shiftKey) redoEditorChange()
+      else undoEditorChange()
+    } else if (key === 'y') {
+      event.preventDefault()
+      redoEditorChange()
+    }
+  }
+
+  function changeTopology(mutator: (draft: NetworkTopology) => void, connections = idealConnections) {
     if (!topology) return
     const draft = clone(topology)
     mutator(draft)
-    commitTopology(draft)
+    commitTopology(draft, '', connections)
   }
 
   function renameLayoutNode(kind: 'bus' | 'gfm' | 'grid', oldId: string, newId: string | undefined) {
     if (!newId || oldId === newId) return
     setDiagramLayout(current => {
       const oldKey = `${kind}:${oldId}`
-      if (!current.node_positions[oldKey]) return current
-      const nextPositions = { ...current.node_positions, [`${kind}:${newId}`]: current.node_positions[oldKey] }
+      const hasPosition = !!current.node_positions[oldKey]
+      const hasWidth = kind === 'bus' && current.bus_widths?.[oldId] !== undefined
+      if (!hasPosition && !hasWidth) return current
+      const nextPositions = { ...current.node_positions }
+      if (hasPosition) nextPositions[`${kind}:${newId}`] = current.node_positions[oldKey]
       delete nextPositions[oldKey]
-      return { ...current, node_positions: nextPositions }
+      const nextWidths = hasWidth ? { ...current.bus_widths, [newId]: current.bus_widths![oldId] } : current.bus_widths
+      if (hasWidth) delete nextWidths![oldId]
+      return { ...current, node_positions: nextPositions, ...(nextWidths ? { bus_widths: nextWidths } : {}) }
     })
   }
 
   function updateBus(index: number, patch: Partial<Bus>) {
     const oldLayoutId = topology?.buses[index]?.id
+    const nextConnections = oldLayoutId && patch.id !== undefined && oldLayoutId !== patch.id
+      ? idealConnections.map(wire => ({ ...wire,
+        from_bus_id: wire.from_bus_id === oldLayoutId ? patch.id! : wire.from_bus_id,
+        to_bus_id: wire.to_bus_id === oldLayoutId ? patch.id! : wire.to_bus_id })) : idealConnections
     changeTopology(draft => {
       const oldId = draft.buses[index].id
       Object.assign(draft.buses[index], patch)
@@ -397,16 +441,42 @@ export default function ReducedOrderWorkbench() {
         draft.loads.forEach(load => { if (load.bus_id === oldId) load.bus_id = newId })
         if (draft.reference_bus_id === oldId) draft.reference_bus_id = newId
       }
-    })
+    }, nextConnections)
     if (oldLayoutId) renameLayoutNode('bus', oldLayoutId, patch.id)
   }
 
   function updateLine(index: number, patch: Partial<ACLine>) {
+    if (!topology || !topology.lines[index]) return
+    if (patch.from_bus_id !== undefined || patch.to_bus_id !== undefined) {
+      const line = topology.lines[index]
+      const outcome = reconnectNetworkLine(topology, line.id,
+        patch.from_bus_id ?? line.from_bus_id, patch.to_bus_id ?? line.to_bus_id)
+      if (!outcome.ok) {
+        setEditorMessage(`${outcome.message}原线路保持不变。`)
+        return
+      }
+      Object.assign(outcome.line, patch)
+      commitTopology(outcome.topology)
+      return
+    }
     changeTopology(draft => Object.assign(draft.lines[index], patch))
   }
 
   function updateGfm(index: number, patch: Partial<GridFormingConverter>) {
-    const oldLayoutId = topology?.grid_forming_converters[index]?.id
+    if (!topology || !topology.grid_forming_converters[index]) return
+    const current = topology.grid_forming_converters[index]
+    if (patch.bus_id !== undefined && patch.bus_id !== current.bus_id) {
+      if (!topology.buses.some(bus => bus.id === patch.bus_id)) {
+        setEditorMessage('接入母线不存在，VSM 原接线保持不变。')
+        return
+      }
+      if (topology.infinite_buses.some(grid => grid.bus_id === patch.bus_id)
+        || topology.grid_forming_converters.some((other, otherIndex) => otherIndex !== index && other.bus_id === patch.bus_id)) {
+        setEditorMessage('当前低频模型不支持 VSM 与理想等值电源或其他 VSM 共用同一节点，原接线保持不变。')
+        return
+      }
+    }
+    const oldLayoutId = current.id
     changeTopology(draft => Object.assign(draft.grid_forming_converters[index], patch))
     if (oldLayoutId) renameLayoutNode('gfm', oldLayoutId, patch.id)
   }
@@ -425,13 +495,7 @@ export default function ReducedOrderWorkbench() {
   }
 
   function addBus() {
-    if (!topology) return
-    const id = nextEntityId('bus', allEntityIds(topology))
-    changeTopology(draft => draft.buses.push({
-      id,
-      name: `母线 ${id.split('-').pop()}`,
-      nominal_voltage_v: draft.base_values.voltage_v,
-    }))
+    requestPlacement('bus')
   }
 
   function removeBus(index: number) {
@@ -454,67 +518,19 @@ export default function ReducedOrderWorkbench() {
   }
 
   function addLine() {
-    if (!topology || topology.buses.length < 2) return
-    const id = nextEntityId('line', allEntityIds(topology))
-    changeTopology(draft => draft.lines.push({
-      id,
-      name: `线路 ${id.split('-').pop()}`,
-      from_bus_id: draft.buses[0].id,
-      to_bus_id: draft.buses[1].id,
-      resistance_pu: 0.01,
-      reactance_pu: 0.2,
-      shunt_susceptance_pu: 0,
-      in_service: true,
-    }))
+    requestPlacement('line')
+  }
+
+  function addWire() {
+    requestPlacement('wire')
   }
 
   function addGfm() {
-    if (!topology) return
-    const id = nextEntityId('gfm', allEntityIds(topology))
-    const occupied = new Set(topology.grid_forming_converters.map(item => item.bus_id))
-    const bus = topology.buses.find(item => !occupied.has(item.id) && !topology.infinite_buses.some(grid => grid.bus_id === item.id))
-    if (!bus) {
-      setError('请先新增一个未被无限大母线或其他 VSM 占用的母线。')
-      return
-    }
-    changeTopology(draft => draft.grid_forming_converters.push({
-      id,
-      name: `VSM ${id.split('-').pop()}`,
-      bus_id: bus.id,
-      rated_apparent_power_va: draft.base_values.apparent_power_va,
-      control_mode: 'virtual_synchronous_machine',
-      active_power_setpoint_pu: 0,
-      reactive_power_setpoint_pu: 0,
-      voltage_setpoint_pu: 1,
-      virtual_inertia_s: 2,
-      damping_coefficient_pu: 60,
-      active_power_measurement_time_constant_s: 0.1,
-    }))
+    requestPlacement('gfm')
   }
 
   function addInfiniteBus() {
-    if (!topology) return
-    const occupied = new Set([
-      ...topology.grid_forming_converters.map(item => item.bus_id),
-      ...topology.infinite_buses.map(item => item.bus_id),
-    ])
-    const bus = topology.buses.find(item => !occupied.has(item.id))
-    if (!bus) {
-      setError('请先新增一个未被 VSM 或其他无限大母线占用的母线。')
-      return
-    }
-    const id = nextEntityId('grid', allEntityIds(topology))
-    changeTopology(draft => {
-      const wasEmpty = draft.infinite_buses.length === 0
-      draft.infinite_buses.push({
-        id,
-        name: `无限大母线 ${id.split('-').pop()}`,
-        bus_id: bus.id,
-        voltage_magnitude_pu: 1,
-        voltage_angle_deg: 0,
-      })
-      if (wasEmpty) draft.reference_bus_id = bus.id
-    })
+    requestPlacement('grid')
   }
 
   function removeInfiniteBus(index: number) {
@@ -534,7 +550,13 @@ export default function ReducedOrderWorkbench() {
 
   async function analyze() {
     if (!topology || analysisBusy.current) return
+    if (!checkLowFrequencyApplicability()) return
     const snapshot = clone(requestPayload())
+    const connectionBinding = idealConnections.length && connectionCompilation?.ok ? clone({
+      sourceTopologyId: topology.id, sourceTopologyName: topology.name,
+      originalBusIds: topology.buses.map(bus => bus.id), idealConnections,
+      busMap: connectionCompilation.busMap,
+    }) : null
     const revision = analysisRevision.current
     const request = ++analysisRequest.current
     analysisBusy.current = true
@@ -543,11 +565,13 @@ export default function ReducedOrderWorkbench() {
     setError('')
     setResult(null)
     setCompletedInput(null)
+    setCompletedConnectionBinding(null)
     try {
       const nextResult = await runReducedOrderAnalysis(snapshot)
       if (!mounted.current || request !== analysisRequest.current || revision !== analysisRevision.current) return
       setResult(nextResult)
       setCompletedInput(snapshot)
+      setCompletedConnectionBinding(connectionBinding)
       setModelView('results')
     } catch (reason) {
       if (mounted.current && request === analysisRequest.current && revision === analysisRevision.current) {
@@ -561,12 +585,13 @@ export default function ReducedOrderWorkbench() {
 
   function requestPayload(): ReducedOrderAnalysisInput {
     if (!topology) throw new Error('拓扑尚未加载。')
+    const calculationTopology = effectiveTopology()
     const common = {
       simulation_time_s: simulationTime,
       time_step_s: timeStep,
       initial_angle_perturbation_rad: initialAngleMrad / 1000,
     }
-    return customized ? { ...common, topology } : { ...common, preset_id: selectedPreset }
+    return customized || idealConnections.length ? { ...common, topology: calculationTopology } : { ...common, preset_id: selectedPreset }
   }
 
   async function openPrintableReport() {
@@ -580,7 +605,7 @@ export default function ReducedOrderWorkbench() {
     setError('')
     const reportWindow = window.open('', '_blank')
     try {
-      const html = await getReducedOrderReportHtml(snapshot)
+      const html = appendConnectionInputBinding(await getReducedOrderReportHtml(snapshot), completedConnectionBinding)
       if (!mounted.current || request !== reportRequest.current || analysis !== analysisRequest.current || revision !== analysisRevision.current) {
         reportWindow?.close()
         return
@@ -619,16 +644,29 @@ export default function ReducedOrderWorkbench() {
       const parsed = JSON.parse(text) as Record<string, unknown>
       let importedTopology: NetworkTopology
       let importedLayout = emptyDiagramLayout()
+      let importedConnections: IdealConnection[] = []
       const currentSettings = {
         simulation_time_s: simulationTime,
         time_step_s: timeStep,
         initial_angle_perturbation_rad: initialAngleMrad / 1000,
       }
       let importedSettings = currentSettings
-      if (parsed.schema_version === 'gfm-reduced-order-case/1.0' || parsed.schema_version === 'gfm-reduced-order-case/1.1') {
+      if (parsed.schema_version === 'gfm-reduced-order-case/1.0' || parsed.schema_version === 'gfm-reduced-order-case/1.1'
+        || parsed.schema_version === 'gfm-reduced-order-case/1.2') {
         importedTopology = parseNetworkTopology(parsed.topology)
-        if (parsed.schema_version === 'gfm-reduced-order-case/1.1' && parsed.diagram_layout !== undefined) {
+        if (parsed.schema_version !== 'gfm-reduced-order-case/1.0' && parsed.diagram_layout !== undefined) {
           importedLayout = parseDiagramLayout(parsed.diagram_layout)
+        }
+        if (parsed.schema_version !== 'gfm-reduced-order-case/1.2' && importedLayout.schema_version === 'gfm-network-diagram-layout/1.1') {
+          throw new Error('含母线长度的图形版面须使用案例版本 1.2，不能混入旧版本。')
+        }
+        for (const busId of Object.keys(importedLayout.bus_widths ?? {})) {
+          if (!importedTopology.buses.some(bus => bus.id === busId)) throw new Error(`母线长度引用了不存在的母线 ${busId}。`)
+        }
+        if (parsed.schema_version === 'gfm-reduced-order-case/1.2') {
+          importedConnections = parseIdealConnections(parsed.ideal_connections, importedTopology)
+        } else if (parsed.ideal_connections !== undefined) {
+          throw new Error('普通导线须使用案例版本 1.2，不能在旧版本中静默忽略。')
         }
         importedSettings = parseSimulationSettings(parsed.simulation_settings, currentSettings)
       } else if (parsed.schema_version === '1.0') {
@@ -637,7 +675,10 @@ export default function ReducedOrderWorkbench() {
         throw new Error(`不支持的案例版本：${String(parsed.schema_version ?? '缺失')}`)
       }
       // All fields are accepted before committing any part of the imported case.
+      setPlacementRequest(null)
+      setEditorResetRevision(value => value + 1)
       setTopology(importedTopology)
+      setIdealConnections(importedConnections)
       updateDiagramLayout(importedLayout)
       setSimulationTime(importedSettings.simulation_time_s)
       setTimeStep(importedSettings.time_step_s)
@@ -660,10 +701,13 @@ export default function ReducedOrderWorkbench() {
   function exportCase() {
     if (!topology) return
     downloadJson(`${topology.id}.gfm-case.json`, {
-      schema_version: 'gfm-reduced-order-case/1.1',
+      schema_version: idealConnections.length || diagramLayout.schema_version === 'gfm-network-diagram-layout/1.1'
+        ? 'gfm-reduced-order-case/1.2' : 'gfm-reduced-order-case/1.1',
       analysis_mode: 'low-frequency-angle-frequency-active-power-reduced-order',
       topology,
       diagram_layout: diagramLayout,
+      ...(idealConnections.length || diagramLayout.schema_version === 'gfm-network-diagram-layout/1.1'
+        ? { ideal_connections: idealConnections } : {}),
       simulation_settings: {
         simulation_time_s: simulationTime,
         time_step_s: timeStep,
@@ -690,6 +734,7 @@ export default function ReducedOrderWorkbench() {
 
   async function runParameterScan() {
     if (!topology || scanBusy.current) return
+    if (!checkLowFrequencyApplicability()) return
     const targetVsm = topology.grid_forming_converters.find(item => item.id === scanTargetVsmId)
     const targetLine = topology.lines.find(item => item.id === scanTargetLineId)
     if (!targetVsm || !targetLine || targetLine.in_service === false) {
@@ -698,7 +743,7 @@ export default function ReducedOrderWorkbench() {
     }
     const count = Math.max(2, Math.min(50, Math.round(scanAxisCount)))
     const snapshot = clone({
-      topology,
+      topology: effectiveTopology(),
       target_vsm_id: targetVsm.id,
       target_line_id: targetLine.id,
       damping_values_pu: linspace(scanDMin, scanDMax, count),
@@ -725,7 +770,8 @@ export default function ReducedOrderWorkbench() {
 
   async function runContingencyStudy() {
     if (!topology || contingencyBusy.current) return
-    const snapshot = clone(topology)
+    if (!checkLowFrequencyApplicability()) return
+    const snapshot = clone(effectiveTopology())
     const revision = modelRevision.current
     const request = ++contingencyRequest.current
     contingencyBusy.current = true
@@ -747,7 +793,11 @@ export default function ReducedOrderWorkbench() {
 
   async function runDQNetworkCompilation() {
     if (!topology || dqNetworkBusy.current) return
-    const snapshot = clone(topology)
+    if (!connectionCompilation?.ok) {
+      setError(connectionCompilation && !connectionCompilation.ok ? connectionCompilation.issues.join(' ') : '接线尚未加载。')
+      return
+    }
+    const snapshot = clone(effectiveTopology())
     const revision = modelRevision.current
     const request = ++dqNetworkRequest.current
     dqNetworkBusy.current = true
@@ -880,10 +930,24 @@ export default function ReducedOrderWorkbench() {
   const frequencyDifference = responseFrequency !== null && modalFrequency !== null
     ? Math.abs(responseFrequency - modalFrequency)
     : null
+  const connectionCompilation = useMemo(() => topology ? compileIdealConnections(topology, idealConnections) : null, [topology, idealConnections])
+  const topologyChecks = useMemo(() => connectionCompilation?.ok ? summarizeTopology(connectionCompilation.topology) : null, [connectionCompilation])
+
+  function effectiveTopology(): NetworkTopology {
+    if (!connectionCompilation?.ok) throw new Error(connectionCompilation && !connectionCompilation.ok ? connectionCompilation.issues.join(' ') : '接线尚未加载。')
+    return connectionCompilation.topology
+  }
+
+  function checkLowFrequencyApplicability() {
+    if (topologyChecks?.lowFrequencyApplicable) return true
+    setError(connectionCompilation && !connectionCompilation.ok ? connectionCompilation.issues.join(' ')
+      : [...(topologyChecks?.wiringIssues ?? []), ...(topologyChecks?.lowFrequencyIssues ?? [])].join(' '))
+    return false
+  }
 
   if (!topology) return <main><div className="panel loading-state">正在加载独立模型预设……</div></main>
 
-  return <main className="model-main" data-view={modelView}>
+  return <main className="model-main" data-view={modelView} data-editor-expanded={editorExpanded ? 'true' : 'false'}>
     <aside className="panel controls model-controls">
       <div className="panel-title"><Network size={18}/><span>独立模型输入</span></div>
       <label>解析校核预设
@@ -901,7 +965,7 @@ export default function ReducedOrderWorkbench() {
         <label>步长 / s<input aria-label="低频模型仿真步长" type="number" min="0.001" max="1" step="0.01" value={timeStep} onChange={event => { setTimeStep(numeric(event.target.value, 0.02)); invalidateAnalysis() }}/></label>
         <label>扰动 / mrad<input aria-label="低频模型初始相角扰动" type="number" min="-100" max="100" step="0.5" value={initialAngleMrad} onChange={event => { setInitialAngleMrad(numeric(event.target.value, 1)); invalidateAnalysis() }}/></label>
       </div>
-      <button onClick={analyze} disabled={running}><Play size={17} fill="currentColor"/>{running ? '正在建立状态空间…' : '验证拓扑并分析'}</button>
+      <button onClick={analyze} disabled={running || !topologyChecks?.lowFrequencyApplicable} title={connectionCompilation && !connectionCompilation.ok ? connectionCompilation.issues.join(' ') : topologyChecks?.lowFrequencyIssues.join(' ')}><Play size={17} fill="currentColor"/>{running ? '正在建立状态空间…' : '验证拓扑并分析'}</button>
       <div className="button-row">
         <button className="secondary-button" onClick={exportCase}><Save size={16}/>保存案例</button>
         <button className="secondary-button" onClick={() => importRef.current?.click()}><FileUp size={16}/>导入案例</button>
@@ -922,25 +986,37 @@ export default function ReducedOrderWorkbench() {
           <button data-testid="reduced-view-results" role="tab" aria-selected={modelView === 'results'} className={modelView === 'results' ? 'active' : ''} disabled={!result} onClick={() => setModelView('results')}>分析结果</button>
         </div>
       </div>
-      <div className="panel model-editor" hidden={modelView !== 'editor'}>
+      <div className="panel model-editor" hidden={modelView !== 'editor'} onKeyDown={handleEditorKeyboard}>
         <div className="panel-title"><Network size={18}/><span>网络建模与拓扑校核</span><em>电气模型与图形版面分离</em></div>
         <div className="editor-toolbar">
-          <div><b>{topology.name}</b><small>{topology.buses.length} 母线 · {topology.lines.filter(line => line.in_service !== false).length}/{topology.lines.length} 线路投运 · {topology.grid_forming_converters.length} 台 VSM</small></div>
+          <div><b>{topology.name}</b><small>{topology.buses.length} 母线段 · {idealConnections.length} 普通导线 · {topology.lines.filter(line => line.in_service !== false).length}/{topology.lines.length} 阻抗线路投运 · {topology.grid_forming_converters.length} 台 VSM</small></div>
           <div className="inline-actions">
-            <button onClick={addBus}><Plus size={14}/>母线</button><button onClick={addLine}><Plus size={14}/>线路</button><button onClick={addGfm}><Plus size={14}/>VSM</button><button onClick={addInfiniteBus}><Plus size={14}/>等值电源</button>
+            <button onClick={addBus} title="选择后在画布点击放置母线"><Plus size={14}/>母线</button><button onClick={addWire} title="普通导线只表示直接电气连接，不添加线路阻抗"><Plus size={14}/>导线</button><button onClick={addLine} title="选择两条母线并建立带电阻、电抗的线路"><Plus size={14}/>阻抗线路</button><button onClick={addGfm} title="选择后在目标母线或空白处放置"><Plus size={14}/>VSM</button><button onClick={addInfiniteBus} title="选择后在目标母线或空白处放置"><Plus size={14}/>等值电源</button>
             <span className="toolbar-separator"/>
-            <button data-testid="network-undo" title="撤销" disabled={undoStack.current.length === 0} onClick={undoEditorChange}><Undo2 size={14}/>撤销</button>
-            <button data-testid="network-redo" title="重做" disabled={redoStack.current.length === 0} onClick={redoEditorChange}><Redo2 size={14}/>重做</button>
+            <button data-testid="network-undo" title="撤销（Ctrl+Z；输入框内保留文本撤销）" disabled={undoStack.current.length === 0} onClick={undoEditorChange}><Undo2 size={14}/>撤销</button>
+            <button data-testid="network-redo" title="重做（Ctrl+Shift+Z 或 Ctrl+Y）" disabled={redoStack.current.length === 0} onClick={redoEditorChange}><Redo2 size={14}/>重做</button>
+            <button data-testid="network-expand-editor" aria-pressed={editorExpanded} onClick={() => setEditorExpanded(value => !value)}>{editorExpanded ? '恢复布局' : '扩大画布'}</button>
+            {editorExpanded && <>
+              <button data-testid="network-editor-save" onClick={exportCase}><Save size={14}/>保存案例</button>
+              <button data-testid="network-editor-import" onClick={() => importRef.current?.click()}><FileUp size={14}/>导入案例</button>
+              <button data-testid="network-editor-analyze" onClick={analyze} disabled={running || !topologyChecks?.lowFrequencyApplicable}><Play size={14}/>{running ? '分析中…' : '验证拓扑并分析'}</button>
+            </>}
           </div>
         </div>
         <NetworkGraphEditor
           topology={topology}
+          idealConnections={idealConnections}
+          onIdealConnectionsChange={commitIdealConnections}
           layout={diagramLayout}
           onLayoutChange={updateDiagramLayout}
           onLayoutCheckpoint={checkpoint}
           onTopologyChange={next => commitTopology(next)}
+          onDiagramChange={commitDiagramEdit}
+          placementRequest={placementRequest}
+          resetRevision={editorResetRevision}
           onMessage={setEditorMessage}
         />
+        {idealConnections.length > 0 && connectionCompilation?.ok && <p className="scope-note" data-testid="network-calculation-node-map">图中保留 {topology.buses.length} 个母线段；普通导线连接的母线在计算时合并为 {connectionCompilation.topology.buses.length} 个电气节点。{connectionCompilation.groups.filter(group => group.length > 1).map(group => `${group.join('、')} → ${connectionCompilation.busMap[group[0]]}`).join('；')}。该转换不增加新的分析模型。</p>}
         {editorMessage && <p className="editor-message" role="status">{editorMessage}</p>}
 
         <details open><summary>系统基值与参考条件</summary><div className="editable-table">
@@ -963,7 +1039,7 @@ export default function ReducedOrderWorkbench() {
           {topology.buses.map((bus, index) => <div className="edit-row bus-row" key={`${bus.id}-${index}`}>
             <label>ID<input value={bus.id} onChange={event => updateBus(index, { id: event.target.value })}/></label>
             <label>名称<input value={bus.name} onChange={event => updateBus(index, { name: event.target.value })}/></label>
-            <label>额定电压 / V<input type="number" value={bus.nominal_voltage_v} onChange={event => updateBus(index, { nominal_voltage_v: numeric(event.target.value, bus.nominal_voltage_v) })}/></label>
+            <label>标称电压 / V<input type="number" value={bus.nominal_voltage_v} onChange={event => updateBus(index, { nominal_voltage_v: numeric(event.target.value, bus.nominal_voltage_v) })}/></label>
             <button className="icon-button" disabled={topology.buses.length <= 2 || (topology.infinite_buses.length === 1 && topology.infinite_buses[0].bus_id === bus.id)} onClick={() => removeBus(index)} title={topology.infinite_buses.length === 1 && topology.infinite_buses[0].bus_id === bus.id ? '至少保留一个无限大母线节点' : '删除母线'}><Trash2 size={15}/></button>
           </div>)}
         </div></details>
@@ -983,7 +1059,7 @@ export default function ReducedOrderWorkbench() {
         <section className="contingency-panel" data-testid="reduced-n-minus-one-panel">
           <div className="panel-title"><ShieldAlert size={18}/><span>N−1 支路停运重算</span><em>逐条停运当前投运线路，并重新建立低频状态矩阵</em></div>
           <div className="contingency-actions">
-            <button data-testid="reduced-n-minus-one-run" onClick={runContingencyStudy} disabled={contingencyRunning || topology.lines.every(line => line.in_service === false)}>{contingencyRunning ? '逐项重算中…' : '开始逐线停运分析'}</button>
+            <button data-testid="reduced-n-minus-one-run" onClick={runContingencyStudy} disabled={contingencyRunning || !topologyChecks?.lowFrequencyApplicable || topology.lines.every(line => line.in_service === false)}>{contingencyRunning ? '逐项重算中…' : '开始逐线停运分析'}</button>
             {contingencyResult && <button className="outline-button" onClick={() => downloadJson(`${contingencyResult.run_id}.json`, contingencyResult)}><Download size={14}/>导出 JSON</button>}
           </div>
           {contingencyResult ? <>
@@ -1027,7 +1103,7 @@ export default function ReducedOrderWorkbench() {
         <details><summary>VSM 控制参数 <small>{topology.grid_forming_converters.length} 台设备</small></summary><div className="editable-table">
           {topology.grid_forming_converters.map((gfm, index) => <div className="edit-row gfm-row" key={`${gfm.id}-${index}`}>
             <label>ID<input value={gfm.id} onChange={event => updateGfm(index, { id: event.target.value })}/></label>
-            <label>接入母线<select value={gfm.bus_id} onChange={event => updateGfm(index, { bus_id: event.target.value })}>{topology.buses.map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
+            <label>接入母线<select value={gfm.bus_id} onChange={event => updateGfm(index, { bus_id: event.target.value })}>{topology.buses.filter(bus => bus.id === gfm.bus_id || (!topology.infinite_buses.some(grid => grid.bus_id === bus.id) && !topology.grid_forming_converters.some((other, otherIndex) => otherIndex !== index && other.bus_id === bus.id))).map(bus => <option key={bus.id}>{bus.id}</option>)}</select></label>
             <label>惯量 M / s<input type="number" min="0.001" step="0.1" value={gfm.virtual_inertia_s} onChange={event => updateGfm(index, { virtual_inertia_s: numeric(event.target.value, gfm.virtual_inertia_s) })}/></label>
             <label>阻尼 D / pu<input type="number" min="0.0001" step="0.05" value={gfm.damping_coefficient_pu} onChange={event => updateGfm(index, { damping_coefficient_pu: numeric(event.target.value, gfm.damping_coefficient_pu) })}/></label>
             <label>有功测量 Tₚ / s<input type="number" min="0.001" step="0.01" value={gfm.active_power_measurement_time_constant_s} onChange={event => updateGfm(index, { active_power_measurement_time_constant_s: numeric(event.target.value, gfm.active_power_measurement_time_constant_s) })}/></label>
@@ -1063,7 +1139,7 @@ export default function ReducedOrderWorkbench() {
             <label>X 最小 / pu<input type="number" min="0.0001" step="0.02" value={scanXMin} onChange={event => { setScanXMin(numeric(event.target.value, 0.08)); invalidateScan() }}/></label>
             <label>X 最大 / pu<input type="number" min="0.0001" step="0.02" value={scanXMax} onChange={event => { setScanXMax(numeric(event.target.value, 0.6)); invalidateScan() }}/></label>
             <label>每轴点数<input type="number" min="2" max="50" step="1" value={scanAxisCount} onChange={event => { setScanAxisCount(numeric(event.target.value, 21)); invalidateScan() }}/></label>
-            <button onClick={runParameterScan} disabled={scanning}>{scanning ? '扫描中…' : '重算参数平面'}</button>
+            <button onClick={runParameterScan} disabled={scanning || !topologyChecks?.lowFrequencyApplicable}>{scanning ? '扫描中…' : '重算参数平面'}</button>
             {scanResult && <button className="outline-button" onClick={exportScanCsv}><Download size={14}/>导出 CSV</button>}
           </div>
           {scanResult ? <>
@@ -1079,7 +1155,7 @@ export default function ReducedOrderWorkbench() {
           </> : <div className="scan-empty">设置阻尼和目标线路电抗范围后，可生成稳定、临界与失稳分区。这里的 X 是选定线路的标幺电抗，不自动改称短路比 SCR。</div>}
         </div>
         <div className="panel provenance-card"><div className="panel-title"><ShieldAlert size={18}/><span>模型假设与适用范围</span></div><p>{result.model_scope.statement}</p><div className="assumption-grid">{result.model_scope.assumptions.map(item => <span key={item}>{item}</span>)}</div></div>
-      </> : <div className="panel empty-state"><Network size={34}/><h2>编辑网络后运行分析</h2><p>后端先校验实体 ID、连接关系、额定电压、控制参数与接地条件，再构造同步刚度、状态矩阵、闭环极点和线性自由响应。</p></div>}
+      </> : <div className="panel empty-state"><Network size={34}/><h2>编辑网络后运行分析</h2><p>后端先校验实体 ID、连接关系、标称电压、控制参数与参考条件，再构造同步刚度、状态矩阵、闭环极点和线性自由响应。</p></div>}
       </section>
     </section>
   </main>

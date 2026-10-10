@@ -1497,6 +1497,161 @@ body {
 .graph-fields .graph-checkbox { padding: 8px 9px; display: flex; align-items: center; gap: 7px; color: #4f5c67; background: #f4f7f8; border-radius: 6px; }
 .graph-fields .graph-checkbox input { width: 14px; height: 14px; margin: 0; accent-color: #169b9b; }
 
+/* Electrical single-line editing: symbols express existing device models;
+   the diagram does not add transformer or protection calculations. */
+.model-main[data-view='editor'][data-editor-expanded='true'] { grid-template-columns: minmax(0, 1fr); }
+.model-main[data-view='editor'][data-editor-expanded='true'] > .controls { display: none; }
+.model-editor .inline-actions { flex-wrap: wrap; }
+.model-editor .inline-actions button:focus-visible,
+.network-editor-toolbar button:focus-visible,
+.graph-fields button:focus-visible { outline: 2px solid #16887f; outline-offset: 3px; }
+.network-editor-toolbar {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px 14px;
+  background: #fff;
+  border-bottom: 1px solid #dde4eb;
+}
+.network-mode-group { display: flex; align-items: center; flex-wrap: wrap; gap: 3px; }
+.network-editor-toolbar button {
+  min-height: 34px;
+  padding: 7px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #415064;
+  background: #fff;
+  border: 1px solid #dce3e9;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.network-editor-toolbar button:hover { background: #f1f6f8; }
+.network-editor-toolbar button[aria-pressed='true'],
+.network-editor-toolbar button.active { color: #116d67; background: #e9f5f2; border-color: #7db8b0; }
+.network-editor-toolbar label { display: inline-flex; align-items: center; gap: 5px; color: #5f6d7e; font-size: 11px; }
+.network-editor-toolbar input[type='checkbox'] { width: 15px; height: 15px; accent-color: #147f75; }
+.network-connect-hint { margin: 0; padding: 8px 12px; color: #4e6471; background: #f2f7fa; font-size: 12px; line-height: 1.6; }
+.network-connect-hint button { margin-left: 9px; padding: 2px 6px; color: #126f68; background: transparent; border: 1px solid #8fb8b2; border-radius: 4px; cursor: pointer; }
+.network-graph-stage { grid-template-columns: minmax(0, 1fr) 280px; }
+.network-graph-canvas { height: 510px; background: #fafcfd; }
+.network-graph-summary b { font-size: 13px; }
+.network-graph-summary small { font-size: 11px; }
+.graph-checks span { font-size: 10px; }
+.network-graph-canvas .react-flow__edge-path { stroke: #475569; stroke-width: 1.8; }
+.network-graph-canvas .react-flow__edge-text { font-size: 11px; fill: #334155; }
+.network-graph-canvas .attachment-edge .react-flow__edge-path { stroke: #536273; stroke-dasharray: none; }
+.network-graph-canvas .out-of-service-edge .react-flow__edge-path { stroke: #a4aebb; stroke-dasharray: 7 5; }
+.power-node.electrical-node {
+  position: relative;
+  width: 128px;
+  min-width: 128px;
+  height: 112px;
+  min-height: 112px;
+  padding: 6px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  color: #1e3449;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  box-shadow: none;
+}
+.power-node.electrical-node.bus { width: 176px; min-width: 176px; height: 88px; min-height: 88px; border-top: 1px solid transparent; }
+.power-node.electrical-node.gfm, .power-node.electrical-node.grid { border-left: 1px solid transparent; }
+.power-node.electrical-node.selected { background: rgba(22, 136, 127, .06); border-color: #53a79e; box-shadow: 0 0 0 2px rgba(22, 136, 127, .1); }
+.power-node.electrical-node:hover { background: rgba(226, 234, 241, .45); }
+.power-node.electrical-node.connection-start { border-color: #147f75; background: #e8f5f2; }
+.electrical-symbol { width: 84px; height: 66px; flex: 0 0 auto; overflow: visible; }
+.electrical-node-symbol { position: relative; width: 84px; height: 66px; flex: 0 0 auto; margin-top: 3px; }
+.electrical-node.bus .electrical-node-symbol { width: 160px; height: 44px; }
+.electrical-node.bus .electrical-symbol { width: 160px; height: 44px; }
+.electrical-node-subtitle { max-width: 100%; margin-top: 4px; color: #5e7183; font-size: 10px !important; line-height: 1.35; text-align: center; }
+.power-node.electrical-node.gfm, .power-node.electrical-node.grid { height: 128px; min-height: 128px; }
+.electrical-node.bus .electrical-node-label { align-self: stretch; width: 78px; text-align: left; }
+.electrical-node.bus .electrical-node-subtitle { position: absolute; top: 8px; right: 8px; width: 62px; margin: 0; text-align: right; }
+.electrical-node.grid .electrical-node-label { margin-top: 4px; }
+.power-node.electrical-node .electrical-terminal.terminal-idle { background: transparent; border-color: transparent; pointer-events: none; }
+.power-node.electrical-node .electrical-terminal.terminal-active { background: transparent; border: 0; }
+.power-node.electrical-node .electrical-terminal.terminal-active::before { content: ''; position: absolute; top: 50%; left: 50%; width: 24px; height: 24px; transform: translate(-50%, -50%); background: transparent; }
+.power-node.electrical-node .electrical-terminal.terminal-active::after { content: ''; position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid #4d7884; border-radius: 50%; background: #fff; }
+.power-node.electrical-node .electrical-terminal.terminal-active:hover::after { border-color: #11877b; background: #d5efe6; }
+.power-node.electrical-node.connection-origin { border-color: #147f75; background: #e8f5f2; }
+.network-view-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.network-connect-hint { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.network-connect-hint > span { flex: 1; min-width: 150px; }
+.network-connect-hint > svg { flex: 0 0 auto; }
+.graph-parameter-note { grid-column: 1 / -1; margin: 0; color: #637588; font-size: 11px; line-height: 1.65; }
+.graph-fields .network-delete-line { display: inline-flex; align-items: center; justify-content: center; gap: 5px; color: #a23737; background: #fff6f4; border-color: #e5c5c0; }
+.network-graph-shell[data-mode='connect'] .react-flow__node.draggable { cursor: grab; }
+.network-graph-shell[data-mode='connect'] .react-flow__node.dragging { cursor: grabbing; }
+.network-graph-shell[data-mode='pan'] .react-flow__pane { cursor: grab; }
+.network-graph-shell[data-mode='pan'] .react-flow__pane:active { cursor: grabbing; }
+.model-editor .editor-toolbar > div { min-width: 0; }
+.electrical-symbol path, .electrical-symbol line, .electrical-symbol rect, .electrical-symbol circle { vector-effect: non-scaling-stroke; }
+.electrical-node-label { min-width: 0; max-width: 100%; flex-shrink: 0; text-align: center; }
+.electrical-node-label b { max-width: 100%; color: #263b4e; font-size: 12px; font-weight: 650; }
+.electrical-node-label small { margin-top: 3px; color: #5e7183; font-size: 10px; line-height: 1.35; }
+/* React Flow anchors at a handle's outer edge. Keep that edge on the symbol;
+   use pseudo-elements for larger hit targets without moving the connection. */
+.power-node.electrical-node .react-flow__handle { width: 1px; height: 1px; min-width: 1px; min-height: 1px; background: transparent; border: 0; }
+.power-node.electrical-node .react-flow__handle-top { transform: translate(-50%, 0); }
+.power-node.electrical-node .react-flow__handle-bottom { transform: translate(-50%, 0); }
+.power-node.electrical-node .react-flow__handle-left { transform: translate(0, -50%); }
+.power-node.electrical-node .react-flow__handle-right { transform: translate(0, -50%); }
+.power-node.electrical-node .react-flow__handle:hover,
+.power-node.electrical-node .react-flow__handle.connectingfrom,
+.power-node.electrical-node .react-flow__handle.valid { border: 0; background: transparent; }
+.power-node.electrical-node .attachment-handle.terminal-idle { opacity: 0; pointer-events: none; }
+.power-node.electrical-node .attachment-handle.terminal-active { opacity: 1; pointer-events: auto; }
+.network-bus-resize { position: absolute; right: -8px; top: 30px; z-index: 6; width: 22px; height: 20px; padding: 0; border: 1px solid #78b5ab; border-radius: 3px; color: #126f64; background: #fff; font-size: 13px; line-height: 18px; cursor: ew-resize; touch-action: none; }
+.network-bus-resize:focus-visible { outline: 2px solid #16887f; outline-offset: 2px; }
+.network-connect-kind-group { display: flex; align-items: center; gap: 4px; }
+.network-connect-kind-group button { padding: 5px 9px; border: 1px solid #cfdee4; border-radius: 4px; color: #476174; background: #fff; font: inherit; font-size: 11px; }
+.network-connect-kind-group button.active { color: #116d67; border-color: #79bcb1; background: #eaf7f1; }
+.react-flow__edge.ideal-wire .react-flow__edge-path { stroke: #2d8272; stroke-width: 1.8; }
+.react-flow__edge.ideal-wire.selected .react-flow__edge-path { stroke: #0b6f60; stroke-width: 2.5; }
+.graph-inspector { padding: 16px; }
+.graph-inspector-title b { font-size: 13px; }
+.graph-inspector-title small { font-size: 11px; }
+.network-element-picker { margin: 12px 0 16px; display: grid; gap: 5px; color: #526477; font-size: 12px; }
+.network-element-picker select { width: 100%; min-width: 0; height: 36px; padding: 0 8px; color: #263b4e; background: #fff; border: 1px solid #d6e0e7; border-radius: 6px; font: inherit; }
+.network-element-picker select:focus-visible { outline: 2px solid #16887f; outline-offset: 2px; }
+.graph-inspector-empty { min-height: 300px; }
+.graph-inspector-empty p { max-width: 230px; font-size: 12px; }
+.graph-fields { gap: 12px; }
+.graph-fields > small { font-size: 11px; }
+.graph-fields label { gap: 5px; color: #526477; font-size: 12px; }
+.graph-fields input, .graph-fields select { height: 36px; font-size: 12px; }
+.graph-fields button { padding: 8px 10px; color: #415064; background: #f4f7f9; border: 1px solid #d6e0e7; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.graph-fields button.danger, .graph-fields .graph-delete-button { color: #a23737; background: #fff6f4; border-color: #e5c5c0; }
+.network-graph-shell > .scope-note { padding: 10px 13px; border-top: 1px solid #e1e7ed; font-size: 11px; }
+.network-graph-shell .graph-diagnostic { font-size: 11px; line-height: 1.6; }
+
+@media (max-width: 1000px) {
+  .network-graph-stage { grid-template-columns: minmax(0, 1fr); }
+  .graph-inspector { border-left: 0; border-top: 1px solid #dde4eb; }
+  .graph-inspector-empty { min-height: 90px; }
+  .graph-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .graph-fields > small, .graph-fields .graph-field-pair, .graph-fields .graph-checkbox { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  .network-editor-toolbar { gap: 8px; padding: 9px; }
+  .network-editor-toolbar button { min-height: 40px; padding: 8px 10px; }
+  .network-mode-group { width: 100%; }
+  .network-mode-group button { flex: 1; }
+  .network-connect-hint { font-size: 11px; }
+  .network-graph-stage { grid-template-columns: minmax(0, 1fr); }
+  .graph-inspector { padding: 13px; }
+  .graph-fields { grid-template-columns: minmax(0, 1fr); }
+}
+
 .contingency-panel {
   margin-top: 14px;
   padding: 16px;
@@ -1589,6 +1744,47 @@ body {
 
 .workspace-loading svg {
   animation: workspace-loading-pulse 1.1s ease-in-out infinite;
+}
+
+/* Library insertion uses pointer capture for mouse and touch; no native DnD. */
+.network-graph-shell:focus { outline: none; }
+.network-graph-shell:focus-visible { outline: 2px solid #16887f; outline-offset: 2px; }
+.network-graph-canvas .electrical-node { user-select: none; -webkit-user-select: none; }
+.network-graph-canvas.placing-element .react-flow__pane, .network-graph-canvas.placing-element .react-flow__node { cursor: crosshair; }
+.network-editor-toolbar kbd, .network-palette-item kbd { padding: 0 4px; color: #6b7d8e; background: #f4f7fa; border: 1px solid #dce5eb; border-radius: 3px; font: 10px/1.5 system-ui, sans-serif; }
+.network-element-library { padding: 12px; display: grid; grid-template-columns: 96px repeat(4, minmax(0, 1fr)); align-items: center; gap: 8px; background: #fff; border-bottom: 1px solid #dce5eb; }
+.network-library-title b, .network-library-title small { display: block; }
+.network-library-title b { color: #263b4e; font-size: 13px; }
+.network-library-title small { margin-top: 5px; color: #738494; font-size: 11px; }
+.network-palette-item { min-width: 0; min-height: 78px; padding: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #2f4b60; background: #f8fafc; border: 1px solid #dce5eb; border-radius: 6px; font: inherit; cursor: grab; touch-action: none; user-select: none; }
+.network-palette-item:hover, .network-palette-item.active { color: #116d67; background: #edf8f4; border-color: #82bcb5; }
+.network-palette-item:active { cursor: grabbing; }
+.network-palette-item:focus-visible { outline: 2px solid #16887f; outline-offset: 2px; }
+.network-palette-item .electrical-symbol { width: 48px; height: 38px; pointer-events: none; }
+.network-palette-line-symbol { width: 48px; height: 38px; pointer-events: none; }
+.network-palette-line-symbol text { fill: currentColor; font: 10px system-ui, sans-serif; }
+.network-palette-item span { font-size: 11px; line-height: 1.5; text-align: center; }
+.network-palette-item > small { color: #64798b; font-size: 10px; line-height: 1.4; }
+.network-element-library > p { grid-column: 1 / -1; margin: 2px 0 0; color: #6b7c8c; font-size: 11px; line-height: 1.5; }
+.network-palette-ghost { position: fixed; z-index: 1000; width: 100px; padding: 8px; display: grid; justify-items: center; pointer-events: none; color: #116d67; background: rgba(245, 253, 250, .95); border: 1px solid #7fb7ad; border-radius: 7px; box-shadow: 0 3px 12px rgba(35, 57, 69, .15); }
+.network-palette-ghost .electrical-symbol { width: 52px; height: 40px; }
+.network-palette-ghost span { font-size: 11px; }
+.network-shortcut-panel { padding: 16px; color: #354b60; background: #f6fafc; border-bottom: 1px solid #dce5eb; }
+.network-shortcut-panel > div:first-child { display: grid; gap: 5px; }
+.network-shortcut-panel b { font-size: 13px; }
+.network-shortcut-panel span, .network-shortcut-panel p { font-size: 12px; line-height: 1.6; }
+.network-shortcut-fields { margin-top: 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.network-shortcut-fields label { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; }
+.network-shortcut-fields input { width: 40px; height: 34px; padding: 4px; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #cad7e0; border-radius: 4px; background: #fff; }
+.network-shortcut-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.network-shortcut-actions button { padding: 7px 10px; color: #2f5964; background: #fff; border: 1px solid #b9cfd8; border-radius: 5px; cursor: pointer; font-size: 12px; }
+.network-shortcut-panel [role='alert'] { margin-bottom: 0; color: #8a5c28; }
+@media (max-width: 720px) {
+  .network-element-library { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .network-library-title { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; }
+  .network-library-title small { margin: 0; }
+  .network-palette-item { min-height: 76px; }
+  .network-shortcut-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @keyframes workspace-loading-pulse {
